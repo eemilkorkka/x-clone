@@ -24,7 +24,7 @@ export default function Root() {
               <hr className="h-1 w-31 text-gray-600"></hr>
             </div>
             <div>
-              <button className="w-72 rounded-full bg-xblue font-bold p-2.5">Create account</button>
+              <Button>Create account</Button>
             </div>
           </div>
           <div className="mt-15 flex flex-col">
