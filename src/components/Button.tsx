@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 const variants = {
     blue: "bg-xblue text-white",
     white: "bg-white text-gray-900",
-    outline: "bg-transparent text-xblue border-1 border-gray-500",
+    outline: "bg-transparent text-xblue border-1 border-gray-500 hover:bg-blue-400/10",
 };
 
 interface ButtonProps {

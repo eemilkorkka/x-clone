@@ -2,7 +2,7 @@ import Image from "next/image";
 import logo from "../assets/logo-white.png";
 import Button from "@/components/Button";
 import { FcGoogle } from "react-icons/fc";
-import SignupFormDialog from "@/components/SingupFormDialog/SignupFormDialog";
+import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
 
 export default function Root() {
   return (

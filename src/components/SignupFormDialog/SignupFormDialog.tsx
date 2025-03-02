@@ -38,14 +38,10 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         }));
     }   
 
-    useEffect(() => {
-        console.log(formData);
-    }, [formData]);
-
     const renderStep = () => {
         switch (step) {
             case 0:
-                return <PersonalInfo onChange={onInputChange} formData={formData} setFormInvalid={setFormInvalid} />
+                return <PersonalInfo onChange={onInputChange} formData={formData} setFormInvalid={setFormInvalid} setFormData={setFormData} />
             case 1:
                 return <VerificationCode email={formData.email} formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
         }
@@ -88,7 +84,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                                 disabled={formInvalid}
                                 type={step == 4 ? "submit" : "button"} 
                                 className="bg-white mb-6 p-4 rounded-full hover:cursor-pointer text-black font-bold mt-auto disabled:opacity-40" 
-                                onClick={() => setStep(prev => prev + 1)}
+                                onClick={() => handleNextClick()}
                             >Next
                             </button>
                         </form>
