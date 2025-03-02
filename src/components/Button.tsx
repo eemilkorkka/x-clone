@@ -13,7 +13,7 @@ interface ButtonProps {
 
 const Button = ({ variant, children }: ButtonProps) => {
     return (
-        <button className={`w-72 rounded-full font-bold p-2.5 ${variant ? variants[variant] : variants.blue }`}>{children}</button>
+        <button className={`w-72 rounded-full font-bold p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue }`}>{children}</button>
     )
 }
 

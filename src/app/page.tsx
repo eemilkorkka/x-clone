@@ -2,6 +2,7 @@ import Image from "next/image";
 import logo from "../assets/logo-white.png";
 import Button from "@/components/Button";
 import { FcGoogle } from "react-icons/fc";
+import SignupFormDialog from "@/components/SingupFormDialog/SignupFormDialog";
 
 export default function Root() {
   return (
@@ -24,7 +25,9 @@ export default function Root() {
               <hr className="h-1 w-31 text-gray-600"></hr>
             </div>
             <div>
-              <Button>Create account</Button>
+              <SignupFormDialog>
+                <Button>Create account</Button>
+              </SignupFormDialog>
             </div>
           </div>
           <div className="mt-15 flex flex-col">

@@ -4,6 +4,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-xblue: rgb(29, 155, 240);
+  --color-gray: rgb(51, 54, 57);
 }
 
 html, body {
