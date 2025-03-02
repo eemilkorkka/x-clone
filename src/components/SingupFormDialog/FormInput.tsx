@@ -1,30 +1,37 @@
 "use client";
 
+import formDataType from "@/types/formDataType";
 import { ChangeEvent, CSSProperties, useEffect, useState } from "react";
 
 interface FormInputProps {
     type: string;
-    name: string;
+    name: keyof formDataType;
     label: string;
+    formData: formDataType;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     style?: CSSProperties;
     isValid?: boolean;
     isReadOnly?: boolean;
 }
 
-const FormInput = ({ type, name, label, onChange, style, isValid, isReadOnly }: FormInputProps) => {
+const FormInput = ({ type, name, label, formData, onChange, style, isValid, isReadOnly }: FormInputProps) => {
 
-    const [inputEmpty, setInputEmpty] = useState<boolean>(true);
+    const [inputEmpty, setInputEmpty] = useState<boolean>(formData[name] === "");
+
+    useEffect(() => {
+        console.log(inputEmpty)
+    }, [inputEmpty]);
 
     return (
         <div className="relative group" style={style}>
             <input 
                 type={type}
                 name={name}
+                value={formData[name]}
                 readOnly={isReadOnly}
                 onChange={(e) => { 
                     onChange(e); 
-                    e.target.value.trim() == "" ? setInputEmpty(true) : setInputEmpty(false) 
+                    e.target.value === "" ? setInputEmpty(true) : setInputEmpty(false) 
                 }}
                 className={`w-full p-2.5 pt-5 border border-gray outline-none 
                     rounded-md ${isValid != undefined && !isValid && !inputEmpty ? 
