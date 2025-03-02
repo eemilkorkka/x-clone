@@ -9,21 +9,19 @@ interface FormInputProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     style?: CSSProperties;
     isValid?: boolean;
+    isReadOnly?: boolean;
 }
 
-const FormInput = ({ type, name, label, onChange, style, isValid }: FormInputProps) => {
+const FormInput = ({ type, name, label, onChange, style, isValid, isReadOnly }: FormInputProps) => {
 
     const [inputEmpty, setInputEmpty] = useState<boolean>(true);
-
-    useEffect(() => {
-        console.log(isValid);
-    }, [isValid]);
 
     return (
         <div className="relative group" style={style}>
             <input 
                 type={type}
-                name={name} 
+                name={name}
+                readOnly={isReadOnly}
                 onChange={(e) => { 
                     onChange(e); 
                     e.target.value.trim() == "" ? setInputEmpty(true) : setInputEmpty(false) 
