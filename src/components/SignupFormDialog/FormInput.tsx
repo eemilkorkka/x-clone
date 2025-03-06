@@ -1,6 +1,6 @@
 "use client";
 import formDataType from "@/types/formDataType";
-import { ChangeEvent, CSSProperties, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface FormInputProps {
     type: string;

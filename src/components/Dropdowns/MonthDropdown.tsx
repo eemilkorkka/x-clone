@@ -1,15 +1,15 @@
 import formDataType from "@/types/formDataType";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface MonthDropdownProps {
-    formData: formDataType;
+    style?: string;
     setFormData: Dispatch<SetStateAction<formDataType>>;
     setMonthDropdownVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-const MonthDropdown = ({ formData, setFormData, setMonthDropdownVisible }: MonthDropdownProps) => {
+const MonthDropdown = ({ style, setFormData, setMonthDropdownVisible }: MonthDropdownProps) => {
 
-    const months = [
+    const months = [ 
         "January", 
         "February", 
         "March", 
@@ -33,7 +33,7 @@ const MonthDropdown = ({ formData, setFormData, setMonthDropdownVisible }: Month
     }
 
     return (
-        <div className="flex flex-col top-30 absolute w-[200px] items-start bg-black border border-gray z-10 rounded-lg">
+    <div className={`flex flex-col absolute w-[200px] items-start bg-black border border-gray z-10 rounded-lg ${style}`}>
             {months.map((month) => {
                 return (
                     <button 

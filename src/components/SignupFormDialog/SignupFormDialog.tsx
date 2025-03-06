@@ -1,6 +1,6 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
 import PersonalInfo from "./steps/PersonalInfo";
@@ -50,7 +50,23 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
     const handleNextClick = () => {
         switch(step) {
             case 0:
+                sendVerificationEmail();
                 setStep(prev => prev + 1);
+        }
+    }
+
+    const sendVerificationEmail = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/verify/email/", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ name: formData.name, email: formData.email })
+            });
+
+            const json = await response.json();
+            console.log(json);
+        } catch(error) {
+            console.log(error);
         }
     }
 
@@ -66,15 +82,14 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                         {step > 0 ? 
                             <>
                                 <FaArrowLeft size={20} className="hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
-                                <FaXTwitter size={35} className="m-auto" />
                             </>
                         :   <>
                                 <Dialog.Close asChild>
                                     <IoClose size={25} className="hover:cursor-pointer" />
                                 </Dialog.Close>
-                                <FaXTwitter size={35} className="m-auto" />
                             </>   
                         }
+                        <FaXTwitter size={35} className="m-auto" />
                     </div>
                     <div className="px-10 md:px-20 flex flex-col flex-1">
                         <Dialog.Title className="text-3xl font-bold mt-5 mb-5">{stepTitles[step]}</Dialog.Title>
@@ -82,7 +97,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                             {renderStep()}
                             <button
                                 disabled={formInvalid}
-                                type={step == 4 ? "submit" : "button"} 
+                                type={step == 3 ? "submit" : "button"} 
                                 className="bg-white mb-6 p-4 rounded-full hover:cursor-pointer text-black font-bold mt-auto disabled:opacity-40" 
                                 onClick={() => handleNextClick()}
                             >Next
