@@ -34,7 +34,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
 
         setFormData((prevFormData) => ({
             ...prevFormData,
-            [name]: value.trim(),
+            [name]: name === "name" ? value : value.trim(),
         }));
     }   
 
@@ -57,10 +57,16 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
 
     const sendVerificationEmail = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/verify/email/", {
+            const code = await Math.floor(100000 + Math.random() * 900000);
+            const response = await fetch("http://localhost:3000/api/email/", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ name: formData.name, email: formData.email })
+                body: JSON.stringify({ 
+                    email: formData.email, 
+                    name: formData.name, 
+                    subject: "Verification code for XClone", 
+                    text:  `Your verification code for XClone is ${code}` 
+                })
             });
 
             const json = await response.json();

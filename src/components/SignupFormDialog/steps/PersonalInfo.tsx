@@ -30,8 +30,29 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
     useEffect(() => {
         const validateEmail = async () => {
             if (email.match(emailPattern)) {
-                // Let's check if the email already exists or not.
                 setIsValidEmail(true);
+                
+                // Let's check if the email already exists or not.
+                const response = await fetch(`/api/users/email?email=${encodeURIComponent(email)}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                
+                if (!response.ok) {
+                    return;
+                }
+
+                const result = await response.json();
+                
+                if (result.user) {
+                    setIsValidEmail(false);
+                    setErrorText("The email you entered is already in use.");
+                }
+                else {
+                    setIsValidEmail(true);
+                }
             }
             else {
                 setIsValidEmail(false);
