@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, HTMLInputTypeAttribute, SetStateAction, useEffect, useState } from "react";
 import FormInput from "../FormInput";
 import formDataType from "@/types/formDataType";
 import FormError from "@/components/FormError";
@@ -28,10 +28,10 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
     const { name, email, birthDateMonth, birthDateDay, birthDateYear } = formData;
 
     useEffect(() => {
-        const validateEmail = async () => {
+        const validateEmail: () => Promise<void> = async () => {
             if (email.match(emailPattern)) {
                 setIsValidEmail(true);
-                
+
                 // Let's check if the email already exists or not.
                 const response = await fetch(`/api/users/email?email=${encodeURIComponent(email)}`, {
                     method: "GET",

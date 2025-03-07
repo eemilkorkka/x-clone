@@ -40,3 +40,9 @@ model users {
   Bio            String?  @db.VarChar(255)
   tweets         tweets[]
 }
+
+model verificationtokens {
+  Id    Int    @id @default(autoincrement())
+  Email String @unique(map: "Email") @db.VarChar(255)
+  Code  Int?
+}

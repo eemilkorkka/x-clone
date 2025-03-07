@@ -1,9 +1,9 @@
 "use client";
 import formDataType from "@/types/formDataType";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, HTMLInputTypeAttribute, useEffect, useState } from "react";
 
 interface FormInputProps {
-    type: string;
+    type: HTMLInputTypeAttribute;
     name: keyof formDataType;
     label: string;
     formData: formDataType;
@@ -34,14 +34,14 @@ const FormInput = ({
     return (
         <div className={`relative group ${parentStyle}`}>
             <input 
-                type={type}
-                name={name}
-                value={formData[name]}
-                readOnly={isReadOnly}
-                onChange={(e) => onChange(e)}
-                className={`w-full p-2.5 pt-5 border border-gray outline-none 
-                    rounded-md ${parentStyle} ${isValid != undefined && !isValid && !inputEmpty ? 
-                        "group-focus-within:border-red-500" : "group-focus-within:border-xblue"}`} 
+            type={type}
+            name={name}
+            value={formData[name]}
+            readOnly={isReadOnly}
+            onChange={(e) => onChange(e)}
+            className={`w-full p-2.5 pt-5 border border-gray outline-none 
+                rounded-md ${parentStyle} ${isValid != undefined && !isValid && !inputEmpty ? 
+                "group-focus-within:border-red-500" : "group-focus-within:border-xblue"}`} 
             />
             <label className={`absolute
              text-gray-400 ${labelStyle} ${isValid != undefined && !isValid && !inputEmpty ? "group-focus-within:text-red-500" : "group-focus-within:text-xblue"}

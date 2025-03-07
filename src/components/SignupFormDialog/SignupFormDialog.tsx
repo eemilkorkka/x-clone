@@ -55,17 +55,14 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         }
     }
 
-    const sendVerificationEmail = async () => {
+    const sendVerificationEmail: () => Promise<void> = async () => {
         try {
-            const code = await Math.floor(100000 + Math.random() * 900000);
-            const response = await fetch("http://localhost:3000/api/email/", {
+            const response = await fetch("http://localhost:3000/api/verify/email", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({ 
                     email: formData.email, 
                     name: formData.name, 
-                    subject: "Verification code for XClone", 
-                    text:  `Your verification code for XClone is ${code}` 
                 })
             });
 
