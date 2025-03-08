@@ -1,7 +1,8 @@
 "use client";
 import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import FormError from "@/components/FormError";
 
 interface VerificationCodeProps {
     email: string;
@@ -12,16 +13,43 @@ interface VerificationCodeProps {
 
 const VerificationCode = ({ email, formData, onChange, setFormInvalid }: VerificationCodeProps) => {
 
+    const [errorText, setErrorText] = useState<string>("");
     const { verificationCode } = formData;
 
-    useEffect(() => {
-        verificationCode === "" ? setFormInvalid(true) : setFormInvalid(false);
+    useEffect(() => {   
+        setFormInvalid(true);
+             
+        // Make a POST request to API endpoint
+        const verifyCode = async () => {
+            if (verificationCode.length == 6) {
+                const response = await fetch("http://localhost:3000/api/verify/code", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email: formData.email, verificationCode: formData.verificationCode })
+                });
+
+                const result = await response.json();
+
+                if (response.status == 200) {
+                    setFormInvalid(false);
+                    setErrorText("");
+                } else {
+                    setFormInvalid(true);
+                    setErrorText(result.message);
+                }
+            }
+        }
+
+        verifyCode();
     }, [verificationCode])
 
     return (
         <>
             <p className="text-gray-500 mb-5">Enter it below to verify {email}.</p>
             <FormInput type="text" name="verificationCode" label="Verification code" formData={formData} onChange={(e) => onChange(e)} />
+            <FormError text={errorText} />
         </>
     );
 }

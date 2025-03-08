@@ -99,7 +99,8 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                             name="birthDateMonth" 
                             label="Month" 
                             formData={formData} 
-                            onChange={(e) => onChange(e)} isReadOnly={true} 
+                            onChange={(e) => onChange(e)} 
+                            isReadOnly={true}
                         />
                         <IoIosArrowDown className="absolute top-4.5 right-3 hover:cursor-pointer" size={20} fill={"gray"} />
                     </div>
@@ -152,7 +153,6 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                     }
                 </div>
             </div>
-
         </>
     );
 }
