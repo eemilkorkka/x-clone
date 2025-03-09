@@ -43,7 +43,7 @@ const storeVerificationCode = async (email: string, code: number) => {
         });
 
         if (user) {
-            const update = await prisma.verificationtokens.update({
+            await prisma.verificationtokens.update({
                 where: {
                     Email: email
                 },
@@ -53,7 +53,7 @@ const storeVerificationCode = async (email: string, code: number) => {
             });
         }
         else {
-            const create = await prisma.verificationtokens.create({
+            await prisma.verificationtokens.create({
                 data: {
                     Email: email,
                     Code: code

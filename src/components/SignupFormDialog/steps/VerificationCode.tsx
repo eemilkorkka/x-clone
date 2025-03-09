@@ -18,8 +18,7 @@ const VerificationCode = ({ email, formData, onChange, setFormInvalid }: Verific
 
     useEffect(() => {   
         setFormInvalid(true);
-             
-        // Make a POST request to API endpoint
+
         const verifyCode = async () => {
             if (verificationCode.length == 6) {
                 const response = await fetch("http://localhost:3000/api/verify/code", {

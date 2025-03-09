@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         if (dbCode) {
             return verificationCode == dbCode.Code ? 
             NextResponse.json({ message: "Success."}, { status: 200 }) : 
-            NextResponse.json({ message: "Verification code invalid."}, { status: 401 });
+            NextResponse.json({ message: "The verification code you entered is invalid."}, { status: 401 });
         }
         else {
             return NextResponse.json({ message: "Could not find verification code."}, { status: 404 });

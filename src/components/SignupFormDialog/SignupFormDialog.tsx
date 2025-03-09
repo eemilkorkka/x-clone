@@ -1,11 +1,12 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { ChangeEvent, ReactNode, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
 import PersonalInfo from "./steps/PersonalInfo";
 import formDataType from "../../types/formDataType";
 import VerificationCode from "./steps/VerificationCode";
+import Username from "./steps/Username";
 
 interface SignupFormDialogProps {
     children: ReactNode
@@ -44,15 +45,23 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                 return <PersonalInfo onChange={onInputChange} formData={formData} setFormInvalid={setFormInvalid} setFormData={setFormData} />
             case 1:
                 return <VerificationCode email={formData.email} formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
+            case 2:
+                return <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
         }
     }
 
     const handleNextClick = () => {
-        switch(step) {
-            case 0:
-                sendVerificationEmail();
-                setStep(prev => prev + 1);
+        if (step == 0) {
+            sendVerificationEmail();
+            setStep(step + 1);
         }
+        else if (step < 3) {
+            setStep(step + 1);
+        }
+    }
+
+    const handleFormSubmit = () => {
+        console.log("submitted");
     }
 
     const sendVerificationEmail: () => Promise<void> = async () => {
@@ -96,7 +105,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                     </div>
                     <div className="px-10 md:px-20 flex flex-col flex-1">
                         <Dialog.Title className="text-3xl font-bold mt-5 mb-5">{stepTitles[step]}</Dialog.Title>
-                        <form className="flex-1 flex flex-col justify-between">
+                        <form className="flex-1 flex flex-col justify-between" onSubmit={handleFormSubmit}>
                             {renderStep()}
                             <button
                                 disabled={formInvalid}
