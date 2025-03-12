@@ -7,6 +7,7 @@ type formDataType = {
     verificationCode: string;
     username: string;
     password: string;
+    confirmPassword: string;
 }
 
 export default formDataType;

@@ -34,21 +34,18 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
 
                 // Let's check if the email already exists or not.
                 const response = await fetch(`http://localhost:3000/api/users/email/${email}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
+                    method: "GET"
                 });
-
-                if (!response.ok) {
-                    return;
-                }
 
                 const result = await response.json();
                 
                 if (response.status == 200) {
                     setIsValidEmail(false);
                     setErrorText(result.message);
+                }
+                else {
+                    setIsValidEmail(true);
+                    setErrorText("");
                 }
             }
             else {

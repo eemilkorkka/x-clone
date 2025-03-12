@@ -1,12 +1,13 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
 import PersonalInfo from "./steps/PersonalInfo";
 import formDataType from "../../types/formDataType";
 import VerificationCode from "./steps/VerificationCode";
 import Username from "./steps/Username";
+import Password from "./steps/Password";
 
 interface SignupFormDialogProps {
     children: ReactNode
@@ -27,7 +28,8 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         birthDateYear: "",
         verificationCode: "",
         username: "",
-        password: ""
+        password: "",
+        confirmPassword: ""
     });
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +49,8 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                 return <VerificationCode email={formData.email} formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
             case 2:
                 return <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
+            case 3:
+                return <Password formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
         }
     }
 
@@ -60,7 +64,8 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         }
     }
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         console.log("submitted");
     }
 
@@ -105,11 +110,11 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                     </div>
                     <div className="px-10 md:px-20 flex flex-col flex-1">
                         <Dialog.Title className="text-3xl font-bold mt-5 mb-5">{stepTitles[step]}</Dialog.Title>
-                        <form className="flex-1 flex flex-col justify-between" onSubmit={handleFormSubmit}>
+                        <form className="flex-1 flex flex-col justify-between" onSubmit={(e) => handleFormSubmit(e)}>
                             {renderStep()}
                             <button
                                 disabled={formInvalid}
-                                type={step == 3 ? "submit" : "button"} 
+                                type={step === 3 ? "submit" : "button"} 
                                 className="bg-white mb-6 p-4 rounded-full hover:cursor-pointer text-black font-bold mt-auto disabled:opacity-40" 
                                 onClick={() => handleNextClick()}
                             >Next

@@ -14,6 +14,8 @@ export async function POST(req: Request) {
             }
         });
 
+        // TODO: Make it so that the verification code expires after a certain amount of time.
+
         if (dbCode) {
             return verificationCode == dbCode.Code ? 
             NextResponse.json({ message: "Success."}, { status: 200 }) : 
