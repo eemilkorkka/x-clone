@@ -67,19 +67,19 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
             name: "birthDateMonth",
             data: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             label: "Month",
-            style: "md:flex-2"
+            style: "flex-1 sm:flex-2"
         },
         {
             name: "birthDateDay",
             data: Array.from({length: 31}, (_, i) => i + 1).map(String),
             label: "Day",
-            style: "md:flex-1"
+            style: "flex-1 sm:flex-1"
         },
         {
             name: "birthDateYear",
             data: Array.from({ length: 81 }, (_, i) => new Date().getFullYear() - i).map(String),
             label: "Year",
-            style: "md:flex-1"
+            style: "flex-1 sm:flex-1"
         }
     ];
 
