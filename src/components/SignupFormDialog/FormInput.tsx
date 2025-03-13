@@ -10,7 +10,6 @@ interface FormInputProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     labelStyle?: string;
     isValid?: boolean;
-    isReadOnly?: boolean;
 }
 
 const FormInput = ({ 
@@ -20,8 +19,7 @@ const FormInput = ({
     formData, 
     onChange, 
     labelStyle, 
-    isValid, 
-    isReadOnly }: FormInputProps) => {
+    isValid }: FormInputProps) => {
 
     const [inputEmpty, setInputEmpty] = useState<boolean>(formData[name] === "");
     
@@ -35,7 +33,6 @@ const FormInput = ({
                 type={type}
                 name={name}
                 value={formData[name]}
-                readOnly={isReadOnly}
                 onChange={(e) => onChange(e)}
                 className={`w-full p-2.5 pt-5 border border-gray outline-none 
                 rounded-md ${isValid != undefined && !isValid && !inputEmpty ? 
@@ -44,7 +41,7 @@ const FormInput = ({
             <label className={`absolute
              text-gray-400 ${labelStyle} ${isValid != undefined && !isValid && !inputEmpty ? 
                 "group-focus-within:text-red-500" : "group-focus-within:text-xblue"}
-                group-focus-within:text-[0.8em] group-focus-within:top-1 group-focus-within:left-3 
+                group-focus-within:text-[0.8em] transition-all group-focus-within:top-1 group-focus-within:left-3 
               ${!inputEmpty ? "text-[0.8em] top-1 left-3" : "top-4 left-3"}`}
             >{label}
             </label>

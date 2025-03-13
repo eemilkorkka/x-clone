@@ -44,7 +44,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
     const renderStep = () => {
         switch (step) {
             case 0:
-                return <PersonalInfo onChange={onInputChange} formData={formData} setFormInvalid={setFormInvalid} setFormData={setFormData} />
+                return <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
             case 1:
                 return <VerificationCode email={formData.email} formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
             case 2:
@@ -96,16 +96,14 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                 <Dialog.Overlay className="fixed inset-0 bg-gray-700/50"/>
                 <Dialog.Content className="w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background bg-black lg:rounded-2xl">
                     <div className="flex items-center justify-between p-3">
-                        {step > 0 ? 
-                            <>
-                                <FaArrowLeft size={20} className="hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
-                            </>
-                        :   <>
-                                <Dialog.Close asChild>
-                                    <IoClose size={25} className="hover:cursor-pointer" />
-                                </Dialog.Close>
-                            </>   
-                        }
+                        {step > 0 ? (
+                            <FaArrowLeft size={20} className="hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
+                        ) 
+                        : (
+                            <Dialog.Close asChild>
+                                <IoClose size={25} className="hover:cursor-pointer" />
+                            </Dialog.Close>
+                        )}
                         <FaXTwitter size={35} className="m-auto" />
                     </div>
                     <div className="px-10 md:px-20 flex flex-col flex-1">

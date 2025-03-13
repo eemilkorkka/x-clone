@@ -7,15 +7,14 @@ import Dropdown from "@/components/Dropdown";
 import { dropdownFields } from "../../../utils/birthDateDropdowns";
 
 interface PersonalInfoProps {
-    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     formData: formDataType;
-    setFormData: Dispatch<SetStateAction<formDataType>>;
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
 }
 
 const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
-const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: PersonalInfoProps) => {
+const PersonalInfo = ({ formData, onChange, setFormInvalid }: PersonalInfoProps) => {
 
     const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
     const [errorText, setErrorText] = useState<string>("");
@@ -53,6 +52,7 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
 
     useEffect(() => {
         const isFormValid = name === "" || email === "" || !isValidEmail || birthDateMonth === "" || birthDateDay == "" || birthDateYear == "";
+        setFormInvalid(isFormValid);
     }, [name, email, birthDateMonth, birthDateDay, birthDateYear, isValidEmail])
 
     return (
