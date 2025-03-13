@@ -4,6 +4,7 @@ import FormInput from "../FormInput";
 import formDataType from "@/types/formDataType";
 import FormError from "@/components/FormError";
 import Dropdown from "@/components/Dropdown";
+import { dropdownFields } from "../../../utils/birthDateDropdowns";
 
 interface PersonalInfoProps {
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
@@ -20,8 +21,6 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
     const [errorText, setErrorText] = useState<string>("");
 
     const { name, email, birthDateMonth, birthDateDay, birthDateYear } = formData;
-
-    console.log(formData);
 
     useEffect(() => {
         const validateEmail: () => Promise<void> = async () => {
@@ -53,34 +52,8 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
     }, [email])
 
     useEffect(() => {
-        if (name === "" || email === "" || !isValidEmail || birthDateMonth === "" || birthDateDay == "" || birthDateYear == "") {
-            setFormInvalid(true);
-        }
-        else {
-            setFormInvalid(false);
-        }
+        const isFormValid = name === "" || email === "" || !isValidEmail || birthDateMonth === "" || birthDateDay == "" || birthDateYear == "";
     }, [name, email, birthDateMonth, birthDateDay, birthDateYear, isValidEmail])
-
-    const dropdownFields = [
-        {
-            name: "birthDateMonth",
-            data: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-            label: "Month",
-            style: "flex-1 sm:flex-2"
-        },
-        {
-            name: "birthDateDay",
-            data: Array.from({length: 31}, (_, i) => i + 1).map(String),
-            label: "Day",
-            style: "flex-1 sm:flex-1"
-        },
-        {
-            name: "birthDateYear",
-            data: Array.from({ length: 81 }, (_, i) => new Date().getFullYear() - i).map(String),
-            label: "Year",
-            style: "flex-1 sm:flex-1"
-        }
-    ];
 
     return (
         <>
