@@ -12,7 +12,7 @@ const Dropdown = ({ name, data, label, onChange, style }: DropdownProps) => {
     return (
         <div className="relative group hover:cursor-pointer">
             <select 
-                className="w-full p-2.5 pt-5 border border-gray outline-none rounded-md group-focus-within:text-xblue" 
+                className="w-full p-2.5 pt-5 border border-gray outline-none appearance-none rounded-md group-focus-within:border-xblue" 
                 name={name} 
                 onChange={(e) => onChange(e)}>
                     <option></option>

@@ -67,6 +67,7 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
             name: "birthDateMonth",
             data: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             label: "Month",
+            style: "md:flex-2"
         },
         {
             name: "birthDateDay",
@@ -94,7 +95,6 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                     isValid={isValidEmail}  
                     onChange={(e) => onChange(e)} 
                 />
-                { /* TODO: Need to make the icon fill blue as well when the input is focused */ }
                 {!isValidEmail && email != "" && <FormError text={errorText} />}
             </div>
             <div className="flex flex-col gap-1 mt-10">
@@ -102,6 +102,7 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                 <p className="text-gray-500 text-[0.9em]">This will not be shown publicly. Confirm your own age, 
                     even if this account is for a business, a pet, or something else.</p>
                 <div className="flex gap-3 mt-2.5">
+                { /* TODO: Need to make the icon fill blue as well when the input is focused */ }
                     {dropdownFields.map((dropdownField, index) => {
                         return (
                             <div key={index} className={`relative ${dropdownField.style}`}>
@@ -111,6 +112,7 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                                     label={dropdownField.label}
                                     onChange={(e) => onChange(e)}
                                 />
+                                <IoIosArrowDown className="absolute top-4.5 right-3" size={20} fill={"gray"} />
                             </div>
                         );
                     })}
