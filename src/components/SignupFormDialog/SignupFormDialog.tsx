@@ -32,7 +32,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         confirmPassword: ""
     });
 
-    const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
         setFormData((prevFormData) => ({

@@ -8,7 +8,6 @@ interface FormInputProps {
     label: string;
     formData: formDataType;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    parentStyle?: string;
     labelStyle?: string;
     isValid?: boolean;
     isReadOnly?: boolean;
@@ -20,7 +19,6 @@ const FormInput = ({
     label, 
     formData, 
     onChange, 
-    parentStyle, 
     labelStyle, 
     isValid, 
     isReadOnly }: FormInputProps) => {
@@ -32,7 +30,7 @@ const FormInput = ({
     }, [formData[name]]);
 
     return (
-        <div className={`relative group ${parentStyle}`}>
+        <div className="relative group hover:cursor-pointer">
             <input 
                 type={type}
                 name={name}
@@ -40,7 +38,7 @@ const FormInput = ({
                 readOnly={isReadOnly}
                 onChange={(e) => onChange(e)}
                 className={`w-full p-2.5 pt-5 border border-gray outline-none 
-                rounded-md ${parentStyle} ${isValid != undefined && !isValid && !inputEmpty ? 
+                rounded-md ${isValid != undefined && !isValid && !inputEmpty ? 
                 "group-focus-within:border-red-500" : "group-focus-within:border-xblue"}`} 
             />
             <label className={`absolute

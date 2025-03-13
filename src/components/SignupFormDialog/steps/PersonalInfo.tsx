@@ -4,9 +4,10 @@ import FormInput from "../FormInput";
 import formDataType from "@/types/formDataType";
 import FormError from "@/components/FormError";
 import { IoIosArrowDown } from "react-icons/io";
+import Dropdown from "@/components/Dropdown";
 
 interface PersonalInfoProps {
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     formData: formDataType;
     setFormData: Dispatch<SetStateAction<formDataType>>;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
@@ -18,11 +19,10 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
 
     const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
     const [errorText, setErrorText] = useState<string>("");
-    const [monthDropdownVisible, setMonthDropdownVisible] = useState<boolean>(false);
-    const [dayDropwdownVisible, setDayDropdownVisible] = useState<boolean>(false);
-    const [yearDropdownVisible, setYearDropdownVisible] = useState<boolean>(false);
 
     const { name, email, birthDateMonth, birthDateDay, birthDateYear } = formData;
+
+    console.log(formData);
 
     useEffect(() => {
         const validateEmail: () => Promise<void> = async () => {
@@ -62,6 +62,26 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
         }
     }, [name, email, birthDateMonth, birthDateDay, birthDateYear, isValidEmail])
 
+    const dropdownFields = [
+        {
+            name: "birthDateMonth",
+            data: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            label: "Month",
+        },
+        {
+            name: "birthDateDay",
+            data: Array.from({length: 31}, (_, i) => i + 1).map(String),
+            label: "Day",
+            style: "md:flex-1"
+        },
+        {
+            name: "birthDateYear",
+            data: Array.from({ length: 81 }, (_, i) => new Date().getFullYear() - i).map(String),
+            label: "Year",
+            style: "md:flex-1"
+        }
+    ];
+
     return (
         <>
             <FormInput type="text" name="name" label="Name" formData={formData} onChange={(e) => onChange(e)} />
@@ -82,45 +102,18 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                 <p className="text-gray-500 text-[0.9em]">This will not be shown publicly. Confirm your own age, 
                     even if this account is for a business, a pet, or something else.</p>
                 <div className="flex gap-3 mt-2.5">
-                    <div className="relative" onClick={() => setMonthDropdownVisible(true)}>
-                        <FormInput 
-                            type="text" 
-                            parentStyle="hover:cursor-pointer"
-                            labelStyle="!top-1 text-[0.8em]"
-                            name="birthDateMonth" 
-                            label="Month" 
-                            formData={formData} 
-                            onChange={(e) => onChange(e)} 
-                            isReadOnly={true}
-                        />
-                        <IoIosArrowDown className="absolute top-4.5 right-3 hover:cursor-pointer" size={20} fill={"gray"} />
-                    </div>
-                    <div className="relative md:flex-1" onClick={() => setDayDropdownVisible(true)}>
-                        <FormInput 
-                            type="text"
-                            parentStyle="hover:cursor-pointer"
-                            labelStyle="!top-1 text-[0.8em]" 
-                            name="birthDateDay" 
-                            label="Day" 
-                            formData={formData} 
-                            onChange={(e) => onChange(e)} 
-                            isReadOnly={true} 
-                        />
-                        <IoIosArrowDown className="absolute top-4.5 right-3" size={20} fill={"gray"} />
-                    </div>
-                    <div className="relative md:flex-1" onClick={() => setYearDropdownVisible(true)}>
-                        <FormInput 
-                            type="text"
-                            parentStyle="hover:cursor-pointer"
-                            labelStyle="!top-1 text-[0.8em]"  
-                            name="birthDateYear" 
-                            label="Year" 
-                            formData={formData} 
-                            onChange={(e) => onChange(e)} 
-                            isReadOnly={true} 
-                        />
-                        <IoIosArrowDown className="absolute top-4.5 right-3" size={20} fill={"gray"} />
-                    </div>
+                    {dropdownFields.map((dropdownField, index) => {
+                        return (
+                            <div key={index} className={`relative ${dropdownField.style}`}>
+                                <Dropdown 
+                                    name={dropdownField.name}
+                                    data={dropdownField.data}
+                                    label={dropdownField.label}
+                                    onChange={(e) => onChange(e)}
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </>
