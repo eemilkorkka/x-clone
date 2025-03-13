@@ -4,9 +4,6 @@ import FormInput from "../FormInput";
 import formDataType from "@/types/formDataType";
 import FormError from "@/components/FormError";
 import { IoIosArrowDown } from "react-icons/io";
-import MonthDropdown from "../../Dropdowns/MonthDropdown";
-import DayDropdown from "@/components/Dropdowns/DayDropdown";
-import YearDropdown from "@/components/Dropdowns/YearDropdown";
 
 interface PersonalInfoProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -98,13 +95,6 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                         />
                         <IoIosArrowDown className="absolute top-4.5 right-3 hover:cursor-pointer" size={20} fill={"gray"} />
                     </div>
-                    { monthDropdownVisible && 
-                        <MonthDropdown 
-                            style="top-30"
-                            setFormData={setFormData} 
-                            setMonthDropdownVisible={setMonthDropdownVisible} 
-                        /> 
-                    }
                     <div className="relative md:flex-1" onClick={() => setDayDropdownVisible(true)}>
                         <FormInput 
                             type="text"
@@ -118,13 +108,6 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                         />
                         <IoIosArrowDown className="absolute top-4.5 right-3" size={20} fill={"gray"} />
                     </div>
-                    { dayDropwdownVisible &&
-                        <DayDropdown 
-                            setDayDropdownVisible={setDayDropdownVisible} 
-                            setFormData={setFormData} 
-                            style="top-0 right-[38%] lg:right-[32%]" 
-                        />
-                    }
                     <div className="relative md:flex-1" onClick={() => setYearDropdownVisible(true)}>
                         <FormInput 
                             type="text"
@@ -138,13 +121,6 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                         />
                         <IoIosArrowDown className="absolute top-4.5 right-3" size={20} fill={"gray"} />
                     </div>
-                    { yearDropdownVisible &&
-                        <YearDropdown 
-                            setYearDropdownVisible={setYearDropdownVisible} 
-                            setFormData={setFormData} 
-                            style="top-0 right-[13%]"
-                        />
-                    }
                 </div>
             </div>
         </>
