@@ -1,9 +1,8 @@
 "use client";
-import { ChangeEvent, Dispatch, HTMLInputTypeAttribute, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import FormInput from "../FormInput";
 import formDataType from "@/types/formDataType";
 import FormError from "@/components/FormError";
-import { IoIosArrowDown } from "react-icons/io";
 import Dropdown from "@/components/Dropdown";
 
 interface PersonalInfoProps {
@@ -102,17 +101,15 @@ const PersonalInfo = ({ onChange, formData, setFormData, setFormInvalid }: Perso
                 <p className="text-gray-500 text-[0.9em]">This will not be shown publicly. Confirm your own age, 
                     even if this account is for a business, a pet, or something else.</p>
                 <div className="flex gap-3 mt-2.5">
-                { /* TODO: Need to make the icon fill blue as well when the input is focused */ }
                     {dropdownFields.map((dropdownField, index) => {
                         return (
-                            <div key={index} className={`relative ${dropdownField.style}`}>
+                            <div key={index} className={dropdownField.style}>
                                 <Dropdown 
                                     name={dropdownField.name}
                                     data={dropdownField.data}
                                     label={dropdownField.label}
                                     onChange={(e) => onChange(e)}
                                 />
-                                <IoIosArrowDown className="absolute top-4.5 right-3" size={20} fill={"gray"} />
                             </div>
                         );
                     })}

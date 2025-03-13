@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import { IoIosArrowDown } from "react-icons/io";
 
 interface DropdownProps {
     name: string;
@@ -25,6 +26,7 @@ const Dropdown = ({ name, data, label, onChange, style }: DropdownProps) => {
             <label className="absolute text-gray-400 top-1 left-3 text-[0.8em] group-focus-within:text-xblue">
                 {label}
             </label>
+            <IoIosArrowDown className="absolute top-4.5 right-3 group-focus-within:fill-xblue" size={20} fill={"gray"} />
         </div>
     );
 }
