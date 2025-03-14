@@ -11,13 +11,36 @@ interface PasswordProps {
 
 const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
 
+    const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false); 
     const [errorText, setErrorText] = useState<string>("");
 
     useEffect(() => {
         setFormInvalid(true);
-        console.log(formData.password === formData.confirmPassword);
+        
+        if (formData.password != "") {
+            if (formData.password === formData.confirmPassword) {
+                setErrorText(validatePassword(formData.password));
+            }
+            else {
+                setErrorText("Passwords do not match!");
+                setIsPasswordValid(false);
+            }
+        }
+
     }, [formData.password, formData.confirmPassword])
-    
+
+    const validatePassword = (password: string): string => {
+        var regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        if (!regex.test(password)) {
+            setIsPasswordValid(false);
+            return "Password should at least be 8 characters long and contain one special symbol, upper and lowercase letters and a number.";
+        } else {
+            setIsPasswordValid(true);
+            setFormInvalid(false);
+            return "";
+        }
+    }
+
     return (
         <>
             <FormInput 
@@ -26,6 +49,7 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                 label="Password"
                 formData={formData}
                 onChange={(e) => onChange(e)}
+                isValid={isPasswordValid}
             />
             <div className="mt-7">
                 <FormInput 
@@ -34,6 +58,7 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                     label="Confirm password"
                     formData={formData}
                     onChange={(e) => onChange(e)}
+                    isValid={isPasswordValid}
                 />
             </div>
             <FormError text={errorText} />

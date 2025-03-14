@@ -53,7 +53,7 @@ const PersonalInfo = ({ formData, onChange, setFormInvalid }: PersonalInfoProps)
     useEffect(() => {
         const isFormValid = name === "" || email === "" || !isValidEmail || birthDateMonth === "" || birthDateDay == "" || birthDateYear == "";
         setFormInvalid(isFormValid);
-    }, [name, email, birthDateMonth, birthDateDay, birthDateYear, isValidEmail])
+    }, [formData])
 
     return (
         <>

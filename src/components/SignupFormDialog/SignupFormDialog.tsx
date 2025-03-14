@@ -115,7 +115,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                                 type={step === 3 ? "submit" : "button"} 
                                 className="bg-white mb-6 p-4 rounded-full hover:cursor-pointer text-black font-bold mt-auto disabled:opacity-40" 
                                 onClick={() => handleNextClick()}
-                            >Next
+                            >{step < 3 ? "Next" : "Sign up"}
                             </button>
                         </form>
                     </div>

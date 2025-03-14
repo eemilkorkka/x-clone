@@ -12,6 +12,7 @@ interface UsernameProps {
 
 const Username = ({ formData, onChange, setFormInvalid }: UsernameProps) => {
 
+    const [isUsernameValid, setIsUsernameValid] = useState<boolean>(false);
     const [errorText, setErrorText] = useState<string>("");
 
     useEffect(() => {
@@ -26,10 +27,12 @@ const Username = ({ formData, onChange, setFormInvalid }: UsernameProps) => {
 
                 if (result.user) {
                     setFormInvalid(true);
+                    setIsUsernameValid(false);
                     setErrorText(result.message);
                 }
                 else {
                     setFormInvalid(false);
+                    setIsUsernameValid(true);
                     setErrorText("");
                 }
             }
@@ -43,7 +46,14 @@ const Username = ({ formData, onChange, setFormInvalid }: UsernameProps) => {
 
     return (
         <>
-            <FormInput type="text" name="username" label="Username" formData={formData} onChange={(e) => onChange(e)} />
+            <FormInput 
+                type="text" 
+                name="username" 
+                label="Username" 
+                formData={formData} 
+                onChange={(e) => onChange(e)} 
+                isValid={isUsernameValid} 
+            />
             <FormError text={errorText} />
         </>
     );

@@ -1,6 +1,6 @@
 "use client";
 import formDataType from "@/types/formDataType";
-import { ChangeEvent, HTMLInputTypeAttribute, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, HTMLInputTypeAttribute, ReactNode, SetStateAction, useEffect, useState } from "react";
 
 interface FormInputProps {
     type: HTMLInputTypeAttribute;
@@ -17,7 +17,7 @@ const FormInput = ({
     name, 
     label, 
     formData, 
-    onChange, 
+    onChange,
     labelStyle, 
     isValid }: FormInputProps) => {
 

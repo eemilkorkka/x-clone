@@ -13,6 +13,7 @@ interface VerificationCodeProps {
 
 const VerificationCode = ({ email, formData, onChange, setFormInvalid }: VerificationCodeProps) => {
 
+    const [codeIsValid, setCodeIsValid] = useState<boolean>(false);
     const [errorText, setErrorText] = useState<string>("");
     const { verificationCode } = formData;
 
@@ -33,9 +34,11 @@ const VerificationCode = ({ email, formData, onChange, setFormInvalid }: Verific
 
                 if (response.status == 200) {
                     setFormInvalid(false);
+                    setCodeIsValid(true);
                     setErrorText("");
                 } else {
                     setFormInvalid(true);
+                    setCodeIsValid(false);
                     setErrorText(result.message);
                 }
             }
@@ -47,7 +50,14 @@ const VerificationCode = ({ email, formData, onChange, setFormInvalid }: Verific
     return (
         <>
             <p className="text-gray-500 mb-5">Enter it below to verify {email}.</p>
-            <FormInput type="text" name="verificationCode" label="Verification code" formData={formData} onChange={(e) => onChange(e)} />
+            <FormInput 
+                type="text" 
+                name="verificationCode" 
+                label="Verification code" 
+                formData={formData} 
+                onChange={(e) => onChange(e)} 
+                isValid={codeIsValid} 
+            />
             <FormError text={errorText} />
         </>
     );
