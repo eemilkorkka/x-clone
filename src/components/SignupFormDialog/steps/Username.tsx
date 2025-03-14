@@ -38,6 +38,7 @@ const Username = ({ formData, onChange, setFormInvalid }: UsernameProps) => {
             }
             else {
                 setFormInvalid(true);
+                formData.username != "" && setErrorText("Username should at least be 4 characters long.");
             }      
         }
 

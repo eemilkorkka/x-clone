@@ -1,3 +1,4 @@
+import formDataType from "@/types/formDataType";
 import { ChangeEvent } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -13,7 +14,7 @@ const Dropdown = ({ name, data, label, onChange }: DropdownProps) => {
         <div className="relative group hover:cursor-pointer">
             <select 
                 className="w-full p-2.5 pt-5 border border-gray outline-none appearance-none rounded-md group-focus-within:border-xblue" 
-                name={name} 
+                name={name}
                 onChange={(e) => onChange(e)}>
                     <option disabled selected></option>
                     {data.map((item, index) => {

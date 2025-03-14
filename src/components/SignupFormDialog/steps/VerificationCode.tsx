@@ -3,15 +3,15 @@ import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import FormError from "@/components/FormError";
+import { sendVerificationEmail } from "@/utils/utilFunctions";
 
 interface VerificationCodeProps {
-    email: string;
     formData: formDataType;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
 }
 
-const VerificationCode = ({ email, formData, onChange, setFormInvalid }: VerificationCodeProps) => {
+const VerificationCode = ({ formData, onChange, setFormInvalid }: VerificationCodeProps) => {
 
     const [codeIsValid, setCodeIsValid] = useState<boolean>(false);
     const [errorText, setErrorText] = useState<string>("");
@@ -49,7 +49,7 @@ const VerificationCode = ({ email, formData, onChange, setFormInvalid }: Verific
 
     return (
         <>
-            <p className="text-gray-500 mb-5">Enter it below to verify {email}.</p>
+            <p className="text-gray-500 mb-5">Enter it below to verify {formData.email}</p>
             <FormInput 
                 type="text" 
                 name="verificationCode" 
@@ -58,7 +58,15 @@ const VerificationCode = ({ email, formData, onChange, setFormInvalid }: Verific
                 onChange={(e) => onChange(e)} 
                 isValid={codeIsValid} 
             />
-            <FormError text={errorText} />
+            { errorText != "" && <FormError text={errorText} /> }
+            <p 
+                className="text-gray-500 mt-3">Didn't receive code?
+                <span 
+                    className="text-xblue hover:cursor-pointer" 
+                    onClick={() => sendVerificationEmail(formData.email, formData.name)}
+                    > Resend code
+                </span>
+            </p>
         </>
     );
 }

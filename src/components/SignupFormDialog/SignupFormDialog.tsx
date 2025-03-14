@@ -1,6 +1,7 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
 import PersonalInfo from "./steps/PersonalInfo";
@@ -46,7 +47,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
             case 0:
                 return <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
             case 1:
-                return <VerificationCode email={formData.email} formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
+                return <VerificationCode formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
             case 2:
                 return <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
             case 3:
@@ -56,7 +57,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
 
     const handleNextClick = () => {
         if (step == 0) {
-            sendVerificationEmail();
+            sendVerificationEmail(formData.email, formData.name);
             setStep(step + 1);
         }
         else if (step < 3) {
@@ -64,25 +65,21 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         }
     }
 
-    const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("submitted");
-    }
 
-    const sendVerificationEmail: () => Promise<void> = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/verify/email", {
+            const response = await fetch("http://localhost:3000/api/signup", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ 
-                    email: formData.email, 
-                    name: formData.name, 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    formData: formData
                 })
             });
 
-            const json = await response.json();
-            console.log(json);
-        } catch(error) {
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
             console.log(error);
         }
     }
