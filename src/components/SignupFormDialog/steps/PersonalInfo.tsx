@@ -5,69 +5,89 @@ import formDataType from "@/types/formDataType";
 import FormError from "@/components/FormError";
 import Dropdown from "@/components/Dropdown";
 import { dropdownFields } from "../../../utils/birthDateDropdowns";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface PersonalInfoProps {
     formData: formDataType;
+    formInvalid: boolean;
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
 }
 
 const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
-const PersonalInfo = ({ formData, onChange, setFormInvalid }: PersonalInfoProps) => {
-
-    const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
-    const [errorText, setErrorText] = useState<string>("");
+const PersonalInfo = ({ formData, formInvalid, onChange, setFormInvalid }: PersonalInfoProps) => {
 
     const { name, email, birthDateMonth, birthDateDay, birthDateYear } = formData;
 
+    const [fieldsAreEmpty, setFieldsAreEmpty] = useState<boolean>(true);
+    const [emailMatchesPattern, setEmailMatchesPattern] = useState<boolean | undefined>(undefined);
+    const [isValidEmail, setIsValidEmail] = useState<boolean | undefined>(undefined);
+    const [errorText, setErrorText] = useState<string>("");
+    
+    const debouncedEmail = useDebounce(email, 300);
+    
+    console.log(formInvalid);
+
     useEffect(() => {
-        const validateEmail: () => Promise<void> = async () => {
-            if (email.match(emailPattern)) {
-                setIsValidEmail(true);
+        setFieldsAreEmpty(!name || !email || !birthDateMonth || !birthDateDay || !birthDateYear);
+    }, [name, email, birthDateMonth, birthDateDay, birthDateYear, setFormInvalid]);
+    
+    useEffect(() => {
+        const validateEmail = async () => {
+            if (!debouncedEmail) {
+                setEmailMatchesPattern(undefined);
+                setIsValidEmail(undefined);
+                setErrorText("");
+                setFormInvalid(true);
+                return;
+            }
 
-                // Let's check if the email already exists or not.
-                const response = await fetch(`http://localhost:3000/api/users/email/${email}`, {
-                    method: "GET"
-                });
+            const matchesPattern = debouncedEmail.match(emailPattern);
+            setEmailMatchesPattern(!!matchesPattern);
 
-                const result = await response.json();
-                
-                if (response.status == 200) {
+            if (!matchesPattern) {
+                setErrorText("Please enter a valid email address");
+                setFormInvalid(true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/users/email/${encodeURIComponent(debouncedEmail)}`);
+                const data = await response.json();
+
+                if (response.status === 200) {
                     setIsValidEmail(false);
-                    setErrorText(result.message);
-                }
-                else {
+                    setErrorText(data.message);
+                    setFormInvalid(true);
+                } else if (response.status === 404) {
                     setIsValidEmail(true);
                     setErrorText("");
+                    setFormInvalid(fieldsAreEmpty);
                 }
-            }
-            else {
+            } catch (error) {
                 setIsValidEmail(false);
-                setErrorText("Email is invalid. Please enter a valid email address.");
+                setErrorText("Error checking email availability");
+                setFormInvalid(true);
             }
-        }
-        validateEmail();
-    }, [email])
+        };
 
-    useEffect(() => {
-        const isFormValid = name === "" || email === "" || !isValidEmail || birthDateMonth === "" || birthDateDay == "" || birthDateYear == "";
-        setFormInvalid(isFormValid);
-    }, [formData])
+        validateEmail();
+    }, [debouncedEmail, setFormInvalid, fieldsAreEmpty]);
 
     return (
         <>
-            <FormInput type="text" name="name" label="Name" formData={formData} onChange={(e) => onChange(e)} />
+            <FormInput type="text" name="name" label="Name" formData={formData} onChange={onChange} />
             <div className="mt-7">
                 <FormInput 
                     type="email"
                     name="email" 
                     label="Email"
-                    formData={formData} 
-                    isValid={isValidEmail}  
-                    onChange={(e) => onChange(e)} 
+                    formData={formData}  
+                    onChange={(e) => { onChange(e); setFormInvalid(true); }} 
+                    isValid={emailMatchesPattern && isValidEmail}
                 />
-                {!isValidEmail && email != "" && <FormError text={errorText} />}
+                <FormError text={errorText} />
             </div>
             <div className="flex flex-col gap-1 mt-10">
                 <span className="font-bold">Date of birth</span>
@@ -81,7 +101,8 @@ const PersonalInfo = ({ formData, onChange, setFormInvalid }: PersonalInfoProps)
                                     name={dropdownField.name}
                                     data={dropdownField.data}
                                     label={dropdownField.label}
-                                    onChange={(e) => onChange(e)}
+                                    formData={formData}
+                                    onChange={onChange}
                                 />
                             </div>
                         );

@@ -1,6 +1,6 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
@@ -9,16 +9,17 @@ import formDataType from "../../types/formDataType";
 import VerificationCode from "./steps/VerificationCode";
 import Username from "./steps/Username";
 import Password from "./steps/Password";
+import MultiStepForm from "../MultiStepForm";
 
 interface SignupFormDialogProps {
     children: ReactNode
 }
 
-const stepTitles = ["Create your account", "We sent you a code", "Choose your username", "Choose a password"];
+const stepTitles: string[] = ["Create your account", "We sent you a code", "Choose your username", "Choose a password"];
 
 const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
 
-    const [step, setStep] = useState(0);
+    const [step, setStep] = useState<number>(0);
     const [formInvalid, setFormInvalid] = useState<boolean>(true);
 
     const [formData, setFormData] = useState<formDataType>({
@@ -40,29 +41,28 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
             ...prevFormData,
             [name]: name === "name" ? value : value.trim(),
         }));
-    }   
-
-    const renderStep = () => {
-        switch (step) {
-            case 0:
-                return <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
-            case 1:
-                return <VerificationCode formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
-            case 2:
-                return <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
-            case 3:
-                return <Password formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
-        }
     }
+    
+    const steps: React.JSX.Element[] = [
+        <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} formInvalid={formInvalid} />,
+        <VerificationCode formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} setFormData={setFormData} />,
+        <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />,
+        <Password formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
+    ];
 
     const handleNextClick = () => {
         if (step == 0) {
             sendVerificationEmail(formData.email, formData.name);
+            setFormData(prev => ({
+                ...prev,
+                verificationCode: ""
+            }));
             setStep(step + 1);
         }
-        else if (step < 3) {
+        else if (step < steps.length - 1) {
             setStep(step + 1);
         }
+        setFormInvalid(true);
     }
 
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -73,10 +73,10 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    formData: formData
+                        formData: formData
                 })
             });
-
+    
             const result = await response.json();
             console.log(result);
         } catch (error) {
@@ -105,16 +105,13 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                     </div>
                     <div className="px-10 md:px-20 flex flex-col flex-1">
                         <Dialog.Title className="text-3xl font-bold mt-5 mb-5">{stepTitles[step]}</Dialog.Title>
-                        <form className="flex-1 flex flex-col justify-between" onSubmit={(e) => handleFormSubmit(e)}>
-                            {renderStep()}
-                            <button
-                                disabled={formInvalid}
-                                type={step === 3 ? "submit" : "button"} 
-                                className="bg-white mb-6 p-4 rounded-full hover:cursor-pointer text-black font-bold mt-auto disabled:opacity-40" 
-                                onClick={() => handleNextClick()}
-                            >{step < 3 ? "Next" : "Sign up"}
-                            </button>
-                        </form>
+                        <MultiStepForm 
+                            step={step} 
+                            steps={steps}
+                            formInvalid={formInvalid}
+                            handleNextClick={handleNextClick}
+                            handleFormSubmit={handleFormSubmit}
+                        />
                     </div>
                 </Dialog.Content>
             </Dialog.Portal>

@@ -1,13 +1,5 @@
-type formDataType = {
-    name: string;
-    email: string;
-    birthDateMonth: string;
-    birthDateDay: string;
-    birthDateYear: string;
-    verificationCode: string;
-    username: string;
-    password: string;
-    confirmPassword: string;
+type formData = {
+    [key: string]: string;
 }
 
-export default formDataType;
+export default formData;

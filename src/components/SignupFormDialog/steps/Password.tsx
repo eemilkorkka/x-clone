@@ -11,23 +11,26 @@ interface PasswordProps {
 
 const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
 
-    const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false); 
+    const { password, confirmPassword } = formData;
+    const [isPasswordValid, setIsPasswordValid] = useState<boolean | undefined>(undefined); 
     const [errorText, setErrorText] = useState<string>("");
 
-    useEffect(() => {
-        setFormInvalid(true);
-        
-        if (formData.password != "") {
-            if (formData.password === formData.confirmPassword) {
-                setErrorText(validatePassword(formData.password));
+    useEffect(() => {        
+        if (password) {
+            if (password === confirmPassword) {
+                setErrorText(validatePassword(password));
             }
             else {
                 setErrorText("Passwords do not match!");
                 setIsPasswordValid(false);
             }
         }
+        else {
+            setFormInvalid(true);
+            setErrorText("");
+        }
 
-    }, [formData.password, formData.confirmPassword])
+    }, [password, confirmPassword])
 
     const validatePassword = (password: string): string => {
         var regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -48,7 +51,7 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                 name="password"
                 label="Password"
                 formData={formData}
-                onChange={(e) => onChange(e)}
+                onChange={onChange}
                 isValid={isPasswordValid}
             />
             <div className="mt-7">
@@ -57,7 +60,7 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                     name="confirmPassword"
                     label="Confirm password"
                     formData={formData}
-                    onChange={(e) => onChange(e)}
+                    onChange={onChange}
                     isValid={isPasswordValid}
                 />
             </div>

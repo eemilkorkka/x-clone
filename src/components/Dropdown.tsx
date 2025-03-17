@@ -6,17 +6,18 @@ interface DropdownProps {
     name: string;
     data: string[];
     label: string;
+    formData: formDataType;
     onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const Dropdown = ({ name, data, label, onChange }: DropdownProps) => {
+const Dropdown = ({ name, data, label, formData, onChange }: DropdownProps) => {
     return (
-        <div className="relative group hover:cursor-pointer">
+        <div className="relative group">
             <select 
-                className="w-full p-2.5 pt-5 border border-gray outline-none appearance-none rounded-md group-focus-within:border-xblue" 
+                className="w-full p-2.5 pt-5 border border-gray outline-none appearance-none rounded-md group-focus-within:border-xblue hover:cursor-pointer" 
                 name={name}
-                onChange={(e) => onChange(e)}>
-                    <option disabled selected></option>
+                onChange={onChange}>
+                    <option disabled selected>{formData[name]}</option>
                     {data.map((item, index) => {
                         return (
                             <option key={index}>{item}</option>
