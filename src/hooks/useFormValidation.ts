@@ -15,9 +15,16 @@ export function useFormValidation<T>({ formData, schema, touchedFields = [], set
 
     useEffect(() => {
         const validateForm = async () => {
-            const result = await schema.safeParseAsync(debouncedFormData);
-            setValidationResult(result);
-            setFormInvalid(!result.success);
+            // Try to parse synchronously first, if it fails with an async error, then use async parse
+            try {
+                const result = schema.safeParse(debouncedFormData);
+                setValidationResult(result);
+                setFormInvalid(!result.success);
+            } catch (error) {
+                const result = await schema.safeParseAsync(debouncedFormData);
+                setValidationResult(result);
+                setFormInvalid(!result.success);
+            }
         };
         
         validateForm();

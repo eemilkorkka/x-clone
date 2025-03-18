@@ -10,6 +10,7 @@ interface FormInputProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     labelStyle?: string;
     error?: string;
+    errorStyle?: string;
 }
 
 const FormInput = ({ 
@@ -18,8 +19,9 @@ const FormInput = ({
     label, 
     formData, 
     onChange,
-    labelStyle, 
-    error }: FormInputProps) => {
+    labelStyle,
+    error,
+    errorStyle }: FormInputProps) => {
 
     const [inputEmpty, setInputEmpty] = useState<boolean>(formData[name] === "");
     
@@ -43,7 +45,7 @@ const FormInput = ({
               ${!inputEmpty ? "text-[0.8em] top-1 left-3" : "top-4 left-3"}`}
             >{label}
             </label>
-            { error && !inputEmpty && <p className="text-red-500 h-4 mt-2">{error}</p> }
+            { error && !inputEmpty && <p className={`text-red-500 h-4 mt-2 ${errorStyle}`}>{error}</p> }
         </div>
     );
 }

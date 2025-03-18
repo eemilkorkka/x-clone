@@ -1,48 +1,28 @@
 import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import FormError from "@/components/FormError";
+import { z } from "zod";
+import { passwordSchema } from "@/lib/schemas";
+import { useFormValidation } from "@/hooks/useFormValidation";
 
 interface PasswordProps {
     formData: formDataType;
+    touchedFields: string[];
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
 }
 
-const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
+type PasswordFormData = z.infer<typeof passwordSchema>;
 
-    const { password, confirmPassword } = formData;
-    const [isPasswordValid, setIsPasswordValid] = useState<boolean | undefined>(undefined); 
-    const [errorText, setErrorText] = useState<string>("");
+const Password = ({ formData, touchedFields, onChange, setFormInvalid }: PasswordProps) => {
 
-    useEffect(() => {        
-        if (password) {
-            if (password === confirmPassword) {
-                setErrorText(validatePassword(password));
-            }
-            else {
-                setErrorText("Passwords do not match!");
-                setIsPasswordValid(false);
-            }
-        }
-        else {
-            setFormInvalid(true);
-            setErrorText("");
-        }
-
-    }, [password, confirmPassword])
-
-    const validatePassword = (password: string): string => {
-        var regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-        if (!regex.test(password)) {
-            setIsPasswordValid(false);
-            return "Password should at least be 8 characters long and contain one special symbol, upper and lowercase letters and a number.";
-        } else {
-            setIsPasswordValid(true);
-            setFormInvalid(false);
-            return "";
-        }
-    }
+    const { getErrorMessage } = useFormValidation<PasswordFormData>({
+        formData: formData as PasswordFormData,
+        schema: passwordSchema,
+        touchedFields: touchedFields,
+        setFormInvalid
+    });
 
     return (
         <>
@@ -52,7 +32,8 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                 label="Password"
                 formData={formData}
                 onChange={onChange}
-                isValid={isPasswordValid}
+                error={getErrorMessage("password") || getErrorMessage("confirmPassword")}
+                errorStyle="mb-2"
             />
             <div className="mt-7">
                 <FormInput 
@@ -61,10 +42,9 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                     label="Confirm password"
                     formData={formData}
                     onChange={onChange}
-                    isValid={isPasswordValid}
+                    error={getErrorMessage("confirmPassword")}
                 />
             </div>
-            <FormError text={errorText} />
         </>
     );
 }

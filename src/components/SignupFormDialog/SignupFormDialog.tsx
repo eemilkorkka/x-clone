@@ -45,12 +45,13 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
             [name]: name === "name" ? value : value.trim(),
         }));
     }
-    
+
+    // TODO: Make a singupFormDialog context instead of prop drilling all these props.
     const steps: React.JSX.Element[] = [
         <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
         <VerificationCode formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} setFormData={setFormData} touchedFields={touchedFields} />,
-        <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />,
-        <Password formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
+        <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
+        <Password formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />
     ];
 
     const handleNextClick = () => {

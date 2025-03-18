@@ -2,11 +2,10 @@ import { z } from "zod";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-export const emailFormatSchema = z.string().email("Please enter a valid email address");
-
 export const personalInfoSchema = z.object({
-    name: z.string().min(1),
-    email: emailFormatSchema
+    name: z.string().min(1).max(50),
+    email: z.string()
+        .email("Please enter a valid email address")
         .refine(async (email) => {
             if (!emailRegex.test(email)) return
             try {
@@ -49,6 +48,41 @@ export const verificationCodeSchema = z.object({
             code: z.ZodIssueCode.custom,
             message: "Something went wrong",
             path: ["verificationCode"]
+        });
+    }
+});
+
+export const usernameSchema = z.object({
+    username: z.string()
+        .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers and underscores")
+        .refine((username) => username.length >= 4 && username.length <= 15, {
+            message: "Username should be between 4 and 15 characters"
+        })
+        .refine(async (username) => {
+            try {
+                const response = await fetch(`api/users/${encodeURIComponent(username)}`);
+                return response.status === 404;
+            } catch (error) {
+                return false;
+            }
+        }, "Username is already in use")
+});
+
+export const passwordSchema = z.object({
+    password: z.string()
+        .min(8, "Password should be at least 8 characters long")
+        .max(100, "Password cannot exceed 100 characters")
+        .refine((password) => /[A-Z]/.test(password), "Password should contain at least one uppercase letter")
+        .refine((password) => /[a-z]/.test(password), "Password should contain at least one lowercase letter")
+        .refine((password) => /[0-9]/.test(password), "Password should contain at least one number")
+        .refine((password) => /[!@#$%&*]/.test(password), "Password should contain at least one of the following special symbols: !@#$%&*"),
+    confirmPassword: z.string()
+}).superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Passwords do not match",
+            path: ["confirmPassword"]
         });
     }
 });

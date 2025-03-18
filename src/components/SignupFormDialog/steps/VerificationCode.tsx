@@ -1,7 +1,6 @@
-"use client";
 import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
@@ -20,10 +19,10 @@ type VerificationCodeFormData = z.infer<typeof verificationCodeSchema>;
 const VerificationCode = ({ formData, touchedFields, onChange, setFormInvalid, setFormData }: VerificationCodeProps) => {
 
     const { getErrorMessage } = useFormValidation<VerificationCodeFormData>({
-            formData: formData as VerificationCodeFormData,
-            schema: verificationCodeSchema,
-            touchedFields: touchedFields,
-            setFormInvalid
+        formData: formData as VerificationCodeFormData,
+        schema: verificationCodeSchema,
+        touchedFields: touchedFields,
+        setFormInvalid
     });
 
     const handleResendCode = () => {
@@ -42,7 +41,7 @@ const VerificationCode = ({ formData, touchedFields, onChange, setFormInvalid, s
                 name="verificationCode" 
                 label="Verification code" 
                 formData={formData} 
-                onChange={onChange} 
+                onChange={(e) => { onChange(e); setFormInvalid(true) }} 
                 error={getErrorMessage("verificationCode")}
             />
             <p 

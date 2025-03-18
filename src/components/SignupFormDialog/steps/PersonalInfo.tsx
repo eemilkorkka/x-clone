@@ -1,4 +1,3 @@
-"use client";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import FormInput from "../FormInput";
 import formDataType from "@/types/formDataType";
