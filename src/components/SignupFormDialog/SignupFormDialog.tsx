@@ -20,6 +20,7 @@ const stepTitles: string[] = ["Create your account", "We sent you a code", "Choo
 const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
 
     const [step, setStep] = useState<number>(0);
+    const [touchedFields, setTouchedFields] = useState<string[]>([]);
     const [formInvalid, setFormInvalid] = useState<boolean>(true);
 
     const [formData, setFormData] = useState<formDataType>({
@@ -37,6 +38,8 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
     const onInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
+        setTouchedFields(prev => [...prev, name]);
+
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: name === "name" ? value : value.trim(),
@@ -44,8 +47,8 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
     }
     
     const steps: React.JSX.Element[] = [
-        <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} formInvalid={formInvalid} />,
-        <VerificationCode formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} setFormData={setFormData} />,
+        <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
+        <VerificationCode formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} setFormData={setFormData} touchedFields={touchedFields} />,
         <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />,
         <Password formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} />
     ];

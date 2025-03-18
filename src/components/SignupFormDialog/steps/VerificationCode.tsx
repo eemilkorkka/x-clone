@@ -2,69 +2,29 @@
 import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import FormError from "@/components/FormError";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
-import { useDebounce } from "@/hooks/useDebounce";
+import { z } from "zod";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { verificationCodeSchema } from "@/lib/schemas";
 
 interface VerificationCodeProps {
     formData: formDataType;
+    touchedFields: string[];
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
     setFormData: Dispatch<SetStateAction<formDataType>>;
 }
 
-const VerificationCode = ({ formData, onChange, setFormInvalid, setFormData }: VerificationCodeProps) => {
+type VerificationCodeFormData = z.infer<typeof verificationCodeSchema>;
 
-    const [codeIsValid, setCodeIsValid] = useState<boolean | undefined>(undefined);
-    const [errorText, setErrorText] = useState<string>("");
-    const { verificationCode } = formData;
-    const debouncedVerificationCode = useDebounce(verificationCode, 500);
-    
-    useEffect(() => {
-        if (!verificationCode) {
-            setCodeIsValid(undefined);
-            setErrorText("");
-            setFormInvalid(true);
-        }
-    }, [verificationCode]);
+const VerificationCode = ({ formData, touchedFields, onChange, setFormInvalid, setFormData }: VerificationCodeProps) => {
 
-    useEffect(() => {  
-        
-        if (debouncedVerificationCode.length < 6) {
-            setErrorText("");
-            setFormInvalid(true);
-            return;
-        }
-
-        const verifyCode = async () => {
-            try {
-                const response = await fetch("http://localhost:3000/api/verify/code", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email: formData.email, verificationCode: debouncedVerificationCode })
-                });
-    
-                const result = await response.json();
-    
-                if (response.status == 200) {
-                    setFormInvalid(false);
-                    setCodeIsValid(true);
-                    setErrorText("");
-                } else {
-                    setFormInvalid(true);
-                    setCodeIsValid(false);
-                    setErrorText(result.message);
-                }
-            } catch (error) {
-                setCodeIsValid(false);
-                setErrorText("An error occurred. Please try again.");
-            }
-        }
-
-        verifyCode();
-    }, [debouncedVerificationCode])
+    const { getErrorMessage } = useFormValidation<VerificationCodeFormData>({
+            formData: formData as VerificationCodeFormData,
+            schema: verificationCodeSchema,
+            touchedFields: touchedFields,
+            setFormInvalid
+    });
 
     const handleResendCode = () => {
         sendVerificationEmail(formData.email, formData.name);
@@ -83,9 +43,8 @@ const VerificationCode = ({ formData, onChange, setFormInvalid, setFormData }: V
                 label="Verification code" 
                 formData={formData} 
                 onChange={onChange} 
-                isValid={codeIsValid} 
+                error={getErrorMessage("verificationCode")}
             />
-            { errorText != "" && <FormError text={errorText} /> }
             <p 
                 className="text-gray-500 mt-3">Didn't receive code?
                 <span 

@@ -1,79 +1,30 @@
 "use client";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import FormInput from "../FormInput";
 import formDataType from "@/types/formDataType";
-import FormError from "@/components/FormError";
 import Dropdown from "@/components/Dropdown";
 import { dropdownFields } from "../../../utils/birthDateDropdowns";
-import { useDebounce } from "@/hooks/useDebounce";
+import { z } from "zod";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { personalInfoSchema } from "@/lib/schemas";
 
 interface PersonalInfoProps {
     formData: formDataType;
-    formInvalid: boolean;
+    touchedFields: string[];
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
 }
 
-const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 
-const PersonalInfo = ({ formData, formInvalid, onChange, setFormInvalid }: PersonalInfoProps) => {
-
-    const { name, email, birthDateMonth, birthDateDay, birthDateYear } = formData;
-
-    const [fieldsAreEmpty, setFieldsAreEmpty] = useState<boolean>(true);
-    const [emailMatchesPattern, setEmailMatchesPattern] = useState<boolean | undefined>(undefined);
-    const [isValidEmail, setIsValidEmail] = useState<boolean | undefined>(undefined);
-    const [errorText, setErrorText] = useState<string>("");
+const PersonalInfo = ({ formData, touchedFields, onChange, setFormInvalid }: PersonalInfoProps) => {
     
-    const debouncedEmail = useDebounce(email, 300);
-    
-    console.log(formInvalid);
-
-    useEffect(() => {
-        setFieldsAreEmpty(!name || !email || !birthDateMonth || !birthDateDay || !birthDateYear);
-    }, [name, email, birthDateMonth, birthDateDay, birthDateYear, setFormInvalid]);
-    
-    useEffect(() => {
-        const validateEmail = async () => {
-            if (!debouncedEmail) {
-                setEmailMatchesPattern(undefined);
-                setIsValidEmail(undefined);
-                setErrorText("");
-                setFormInvalid(true);
-                return;
-            }
-
-            const matchesPattern = debouncedEmail.match(emailPattern);
-            setEmailMatchesPattern(!!matchesPattern);
-
-            if (!matchesPattern) {
-                setErrorText("Please enter a valid email address");
-                setFormInvalid(true);
-                return;
-            }
-
-            try {
-                const response = await fetch(`/api/users/email/${encodeURIComponent(debouncedEmail)}`);
-                const data = await response.json();
-
-                if (response.status === 200) {
-                    setIsValidEmail(false);
-                    setErrorText(data.message);
-                    setFormInvalid(true);
-                } else if (response.status === 404) {
-                    setIsValidEmail(true);
-                    setErrorText("");
-                    setFormInvalid(fieldsAreEmpty);
-                }
-            } catch (error) {
-                setIsValidEmail(false);
-                setErrorText("Error checking email availability");
-                setFormInvalid(true);
-            }
-        };
-
-        validateEmail();
-    }, [debouncedEmail, setFormInvalid, fieldsAreEmpty]);
+    const { getErrorMessage } = useFormValidation<PersonalInfoFormData>({
+        formData: formData as PersonalInfoFormData,
+        schema: personalInfoSchema,
+        touchedFields,
+        setFormInvalid
+    });
 
     return (
         <>
@@ -84,10 +35,9 @@ const PersonalInfo = ({ formData, formInvalid, onChange, setFormInvalid }: Perso
                     name="email" 
                     label="Email"
                     formData={formData}  
-                    onChange={(e) => { onChange(e); setFormInvalid(true); }} 
-                    isValid={emailMatchesPattern && isValidEmail}
+                    onChange={(e) => { onChange(e); setFormInvalid(true); }}
+                    error={getErrorMessage("email")}
                 />
-                <FormError text={errorText} />
             </div>
             <div className="flex flex-col gap-1 mt-10">
                 <span className="font-bold">Date of birth</span>
