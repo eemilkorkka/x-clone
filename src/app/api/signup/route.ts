@@ -34,5 +34,7 @@ export async function POST(req: Request) {
             console.log(error);
             return NextResponse.json({ message: "Signup failed." }, { status: 500 });
         }
+    } else {
+        return NextResponse.json({ message: "Something went wrong." }, { status: 400 });
     }
 }

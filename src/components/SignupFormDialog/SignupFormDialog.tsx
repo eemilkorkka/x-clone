@@ -10,6 +10,7 @@ import Username from "./steps/Username";
 import Password from "./steps/Password";
 import MultiStepForm from "../MultiStepForm";
 import { SignupFormContext } from "@/context/signupFormContext";
+import toast, { Toaster } from "react-hot-toast";
 
 interface SignupFormDialogProps {
     children: ReactNode
@@ -60,44 +61,48 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
             });
     
             const result = await response.json();
-            console.log(result);
+            
+            response.status === 201 ? toast.success(result.message) : toast.error(result.message);
         } catch (error) {
             console.log(error);
         }
     }
 
     return (
-        <Dialog.Root>
-            <Dialog.Trigger asChild>
-                {children}
-            </Dialog.Trigger>
-            <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 bg-gray-700/50"/>
-                <Dialog.Content className="w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background bg-black lg:rounded-2xl">
-                    <div className="flex items-center justify-between p-3">
-                        {step > 0 ? (
-                            <FaArrowLeft size={20} className="hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
-                        ) 
-                        : (
-                            <Dialog.Close asChild>
-                                <IoClose size={25} className="hover:cursor-pointer" />
-                            </Dialog.Close>
-                        )}
-                        <FaXTwitter size={35} className="m-auto" />
-                    </div>
-                    <div className="px-10 md:px-20 flex flex-col flex-1">
-                        <Dialog.Title className="text-3xl font-bold mt-5 mb-5">{stepTitles[step]}</Dialog.Title>
-                        <MultiStepForm 
-                            step={step} 
-                            steps={steps}
-                            formInvalid={formInvalid}
-                            handleNextClick={(e) => handleNextClick(e)}
-                            handleFormSubmit={handleFormSubmit}
-                        />
-                    </div>
-                </Dialog.Content>
-            </Dialog.Portal>
-        </Dialog.Root>
+        <>
+            <Dialog.Root>
+                <Dialog.Trigger asChild>
+                    {children}
+                </Dialog.Trigger>
+                <Dialog.Portal>
+                    <Dialog.Overlay className="fixed inset-0 bg-gray-700/50"/>
+                    <Dialog.Content className="w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background bg-black lg:rounded-2xl">
+                        <div className="flex items-center justify-between p-3">
+                            {step > 0 ? (
+                                <FaArrowLeft size={20} className="hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
+                            ) 
+                            : (
+                                <Dialog.Close asChild>
+                                    <IoClose size={25} className="hover:cursor-pointer" />
+                                </Dialog.Close>
+                            )}
+                            <FaXTwitter size={35} className="m-auto" />
+                        </div>
+                        <div className="px-10 md:px-20 flex flex-col flex-1">
+                            <Dialog.Title className="text-3xl font-bold mt-5 mb-5">{stepTitles[step]}</Dialog.Title>
+                            <MultiStepForm 
+                                step={step} 
+                                steps={steps}
+                                formInvalid={formInvalid}
+                                handleNextClick={(e) => handleNextClick(e)}
+                                handleFormSubmit={handleFormSubmit}
+                            />
+                        </div>
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog.Root>
+            <Toaster />
+        </>
     );
 }
 
