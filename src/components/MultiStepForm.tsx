@@ -1,10 +1,10 @@
-import { FormEvent } from "react";
+import { FormEvent, MouseEvent } from "react";
 
 interface MultiStepFormProps {
     step: number;
     steps: React.JSX.Element[];
     formInvalid: boolean;
-    handleNextClick: () => void;
+    handleNextClick: (e: MouseEvent<HTMLButtonElement>) => void;
     handleFormSubmit: (e: FormEvent<HTMLFormElement>) => void;
 }
 

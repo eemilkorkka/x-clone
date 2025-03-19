@@ -1,6 +1,6 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { FormEvent, ReactNode, useContext, useState } from "react";
+import { FormEvent, MouseEvent, ReactNode, useContext, useState } from "react";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
@@ -29,19 +29,22 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         <Password />
     ];
 
-    const handleNextClick = () => {
-        if (step == 0) {
+    const handleNextClick = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        if (step === 0) {
             sendVerificationEmail(formData.email, formData.name);
             setFormData(prev => ({
                 ...prev,
                 verificationCode: ""
             }));
             setStep(step + 1);
+            setFormInvalid(true);
         }
         else if (step < steps.length - 1) {
             setStep(step + 1);
+            setFormInvalid(true);
         }
-        setFormInvalid(true);
     }
 
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -88,7 +91,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                             step={step} 
                             steps={steps}
                             formInvalid={formInvalid}
-                            handleNextClick={handleNextClick}
+                            handleNextClick={(e) => handleNextClick(e)}
                             handleFormSubmit={handleFormSubmit}
                         />
                     </div>

@@ -9,7 +9,7 @@ export const personalInfoSchema = z.object({
         .refine(async (email) => {
             if (!emailRegex.test(email)) return
             try {
-                const response = await fetch(`/api/users/email/${encodeURIComponent(email)}`);
+                const response = await fetch(`http://localhost:3000/api/users/email/${encodeURIComponent(email)}`);
                 return response.status === 404;
             } catch (error) {
                 return false;
@@ -26,7 +26,7 @@ export const verificationCodeSchema = z.object({
 }).superRefine(async (data, ctx) => {
     if (data.verificationCode.length > 6 || data.verificationCode.length < 6) return;
     try {
-        const response = await fetch('/api/verify/code', {
+        const response = await fetch('http://localhost:3000/api/verify/code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const usernameSchema = z.object({
         })
         .refine(async (username) => {
             try {
-                const response = await fetch(`api/users/${encodeURIComponent(username)}`);
+                const response = await fetch(`http://localhost:3000/api/users/${encodeURIComponent(username)}`);
                 return response.status === 404;
             } catch (error) {
                 return false;
