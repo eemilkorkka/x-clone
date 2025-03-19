@@ -1,23 +1,18 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
 import FormInput from "../FormInput";
-import formDataType from "@/types/formDataType";
 import Dropdown from "@/components/Dropdown";
 import { dropdownFields } from "../../../utils/birthDateDropdowns";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { personalInfoSchema } from "@/lib/schemas";
-
-interface PersonalInfoProps {
-    formData: formDataType;
-    touchedFields: string[];
-    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-    setFormInvalid: Dispatch<SetStateAction<boolean>>;
-}
+import { SignupFormContext } from "@/context/signupFormContext";
 
 type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 
-const PersonalInfo = ({ formData, touchedFields, onChange, setFormInvalid }: PersonalInfoProps) => {
+const PersonalInfo = () => {
     
+    const { formData, touchedFields, onChange, setFormInvalid } = useContext(SignupFormContext)!;
+
     const { getErrorMessage } = useFormValidation<PersonalInfoFormData>({
         formData: formData as PersonalInfoFormData,
         schema: personalInfoSchema,

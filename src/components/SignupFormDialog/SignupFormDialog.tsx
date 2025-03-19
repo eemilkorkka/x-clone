@@ -1,15 +1,15 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
+import { FormEvent, ReactNode, useContext, useState } from "react";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
 import PersonalInfo from "./steps/PersonalInfo";
-import formDataType from "../../types/formDataType";
 import VerificationCode from "./steps/VerificationCode";
 import Username from "./steps/Username";
 import Password from "./steps/Password";
 import MultiStepForm from "../MultiStepForm";
+import { SignupFormContext } from "@/context/signupFormContext";
 
 interface SignupFormDialogProps {
     children: ReactNode
@@ -20,38 +20,13 @@ const stepTitles: string[] = ["Create your account", "We sent you a code", "Choo
 const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
 
     const [step, setStep] = useState<number>(0);
-    const [touchedFields, setTouchedFields] = useState<string[]>([]);
-    const [formInvalid, setFormInvalid] = useState<boolean>(true);
+    const { formData, formInvalid, setFormInvalid, setFormData } = useContext(SignupFormContext)!;
 
-    const [formData, setFormData] = useState<formDataType>({
-        name: "",
-        email: "",
-        birthDateMonth: "",
-        birthDateDay: "",
-        birthDateYear: "",
-        verificationCode: "",
-        username: "",
-        password: "",
-        confirmPassword: ""
-    });
-
-    const onInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-
-        setTouchedFields(prev => [...prev, name]);
-
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: name === "name" ? value : value.trim(),
-        }));
-    }
-
-    // TODO: Make a singupFormDialog context instead of prop drilling all these props.
     const steps: React.JSX.Element[] = [
-        <PersonalInfo formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
-        <VerificationCode formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} setFormData={setFormData} touchedFields={touchedFields} />,
-        <Username formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
-        <Password formData={formData} onChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />
+        <PersonalInfo />,
+        <VerificationCode />,
+        <Username />,
+        <Password />
     ];
 
     const handleNextClick = () => {

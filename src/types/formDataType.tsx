@@ -1,5 +1,5 @@
-type formData = {
+type formDataType = {
     [key: string]: string;
 }
 
-export default formData;
+export default formDataType;

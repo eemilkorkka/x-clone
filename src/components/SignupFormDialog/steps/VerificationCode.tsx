@@ -1,28 +1,22 @@
-import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { verificationCodeSchema } from "@/lib/schemas";
-
-interface VerificationCodeProps {
-    formData: formDataType;
-    touchedFields: string[];
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    setFormInvalid: Dispatch<SetStateAction<boolean>>;
-    setFormData: Dispatch<SetStateAction<formDataType>>;
-}
+import { useContext } from "react";
+import { SignupFormContext } from "@/context/signupFormContext";
 
 type VerificationCodeFormData = z.infer<typeof verificationCodeSchema>;
 
-const VerificationCode = ({ formData, touchedFields, onChange, setFormInvalid, setFormData }: VerificationCodeProps) => {
+const VerificationCode = () => {
+
+    const { formData, touchedFields, onChange, setFormInvalid, setFormData } = useContext(SignupFormContext)!;
 
     const { getErrorMessage } = useFormValidation<VerificationCodeFormData>({
         formData: formData as VerificationCodeFormData,
         schema: verificationCodeSchema,
         touchedFields: touchedFields,
-        setFormInvalid
+        setFormInvalid,
     });
 
     const handleResendCode = () => {

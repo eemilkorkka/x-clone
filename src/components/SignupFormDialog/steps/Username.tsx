@@ -1,21 +1,15 @@
-import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
 import { z } from "zod";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import FormError from "@/components/FormError";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { usernameSchema } from "@/lib/schemas";
-
-interface UsernameProps {
-    formData: formDataType;
-    touchedFields: string[];
-    setFormInvalid: Dispatch<SetStateAction<boolean>>;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+import { useContext } from "react";
+import { SignupFormContext } from "@/context/signupFormContext";
 
 type UsernameFormData = z.infer<typeof usernameSchema>;
 
-const Username = ({ formData, touchedFields, onChange, setFormInvalid }: UsernameProps) => {
+const Username = () => {
+
+    const { formData, touchedFields, setFormInvalid, onChange } = useContext(SignupFormContext)!;
 
     const { getErrorMessage } = useFormValidation<UsernameFormData>({
         formData: formData as UsernameFormData,

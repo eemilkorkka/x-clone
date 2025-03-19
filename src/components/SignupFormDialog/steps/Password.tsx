@@ -1,21 +1,17 @@
 import formDataType from "@/types/formDataType";
 import FormInput from "../FormInput";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import FormError from "@/components/FormError";
 import { z } from "zod";
 import { passwordSchema } from "@/lib/schemas";
 import { useFormValidation } from "@/hooks/useFormValidation";
-
-interface PasswordProps {
-    formData: formDataType;
-    touchedFields: string[];
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    setFormInvalid: Dispatch<SetStateAction<boolean>>;
-}
+import { useContext } from "react";
+import { SignupFormContext } from "@/context/signupFormContext";
 
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
-const Password = ({ formData, touchedFields, onChange, setFormInvalid }: PasswordProps) => {
+const Password = () => {
+
+    const { formData, touchedFields, onChange, setFormInvalid } = useContext(SignupFormContext)!;
 
     const { getErrorMessage } = useFormValidation<PasswordFormData>({
         formData: formData as PasswordFormData,
