@@ -1,4 +1,4 @@
-import FormInput from "../FormInput";
+import FormInput from "../../FormInput";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import FormInput from "../FormInput";
+import FormInput from "../../FormInput";
 import Dropdown from "@/components/Dropdown";
 import { dropdownFields } from "../../../utils/birthDateDropdowns";
 import { z } from "zod";

@@ -1,6 +1,6 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { FormEvent, MouseEvent, ReactNode, useContext, useState } from "react";
+import { FormEvent, MouseEvent, ReactNode, useContext, useState, useEffect } from "react";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
@@ -11,6 +11,7 @@ import Password from "./steps/Password";
 import MultiStepForm from "../MultiStepForm";
 import { SignupFormContext } from "@/context/signupFormContext";
 import toast, { Toaster } from "react-hot-toast";
+import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 
 interface SignupFormDialogProps {
     children: ReactNode
@@ -19,9 +20,15 @@ interface SignupFormDialogProps {
 const stepTitles: string[] = ["Create your account", "We sent you a code", "Choose your username", "Choose a password"];
 
 const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
-
+    const [open, setOpen] = useState(false);
     const [step, setStep] = useState<number>(0);
     const { formData, formInvalid, setFormInvalid, setFormData } = useContext(SignupFormContext)!;
+
+    useEffect(() => {
+        const handleOpenSignup = () => setOpen(true);
+        window.addEventListener(DIALOG_EVENTS.OPEN_SIGNUP, handleOpenSignup);
+        return () => window.removeEventListener(DIALOG_EVENTS.OPEN_SIGNUP, handleOpenSignup);
+    }, []);
 
     const steps: React.JSX.Element[] = [
         <PersonalInfo />,
@@ -62,7 +69,12 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
     
             const result = await response.json();
             
-            response.status === 201 ? toast.success(result.message) : toast.error(result.message);
+            if (response.status === 201) {
+                toast.success(result.message); 
+                setOpen(false);
+            } else {
+                toast.error(result.message);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -70,7 +82,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
 
     return (
         <>
-            <Dialog.Root>
+            <Dialog.Root open={open} onOpenChange={setOpen}>
                 <Dialog.Trigger asChild>
                     {children}
                 </Dialog.Trigger>
