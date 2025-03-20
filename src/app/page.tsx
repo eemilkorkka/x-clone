@@ -3,6 +3,9 @@ import logo from "../assets/logo-white.png";
 import Button from "@/components/Button";
 import { FcGoogle } from "react-icons/fc";
 import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
+import SignupFormContextProvider from "@/context/signupFormContext";
+import SignInFormDialog from "@/components/SignInFormDialog/SignInFormDialog";
+import GoogleSignIn from "@/components/GoogleSignIn";
 
 export default function Root() {
   return (
@@ -15,25 +18,26 @@ export default function Root() {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold lg:whitespace-nowrap mt-15 lg:mt-0 p-3">Happening now</h1>
           <h2 className="text-3xl font-bold mt-15">Join today.</h2>
           <div className="flex flex-col mt-10 gap-2.5">
-            <div className="relative">
-              <Button variant="white">Sign up with Google</Button>
-              <FcGoogle className="absolute top-3 left-9" size={22} />
-            </div>
+            <GoogleSignIn buttonText="Sign up with Google" />
             <div className="flex items-center gap-3">
               <hr className="h-1 w-31 text-gray-600"></hr>
               <span>or</span>
               <hr className="h-1 w-31 text-gray-600"></hr>
             </div>
             <div>
-              <SignupFormDialog>
-                <Button>Create account</Button>
-              </SignupFormDialog>
+              <SignupFormContextProvider>
+                <SignupFormDialog>
+                  <Button>Create account</Button>
+                </SignupFormDialog>
+              </SignupFormContextProvider>
             </div>
           </div>
           <div className="mt-15 flex flex-col">
             <span className="font-bold">Already have an account?</span>
             <div className="mt-5">
-              <Button variant="outline">Sign in</Button>
+              <SignInFormDialog>
+                <Button variant="outline" hoverColor="blue">Sign in</Button>
+              </SignInFormDialog>
             </div>
           </div>
         </div>

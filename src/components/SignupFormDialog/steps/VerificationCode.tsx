@@ -1,54 +1,51 @@
-"use client";
-import formDataType from "@/types/formDataType";
-import FormInput from "../FormInput";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import FormError from "@/components/FormError";
+import FormInput from "../../FormInput";
+import { sendVerificationEmail } from "@/utils/utilFunctions";
+import { z } from "zod";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { verificationCodeSchema } from "@/lib/schemas";
+import { useContext } from "react";
+import { SignupFormContext } from "@/context/signupFormContext";
 
-interface VerificationCodeProps {
-    email: string;
-    formData: formDataType;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    setFormInvalid: Dispatch<SetStateAction<boolean>>;
-}
+type VerificationCodeFormData = z.infer<typeof verificationCodeSchema>;
 
-const VerificationCode = ({ email, formData, onChange, setFormInvalid }: VerificationCodeProps) => {
+const VerificationCode = () => {
 
-    const [errorText, setErrorText] = useState<string>("");
-    const { verificationCode } = formData;
+    const { formData, touchedFields, onChange, setFormInvalid, setFormData } = useContext(SignupFormContext)!;
 
-    useEffect(() => {   
-        setFormInvalid(true);
+    const { getErrorMessage } = useFormValidation<VerificationCodeFormData>({
+        formData: formData as VerificationCodeFormData,
+        schema: verificationCodeSchema,
+        touchedFields: touchedFields,
+        setFormInvalid,
+    });
 
-        const verifyCode: () => Promise<void> = async () => {
-            if (verificationCode.length == 6) {
-                const response = await fetch("http://localhost:3000/api/verify/code", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email: formData.email, verificationCode: formData.verificationCode })
-                });
-
-                const result = await response.json();
-
-                if (response.status == 200) {
-                    setFormInvalid(false);
-                    setErrorText("");
-                } else {
-                    setFormInvalid(true);
-                    setErrorText(result.message);
-                }
-            }
-        }
-
-        verifyCode();
-    }, [verificationCode])
+    const handleResendCode = () => {
+        sendVerificationEmail(formData.email, formData.name);
+        setFormData(prev => ({
+            ...prev,
+            verificationCode: ""
+        }));
+    }
 
     return (
         <>
-            <p className="text-gray-500 mb-5">Enter it below to verify {email}.</p>
-            <FormInput type="text" name="verificationCode" label="Verification code" formData={formData} onChange={(e) => onChange(e)} />
-            <FormError text={errorText} />
+            <p className="text-gray-500 mb-5">Enter it below to verify {formData.email}</p>
+            <FormInput 
+                type="text" 
+                name="verificationCode" 
+                label="Verification code" 
+                formData={formData} 
+                onChange={(e) => { onChange(e); setFormInvalid(true) }} 
+                error={getErrorMessage("verificationCode")}
+            />
+            <p 
+                className="text-gray-500 mt-3">Didn't receive code?
+                <span 
+                    className="text-xblue hover:cursor-pointer" 
+                    onClick={handleResendCode}
+                    > Resend code
+                </span>
+            </p>
         </>
     );
 }

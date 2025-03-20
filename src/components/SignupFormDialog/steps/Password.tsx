@@ -1,23 +1,25 @@
 import formDataType from "@/types/formDataType";
-import FormInput from "../FormInput";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import FormError from "@/components/FormError";
+import FormInput from "../../FormInput";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { z } from "zod";
+import { passwordSchema } from "@/lib/schemas";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { useContext } from "react";
+import { SignupFormContext } from "@/context/signupFormContext";
 
-interface PasswordProps {
-    formData: formDataType;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    setFormInvalid: Dispatch<SetStateAction<boolean>>;
-}
+type PasswordFormData = z.infer<typeof passwordSchema>;
 
-const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
+const Password = () => {
 
-    const [errorText, setErrorText] = useState<string>("");
+    const { formData, touchedFields, onChange, setFormInvalid } = useContext(SignupFormContext)!;
 
-    useEffect(() => {
-        setFormInvalid(true);
-        console.log(formData.password === formData.confirmPassword);
-    }, [formData.password, formData.confirmPassword])
-    
+    const { getErrorMessage } = useFormValidation<PasswordFormData>({
+        formData: formData as PasswordFormData,
+        schema: passwordSchema,
+        touchedFields: touchedFields,
+        setFormInvalid
+    });
+
     return (
         <>
             <FormInput 
@@ -25,7 +27,9 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                 name="password"
                 label="Password"
                 formData={formData}
-                onChange={(e) => onChange(e)}
+                onChange={onChange}
+                error={getErrorMessage("password") || getErrorMessage("confirmPassword")}
+                errorStyle="mb-2"
             />
             <div className="mt-7">
                 <FormInput 
@@ -33,10 +37,10 @@ const Password = ({ formData, onChange, setFormInvalid }: PasswordProps) => {
                     name="confirmPassword"
                     label="Confirm password"
                     formData={formData}
-                    onChange={(e) => onChange(e)}
+                    onChange={onChange}
+                    error={getErrorMessage("confirmPassword")}
                 />
             </div>
-            <FormError text={errorText} />
         </>
     );
 }

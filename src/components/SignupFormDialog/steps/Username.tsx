@@ -1,50 +1,33 @@
-"use client";
-import formDataType from "@/types/formDataType";
-import FormInput from "../FormInput";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import FormError from "@/components/FormError";
+import FormInput from "../../FormInput";
+import { z } from "zod";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { usernameSchema } from "@/lib/schemas";
+import { useContext } from "react";
+import { SignupFormContext } from "@/context/signupFormContext";
 
-interface UsernameProps {
-    setFormInvalid: Dispatch<SetStateAction<boolean>>;
-    formData: formDataType;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+type UsernameFormData = z.infer<typeof usernameSchema>;
 
-const Username = ({ formData, onChange, setFormInvalid }: UsernameProps) => {
+const Username = () => {
 
-    const [errorText, setErrorText] = useState<string>("");
+    const { formData, touchedFields, setFormInvalid, onChange } = useContext(SignupFormContext)!;
 
-    useEffect(() => {
-        const checkIfUsernameExists: () => Promise<void> = async () => {
-            if (formData.username.length > 4) {
-
-                const response = await fetch(`http://localhost:3000/api/users/${formData.username}`, {
-                    method: "GET"
-                });
-
-                const result = await response.json();
-
-                if (result.user) {
-                    setFormInvalid(true);
-                    setErrorText(result.message);
-                }
-                else {
-                    setFormInvalid(false);
-                    setErrorText("");
-                }
-            }
-            else {
-                setFormInvalid(true);
-            }      
-        }
-
-        checkIfUsernameExists();
-    }, [formData.username])
+    const { getErrorMessage } = useFormValidation<UsernameFormData>({
+        formData: formData as UsernameFormData,
+        schema: usernameSchema,
+        touchedFields: touchedFields,
+        setFormInvalid
+    });
 
     return (
         <>
-            <FormInput type="text" name="username" label="Username" formData={formData} onChange={(e) => onChange(e)} />
-            <FormError text={errorText} />
+            <FormInput 
+                type="text" 
+                name="username" 
+                label="Username" 
+                formData={formData} 
+                onChange={onChange}
+                error={getErrorMessage("username")} 
+            />
         </>
     );
 }
