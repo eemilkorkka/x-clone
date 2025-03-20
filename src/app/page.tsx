@@ -36,7 +36,7 @@ export default function Root() {
             <span className="font-bold">Already have an account?</span>
             <div className="mt-5">
               <SignInFormDialog>
-                <Button variant="outline">Sign in</Button>
+                <Button variant="outline" hoverColor="blue">Sign in</Button>
               </SignInFormDialog>
             </div>
           </div>

@@ -20,7 +20,7 @@ interface SignupFormDialogProps {
 const stepTitles: string[] = ["Create your account", "We sent you a code", "Choose your username", "Choose a password"];
 
 const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
     const [step, setStep] = useState<number>(0);
     const { formData, formInvalid, setFormInvalid, setFormData } = useContext(SignupFormContext)!;
 

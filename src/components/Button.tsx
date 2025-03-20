@@ -1,19 +1,25 @@
-import { ReactNode, MouseEvent } from "react";
+import { ReactNode } from "react";
+
+const hoverColors = {
+    blue: "hover:bg-blue-400/10",
+    white: "hover:bg-white/10",
+};  
 
 interface ButtonProps {
     type?: "submit" | "reset" | "button";
     variant?: "blue" | "white" | "outline";
     textColor?: string;
-    hoverColor?: string;
+    hoverColor?: keyof typeof hoverColors;
     children: ReactNode;
 }
 
-const Button = ({ type, variant, textColor, hoverColor, children }: ButtonProps) => {
+const Button = ({ type, variant, textColor, hoverColor, children }: ButtonProps) => { 
+
     const variants = {
         blue: "bg-xblue text-white",
         white: "bg-white text-gray-900",
-        outline: `bg-transparent ${textColor ?? "text-xblue"} border border-gray-500 hover:${hoverColor ? hoverColor : "bg-blue-400/10"}`,
-    };
+        outline: `bg-transparent ${textColor ?? "text-xblue"} border border-gray-500 ${hoverColors[hoverColor ?? "blue"]}`,
+    }; 
 
     return (
         <button 
