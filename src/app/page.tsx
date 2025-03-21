@@ -5,8 +5,13 @@ import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
 import SignupFormContextProvider from "@/context/signupFormContext";
 import SignInFormDialog from "@/components/SignInFormDialog/SignInFormDialog";
 import GoogleSignIn from "@/components/GoogleSignIn";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function Root() {
+export default async function Root() {
+  const session = await auth();
+  if (session?.user) return redirect("/home");
+
   return (
     <div className="flex w-full h-full justify-center">
       <div className="flex lg:w-full lg:items-center justify-center flex-col lg:flex-row p-4 lg:p-0">

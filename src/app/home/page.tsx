@@ -3,11 +3,11 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default async function Page() {
     const session = await auth();
-    const username = session?.user.username;
+    const email = session?.user.email;
 
     return (
         <ProtectedRoute>
-            <div>Hello {username}, welcome to /home</div>
+            <div>Hello {email}, welcome to /home</div>
         </ProtectedRoute>
     );
 }

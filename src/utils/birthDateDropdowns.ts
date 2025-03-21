@@ -1,9 +1,24 @@
 import dropdownType from "@/types/dropdownType";
 
+export const months: string[] = [
+    "January", 
+    "February", 
+    "March", 
+    "April", 
+    "May", 
+    "June", 
+    "July", 
+    "August", 
+    "September", 
+    "October", 
+    "November", 
+    "December"
+];
+
 export const dropdownFields: dropdownType[] = [
     {
         name: "birthDateMonth",
-        data: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        data: months,
         label: "Month",
         style: "flex-1 sm:flex-2"
     },
