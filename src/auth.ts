@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
 
-export const handlers = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt"
   },
@@ -19,13 +19,11 @@ export const handlers = NextAuth({
         password: {}
       },
       async authorize(credentials) {
-        console.log(credentials);
-
         const user = await prisma.users.findFirst({
           where: {
             OR: [
-              { Email: credentials?.email },
-              { Username: credentials?.username }
+              { Email: credentials?.email as string },
+              { Username: credentials?.username as string }
             ]
           }
         });
@@ -48,6 +46,25 @@ export const handlers = NextAuth({
       clientSecret: GOOGLE_CLIENT_SECRET
     })
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.username = user.username
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string,
+          email: token.email as string,
+          username: token.username as string
+        }
+      }
+    }
+  }
 });
-
-export { handlers as GET, handlers as POST };

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import logo from "../assets/logo-white.png";
 import Button from "@/components/Button";
-import { FcGoogle } from "react-icons/fc";
 import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
 import SignupFormContextProvider from "@/context/signupFormContext";
 import SignInFormDialog from "@/components/SignInFormDialog/SignInFormDialog";
