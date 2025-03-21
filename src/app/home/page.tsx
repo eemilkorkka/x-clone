@@ -1,5 +1,13 @@
-export default function Page() {
+import { auth } from "@/auth";
+import ProtectedRoute from "@/components/ProtectedRoute";
+
+export default async function Page() {
+    const session = await auth();
+    const email = session?.user.email;
+
     return (
-        <div>Hello from /home!</div>
+        <ProtectedRoute>
+            <div>Hello {email}, welcome to /home</div>
+        </ProtectedRoute>
     );
 }

@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model tweets {
+  TweetID    Int       @id @default(autoincrement())
+  Content    String    @db.VarChar(255)
+  ImageUrl   String?   @db.VarChar(255)
+  Replies    Int       @default(0)
+  Likes      Int       @default(0)
+  Retweets   Int       @default(0)
+  Bookmarks  Int       @default(0)
+  UserID     Int?
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.DateTime(0)
+  users      users?    @relation(fields: [UserID], references: [UserID], onDelete: Restrict, onUpdate: Restrict, map: "tweets_ibfk_1")
+
+  @@index([UserID], map: "UserID")
+}
+
+model users {
+  UserID         Int      @id @default(autoincrement())
+  Name           String   @db.VarChar(255)
+  DisplayName    String   @db.VarChar(255)
+  Email          String   @db.VarChar(255)
+  BirthDateMonth String   @db.VarChar(255)
+  BirthDateDay   String   @db.VarChar(255)
+  BirthDateYear  String   @db.VarChar(255)
+  Username       String   @db.VarChar(255)
+  Password       String   @db.VarChar(255)
+  Location       String?  @db.VarChar(255)
+  Website        String?  @db.VarChar(255)
+  ProfilePicture String?  @db.VarChar(255)
+  CoverPicture   String?  @db.VarChar(255)
+  Bio            String?  @db.VarChar(255)
+  tweets         tweets[]
+}
+
+model verificationtokens {
+  Id    Int    @id @default(autoincrement())
+  Email String @unique(map: "Email") @db.VarChar(255)
+  Code  Int?
+}

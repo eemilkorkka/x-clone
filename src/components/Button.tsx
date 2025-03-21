@@ -1,20 +1,33 @@
 import { ReactNode } from "react";
 
-const variants = {
-    blue: "bg-xblue text-white",
-    white: "bg-white text-gray-900",
-    outline: "bg-transparent text-xblue border-1 border-gray-500 hover:bg-blue-400/10",
-};
+const hoverColors = {
+    blue: "hover:bg-blue-400/10",
+    white: "hover:bg-white/10",
+};  
 
 interface ButtonProps {
-    variant?: keyof typeof variants;
-    children: ReactNode
+    type?: "submit" | "reset" | "button";
+    variant?: "blue" | "white" | "outline";
+    textColor?: string;
+    hoverColor?: keyof typeof hoverColors;
+    children: ReactNode;
 }
 
-const Button = ({ variant, children }: ButtonProps) => {
+const Button = ({ type, variant, textColor, hoverColor, children }: ButtonProps) => { 
+
+    const variants = {
+        blue: "bg-xblue text-white",
+        white: "bg-white text-gray-900",
+        outline: `bg-transparent ${textColor ?? "text-xblue"} border border-gray-500 ${hoverColors[hoverColor ?? "blue"]}`,
+    }; 
+
     return (
-        <button className={`w-72 rounded-full font-bold p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue }`}>{children}</button>
-    )
+        <button 
+            type={type ?? "button"} 
+            className={`w-72 rounded-full font-bold p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
+                {children}
+        </button>
+    );
 }
 
 export default Button;

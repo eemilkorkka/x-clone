@@ -1,9 +1,66 @@
+const nodemailer = require("nodemailer");
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-    /* Here we will be adding the user's email to our db along with a 6 digit verification code and sending them a verification email. 
-    (Or updating the verification code in case the email already exits in the database.) */
+const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.USER,
+      pass: process.env.PASS,
+    },
+});
 
-    const { name, email } = await req.json();
-    return NextResponse.json({ message: `Received the email address ${email} from a person named ${name}`});
+export async function POST(req: Request) {
+    const { email, name } = await req.json();
+    const code: number = await Math.floor(100000 + Math.random() * 900000);
+
+    try {
+        await storeVerificationCode(email, code);
+
+        const mail = await transporter.sendMail({
+            from: process.env.USER,
+            to: email,
+            subject: "Verification code for XClone",
+            text: `Hello, ${name}! Your verification code for XClone is ${code}`
+        });
+
+        return NextResponse.json({ message: "Email sent successfully!"}, { status: 200 });
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    }
+}
+
+const storeVerificationCode = async (email: string, code: number) => {
+    try {
+        const user = await prisma.verificationtokens.findFirst({
+            where: {
+                Email: email
+            }
+        });
+
+        if (user) {
+            await prisma.verificationtokens.update({
+                where: {
+                    Email: email
+                },
+                data: {
+                    Code: code
+                }
+            });
+        }
+        else {
+            await prisma.verificationtokens.create({
+                data: {
+                    Email: email,
+                    Code: code
+                }
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
