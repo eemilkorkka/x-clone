@@ -1,10 +1,10 @@
 import Image from "next/image";
 import logo from "../assets/logo-white.png";
-import Button from "@/components/Button";
+import Button from "@/components/shared/Button";
 import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
 import SignupFormContextProvider from "@/context/signupFormContext";
 import SignInFormDialog from "@/components/SignInFormDialog/SignInFormDialog";
-import GoogleSignIn from "@/components/GoogleSignIn";
+import GoogleSignIn from "@/components/shared/GoogleSignIn";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
@@ -13,7 +13,7 @@ export default async function Root() {
   if (session?.user) return redirect("/home");
 
   return (
-    <div className="flex w-full h-full justify-center">
+    <div className="flex w-full h-full bg-black text-white justify-center">
       <div className="flex lg:w-full lg:items-center justify-center flex-col lg:flex-row p-4 lg:p-0">
         <div className="w-1/2 flex items-start justify-start lg:items-center lg:justify-center">
           <Image src={logo} alt="logo" width={0} height={0} className="w-12 lg:w-[400px]" />

@@ -3,14 +3,15 @@ import { useState, ReactNode, ChangeEvent, useEffect, FormEvent } from "react";
 import { Dialog } from "radix-ui";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter } from "react-icons/fa6";
-import GoogleSignIn from "../GoogleSignIn";
-import FormInput from "../FormInput";
+import GoogleSignIn from "../shared/GoogleSignIn";
+import FormInput from "../form/FormInput";
 import formDataType from "@/types/formDataType";
-import Button from "../Button";
+import Button from "../shared/Button";
 import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 import { signIn } from "next-auth/react";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "../shared/LoadingSpinner";
 
 interface SignInFormDialogProps {
     children: ReactNode;
@@ -20,6 +21,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
     
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false);
+    const [hasSubmitted, setSubmitted] = useState<boolean>();
     const [errorText, setErrorText] = useState<string>("");
 
     const [formData, setFormData] = useState<formDataType>({
@@ -45,6 +47,8 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        setSubmitted(true);
+
         try {
             const result = await signIn("credentials", {
                 email: formData.identifier,
@@ -54,13 +58,16 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
             });
 
             if (result?.error) {
+                setSubmitted(false);
                 setErrorText("Invalid credentials. Please try again.");
             } else {
                 console.log("success", result);
                 setOpen(false);
+                setSubmitted(false);
                 router.push("/home")
             }
         } catch (error) {
+            setSubmitted(false);
             toast.error("Something went wrong");
         }
     }   
@@ -73,7 +80,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                 </Dialog.Trigger>
                 <Dialog.Portal>
                     <Dialog.Overlay className="fixed inset-0 bg-gray-700/50"/>
-                    <Dialog.Content className="w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background bg-black lg:rounded-2xl">
+                    <Dialog.Content className="text-white w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background bg-black lg:rounded-2xl">
                         <div className="flex items-center justify-between p-3">
                             <Dialog.Close asChild>
                                 <IoClose size={25} className="hover:cursor-pointer" />
@@ -105,7 +112,9 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                                             formData={formData} 
                                             onChange={(e) => { onInputChange(e); setErrorText(""); }} 
                                         />
-                                        { errorText && <p className="text-red-500">{errorText}</p>}
+                                        <div className="flex justify-center">
+                                            { errorText ? <p className="text-red-500">{errorText} </p> : hasSubmitted && <LoadingSpinner /> }
+                                        </div>
                                         <Button type="submit" variant="white">Sign in</Button>
                                     </form>
                                     <Button variant="outline" textColor="white" hoverColor="white">Forgot password?</Button>

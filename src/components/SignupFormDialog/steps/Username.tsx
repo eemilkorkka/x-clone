@@ -1,4 +1,4 @@
-import FormInput from "../../FormInput";
+import FormInput from "../../form/FormInput";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { usernameSchema } from "@/lib/schemas";

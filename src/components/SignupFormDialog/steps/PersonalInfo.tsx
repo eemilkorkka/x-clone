@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import FormInput from "../../FormInput";
-import Dropdown from "@/components/Dropdown";
+import FormInput from "../../form/FormInput";
+import Dropdown from "@/components/shared/Dropdown";
 import { dropdownFields } from "../../../utils/birthDateDropdowns";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";

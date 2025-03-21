@@ -16,13 +16,6 @@ html, body {
   --foreground: black;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: black;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
