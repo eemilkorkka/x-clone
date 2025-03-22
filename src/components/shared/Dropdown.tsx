@@ -14,7 +14,7 @@ const Dropdown = ({ name, data, label, formData, onChange }: DropdownProps) => {
     return (
         <div className="relative group">
             <select 
-                className="w-full p-2.5 pt-5 border border-gray outline-none appearance-none rounded-md group-focus-within:border-xblue hover:cursor-pointer" 
+                className="w-full bg-black p-2.5 pt-5 border border-gray outline-none appearance-none rounded-md group-focus-within:border-xblue hover:cursor-pointer" 
                 name={name}
                 onChange={onChange}>
                     <option disabled selected>{formData[name]}</option>

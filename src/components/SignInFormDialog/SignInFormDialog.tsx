@@ -61,10 +61,9 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                 setSubmitted(false);
                 setErrorText("Invalid credentials. Please try again.");
             } else {
-                console.log("success", result);
                 setOpen(false);
                 setSubmitted(false);
-                router.push("/home")
+                router.push("/home");
             }
         } catch (error) {
             setSubmitted(false);
@@ -91,7 +90,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                             <div className="mt-5">
                                 <Dialog.Title className="text-3xl font-bold">Sign in to X</Dialog.Title>
                                 <div className="mt-5 flex flex-col gap-6">
-                                    <GoogleSignIn buttonText="Sign in with Google" />
+                                    <GoogleSignIn buttonText="Sign in with Google" onClick={() => setSubmitted(true) } />
                                     <div className="flex items-center gap-3">
                                         <hr className="h-1 w-31 text-gray-600"></hr>
                                         <span>or</span>

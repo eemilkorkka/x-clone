@@ -7,24 +7,26 @@ const hoverColors = {
 
 interface ButtonProps {
     type?: "submit" | "reset" | "button";
-    variant?: "blue" | "white" | "outline";
+    variant?: "blue" | "white" | "black" | "outline";
     textColor?: string;
     hoverColor?: keyof typeof hoverColors;
+    style?: string;
     children: ReactNode;
 }
 
-const Button = ({ type, variant, textColor, hoverColor, children }: ButtonProps) => { 
+const Button = ({ type, variant, textColor, hoverColor, style, children }: ButtonProps) => { 
 
     const variants = {
         blue: "bg-xblue text-white",
         white: "bg-white text-gray-900",
+        black: "bg-black text-white",
         outline: `bg-transparent ${textColor ?? "text-xblue"} border border-gray-500 ${hoverColors[hoverColor ?? "blue"]}`,
     }; 
 
     return (
         <button 
             type={type ?? "button"} 
-            className={`w-72 rounded-full font-bold p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
+            className={`${style} rounded-full font-bold p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
                 {children}
         </button>
     );

@@ -31,7 +31,7 @@ export default async function Root() {
             <div>
               <SignupFormContextProvider>
                 <SignupFormDialog>
-                  <Button>Create account</Button>
+                  <Button style="w-72">Create account</Button>
                 </SignupFormDialog>
               </SignupFormContextProvider>
             </div>
@@ -40,7 +40,7 @@ export default async function Root() {
             <span className="font-bold">Already have an account?</span>
             <div className="mt-5">
               <SignInFormDialog>
-                <Button variant="outline" hoverColor="blue">Sign in</Button>
+                <Button variant="outline" hoverColor="blue" style="w-72">Sign in</Button>
               </SignInFormDialog>
             </div>
           </div>

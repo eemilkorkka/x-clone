@@ -1,4 +1,6 @@
 import { auth } from "@/auth";
+import Layout from "@/components/Layout/Layout";
+import LeftSideBar from "@/components/Layout/LeftSideBar/LeftSideBar";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 export default async function Page() {
@@ -7,7 +9,7 @@ export default async function Page() {
 
     return (
         <ProtectedRoute>
-            <div>Hello {email}, welcome to /home</div>
+            <Layout>middle</Layout>
         </ProtectedRoute>
     );
 }

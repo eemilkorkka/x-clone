@@ -1,19 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, { params }: { params: { username: string }}) {
-    const { username } = params;
+export async function GET(req: Request, { params }: { params: Promise<{ username: string }> }) {
+    const { username } = await params;
 
     const user = await prisma.users.findFirst({
-        omit: {
-            Password: true,
-            BirthDateMonth: true,
-            BirthDateDay: true,
-            BirthDateYear: true,
-            Email: true
-        },
         where: {
             Username: username
+        },
+        select: {
+            Username: true,
+            DisplayName: true,
+            Website: true,
+            Location: true,
+            ProfilePicture: true,
+            CoverPicture: true,
+            Bio: true
         }
     });
 
