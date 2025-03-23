@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
 const bcrypt = require("bcrypt");
+import { v4 as uuidv4 } from 'uuid';
 import { months } from "./utils/birthDateDropdowns";
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
@@ -99,7 +100,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               BirthDateMonth: months[month - 1],
               BirthDateDay: day.toString(),
               BirthDateYear: year.toString(),
-              Username: profile.email.split("@")[0] + Date.now(),
+              Username: "user_" + uuidv4().slice(0, 10),
               Password: "",
               ProfilePicture: profile.picture
             }

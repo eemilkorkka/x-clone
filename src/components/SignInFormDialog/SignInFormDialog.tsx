@@ -21,7 +21,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
     
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false);
-    const [hasSubmitted, setSubmitted] = useState<boolean>();
+    const [hasSubmitted, setSubmitted] = useState<boolean>(false);
     const [errorText, setErrorText] = useState<string>("");
 
     const [formData, setFormData] = useState<formDataType>({

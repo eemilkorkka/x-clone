@@ -9,13 +9,8 @@ interface GoogleSignInProps {
 }
 
 const GoogleSignIn = ({ buttonText, onClick }: GoogleSignInProps) => {
-    
-    const signInWithGoogle = async () => {
-        await signIn("google");
-    }
-
     return (
-        <div className="relative" onClick={() => { signInWithGoogle(); onClick }}>
+        <div className="relative" onClick={() => { signIn("google"); onClick && onClick(); }}>
               <Button variant="white" style="w-72">{buttonText}</Button>
               <FcGoogle className="absolute top-3 left-9" size={22} />
         </div>
