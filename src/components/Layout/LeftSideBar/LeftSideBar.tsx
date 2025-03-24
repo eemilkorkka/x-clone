@@ -5,7 +5,6 @@ import { prisma } from "@/lib/prisma";
 import Button from "@/components/shared/Button";
 import Link from "next/link";
 import { BsTwitterX } from "react-icons/bs";
-import ProfilePicture from "@/components/shared/ProfilePicture";
 import UserCard from "@/components/shared/UserCard";
 import { BsThreeDots } from "react-icons/bs";
 import LogoutPopover from "./LogoutPopover";
@@ -25,7 +24,7 @@ const LeftSideBar = async () => {
     });
 
     return (
-        <div className="w-full flex flex-col justify-between pr-2 pl-2">
+        <div className="w-full flex flex-col justify-between mt-2 pr-2 pl-2">
             <div className="flex flex-col gap-6">
                 <Link href="/home">
                     <button className="pl-3 hover:bg-gray-200 p-2.5 hover:cursor-pointer rounded-full">

@@ -15,6 +15,7 @@ const ProfilePicture = ({ image, style }: ProfilePictureProps) => {
 			height={40} 
 			width={40}
 			unoptimized
+			priority={true}
 			className={`rounded-full ${style}`} 
 		/>
     );

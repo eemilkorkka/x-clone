@@ -16,7 +16,7 @@ export default async function Root() {
     <div className="flex w-full h-full bg-black text-white justify-center">
       <div className="flex lg:w-full lg:items-center justify-center flex-col lg:flex-row p-4 lg:p-0">
         <div className="w-1/2 flex items-start justify-start lg:items-center lg:justify-center">
-          <Image src={logo} alt="logo" width={0} height={0} className="w-12 lg:w-[400px]" />
+          <Image src={logo} alt="logo" width={0} height={0} className="w-12 lg:w-[400px]" priority={true} />
         </div>
         <div className="flex-1 flex flex-col">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold lg:whitespace-nowrap mt-15 lg:mt-0 p-3">Happening now</h1>

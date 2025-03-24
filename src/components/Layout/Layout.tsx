@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import LeftSideBar from "./LeftSideBar/LeftSideBar";
+import SearchBar from "../shared/SearchBar";
 
 const Layout = ({ children }: { children: ReactNode }) => {
     return (
@@ -11,7 +12,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 <div className="w-[598px] h-screen border-r border-l border-gray-200">
                     {children}
                 </div>
-                <div className="w-[350px]">right</div>
+                <div className="hidden lg:inline w-[350px]">
+                    <SearchBar />
+                </div>
             </div>
         </div>
     );

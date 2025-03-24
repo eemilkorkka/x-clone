@@ -1,15 +1,15 @@
-import { auth } from "@/auth";
+import HomeWrapper from "@/components/home/HomeWrapper";
 import Layout from "@/components/Layout/Layout";
-import LeftSideBar from "@/components/Layout/LeftSideBar/LeftSideBar";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import TabsSwitcher from "@/components/shared/TabsSwitcher";
 
 export default async function Page() {
-    const session = await auth();
-    const email = session?.user.email;
-
+    console.log("yes");
     return (
         <ProtectedRoute>
-            <Layout>middle</Layout>
+            <Layout>
+                <HomeWrapper />
+            </Layout>
         </ProtectedRoute>
     );
 }

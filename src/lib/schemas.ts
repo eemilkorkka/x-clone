@@ -54,7 +54,7 @@ export const verificationCodeSchema = z.object({
 
 export const usernameSchema = z.object({
     username: z.string()
-        .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers and underscores")
+        .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, underscores and dashes")
         .refine((username) => username.length >= 4 && username.length <= 15, {
             message: "Username should be between 4 and 15 characters"
         })
