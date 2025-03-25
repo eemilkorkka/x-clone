@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
 import { months } from "./utils/birthDateDropdowns";
 
@@ -40,6 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.UserID.toString(),
           email: user.Email,
           username: user.Username,
+          image: user.ProfilePicture,
         }
       }
     }),
@@ -50,7 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         params: {
           scope: "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/user.birthday.read"
         }
-      }
+      },
     })
   ],
   callbacks: {
@@ -58,7 +59,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.username = user.username
+        token.username = user.username;
+        token.picture = user.image;
       }
       return token;
     },
@@ -69,7 +71,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           ...session.user,
           id: token.id as string,
           email: token.email as string,
-          username: token.username as string
+          username: token.username as string,
+          image: token.picture as string,
         }
       }
     },

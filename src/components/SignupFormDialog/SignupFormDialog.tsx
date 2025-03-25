@@ -31,10 +31,10 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
     }, []);
 
     const steps: React.JSX.Element[] = [
-        <PersonalInfo />,
-        <VerificationCode />,
-        <Username />,
-        <Password />
+        <PersonalInfo key={0} />,
+        <VerificationCode key={1} />,
+        <Username key={2} />,
+        <Password key={3} />
     ];
 
     const handleNextClick = (e: MouseEvent<HTMLButtonElement>) => {

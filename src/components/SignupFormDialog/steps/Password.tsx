@@ -1,6 +1,4 @@
-import formDataType from "@/types/formDataType";
 import FormInput from "../../form/FormInput";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { passwordSchema } from "@/lib/schemas";
 import { useFormValidation } from "@/hooks/useFormValidation";

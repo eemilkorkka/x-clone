@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { personalInfoSchema, verificationCodeSchema, usernameSchema, passwordSchema } from "@/lib/schemas";
 import { prisma } from "@/lib/prisma";
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
 export async function POST(req: Request) {
     const { formData } = await req.json();
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     if ((await result).success) {
         try {
             const hashedPassword = await bcrypt.hash(formData.password, 10);
-            const user = await prisma.users.create({
+            await prisma.users.create({
                 data: {
                     Name: formData.name,
                     DisplayName: formData.name,

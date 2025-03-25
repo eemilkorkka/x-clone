@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     try {
         await storeVerificationCode(email, code);
 
-        const mail = await transporter.sendMail({
+        await transporter.sendMail({
             from: process.env.USER,
             to: email,
             subject: "Verification code for XClone",

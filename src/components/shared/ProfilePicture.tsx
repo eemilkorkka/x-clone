@@ -9,15 +9,17 @@ interface ProfilePictureProps {
 
 const ProfilePicture = ({ image, style }: ProfilePictureProps) => {
     return (
-		<Image 
-			src={image ? image : defaultPfp} 
-			alt="avatar"
-			height={40} 
-			width={40}
-			unoptimized
-			priority={true}
-			className={`rounded-full ${style}`} 
-		/>
+		<div className="max-w-[40px] max-h-[40px]">
+			<Image 
+				src={image ? image : defaultPfp} 
+				alt="avatar"
+				height={0} 
+				width={0}
+				unoptimized
+				priority={true}
+				className={`rounded-full w-full h-full ${style}`} 
+			/>
+		</div>
     );
 }
 

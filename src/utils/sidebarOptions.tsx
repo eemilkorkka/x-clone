@@ -1,6 +1,6 @@
 import { GoHomeFill, GoHome } from "react-icons/go";
-import { IoSearch, IoSearchOutline, IoPerson, IoPersonOutline } from "react-icons/io5";
-import { HiBell, HiOutlineBell, HiEnvelope, HiOutlineEnvelope, HiBookmark, HiOutlineBookmark } from "react-icons/hi2";
+import { IoSearch, IoSearchOutline, IoPerson, IoPersonOutline, IoBookmark, IoBookmarkOutline } from "react-icons/io5";
+import { HiBell, HiOutlineBell, HiEnvelope, HiOutlineEnvelope } from "react-icons/hi2";
 import { BsPeople, BsPeopleFill } from "react-icons/bs";
 
 export const sideBarOptions = (username: string) => [
@@ -31,8 +31,8 @@ export const sideBarOptions = (username: string) => [
     {
         text: "Bookmarks",
         href: "/bookmarks",
-        darkIcon: <HiBookmark size="30" />,
-        lightIcon: <HiOutlineBookmark size="30" />
+        darkIcon: <IoBookmark size="30" />,
+        lightIcon: <IoBookmarkOutline size="30" />
     },
     {
         text: "Communities",

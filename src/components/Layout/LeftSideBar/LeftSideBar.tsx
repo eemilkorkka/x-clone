@@ -25,10 +25,10 @@ const LeftSideBar = async () => {
 
     return (
         <div className="w-full flex flex-col justify-between mt-2 pr-2 pl-2">
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
                 <Link href="/home">
-                    <button className="pl-3 hover:bg-gray-200 p-2.5 hover:cursor-pointer rounded-full">
-                        <BsTwitterX size="30" />
+                    <button className="hover:bg-gray-200 p-2.5 pl-3 hover:cursor-pointer rounded-full">
+                        <BsTwitterX size="30" className="p-0.5" />
                     </button>
                 </Link>
                 {sideBarOptions(user!.Username).map((option, index) => {
@@ -42,7 +42,7 @@ const LeftSideBar = async () => {
                         />
                     );
                 })}
-                <Button variant="black" style="p-3.5 xl:w-[90%]">Post</Button>
+                <Button variant="black" style="p-3.5 xl:w-[90%] mt-2">Post</Button>
             </div>
             <div className="mb-4">
                 <LogoutPopover image={user?.ProfilePicture ?? ""} username={user?.Username!} displayName={user?.DisplayName!} >
