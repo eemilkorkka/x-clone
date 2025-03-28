@@ -1,12 +1,16 @@
-import { useSession } from "next-auth/react";
 import ProfilePicture from "../../shared/ProfilePicture";
 import TweetStat from "./TweetStat";
 import { tweetStatType } from "@/types/tweetStatType";
+import { tweetContentType } from "@/types/tweetContentType";
+import AttachmentsGrid from "./AttachmentsGrid";
+import Media from "./Attachment";
 
 interface TweetProps {
-    content: string;
+    tweetContent: tweetContentType;
+    profilePicture: string | undefined;
     displayName: string;
     username: string;
+    timeStamp: string;
     statValues: number[];
 }
 
@@ -31,19 +35,36 @@ const tweetStats: tweetStatType[] = [
     }
 ];
 
-const Tweet = ({ content, displayName, username, statValues }: TweetProps) => {
-    const { data: session } = useSession();
-
+const Tweet = ({ tweetContent, profilePicture, displayName, username, timeStamp, statValues }: TweetProps) => {
     return (
         <div className="flex p-4 pb-1 border-b border-gray-200 hover:cursor-pointer hover:bg-gray-100">
-            <ProfilePicture image={session?.user.image} />
+            <ProfilePicture image={profilePicture} />
             <div className="flex flex-col pl-4 h-full w-full">
-                <div className="flex gap-1">
+                <div className="flex items-center gap-1">
                     <span className="font-bold whitespace-nowrap text-[16px]">{displayName}</span>
                     <span className="text-gray-500 whitespace-nowrap text-[16px]">@{username}</span>
+                    <i className="text-gray-500">·</i>
+                    <span className="text-gray-500">{timeStamp}</span>
                 </div>
-                <div>{content}</div>
-                <div className="flex justify-between mt-2">
+                <div>{tweetContent.text}</div>
+                {tweetContent.files?.length > 0 && (
+                    <div className="mt-2">
+                        <AttachmentsGrid>
+                            {tweetContent.files.map((file, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className={`relative ${
+                                            tweetContent.files.length === 3 && index === 0 ? "row-span-2 h-full" : "h-full"
+                                        }`}>
+                                            <Media type={file.type} url={file.url} />
+                                    </div>      
+                                );
+                            })}
+                        </AttachmentsGrid>
+                    </div>
+                )}
+                <div className={`flex justify-between ${tweetContent.files.length != 0 ? "mt-2" : ""}`}>
                     {tweetStats.map((stat, index) => {
                         return (
                             <TweetStat 

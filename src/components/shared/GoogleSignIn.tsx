@@ -10,9 +10,9 @@ interface GoogleSignInProps {
 
 const GoogleSignIn = ({ buttonText, onClick }: GoogleSignInProps) => {
     return (
-        <div className="relative" onClick={() => { signIn("google"); onClick?.() }}>
+        <div className="relative flex items-center" onClick={() => { signIn("google"); onClick?.() }}>
               <Button variant="white" style="w-72">{buttonText}</Button>
-              <FcGoogle className="absolute top-3 left-9" size={22} />
+              <FcGoogle className="absolute left-9" size={22} />
         </div>
     );
 }

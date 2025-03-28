@@ -1,26 +1,25 @@
-import Image from "next/image";
-import defaultPfp from "../../assets/default-pfp.png";
-
+import { Avatar } from "radix-ui";
 
 interface ProfilePictureProps {
-	image?: string;
-	style?: string;
+  image: string | undefined;
+  style?: string;
 }
 
 const ProfilePicture = ({ image, style }: ProfilePictureProps) => {
-    return (
-		<div className="max-w-[40px] max-h-[40px]">
-			<Image 
-				src={image ? image : defaultPfp} 
-				alt="avatar"
-				height={0} 
-				width={0}
-				unoptimized
-				priority={true}
-				className={`rounded-full w-full h-full ${style}`} 
+  	return (
+    	<Avatar.Root className={`w-10 h-10 min-w-10 min-h-10 select-none overflow-hidden rounded-full bg-blackA1 ${style}`}>
+			<Avatar.Image
+				className="w-full h-full rounded-[inherit] object-cover"
+				src={image}
+				width={40}
+				height={40}
+				alt="Profile Picture"
 			/>
-		</div>
-    );
+			<Avatar.Fallback
+				className="flex w-full h-full items-center justify-center bg-gray-400"
+			/>
+		</Avatar.Root>
+  	);
 }
 
 export default ProfilePicture;
