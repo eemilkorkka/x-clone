@@ -3,7 +3,7 @@ import TweetStat from "./TweetStat";
 import { tweetStatType } from "@/types/tweetStatType";
 import { tweetContentType } from "@/types/tweetContentType";
 import AttachmentsGrid from "./AttachmentsGrid";
-import Media from "./Attachment";
+import Media from "./Media";
 
 interface TweetProps {
     tweetContent: tweetContentType;
@@ -47,7 +47,7 @@ const Tweet = ({ tweetContent, profilePicture, displayName, username, timeStamp,
                     <span className="text-gray-500">{timeStamp}</span>
                 </div>
                 <div>{tweetContent.text}</div>
-                {tweetContent.files?.length > 0 && (
+                {tweetContent.files.length > 0 && (
                     <div className="mt-2">
                         <AttachmentsGrid>
                             {tweetContent.files.map((file, index) => {

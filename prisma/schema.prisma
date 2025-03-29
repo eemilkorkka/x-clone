@@ -28,4 +28,32 @@ model users {
   ProfilePicture String  @default("https://cloud.appwrite.io/v1/storage/buckets/67e599e6001b68a099f7/files/67e59ae30013a907b563/view?project=67e599cf000525d1eb9a") @db.VarChar(255)
   CoverPicture   String? @db.VarChar(255)
   Bio            String? @db.VarChar(255)
+  posts          posts[]
+}
+
+model files {
+  ID         Int             @id @default(autoincrement())
+  PostID     Int
+  File_URL   String          @db.VarChar(255)
+  File_Type  files_File_Type
+  created_at DateTime?       @default(now()) @db.Timestamp(0)
+  posts      posts           @relation(fields: [PostID], references: [ID], onDelete: Cascade, onUpdate: NoAction, map: "files_ibfk_1")
+
+  @@index([PostID], map: "PostID")
+}
+
+model posts {
+  ID         Int       @id @default(autoincrement())
+  UserID     Int
+  Content    String    @db.Text
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  files      files[]
+  users      users     @relation(fields: [UserID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
+
+  @@index([UserID], map: "UserID")
+}
+
+enum files_File_Type {
+  image
+  video
 }

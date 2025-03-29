@@ -29,3 +29,28 @@ export const uploadFiles = async (files: { url: string, file: File }[], formData
         console.log(error);
     }
 }
+
+export const timeAgo = (timestamp: string) => {
+    const now = new Date();
+    const tweetDate = new Date(timestamp);
+    const timeDiff = now.getTime() - tweetDate.getTime()
+  
+    const seconds = Math.floor(timeDiff / 1000); 
+    const minutes = Math.floor(timeDiff / 60000); 
+    const hours = Math.floor(timeDiff / 3600000); 
+  
+    if (seconds < 60) {
+      return `${seconds}s`;
+    }
+    else if (minutes < 60) {
+      return `${minutes}m`;
+    }
+    else if (hours < 24) {
+      return `${hours}h`;
+    }
+    else {
+      const month = tweetDate.toLocaleString('default', { month: 'short' });
+      const day = tweetDate.getDate(); 
+      return `${month} ${day}`;
+    }
+}

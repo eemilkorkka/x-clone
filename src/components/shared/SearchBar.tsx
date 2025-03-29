@@ -7,7 +7,7 @@ const SearchBar = () => {
     const [searchFocused, setSearchFocused] = useState<boolean>(false);
 
     return (
-        <form className="relative w-full mt-2">
+        <form className="relative flex items-center w-full mt-2">
             <input 
                 className="w-full p-2 px-9 rounded-full border border-gray-300 outline-0 focus:border-xblue focus:border-2" 
                 type="text" 
@@ -18,14 +18,14 @@ const SearchBar = () => {
                 onChange={(e) => setSearchText(e.target.value)} 
             />
             <IoSearch 
-                className="absolute top-3 left-3" 
+                className="absolute left-3" 
                 fill="gray" 
                 size="19" 
                 onClick={() => setSearchText("")} 
             />
             { searchFocused && searchText && 
                 <IoCloseCircle 
-                    className="absolute top-3 right-3 hover:cursor-pointer" 
+                    className="absolute right-3 hover:cursor-pointer" 
                     size="20" 
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => setSearchText("")} 

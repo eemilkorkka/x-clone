@@ -9,7 +9,7 @@ interface TabsSwitcherProps {
 
 const TabSwitcher = ({ tabs, currentTab, setCurrentTab }: TabsSwitcherProps) => {
     return (
-        <div className="flex w-full border-b border-gray-200">
+        <div className="sticky top-0 z-10 bg-white flex w-full border-b border-gray-200">
             {tabs.map((tab, index) => {
                 return (
                     <button
