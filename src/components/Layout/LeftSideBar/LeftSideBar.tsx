@@ -8,6 +8,7 @@ import { BsTwitterX } from "react-icons/bs";
 import UserCard from "@/components/shared/UserCard";
 import { BsThreeDots } from "react-icons/bs";
 import LogoutPopover from "./LogoutPopover";
+import PostButtonDialog from "./PostButtonDialog";
 
 const LeftSideBar = async () => {
     const session = await auth();
@@ -42,7 +43,9 @@ const LeftSideBar = async () => {
                         />
                     );
                 })}
-                <Button variant="black" style="p-3.5 xl:w-[90%] mt-2">Post</Button>
+                <PostButtonDialog>
+                    <Button variant="black" style="p-3.5 xl:w-[90%] mt-2">Post</Button>
+                </PostButtonDialog>
             </div>
             <div className="mb-4">
                 <LogoutPopover image={user?.ProfilePicture ?? ""} username={user?.Username!} displayName={user?.DisplayName!} >

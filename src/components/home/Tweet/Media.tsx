@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 
-interface AttachmentProps {
+interface MediaProps {
     type: string;
     url: string;
     children?: ReactNode;
 }
 
-const Media = ({ type, url, children }: AttachmentProps) => {
+const Media = ({ type, url, children }: MediaProps) => {
     return (
         <>
             {type.startsWith("image") ? (

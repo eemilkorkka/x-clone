@@ -26,7 +26,7 @@ const Button = ({ type, variant, textColor, hoverColor, style, children }: Butto
     return (
         <button 
             type={type ?? "button"} 
-            className={`${style} rounded-full font-bold p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
+            className={`${style} rounded-full font-bold text-lg p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
                 {children}
         </button>
     );

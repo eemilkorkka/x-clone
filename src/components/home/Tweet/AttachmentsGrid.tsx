@@ -10,12 +10,10 @@ const AttachmentsGrid = ({ children }: AttachmentsGridProps) => {
     return (
         <div
             className={`mt-2 grid gap-1 w-full ${
-                itemCount === 3
-                    ? "grid-cols-2 grid-rows-2 h-[300px]"
-                    : itemCount === 4
-                    ? "grid-cols-2 grid-rows-2 h-[300px]"
+                itemCount > 2
+                    ? "grid-cols-2 grid-rows-2"
                     : itemCount > 1
-                    ? "grid grid-cols-2 h-[300px]"
+                    ? "grid grid-cols-2"
                     : "inline"
             }`}
         >

@@ -2,7 +2,7 @@ import Image from "next/image";
 import logo from "../assets/logo-white.png";
 import Button from "@/components/shared/Button";
 import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
-import SignupFormContextProvider from "@/context/signupFormContext";
+import SignupFormContextProvider from "@/context/SignupFormContext";
 import SignInFormDialog from "@/components/SignInFormDialog/SignInFormDialog";
 import GoogleSignIn from "@/components/shared/GoogleSignIn";
 import { auth } from "@/auth";

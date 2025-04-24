@@ -9,7 +9,7 @@ import VerificationCode from "./steps/VerificationCode";
 import Username from "./steps/Username";
 import Password from "./steps/Password";
 import MultiStepForm from "../form/MultiStepForm";
-import { SignupFormContext } from "@/context/signupFormContext";
+import { SignupFormContext } from "@/context/SignupFormContext";
 import toast, { Toaster } from "react-hot-toast";
 import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 

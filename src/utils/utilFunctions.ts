@@ -37,8 +37,8 @@ export const timeAgo = (timestamp: string) => {
   
     const seconds = Math.floor(timeDiff / 1000); 
     const minutes = Math.floor(timeDiff / 60000); 
-    const hours = Math.floor(timeDiff / 3600000); 
-  
+    const hours = Math.floor(timeDiff / 3600000);
+
     if (seconds < 60) {
       return `${seconds}s`;
     }
@@ -51,6 +51,6 @@ export const timeAgo = (timestamp: string) => {
     else {
       const month = tweetDate.toLocaleString('default', { month: 'short' });
       const day = tweetDate.getDate(); 
-      return `${month} ${day}`;
+      return tweetDate.getFullYear() < now.getFullYear() ? `${month} ${day}, ${tweetDate.getFullYear()}` : `${month} ${day}`;
     }
 }

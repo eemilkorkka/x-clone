@@ -5,7 +5,7 @@ import { dropdownFields } from "../../../utils/birthDateDropdowns";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { personalInfoSchema } from "@/lib/schemas";
-import { SignupFormContext } from "@/context/signupFormContext";
+import { SignupFormContext } from "@/context/SignupFormContext";
 
 type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 

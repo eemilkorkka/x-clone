@@ -1,16 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TabSwitcher from "../shared/TabSwitcher";
 import TweetBox from "./TweetBox/TweetBox";
 import Tweet from "./Tweet/Tweet";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { timeAgo } from "@/utils/utilFunctions";
+import { TweetsContext } from "@/context/TweetsContext";
 
 const HomeWrapper = () => {
     const tabs: string[] = ["For you", "Following"];
     const [currentTab, setCurrentTab] = useState<number>(0);
-    const [tweets, setTweets] = useState<TweetData[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const { tweets, setTweets } = useContext(TweetsContext)!;
 
     useEffect(() => {
         const fetchTweets = async () => {
@@ -27,7 +28,7 @@ const HomeWrapper = () => {
     return (
         <>
             <TabSwitcher tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
-            <TweetBox setTweets={setTweets} />
+            <TweetBox />
             {loading ? (
                 <div className="flex justify-center mt-10 w-full">
                     <AiOutlineLoading3Quarters className="animate-spin text-xblue" size={30} />
@@ -50,7 +51,7 @@ const HomeWrapper = () => {
                                 }
                             }
                             timeStamp={timeAgo(tweet.created_at)}
-                            statValues={[0, 0, 0]}
+                            statValues={[0,0,0]}
                         />
                     );
                 })

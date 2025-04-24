@@ -3,7 +3,7 @@ import { z } from "zod";
 import { passwordSchema } from "@/lib/schemas";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { useContext } from "react";
-import { SignupFormContext } from "@/context/signupFormContext";
+import { SignupFormContext } from "@/context/SignupFormContext";
 
 type PasswordFormData = z.infer<typeof passwordSchema>;
 

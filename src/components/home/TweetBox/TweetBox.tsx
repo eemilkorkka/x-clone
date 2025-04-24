@@ -6,15 +6,17 @@ import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
 import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
-import { ChangeEvent, SetStateAction, Dispatch, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import Media from "../Tweet/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
 import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
+import { TweetsContext } from "@/context/TweetsContext";
 
 interface TweetBoxProps {
-    setTweets: Dispatch<SetStateAction<TweetData[]>>;
+    alwaysShowBorder?: boolean;
+    minRows?: number;
 }
 
 const icons = [
@@ -27,10 +29,11 @@ const icons = [
 const MAX_FILES = 4;
 const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "video/mp4"];
 
-const TweetBox = ({ setTweets }: TweetBoxProps) => {
+const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [isFocused, setFocused] = useState<boolean>(false);
+    const { setTweets, postDialogOpen, setPostDialogOpen } = useContext(TweetsContext)!;
     const [tweetContent, setTweetContent] = useState({
         text: "",
         files: [] as { url: string, file: File }[],
@@ -81,7 +84,7 @@ const TweetBox = ({ setTweets }: TweetBoxProps) => {
         if (tweetContent.files.length > 0) {
             const data = await uploadFiles(tweetContent.files, formData);
 
-            data.urls.forEach((url: { url: string; type: string }) => {
+            data.urls?.forEach((url: { url: string; type: string }) => {
                 files.push({ url: url.url, type: url.type });
             });
         }
@@ -98,13 +101,14 @@ const TweetBox = ({ setTweets }: TweetBoxProps) => {
 
         setTweets(prev => [json.post, ...prev]);
         setLoading(false);
+        postDialogOpen && setPostDialogOpen(false);
         setTweetContent({ text: "", files: [] });
     }
 
     return (
         <>
             { loading && <IndeterminateProgress /> }
-            <div className="flex p-4 pb-2 border-b border-gray-200">
+            <div className="flex p-4 pb-2">
                 <ProfilePicture image={session?.user.image} />
                 <div className="flex flex-col pl-1 h-full w-full text-xl">
                     <div className="p-1">
@@ -112,6 +116,7 @@ const TweetBox = ({ setTweets }: TweetBoxProps) => {
                             placeholder="What's happening?" 
                             className="w-full outline-0 resize-none placeholder-gray-600"
                             value={tweetContent.text}
+                            minRows={tweetContent.files.length > 0 ? 1 : minRows}
                             onChange={(e) => setTweetContent({ ...tweetContent, text: e.target.value })}
                             onFocus={() => setFocused(true)}
                         />
@@ -134,24 +139,22 @@ const TweetBox = ({ setTweets }: TweetBoxProps) => {
                             ))}
                         </AttachmentsGrid>
                     </div>
-                    <div className={`flex mt-2 pt-2.5 justify-between ${isFocused && "border-t mt-8 border-gray-200"}`}>
-                        <div>
-                            <div className="flex items-center h-full">
-                                <Icon onClick={() => tweetContent.files.length < MAX_FILES && filePickerRef.current?.click()}>
-                                    <SlPicture size={17} />
-                                    <input 
-                                        type="file" 
-                                        className="hidden"
-                                        ref={filePickerRef} 
-                                        onChange={handleFileAdd} 
-                                        multiple
-                                        accept="image/*,video/*"
-                                    />
-                                </Icon>
+                    <div className={`flex mt-2 pt-2.5 justify-between ${isFocused || alwaysShowBorder ? "border-t mt-8 border-gray-200" : ""}`}>
+                        <div className="flex items-center h-full">
+                            <Icon onClick={() => tweetContent.files.length < MAX_FILES && filePickerRef.current?.click()}>
+                                <SlPicture size={17} />
+                                <input 
+                                    type="file" 
+                                    className="hidden"
+                                    ref={filePickerRef} 
+                                    onChange={handleFileAdd} 
+                                    multiple
+                                    accept="image/*,video/*"
+                                />
+                            </Icon>
                                 {icons.map((icon, index) => (
-                                    <Icon key={index}>{icon}</Icon>
-                                ))}
-                            </div>
+                                <Icon key={index}>{icon}</Icon>
+                            ))}
                         </div>
                         <div className="flex items-center gap-4">
                             <button

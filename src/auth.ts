@@ -55,9 +55,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        token.id = user.id;
+        account?.provider === "google" ? token.id = account.userId : token.id = user.id;
         token.email = user.email;
         token.username = user.username;
         token.picture = user.image;
@@ -95,7 +95,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           
           const { year, month, day } = data.birthdays[0].date;
 
-          await prisma.users.create({
+          const user = await prisma.users.create({
             data: {
               Name: profile.name || "Google User",
               DisplayName: profile.nickname || "GoogleUser",
@@ -109,6 +109,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
           });
         }
+        
+        account.userId = user?.UserID.toString();
         return true;
       }
       return false; 

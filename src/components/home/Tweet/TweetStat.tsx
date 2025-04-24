@@ -1,4 +1,4 @@
-import { useState, JSX } from "react";
+import { useState } from "react";
 import { FaRegComment } from "react-icons/fa6";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { GoHeart, GoHeartFill } from "react-icons/go";
