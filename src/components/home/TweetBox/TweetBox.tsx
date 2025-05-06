@@ -14,6 +14,7 @@ import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
 import { TweetsContext } from "@/context/TweetsContext";
 import Button from "@/components/shared/Button";
+import EmojiPickerPopover from "./EmojiPickerPopover";
 
 interface TweetBoxProps {
     alwaysShowBorder?: boolean;
@@ -153,8 +154,20 @@ const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
                                     accept="image/*,video/*"
                                 />
                             </Icon>
-                                {icons.map((icon, index) => (
-                                <Icon key={index}>{icon}</Icon>
+                            {icons.map((icon, index) => (
+                                <>
+                                    {index === 1 ? (
+                                        <EmojiPickerPopover onEmojiClick={(emoji) => setTweetContent(prev => ({ ...prev, text: prev.text + emoji.emoji }))}>
+                                            <Icon key={index}>
+                                                {icon}
+                                            </Icon>
+                                        </EmojiPickerPopover>
+                                    ) : (
+                                        <Icon key={index}>
+                                            {icon}
+                                        </Icon>
+                                    )}
+                                </>
                             ))}
                         </div>
                         <div className="flex items-center gap-4">
