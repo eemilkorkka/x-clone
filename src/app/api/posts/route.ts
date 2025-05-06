@@ -42,7 +42,7 @@ export async function POST(req: Request) {
             orderBy: {
                 created_at: "desc"
             }
-        })
+        });
         
         return NextResponse.json({ message: "Post created successfully.", post: createdPost }, { status: 201 });
 

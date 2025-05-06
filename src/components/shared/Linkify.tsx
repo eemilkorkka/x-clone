@@ -3,12 +3,12 @@ const Linkify = ({ text }: { text: string }) => {
     const words = text.split(" ");
 
     return (
-        <>
+        <span className="break-words">
             {words.map((word, index) => {
                 return word.match(urlPattern) ? 
                 <a key={index} href={word} target="_blank" className="text-xblue no-underline hover:underline">{word}</a> : word + " ";
             })}
-        </>
+        </span>
     );
 }
 

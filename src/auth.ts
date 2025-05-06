@@ -57,13 +57,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user, account }) {
       if (user) {
-        account?.provider === "google" ? token.id = account.userId : token.id = user.id;
         token.email = user.email;
-        token.username = user.username;
         token.picture = user.image;
+    
+        if (account?.provider === "google") {
+          const dbUser = await prisma.users.findUnique({
+            where: { Email: user.email! },
+          });
+    
+          token.id = dbUser?.UserID.toString();
+          token.username = dbUser?.Username;  
+        } else {
+          token.id = user.id; 
+          token.username = user.username;
+        }
+      } else if (!token.id && token.email) {
+        const dbUser = await prisma.users.findUnique({
+          where: { Email: token.email },
+        });
+    
+        token.id = dbUser?.UserID.toString();
       }
+    
       return token;
-    },
+    },    
     async session({ session, token }) {
       return {
         ...session,
@@ -95,7 +112,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           
           const { year, month, day } = data.birthdays[0].date;
 
-          const user = await prisma.users.create({
+          const newUser = await prisma.users.create({
             data: {
               Name: profile.name || "Google User",
               DisplayName: profile.nickname || "GoogleUser",
@@ -108,9 +125,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               ProfilePicture: profile.picture
             }
           });
+
+          account.userId = newUser?.UserID.toString();
         }
-        
-        account.userId = user?.UserID.toString();
         return true;
       }
       return false; 

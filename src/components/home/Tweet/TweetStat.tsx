@@ -44,7 +44,7 @@ const TweetStat = ({ type, hoverBgColor, hoverTextColor, clickedColor, statValue
             className={`flex items-center text-gray-600 ${clicked && type !== "reply" && (clickedColor ?? "text-xblue")} hover:cursor-pointer`} 
             onClick={() =>  { handleStatClick(type); setClicked(prev => !prev) }}>
                 <div className="group flex items-center">
-                    <div className={`rounded-full p-2 ${hoverBgColor ? hoverBgColor : "hover:bg-xblue/20"} 
+                    <div className={`rounded-full p-2 ${hoverBgColor ? hoverBgColor : "hover:bg-xblue/10"} 
                     ${hoverTextColor ? hoverTextColor : "hover:text-xblue"}`}>
                         {types[type]}
                     </div>

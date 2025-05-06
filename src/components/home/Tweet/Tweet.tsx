@@ -2,10 +2,14 @@ import ProfilePicture from "../../shared/ProfilePicture";
 import TweetStat from "./TweetStat";
 import { tweetStatType } from "@/types/tweetStatType";
 import { tweetContentType } from "@/types/tweetContentType";
+import { BsThreeDots } from "react-icons/bs";
+import Icon from "../TweetBox/Icon";
 import AttachmentsGrid from "./AttachmentsGrid";
 import Media from "./Media";
 import Linkify from "@/components/shared/Linkify";
-import ProfileHoverCard from "@/components/profile/ProfileHoverCard";
+import ProfileHoverCard from "@/components/Profile/ProfileHoverCard";
+import Username from "@/components/Profile/Username";
+import DisplayName from "@/components/Profile/DisplayName";
 
 interface TweetProps {
     tweetContent: tweetContentType;
@@ -40,25 +44,27 @@ const tweetStats: tweetStatType[] = [
 const Tweet = ({ tweetContent, profilePicture, displayName, username, timeStamp, statValues }: TweetProps) => {
     return (
         <div className="flex p-4 pb-1 border-t last:border-b border-gray-200 hover:cursor-pointer hover:bg-gray-100">
-            <ProfileHoverCard>
-                <ProfilePicture image={profilePicture} href={username} />
-                { /* Not ideal but without this div the ProfileHoverCard won't work so this will do for now.
-                <div className="w-10 h-10 min-w-10 min-h-10 select-none overflow-hidden rounded-full bg-blackA1">
-                    <ProfilePicture image={profilePicture} href={username} />
-                </div>*/ }
-            </ProfileHoverCard>
+            <ProfilePicture image={profilePicture} href={username} username={username} showProfileHoverCard={true} />
             <div className="flex flex-col pl-4 h-full w-full">
-                <div className="flex items-center gap-1">
-                    <ProfileHoverCard>
-                        <a href={username} className="hover:underline"><span className="font-bold whitespace-nowrap text-[16px]">{displayName}</span></a>
-                    </ProfileHoverCard>
-                    <ProfileHoverCard>
-                        <a href={username}><span className="text-gray-500 whitespace-nowrap text-[16px]">@{username}</span></a>
-                    </ProfileHoverCard>
-                    <i className="text-gray-500">·</i>
-                    <span className="text-gray-500">{timeStamp}</span>
+                <div className="flex justify-between">
+                    <div className="flex gap-1">
+                        { /*TODO: Get rid of ProfileHoverCard components here and include them in the DisplayName and Username components.*/ }
+                        <ProfileHoverCard username={username}>
+                            <a href={username}><DisplayName displayName={displayName} variant="small" /></a>
+                        </ProfileHoverCard>
+                        <ProfileHoverCard username={username}>
+                            <a href={username}><Username username={username} /></a>
+                        </ProfileHoverCard>
+                        <i className="text-gray-500">·</i>
+                        <span className="text-gray-500 text-[15px] whitespace-nowrap">{timeStamp}</span>
+                    </div>
+                    <div className="group">
+                        <Icon>
+                            <BsThreeDots className="text-gray-500 group-hover:text-xblue" />
+                        </Icon>
+                    </div>
                 </div>
-                <div className="whitespace-pre-line">
+                <div className="whitespace-pre-line break-words mt-[-9px]">
                     { /* Tweets can include links, this component will detect them and turn them into anchor tags. */ }
                     <Linkify text={tweetContent.text} />
                 </div>

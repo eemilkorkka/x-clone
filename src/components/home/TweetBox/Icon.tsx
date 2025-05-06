@@ -7,7 +7,7 @@ interface IconProps {
 
 const Icon = ({ children, onClick }: IconProps) => {
     return (
-        <div className="relative hover:bg-xblue/20 hover:cursor-pointer p-2 rounded-full text-xblue" onClick={onClick}>
+        <div className="relative hover:bg-xblue/10 hover:cursor-pointer p-2 rounded-full text-xblue" onClick={onClick}>
             {children}
         </div>
     );

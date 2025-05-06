@@ -13,6 +13,7 @@ import AttachmentsGrid from "../Tweet/AttachmentsGrid";
 import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
 import { TweetsContext } from "@/context/TweetsContext";
+import Button from "@/components/shared/Button";
 
 interface TweetBoxProps {
     alwaysShowBorder?: boolean;
@@ -157,14 +158,13 @@ const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
                             ))}
                         </div>
                         <div className="flex items-center gap-4">
-                            <button
+                            <Button 
                                 disabled={postButtonIsDisabled} 
-                                className={`bg-black ${postButtonIsDisabled ? "opacity-50" : ""} 
-                                pt-2 px-4 py-1.5 text-[0.8em] text-white font-bold rounded-full hover:cursor-pointer`}
+                                variant="black" 
                                 onClick={handlePostTweet}
-                            >
-                                Post
-                            </button>
+                                style={`text-sm px-4 pt-2 pb-1.5 ${postButtonIsDisabled ? "opacity-50" : ""}`}>
+                                    Post
+                            </Button>
                         </div>
                     </div>
                 </div>

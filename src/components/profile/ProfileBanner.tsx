@@ -2,14 +2,18 @@ import Image from "next/image";
 import { ReactNode } from "react";
 
 interface ProfileBannerProps {
-    image: string;
+    image?: string;
     children?: ReactNode;
 }
 
 const ProfileBanner = ({ image, children }: ProfileBannerProps) => {
     return (
         <div className="w-full max-h-[200px] relative">
-            <Image className="w-full h-full" alt="Banner" src={image} width={0} height={0} unoptimized />
+            {image ? (
+                <Image className="w-full h-full" alt="Banner" src={image} width={0} height={0} unoptimized />
+            ) : (
+                <div className="w-full h-[200px] bg-gray-300"></div>
+            )}
             {children}
         </div>
     );

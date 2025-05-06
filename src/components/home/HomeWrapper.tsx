@@ -3,9 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import TabSwitcher from "../shared/TabSwitcher";
 import TweetBox from "./TweetBox/TweetBox";
 import Tweet from "./Tweet/Tweet";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { timeAgo } from "@/utils/utilFunctions";
 import { TweetsContext } from "@/context/TweetsContext";
+import { LoadingSpinner } from "../shared/LoadingSpinner";
 
 const HomeWrapper = () => {
     const tabs: string[] = ["For you", "Following"];
@@ -23,15 +23,15 @@ const HomeWrapper = () => {
         }
 
         fetchTweets();
-    }, [])
-    
+    }, []);
+
     return (
         <>
             <TabSwitcher tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
             <TweetBox />
             {loading ? (
                 <div className="flex justify-center mt-10 w-full">
-                    <AiOutlineLoading3Quarters className="animate-spin text-xblue" size={30} />
+                    <LoadingSpinner variant="blue" />
                 </div>
             ) : (
                 tweets.map((tweet, index) => {

@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 const hoverColors = {
     blue: "hover:bg-blue-400/10",
+    gray: "hover:bg-gray-700/10",
     white: "hover:bg-white/10",
 };  
 
@@ -11,10 +12,12 @@ interface ButtonProps {
     textColor?: string;
     hoverColor?: keyof typeof hoverColors;
     style?: string;
+    disabled?: boolean;
     children: ReactNode;
+    onClick?: () => void;
 }
 
-const Button = ({ type, variant, textColor, hoverColor, style, children }: ButtonProps) => { 
+const Button = ({ type, variant, textColor, hoverColor, style, disabled, children, onClick }: ButtonProps) => { 
 
     const variants = {
         blue: "bg-xblue text-white",
@@ -25,8 +28,10 @@ const Button = ({ type, variant, textColor, hoverColor, style, children }: Butto
 
     return (
         <button 
+            disabled={disabled}
             type={type ?? "button"} 
-            className={`${style} rounded-full font-bold text-lg p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
+            onClick={onClick}
+            className={`${style} rounded-full text-center font-bold text-lg p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
                 {children}
         </button>
     );

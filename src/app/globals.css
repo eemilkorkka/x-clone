@@ -21,6 +21,17 @@
   }
 }
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+
 .animate-progress {
   animation: progress 1s infinite linear;
   transform-origin: 0% 50%;
