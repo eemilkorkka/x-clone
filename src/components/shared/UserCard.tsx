@@ -1,7 +1,7 @@
 "use client";
 import { ReactNode } from "react";
 import { useSession } from "next-auth/react";
-import ProfilePicture from "./ProfilePicture";
+import ProfilePicture from "../Profile/ProfilePicture";
 import Username from "../Profile/Username";  
 import DisplayName from "../Profile/DisplayName";
 
@@ -21,13 +21,16 @@ const UserCard = ({ image, username, displayName, children, style }: UserCardPro
             <ProfilePicture 
                 image={image} 
                 username={username} 
-                showProfileHoverCard={
-                    session.data?.user?.username !== username && true
-                } 
+                showProfileHoverCard={session.data?.user?.username !== username} 
             />
             <div className={`${style ?? "flex"} pl-2.5 w-full xl:flex flex-col text-left`}>
-                <DisplayName displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName} variant="small" />
-                <Username username={username} />
+                <DisplayName 
+                    displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName} 
+                    username={username}
+                    showProfileHoverCard={session.data?.user.username !== username} 
+                    variant="small" 
+                />
+                <Username username={username} showProfileHoverCard={session.data?.user.username !== username} />
             </div>
             <div className="w-full flex justify-end">
                 {children}

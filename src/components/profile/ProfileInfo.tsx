@@ -33,6 +33,10 @@ const ProfileInfo = (
             {showJoinDate && (
                 <span className="text-gray-500">Joined {joinDate}</span>
             )}
+            <div className="flex gap-4 mt-2">
+                <span className="text-black text-sm font-bold">{following} <span className="text-gray-500 text-sm font-normal">Following</span></span>
+                <span className="text-black text-sm font-bold">{followers} <span className="text-gray-500 text-sm font-normal">Followers</span></span>
+            </div>
         </div>
     );
 }

@@ -1,22 +1,34 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
-import TabSwitcher from "../shared/TabSwitcher";
-import TweetBox from "./TweetBox/TweetBox";
-import Tweet from "./Tweet/Tweet";
-import { timeAgo } from "@/utils/utilFunctions";
-import { TweetsContext } from "@/context/TweetsContext";
+import { useEffect, useState } from "react";
+import TabSwitcher from "@/components/shared/TabSwitcher";
+import { useSession } from "next-auth/react";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
+import Tweet from "../home/Tweet/Tweet";
+import { timeAgo } from "@/utils/utilFunctions";
 
-const HomeWrapper = () => {
-    const tabs: string[] = ["For you", "Following"];
+interface ProfileWrapperProps {
+    username: string;
+}
+
+const ProfileWrapper = ({ username }: ProfileWrapperProps) => {
+
     const [currentTab, setCurrentTab] = useState<number>(0);
+    const [tweets, setTweets] = useState<TweetData[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const { tweets, setTweets } = useContext(TweetsContext)!;
+    const session = useSession();
+    const isOwnProfile = username === session.data?.user?.username;
+
+    const profileTabs = [
+        "Posts",
+        "Replies",
+        "Media",
+        "Likes"
+    ];
 
     useEffect(() => {
         const fetchTweets = async () => {
             setLoading(true);
-            const response = await fetch("http://localhost:3000/api/posts");
+            const response = await fetch(`http://localhost:3000/api/posts/${username}`);
             const tweets = await response.json();
             setTweets(tweets);
             setLoading(false);
@@ -27,8 +39,12 @@ const HomeWrapper = () => {
 
     return (
         <>
-            <TabSwitcher tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
-            <TweetBox />
+            <TabSwitcher 
+                tabs={isOwnProfile ? profileTabs : profileTabs.slice(0, profileTabs.length - 1)} 
+                currentTab={currentTab} 
+                setCurrentTab={setCurrentTab}
+                style={"static! border-b-0!"} 
+            />
             {loading ? (
                 <div className="flex justify-center mt-10 w-full">
                     <LoadingSpinner variant="blue" />
@@ -61,4 +77,4 @@ const HomeWrapper = () => {
     );
 }
 
-export default HomeWrapper;
+export default ProfileWrapper;

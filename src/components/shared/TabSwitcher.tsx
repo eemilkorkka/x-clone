@@ -5,11 +5,12 @@ interface TabsSwitcherProps {
     tabs: string[];
     currentTab: number;
     setCurrentTab: Dispatch<SetStateAction<number>>;
+    style?: string;
 }
 
-const TabSwitcher = ({ tabs, currentTab, setCurrentTab }: TabsSwitcherProps) => {
+const TabSwitcher = ({ tabs, currentTab, setCurrentTab, style }: TabsSwitcherProps) => {
     return (
-        <div className="sticky top-0 z-10 bg-white flex w-full border-b border-gray-200">
+        <div className={`sticky top-0 z-10 bg-white flex w-full border-b border-gray-200 ${style}`}>
             {tabs.map((tab, index) => {
                 return (
                     <button

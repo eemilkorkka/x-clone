@@ -1,12 +1,12 @@
 import { SlPicture, SlLocationPin } from "react-icons/sl";
 import { HiOutlineGif } from "react-icons/hi2";
-import ProfilePicture from "../../shared/ProfilePicture";
+import ProfilePicture from "../../Profile/ProfilePicture";
 import { RxCalendar } from "react-icons/rx";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
 import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
-import { ChangeEvent, useRef, useState, useContext } from "react";
+import React, { ChangeEvent, useRef, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import Media from "../Tweet/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
@@ -155,19 +155,20 @@ const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
                                 />
                             </Icon>
                             {icons.map((icon, index) => (
-                                <>
+                                <React.Fragment key={index}>
                                     {index === 1 ? (
-                                        <EmojiPickerPopover onEmojiClick={(emoji) => setTweetContent(prev => ({ ...prev, text: prev.text + emoji.emoji }))}>
-                                            <Icon key={index}>
+                                        <EmojiPickerPopover onEmojiClick={(emoji) => setTweetContent(prev => ({ ...prev, text: prev.text + emoji.emoji }))}
+                                        >
+                                            <Icon>
                                                 {icon}
                                             </Icon>
                                         </EmojiPickerPopover>
                                     ) : (
-                                        <Icon key={index}>
+                                        <Icon>
                                             {icon}
                                         </Icon>
                                     )}
-                                </>
+                                </React.Fragment>
                             ))}
                         </div>
                         <div className="flex items-center gap-4">

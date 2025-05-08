@@ -3,11 +3,13 @@ import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import { FaArrowLeft } from "react-icons/fa6";
 import Link from "next/link";
 import ProfileBanner from "@/components/Profile/ProfileBanner";
-import ProfilePicture from "@/components/shared/ProfilePicture";
+import ProfilePicture from "../../components/Profile/ProfilePicture";
 import DisplayName from "@/components/Profile/DisplayName";
 import ProfileInfo from "@/components/Profile/ProfileInfo";
 import Button from "@/components/shared/Button";
 import { auth } from "@/auth";
+import ProfileWrapper from "@/components/Profile/ProfileWrapper";
+import { prisma } from "@/lib/prisma";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
@@ -15,6 +17,14 @@ export default async function Page({ params }: { params: Promise<{ username: str
     const response = await fetch(`http://localhost:3000/api/users/${username}`);
     const data = await response.json();
     const session = await auth();
+
+    const numberOfPosts = await prisma.posts.count({
+        where: {
+            users: {
+                Username: username,
+            },
+        },
+    });
 
     return (
         <ProtectedRoute>
@@ -27,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         {data.user ? (
                             <>
                                 <DisplayName displayName={data.user.DisplayName} />
-                                <span className="text-gray-500 text-sm">55 posts</span>
+                                <span className="text-gray-500 text-sm">{numberOfPosts} posts</span>
                             </>
                         ) : (
                             <span className="font-bold text-lg">Profile</span>
@@ -50,13 +60,18 @@ export default async function Page({ params }: { params: Promise<{ username: str
                 </div>
                 <div className={`flex flex-col pl-4 ${data.user ? "mt-7" : "mt-15"}`}>
                     {data.user ? (
-                        <ProfileInfo
-                            displayName={data.user.DisplayName}
-                            username={data.user.Username}
-                            bio={data.user.Bio}
-                            followers={data.user.Followers}
-                            following={data.user.Following}   
-                        />
+                        <div className="flex flex-col gap-4">
+                            <ProfileInfo
+                                displayName={data.user.DisplayName}
+                                username={data.user.Username}
+                                bio={data.user.Bio}
+                                followers={0}
+                                following={0}   
+                            />
+                            <div className="-ml-4">
+                                <ProfileWrapper username={username} />
+                            </div>
+                        </div>
                     ) : (
                         <>
                             <DisplayName displayName={data.user?.DisplayName ?? `@${username}`} />

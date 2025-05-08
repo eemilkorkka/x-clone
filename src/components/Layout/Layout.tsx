@@ -28,7 +28,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                     <LeftSideBar />
                 </div>
                 <div className="flex w-full min-w-0 gap-8">
-                    <div className="min-w-0 w-full md:w-[598px] h-screen border-r border-l border-gray-200 overflow-y-auto no-scrollbar">
+                    <div className="w-3xl md:w-[598px] h-screen border-r border-l border-gray-200 overflow-y-auto no-scrollbar">
                         {children}
                     </div>
                     <div className="hidden lg:flex flex-col gap-4 flex-shrink-0">

@@ -9,9 +9,9 @@ const AttachmentsGrid = ({ children }: AttachmentsGridProps) => {
 
     return (
         <div
-            className={`mt-2 grid gap-1 w-full ${
+            className={`grid gap-1 w-full max-h-[500px] ${
                 itemCount > 2
-                    ? "grid-cols-2 grid-rows-2"
+                    ? "grid-cols-2 h-[300px] grid-rows-2"
                     : itemCount > 1
                     ? "grid grid-cols-2"
                     : "inline"
