@@ -29,6 +29,8 @@ model users {
   CoverPicture   String? @db.VarChar(255)
   Bio            String? @db.VarChar(255)
   posts          posts[]
+
+  likes likes[]
 }
 
 model files {
@@ -51,6 +53,20 @@ model posts {
   users      users     @relation(fields: [UserID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "posts_ibfk_1")
 
   @@index([UserID], map: "UserID")
+  likes likes[]
+}
+
+model likes {
+  ID     Int   @id @default(autoincrement())
+  UserID Int
+  PostID Int
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  user   users @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+  post   posts @relation(fields: [PostID], references: [ID], onDelete: Cascade)
+
+  @@unique([UserID, PostID])
+  @@index([UserID])
+  @@index([PostID])
 }
 
 enum files_File_Type {

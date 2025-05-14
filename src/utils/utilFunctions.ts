@@ -1,3 +1,5 @@
+import { timeStamp } from "console";
+
 export const sendVerificationEmail = async (email: string, name: string) => {
     try {
         await fetch("http://localhost:3000/api/verify/email", {
@@ -30,10 +32,9 @@ export const uploadFiles = async (files: { url: string, file: File }[], formData
     }
 }
 
-export const timeAgo = (timestamp: string) => {
+export const timeAgo = (timeStamp: Date) => {
     const now = new Date();
-    const tweetDate = new Date(timestamp);
-    const timeDiff = now.getTime() - tweetDate.getTime()
+    const timeDiff = now.getTime() - timeStamp.getTime()
   
     const seconds = Math.floor(timeDiff / 1000); 
     const minutes = Math.floor(timeDiff / 60000); 
@@ -49,8 +50,8 @@ export const timeAgo = (timestamp: string) => {
       return `${hours}h`;
     }
     else {
-      const month = tweetDate.toLocaleString('default', { month: 'short' });
-      const day = tweetDate.getDate(); 
-      return tweetDate.getFullYear() < now.getFullYear() ? `${month} ${day}, ${tweetDate.getFullYear()}` : `${month} ${day}`;
+      const month = timeStamp.toLocaleString('en-US', { month: 'short' });
+      const day = timeStamp.getDate(); 
+      return timeStamp.getFullYear() < now.getFullYear() ? `${month} ${day}, ${timeStamp.getFullYear()}` : `${month} ${day}`;
     }
 }

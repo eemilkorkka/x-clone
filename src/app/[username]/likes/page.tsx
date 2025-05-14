@@ -7,46 +7,64 @@ import Tweet from "@/components/home/Tweet/Tweet";
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
 
-    const tweets = await prisma.posts.findMany({
+    const userId = await prisma.users.findUnique({
         where: {
-            users: {
-                Username: username,
-            },
+            Username: username
         },
-        include: {
-            users: {
-                select: {
-                    Username: true,
-                    DisplayName: true,
-                    ProfilePicture: true,
-                },
-            },
-            files: true,
-            likes: {
-                select: {
-                    UserID: true,
-                },
-            }
+        select: {
+            UserID: true
+        }
+    });
+
+    const likes = await prisma.likes.findMany({
+        where: {
+            UserID: userId?.UserID,
         },
         orderBy: {
-            created_at: "desc",
+            created_at: 'desc',
+        },
+        include: {
+            post: {
+                include: {
+                    users: {
+                        select: {
+                            Username: true,
+                            DisplayName: true,
+                            UserID: true,
+                            ProfilePicture: true,
+                        },
+                    },
+                    files: true,
+                    likes: {
+                        select: {
+                            UserID: true,
+                        },
+                        orderBy: {
+                            created_at: 'desc',
+                        },
+                    },
+                },
+            },
         },
     });
+
 
     return (
         <ProtectedRoute>
             <Layout>
-                <Profile username={username}>
-                    {tweets.map((tweet, index) => {
+                <Profile username={username} likesCount={likes.length}>
+                    {likes.map((like, index) => {
+                        const tweet = like.post;
                         return (
-                            <Tweet 
+                            <Tweet
                                 key={index}
+                                tweetType="tweet"
                                 tweetId={tweet.ID}
                                 username={tweet.users.Username}
                                 displayName={tweet.users.DisplayName}
                                 profilePicture={tweet.users.ProfilePicture}
                                 tweetContent={
-                                    { 
+                                    {
                                         text: tweet.Content,
                                         files: tweet.files.map((file: { File_URL: string; File_Type: string }) => ({
                                             url: file.File_URL,
@@ -55,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                                     }
                                 }
                                 timeStamp={tweet.created_at!}
-                                statValues={[0,0, tweet.likes.length]}
+                                statValues={[0, 0, tweet.likes.length]}
                                 likes={tweet.likes}
                             />
                         );

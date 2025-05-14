@@ -1,3 +1,4 @@
+"use client";
 import ProfilePicture from "../../Profile/ProfilePicture";
 import TweetStat from "./TweetStat";
 import { tweetStatType } from "@/types/tweetStatType";
@@ -10,18 +11,23 @@ import Linkify from "@/components/shared/Linkify";
 import Username from "@/components/Profile/Username";
 import DisplayName from "@/components/Profile/DisplayName";
 import { useRouter } from "next/navigation";
+import { timeAgo } from "@/utils/utilFunctions";
+
+type tweetType = "status" | "tweet";
 
 interface TweetProps {
+    tweetType: tweetType;
     tweetContent: tweetContentType;
     tweetId: number;
     profilePicture: string | undefined;
     displayName: string;
     username: string;
-    timeStamp: string;
+    timeStamp: Date;
     statValues: number[];
+    likes: { UserID: number }[];
 }
 
-const tweetStats: tweetStatType[] = [
+export const tweetStats: tweetStatType[] = [
     {   
         type: "reply",
     },
@@ -42,34 +48,81 @@ const tweetStats: tweetStatType[] = [
     }
 ];
 
-const Tweet = ({ tweetContent, tweetId, profilePicture, displayName, username, timeStamp, statValues }: TweetProps) => {
+const Tweet = ({
+    tweetType = "tweet", 
+    tweetContent, 
+    tweetId, 
+    profilePicture, 
+    displayName, 
+    username, 
+    timeStamp, 
+    statValues, 
+    likes 
+}: TweetProps) => {
     
     /* Wrapping the component in a Link tag will cause a hydration error, 
     so we will use the useRouter hook. */
     
     const router = useRouter();
 
+    const usernameElement = (
+        <a href={`/${username}`} onClick={(e) => e.stopPropagation()}><Username username={username} showProfileHoverCard={true} /></a>
+    );
+
+    const displayNameElement = (
+        <a href={`/${username}`} onClick={(e) => e.stopPropagation()}><DisplayName displayName={displayName} username={username} showProfileHoverCard={true} variant="small" /></a>
+    );
+
+    const tweetStatsElement = (
+        <div className={`flex justify-between ${tweetContent.files.length != 0 ? "mt-2" : ""} ${tweetType === "status" && "border-t border-b border-gray-200 p-2"}`}>    
+            {tweetStats.map((stat, index) => {
+                return (
+                    <TweetStat 
+                        key={index}
+                        type={stat.type}
+                        tweetId={tweetId}
+                        hoverBgColor={stat.hoverBgColor} 
+                        hoverTextColor={stat.hoverTextColor}
+                        clickedColor={stat.clickedColor}
+                        statValue={statValues[index]}
+                        likes={likes}
+                    />
+                );
+            })}
+        </div>
+    );
+
     return (
         <div 
-            className="flex p-4 pb-1 border-t last:border-b border-gray-200 hover:cursor-pointer hover:bg-gray-100" 
+            className={`${tweetType === "tweet" ? "flex border-t hover:cursor-pointer hover:bg-gray-100" : "flex-col"} p-4 pb-1 border-gray-200`} 
             onClick={() => router.push(`/${username}/status/${tweetId}`)}
         >
-            <ProfilePicture image={profilePicture} href={username} username={username} showProfileHoverCard={true} />
-            <div className="flex flex-col pl-4 h-full w-full">
-                <div className="flex justify-between">
+            {tweetType === "tweet" ? (
+                <ProfilePicture image={profilePicture} href={`/${username}`} username={username} showProfileHoverCard={true} />
+            ) : (
+                <div className="flex gap-4">
+                    <ProfilePicture image={profilePicture} href={`/${username}`} username={username} showProfileHoverCard={true} />
+                    <div className="flex flex-col">
+                        {displayNameElement}
+                        {usernameElement}
+                    </div>
+                </div>
+            )}
+            <div className={`flex flex-col ${tweetType !== "status" && "pl-4"} h-full w-full`}>
+                <div className={`${tweetType === "status" ? "hidden" : "flex"} justify-between`}>
                     <div className="flex gap-1">
-                        <a href={username}><DisplayName displayName={displayName} username={username} showProfileHoverCard={true} variant="small" /></a>
-                        <a href={username}><Username username={username} showProfileHoverCard={true} /></a>
-                        <i className="text-gray-500">·</i>
-                        <span className="text-gray-500 text-[15px] whitespace-nowrap">{timeStamp}</span>
+                        {displayNameElement}
+                        {usernameElement}
+                        <i className="text-gray-500 text-lg">·</i>
+                        <span className="text-gray-500 text-[15px] whitespace-nowrap">{timeAgo(timeStamp)}</span>
                     </div>
                     <div className="group">
-                        <Icon>
+                        <Icon onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                             <BsThreeDots className="text-gray-500 group-hover:text-xblue" />
                         </Icon>
                     </div>
                 </div>
-                <div className="whitespace-pre-line break-words mt-[-9px]">
+                <div className={`whitespace-pre-line break-words ${tweetType !== "status" ? "mt-[-5px]" : "mt-4"}`}>
                     { /* Tweets can include links, this component will detect them and turn them into anchor tags. */ }
                     <Linkify text={tweetContent.text} />
                 </div>
@@ -90,20 +143,21 @@ const Tweet = ({ tweetContent, tweetId, profilePicture, displayName, username, t
                         </AttachmentsGrid>
                     </div>
                 )}
-                <div className={`flex justify-between ${tweetContent.files.length != 0 ? "mt-2" : ""}`}>
-                    {tweetStats.map((stat, index) => {
-                        return (
-                            <TweetStat 
-                                key={index}
-                                type={stat.type}
-                                hoverBgColor={stat.hoverBgColor} 
-                                hoverTextColor={stat.hoverTextColor}
-                                clickedColor={stat.clickedColor}
-                                statValue={statValues[index]} 
-                            />
-                        );
-                    })}
-                </div>
+                {tweetType === "status" && (
+                    <div className="pt-2 flex items-center text-gray-500 text-[15px]">
+                        <span>{new Date(timeStamp).toLocaleTimeString('en-US', {
+                            hour: 'numeric',
+                            minute: '2-digit'
+                        })}</span>
+                        <span className="mx-2 leading-[15px] text-xl">·</span>
+                        <span>{new Date(timeStamp).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric'
+                        })}</span>
+                    </div>
+                )}
+                {tweetStatsElement}
             </div>
         </div>
     );

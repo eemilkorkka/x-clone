@@ -19,4 +19,7 @@ type TweetData = {
     created_at: string;
     users: TweetUser;
     files: TweetFile[];
+    likes: {
+        UserID: number;
+    }[];
 }

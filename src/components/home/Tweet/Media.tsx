@@ -18,12 +18,14 @@ const Media = ({ type, url, children }: MediaProps) => {
                     unoptimized
                     width={0}
                     height={0}
+                    onClick={(e) => e.stopPropagation()}
                 />
                 ) : (
                 <video
                     className="w-full h-full rounded-xl cursor-pointer object-cover"
                     src={url}
                     controls
+                    onClick={(e) => e.stopPropagation()}
                 />
             )}
             {children}

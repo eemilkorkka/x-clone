@@ -9,34 +9,41 @@ interface UserCardProps {
     image: string;
     username: string;
     displayName: string;
+    bio?: string;
     children?: ReactNode;
     style?: string;
 }
 
-const UserCard = ({ image, username, displayName, children, style }: UserCardProps) => {
+const UserCard = ({ image, username, displayName, bio, style, children }: UserCardProps) => {
     const session = useSession();
 
     return (
-        <div className="w-full flex items-center justify-center">
+        <div className="w-full flex items-start justify-center">
             <ProfilePicture 
                 image={image} 
-                username={username} 
-                showProfileHoverCard={session.data?.user?.username !== username} 
+                username={username}
+                showProfileHoverCard={session.data?.user?.username !== username}
             />
-            <div className={`${style ?? "flex"} pl-2.5 w-full xl:flex flex-col text-left`}>
-                <DisplayName 
-                    displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName} 
-                    username={username}
-                    showProfileHoverCard={session.data?.user.username !== username} 
-                    variant="small" 
-                />
-                <Username username={username} showProfileHoverCard={session.data?.user.username !== username} />
-            </div>
-            <div className="w-full flex justify-end">
-                {children}
+            <div className={`xl:flex flex-1 pl-2.5 ${style}`}>
+                <div className="flex items-center w-full justify-between">
+                    <div className="flex flex-col text-left">
+                        <DisplayName 
+                            displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName}
+                            username={username}
+                            showProfileHoverCard={session.data?.user?.username !== username}
+                            variant="small"
+                        />
+                        <Username 
+                            username={username}
+                            showProfileHoverCard={session.data?.user?.username !== username}
+                        />
+                    </div>
+                    {children}
+                </div>
+                {bio && <p>{bio}</p>}
             </div>
         </div>
     );
-}
+};
 
 export default UserCard;

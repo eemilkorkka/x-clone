@@ -27,8 +27,13 @@ const HomeWrapper = () => {
 
     return (
         <>
-            <TabSwitcher tabs={tabs} currentTab={currentTab} setCurrentTab={setCurrentTab} />
-            <TweetBox />
+            <TabSwitcher 
+                tabs={tabs} 
+                currentTab={currentTab} 
+                setCurrentTab={setCurrentTab} 
+                style="bg-white/90! backdrop-blur-sm!" 
+            />
+            <TweetBox type="tweet" />
             {loading ? (
                 <div className="flex justify-center mt-10 w-full">
                     <LoadingSpinner variant="blue" />
@@ -38,6 +43,7 @@ const HomeWrapper = () => {
                     return (
                         <Tweet 
                             key={index}
+                            tweetType="tweet"
                             tweetId={tweet.ID}
                             username={tweet.users.Username}
                             displayName={tweet.users.DisplayName}
@@ -51,8 +57,9 @@ const HomeWrapper = () => {
                                     }))
                                 }
                             }
-                            timeStamp={timeAgo(tweet.created_at)}
-                            statValues={[0,0,0]}
+                            timeStamp={new Date(tweet.created_at!)}
+                            statValues={[0,0, tweet.likes.length]}
+                            likes={tweet.likes}
                         />
                     );
                 })

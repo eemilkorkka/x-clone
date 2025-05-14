@@ -27,7 +27,7 @@ const PostButtonDialog = ({ children }: PostButtonDialogProps) => {
                         <IoClose size={23}/>
                     </button>
                 </Dialog.Close>
-                <TweetBox alwaysShowBorder={true} minRows={3} />
+                <TweetBox alwaysShowBorder={true} minRows={3} type="tweet" />
             </Dialog.Content>
         </Dialog.Root>
     );

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request, { params }: { params: { username: string } }) {
-    const { username } = params;
+    const { username } = await params;
     
     try {
         const posts = await prisma.posts.findMany({
@@ -20,6 +20,11 @@ export async function GET(request: Request, { params }: { params: { username: st
                     },
                 },
                 files: true,
+                likes: {
+                    select: {
+                        UserID: true,
+                    },
+                }
             },
             orderBy: {
                 created_at: "desc",

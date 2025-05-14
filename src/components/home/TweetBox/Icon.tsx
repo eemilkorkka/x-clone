@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 interface IconProps {
     children: ReactNode
-    onClick?: () => void;
+    onClick?: (e: React.MouseEvent) => void;
 }
 
 const Icon = ({ children, onClick }: IconProps) => {

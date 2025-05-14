@@ -38,6 +38,11 @@ export async function POST(req: Request) {
                     },
                 },
                 files: true,
+                likes: {
+                    select: {
+                        UserID: true,
+                    },
+                }
             },
             orderBy: {
                 created_at: "desc"
@@ -64,6 +69,11 @@ export async function GET(req: Request) {
                     },
                 },
                 files: true,
+                likes: {
+                    select: {
+                        UserID: true,
+                    },
+                },
             },
             orderBy: {
                 created_at: "desc"

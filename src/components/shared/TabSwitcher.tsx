@@ -1,29 +1,66 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface TabsSwitcherProps {
     tabs: string[];
-    currentTab: number;
-    setCurrentTab: Dispatch<SetStateAction<number>>;
+    currentTab?: number;
+    setCurrentTab?: Dispatch<SetStateAction<number>>;
+    useLink?: boolean;
+    username?: string;
     style?: string;
 }
+    
+const buttonStyles = "w-full flex justify-center h-13 font-bold hover:bg-gray-200 hover:cursor-pointer";
+const spanStyles = "relative flex flex-col w-fit justify-center h-full";
+const underlineStyles = "w-full h-1 absolute bottom-0 bg-xblue rounded-full";
 
-const TabSwitcher = ({ tabs, currentTab, setCurrentTab, style }: TabsSwitcherProps) => {
+const TabSwitcher = ({ tabs, currentTab, setCurrentTab, useLink, username, style }: TabsSwitcherProps) => {
+    const pathname = usePathname();
+
+    const isTabActive = (tab: string) => {
+        if (tab.toLowerCase() === 'posts') {
+            return pathname === `/${username}`;
+        }
+        const tabPath = `/${username}/${tab.toLowerCase()}`;
+        return pathname === tabPath;
+    };
+
+    const anyTabActive = tabs.some(tab => isTabActive(tab));
+
     return (
         <div className={`sticky top-0 z-10 bg-white flex w-full border-b border-gray-200 ${style}`}>
             {tabs.map((tab, index) => {
-                return (
+                const isActive = anyTabActive ? isTabActive(tab) : index === 0;
+
+                return useLink ? (
+                    <Link 
+                        key={index} 
+                        className={buttonStyles} 
+                        href={index == 0 ? `/${username}` : `/${username}/${tab.toLowerCase()}`}
+                    >
+                        <button 
+                            className={`hover:cursor-pointer ${isActive ? "text-black" : "text-gray-500"}`} 
+                            >
+                                <span className={spanStyles}>
+                                    {tab}
+                                    {isActive && <div className={underlineStyles}></div>}
+                                </span>
+                        </button>
+                    </Link>
+                ) : (
                     <button
                         key={index} 
-                        className={`w-full flex justify-center h-13 font-bold hover:bg-gray-200 hover:cursor-pointer 
-                            ${index === currentTab ? "text-black" : "text-gray-500"}`} 
-                        onClick={() => setCurrentTab(index)}>
-                            <span className="relative flex flex-col w-fit justify-center h-full">
+                        className={`${buttonStyles} 
+                        ${index === currentTab ? "text-black" : "text-gray-500"}`} 
+                        onClick={() => setCurrentTab?.(index)}>
+                            <span className={spanStyles}>
                                 {tab}
-                                {index === currentTab && <div className="w-full h-1 absolute bottom-0 bg-xblue rounded-full"></div>}
+                                {index === currentTab && <div className={underlineStyles}></div>}
                             </span>
                     </button>
-                );
+                )
             })}
         </div>
     );

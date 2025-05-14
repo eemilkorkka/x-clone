@@ -27,8 +27,8 @@ const LeftSideBar = async () => {
     return (
         <div className="w-full flex flex-col mt-2 pr-2 pl-2 justify-between">
             <div className="flex flex-col gap-4">
-                <Link href="/home">
-                    <button className="hover:bg-gray-200 p-2.5 pl-3 hover:cursor-pointer rounded-full">
+                <Link href="/home" className="pl-1">
+                    <button className="hover:bg-gray-200 p-2.5 hover:cursor-pointer rounded-full">
                         <BsTwitterX size="30" className="p-0.5" />
                     </button>
                 </Link>

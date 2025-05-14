@@ -1,3 +1,4 @@
+"use client";
 import { SlPicture, SlLocationPin } from "react-icons/sl";
 import { HiOutlineGif } from "react-icons/hi2";
 import ProfilePicture from "../../Profile/ProfilePicture";
@@ -16,7 +17,10 @@ import { TweetsContext } from "@/context/TweetsContext";
 import Button from "@/components/shared/Button";
 import EmojiPickerPopover from "./EmojiPickerPopover";
 
+type tweetBoxType = "reply" | "tweet";
+
 interface TweetBoxProps {
+    type: tweetBoxType;
     alwaysShowBorder?: boolean;
     minRows?: number;
 }
@@ -31,7 +35,7 @@ const icons = [
 const MAX_FILES = 4;
 const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "video/mp4"];
 
-const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
+const TweetBox = ({ type = "tweet", alwaysShowBorder = true, minRows }: TweetBoxProps) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [isFocused, setFocused] = useState<boolean>(false);
@@ -112,10 +116,10 @@ const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
             { loading && <IndeterminateProgress /> }
             <div className="flex p-4 pb-2">
                 <ProfilePicture image={session?.user.image} />
-                <div className="flex flex-col pl-1 h-full w-full text-xl">
+                <div className={`flex flex-col ${type === "reply" && !isFocused ? "flex-row justify-between items-center" : ""} pl-1 h-full w-full text-xl`}>
                     <div className="p-1">
                         <TextareaAutosize 
-                            placeholder="What's happening?" 
+                            placeholder={type === "tweet" ? "What's happening?" : "Post your reply"} 
                             className="w-full outline-0 resize-none placeholder-gray-600"
                             value={tweetContent.text}
                             minRows={tweetContent.files.length > 0 ? 1 : minRows}
@@ -141,8 +145,8 @@ const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
                             ))}
                         </AttachmentsGrid>
                     </div>
-                    <div className={`flex mt-2 pt-2.5 justify-between ${isFocused || alwaysShowBorder ? "border-t mt-8 border-gray-200" : ""}`}>
-                        <div className="flex items-center h-full">
+                    <div className={`flex pt-2.5 justify-between ${isFocused && alwaysShowBorder ? "border-t mt-8 border-gray-200" : ""}`}>
+                        <div className={`${type === "reply" && !isFocused ? "hidden" : "flex"} items-center h-full`}>
                             <Icon onClick={() => tweetContent.files.length < MAX_FILES && filePickerRef.current?.click()}>
                                 <SlPicture size={17} />
                                 <input 
@@ -171,13 +175,13 @@ const TweetBox = ({ alwaysShowBorder, minRows }: TweetBoxProps) => {
                                 </React.Fragment>
                             ))}
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center">
                             <Button 
                                 disabled={postButtonIsDisabled} 
                                 variant="black" 
                                 onClick={handlePostTweet}
                                 style={`text-sm px-4 pt-2 pb-1.5 ${postButtonIsDisabled ? "opacity-50" : ""}`}>
-                                    Post
+                                    {type === "tweet" ? "Post" : "Reply"}
                             </Button>
                         </div>
                     </div>
