@@ -73,25 +73,6 @@ const Tweet = ({
         <a href={`/${username}`} onClick={(e) => e.stopPropagation()}><DisplayName displayName={displayName} username={username} showProfileHoverCard={true} variant="small" /></a>
     );
 
-    const tweetStatsElement = (
-        <div className={`flex justify-between ${tweetContent.files.length != 0 ? "mt-2" : ""} ${tweetType === "status" && "border-t border-b border-gray-200 p-2"}`}>    
-            {tweetStats.map((stat, index) => {
-                return (
-                    <TweetStat 
-                        key={index}
-                        type={stat.type}
-                        tweetId={tweetId}
-                        hoverBgColor={stat.hoverBgColor} 
-                        hoverTextColor={stat.hoverTextColor}
-                        clickedColor={stat.clickedColor}
-                        statValue={statValues[index]}
-                        likes={likes}
-                    />
-                );
-            })}
-        </div>
-    );
-
     return (
         <div 
             className={`${tweetType === "tweet" ? "flex border-t hover:cursor-pointer hover:bg-gray-100" : "flex-col"} p-4 pb-1 border-gray-200`} 
@@ -157,7 +138,20 @@ const Tweet = ({
                         })}</span>
                     </div>
                 )}
-                {tweetStatsElement}
+                {tweetStats.map((stat, index) => {
+                    return (
+                        <TweetStat 
+                            key={index}
+                            type={stat.type}
+                            tweetId={tweetId}
+                            hoverBgColor={stat.hoverBgColor} 
+                            hoverTextColor={stat.hoverTextColor}
+                            clickedColor={stat.clickedColor}
+                            statValue={statValues[index]}
+                            likes={likes}
+                        />
+                    );
+                })}
             </div>
         </div>
     );
