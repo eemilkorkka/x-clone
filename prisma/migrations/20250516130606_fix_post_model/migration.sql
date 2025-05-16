@@ -48,8 +48,23 @@ CREATE TABLE `posts` (
     `UserID` INTEGER NOT NULL,
     `Content` TEXT NOT NULL,
     `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `ParentID` INTEGER NULL,
 
     INDEX `UserID`(`UserID`),
+    INDEX `posts_ParentID_fkey`(`ParentID`),
+    PRIMARY KEY (`ID`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `likes` (
+    `ID` INTEGER NOT NULL AUTO_INCREMENT,
+    `UserID` INTEGER NOT NULL,
+    `PostID` INTEGER NOT NULL,
+    `created_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    INDEX `likes_UserID_idx`(`UserID`),
+    INDEX `likes_PostID_idx`(`PostID`),
+    UNIQUE INDEX `likes_UserID_PostID_key`(`UserID`, `PostID`),
     PRIMARY KEY (`ID`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -57,4 +72,13 @@ CREATE TABLE `posts` (
 ALTER TABLE `files` ADD CONSTRAINT `files_ibfk_1` FOREIGN KEY (`PostID`) REFERENCES `posts`(`ID`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE `posts` ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `posts` ADD CONSTRAINT `posts_ParentID_fkey` FOREIGN KEY (`ParentID`) REFERENCES `posts`(`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `posts` ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `likes` ADD CONSTRAINT `likes_PostID_fkey` FOREIGN KEY (`PostID`) REFERENCES `posts`(`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `likes` ADD CONSTRAINT `likes_UserID_fkey` FOREIGN KEY (`UserID`) REFERENCES `users`(`UserID`) ON DELETE CASCADE ON UPDATE CASCADE;

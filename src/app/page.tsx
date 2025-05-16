@@ -1,10 +1,10 @@
 import Image from "next/image";
 import logo from "../assets/logo-white.png";
-import Button from "@/components/shared/Button";
+import Button from "@/components/Shared/Button";
 import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
-import SignupFormContextProvider from "@/context/SignupFormContext";
+import SignupFormContextProvider from "@/Context/SignupFormContext";
 import SignInFormDialog from "@/components/SignInFormDialog/SignInFormDialog";
-import GoogleSignIn from "@/components/shared/GoogleSignIn";
+import GoogleSignIn from "@/components/Shared/GoogleSignIn";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 

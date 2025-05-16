@@ -1,7 +1,7 @@
 "use client";
 import { ReactNode, useState } from "react"
 import { HoverCard } from "radix-ui";
-import Button from "../shared/Button";
+import Button from "../Shared/Button";
 import ProfilePicture from "../Profile/ProfilePicture";
 import { useSession } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";

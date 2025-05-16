@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import LeftSideBar from "./LeftSideBar/LeftSideBar";
-import SearchBar from "../shared/SearchBar";
-import TweetsContextProvider from "@/context/TweetsContext";
-import Widget from "../shared/Widget";
+import SearchBar from "../Shared/SearchBar";
+import TweetsContextProvider from "@/Context/TweetsContext";
+import Widget from "../Shared/Widget";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import UserCard from "../shared/UserCard";
-import Button from "../shared/Button";
+import UserCard from "../Shared/UserCard";
+import Button from "../Shared/Button";
 import Link from "next/link";
 import { headers } from "next/headers";
 

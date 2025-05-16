@@ -3,15 +3,15 @@ import { useState, ReactNode, ChangeEvent, useEffect, FormEvent } from "react";
 import { Dialog } from "radix-ui";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter } from "react-icons/fa6";
-import GoogleSignIn from "../shared/GoogleSignIn";
-import FormInput from "../form/FormInput";
+import GoogleSignIn from "../Shared/GoogleSignIn";
+import FormInput from "../Form/FormInput";
 import formDataType from "@/types/formDataType";
-import Button from "../shared/Button";
+import Button from "../Shared/Button";
 import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 import { signIn } from "next-auth/react";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { LoadingSpinner } from "../shared/LoadingSpinner";
+import { LoadingSpinner } from "../Shared/LoadingSpinner";
 
 interface SignInFormDialogProps {
     children: ReactNode;

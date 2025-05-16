@@ -1,9 +1,9 @@
-import FormInput from "../../form/FormInput";
+import FormInput from "../../Form/FormInput";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { usernameSchema } from "@/lib/schemas";
 import { useContext } from "react";
-import { SignupFormContext } from "@/context/SignupFormContext";
+import { SignupFormContext } from "@/Context/SignupFormContext";
 
 type UsernameFormData = z.infer<typeof usernameSchema>;
 

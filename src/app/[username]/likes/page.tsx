@@ -1,8 +1,8 @@
 import Layout from "@/components/Layout/Layout";
-import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import ProtectedRoute from "@/components/Shared/ProtectedRoute";
 import Profile from "@/components/Profile/Profile";
 import { prisma } from "@/lib/prisma";
-import Tweet from "@/components/home/Tweet/Tweet";
+import Tweet from "@/components/Tweet/Tweet";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;

@@ -22,4 +22,7 @@ type TweetData = {
     likes: {
         UserID: number;
     }[];
+    replies: {
+        UserID: number;
+    }[];
 }

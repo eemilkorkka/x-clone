@@ -12,7 +12,7 @@ type StatType = "reply" | "retweet" | "like" | "bookmark";
 interface StatConfig {
     icon: React.JSX.Element;
     activeIcon?: React.JSX.Element;
-    action: () => Promise<void>;
+    action?: () => Promise<void>;
     checkActive?: (userId: string, tweetId: number) => boolean;
 }
 
@@ -26,6 +26,15 @@ interface TweetStatProps {
     likes: { UserID: number }[];
     retweets?: { UserID: number }[];
 }
+
+const Icons = {
+    reply: <FaRegComment size={18} />,
+    retweet: <AiOutlineRetweet size={18} />,
+    like: <GoHeart size={18} />,
+    likeActive: <GoHeartFill size={18} />,
+    bookmark: <IoBookmarkOutline size={18} />,
+    bookmarkActive: <IoBookmark size={18} />
+};
 
 const TweetStat = ({ 
     type, 
@@ -41,9 +50,11 @@ const TweetStat = ({
     const [localStatValue, setLocalStatValue] = useState<number>(statValue);
     const session = useSession();
 
+    useEffect(() => {
+        setLocalStatValue(statValue);
+    }, [statValue, tweetId]);
+
     const handleInteraction = async (endpoint: StatType) => {
-        /* This function will only handle the liking, retweeting and bookmarking 
-        of tweets. Replying will use a POST request. */
         if (type === "reply") return;
 
         try {
@@ -67,30 +78,31 @@ const TweetStat = ({
         }
     };
 
-    const statConfigs: Record<StatType, StatConfig> = {
+    const getStatConfigs = (): Record<StatType, StatConfig> => ({
         reply: {
-            icon: <FaRegComment size={18} />,
-            action: async () => console.log("reply")
+            icon: Icons.reply,
         },
         retweet: {
-            icon: <AiOutlineRetweet size={18} />,
+            icon: Icons.retweet,
             action: async () => handleInteraction('retweet'),
-            checkActive: (userId) => 
+            checkActive: (userId: string) => 
                 retweets.some(retweet => retweet.UserID === parseInt(userId))
         },
         like: {
-            icon: <GoHeart size={18} />,
-            activeIcon: <GoHeartFill size={18} />,
+            icon: Icons.like,
+            activeIcon: Icons.likeActive,
             action: async () => handleInteraction('like'),
-            checkActive: (userId) => 
+            checkActive: (userId: string) => 
                 likes.some(like => like.UserID === parseInt(userId))
         },
         bookmark: {
-            icon: <IoBookmarkOutline size={18} />,
-            activeIcon: <IoBookmark size={18} />,
+            icon: Icons.bookmark,
+            activeIcon: Icons.bookmarkActive,
             action: async () => console.log("bookmark")
         }
-    };
+    });
+
+    const statConfigs = getStatConfigs();
 
     useEffect(() => {
         if (session.data?.user?.id && statConfigs[type].checkActive) {
@@ -109,7 +121,7 @@ const TweetStat = ({
             } hover:cursor-pointer`} 
             onClick={(e) => {
                 e.stopPropagation();
-                statConfigs[type].action();
+                statConfigs[type].action?.();
             }}
         >
             <div className="group flex items-center">

@@ -2,8 +2,8 @@
 import { Dialog, VisuallyHidden } from "radix-ui";
 import { ReactNode, useContext } from "react";
 import { IoClose } from "react-icons/io5";
-import TweetBox from "@/components/home/TweetBox/TweetBox";
-import { TweetsContext } from "@/context/TweetsContext";
+import TweetBox from "@/components/TweetBox/TweetBox";
+import { TweetsContext } from "@/Context/TweetsContext";
 
 interface PostButtonDialogProps {
     children: ReactNode;

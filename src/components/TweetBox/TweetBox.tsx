@@ -1,26 +1,28 @@
 "use client";
 import { SlPicture, SlLocationPin } from "react-icons/sl";
 import { HiOutlineGif } from "react-icons/hi2";
-import ProfilePicture from "../../Profile/ProfilePicture";
+import ProfilePicture from "../Profile/ProfilePicture";
 import { RxCalendar } from "react-icons/rx";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
 import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
-import React, { ChangeEvent, useRef, useState, useContext } from "react";
+import React, { ChangeEvent, useRef, useState, useContext, Dispatch, SetStateAction } from "react";
 import { useSession } from "next-auth/react";
 import Media from "../Tweet/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
 import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
-import { TweetsContext } from "@/context/TweetsContext";
-import Button from "@/components/shared/Button";
+import { TweetsContext } from "@/Context/TweetsContext";
+import Button from "@/components/Shared/Button";
 import EmojiPickerPopover from "./EmojiPickerPopover";
 
 type tweetBoxType = "reply" | "tweet";
 
 interface TweetBoxProps {
     type: tweetBoxType;
+    parentTweetID?: number;
+    setReplies?: Dispatch<SetStateAction<TweetData[]>>;
     alwaysShowBorder?: boolean;
     minRows?: number;
 }
@@ -35,7 +37,7 @@ const icons = [
 const MAX_FILES = 4;
 const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "video/mp4"];
 
-const TweetBox = ({ type = "tweet", alwaysShowBorder = true, minRows }: TweetBoxProps) => {
+const TweetBox = ({ type = "tweet", parentTweetID, setReplies, alwaysShowBorder = true, minRows }: TweetBoxProps) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [isFocused, setFocused] = useState<boolean>(false);
@@ -95,20 +97,37 @@ const TweetBox = ({ type = "tweet", alwaysShowBorder = true, minRows }: TweetBox
             });
         }
 
+        const requestBody = {
+            text: tweetContent.text,
+            userID: parseInt(session?.user.id!),
+            files: files,
+            ...(parentTweetID && { parentTweetID }),
+        };
+
         const response = await fetch("http://localhost:3000/api/posts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ text: tweetContent.text, userID: parseInt(session?.user.id!), files: files })
+            body: JSON.stringify(requestBody)
         });
 
         const json = await response.json();
 
-        setTweets(prev => [json.post, ...prev]);
-        setLoading(false);
-        postDialogOpen && setPostDialogOpen(false);
-        setTweetContent({ text: "", files: [] });
+        if (response.ok) {
+            if (type === "tweet") {
+                setTweets(prev => [json.post, ...prev]);
+                postDialogOpen && setPostDialogOpen(false);
+            } else {
+                setReplies?.(prev => [json.post, ...prev]);
+            }
+        
+            setLoading(false);
+            setTweetContent({ text: "", files: [] });
+        } else {
+            console.error("Failed to create post:", json.message);
+            setLoading(false);
+        }
     }
 
     return (

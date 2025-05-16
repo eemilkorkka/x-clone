@@ -1,10 +1,10 @@
-import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import ProtectedRoute from "@/components/Shared/ProtectedRoute";
 import Layout from "@/components/Layout/Layout";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
-import Tweet from "@/components/home/Tweet/Tweet";
-import TweetBox from "@/components/home/TweetBox/TweetBox";
+import Tweet from "@/components/Tweet/Tweet";
+import RepliesWrapper from "@/components/Tweet/RepliesWrapper";
 
 export default async function Page({ params }: { params: Promise<{ username: string, tweetId: string }> }) {
     const { username, tweetId } = await params;
@@ -22,12 +22,9 @@ export default async function Page({ params }: { params: Promise<{ username: str
             },
             files: true,
             likes: true,
+            replies: true
         }
     });
-    
-    function item(value: string, index: number, array: string[]): unknown {
-        throw new Error("Function not implemented.");
-    }
 
     return (
         <ProtectedRoute>
@@ -55,11 +52,11 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         displayName={tweet.users.DisplayName}
                         username={username}
                         timeStamp={tweet.created_at!}
-                        statValues={[0, 0, tweet.likes.length]}
+                        statValues={[tweet.replies.length, 0, tweet.likes.length]}
                         likes={tweet.likes}
                     />
                 )}
-                <TweetBox type="reply" />
+                <RepliesWrapper parentTweetID={parseInt(tweetId)} />
             </Layout>
         </ProtectedRoute>
     );

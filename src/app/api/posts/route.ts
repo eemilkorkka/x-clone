@@ -6,13 +6,14 @@ export async function POST(req: Request) {
     const session = await auth();
     if (!session?.user) return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
 
-    const { text, userID, files } = await req.json();
+    const { text, userID, files, parentTweetID } = await req.json();
 
     try {
         const post = await prisma.posts.create({
             data: {
                 UserID: userID,
                 Content: text,
+                ParentID: parentTweetID
             }
         });
 
@@ -28,7 +29,10 @@ export async function POST(req: Request) {
             });
         }
 
-        const createdPost = await prisma.posts.findFirst({
+        const createdPost = await prisma.posts.findUnique({
+            where: {
+                ID: post.ID
+            },
             include: {
                 users: {
                     select: {
@@ -42,13 +46,15 @@ export async function POST(req: Request) {
                     select: {
                         UserID: true,
                     },
+                },
+                replies: {
+                    select: {
+                        UserID: true,
+                    }
                 }
-            },
-            orderBy: {
-                created_at: "desc"
             }
         });
-        
+
         return NextResponse.json({ message: "Post created successfully.", post: createdPost }, { status: 201 });
 
     } catch (error) {
@@ -60,6 +66,9 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
     try {
         const posts = await prisma.posts.findMany({
+            where: {
+                ParentID: null
+            },
             include: {
                 users: {
                     select: {
@@ -74,6 +83,11 @@ export async function GET(req: Request) {
                         UserID: true,
                     },
                 },
+                replies: {
+                    select: {
+                        UserID: true,
+                    }
+                }
             },
             orderBy: {
                 created_at: "desc"

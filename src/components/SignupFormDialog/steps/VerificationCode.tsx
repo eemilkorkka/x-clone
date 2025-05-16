@@ -1,10 +1,10 @@
-import FormInput from "../../form/FormInput";
+import FormInput from "../../Form/FormInput";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { verificationCodeSchema } from "@/lib/schemas";
 import { useContext } from "react";
-import { SignupFormContext } from "@/context/SignupFormContext";
+import { SignupFormContext } from "@/Context/SignupFormContext";
 
 type VerificationCodeFormData = z.infer<typeof verificationCodeSchema>;
 

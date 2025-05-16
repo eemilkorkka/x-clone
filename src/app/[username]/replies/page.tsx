@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout/Layout";
-import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import ProtectedRoute from "@/components/Shared/ProtectedRoute";
 import Profile from "@/components/Profile/Profile";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {

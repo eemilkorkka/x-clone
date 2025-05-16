@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import FormInput from "../../form/FormInput";
-import Dropdown from "@/components/shared/Dropdown";
+import FormInput from "../../Form/FormInput";
+import Dropdown from "@/components/Shared/Dropdown";
 import { dropdownFields } from "../../../utils/birthDateDropdowns";
 import { z } from "zod";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { personalInfoSchema } from "@/lib/schemas";
-import { SignupFormContext } from "@/context/SignupFormContext";
+import { SignupFormContext } from "@/Context/SignupFormContext";
 
 type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 

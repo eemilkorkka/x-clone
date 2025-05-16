@@ -1,11 +1,11 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import TabSwitcher from "../shared/TabSwitcher";
-import TweetBox from "./TweetBox/TweetBox";
-import Tweet from "./Tweet/Tweet";
+import TabSwitcher from "../Shared/TabSwitcher";
+import TweetBox from "../TweetBox/TweetBox";
+import Tweet from "../Tweet/Tweet";
 import { timeAgo } from "@/utils/utilFunctions";
-import { TweetsContext } from "@/context/TweetsContext";
-import { LoadingSpinner } from "../shared/LoadingSpinner";
+import { TweetsContext } from "@/Context/TweetsContext";
+import { LoadingSpinner } from "../Shared/LoadingSpinner";
 
 const HomeWrapper = () => {
     const tabs: string[] = ["For you", "Following"];
@@ -39,10 +39,10 @@ const HomeWrapper = () => {
                     <LoadingSpinner variant="blue" />
                 </div>
             ) : (
-                tweets.map((tweet, index) => {
+                tweets.map((tweet) => {
                     return (
                         <Tweet 
-                            key={index}
+                            key={tweet.ID}
                             tweetType="tweet"
                             tweetId={tweet.ID}
                             username={tweet.users.Username}
@@ -58,7 +58,7 @@ const HomeWrapper = () => {
                                 }
                             }
                             timeStamp={new Date(tweet.created_at!)}
-                            statValues={[0,0, tweet.likes.length]}
+                            statValues={[tweet.replies.length, 0, tweet.likes.length]}
                             likes={tweet.likes}
                         />
                     );

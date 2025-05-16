@@ -5,11 +5,11 @@ import DisplayName from "./DisplayName";
 import ProfileBanner from "./ProfileBanner";
 import ProfilePicture from "./ProfilePicture";
 import ProfileInfo from "./ProfileInfo";
-import Button from "../shared/Button";
+import Button from "../Shared/Button";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { ReactNode } from "react";
-import TabSwitcher from "../shared/TabSwitcher";
+import TabSwitcher from "../Shared/TabSwitcher";
 
 interface ProfileProps {
     username: string;
@@ -62,7 +62,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                             <DisplayName displayName={user.DisplayName} />
                             <span className="text-gray-500 text-sm">
                                 {likesCount ? (
-                                    `${likesCount} likes`
+                                    likesCount > 1 ? `${likesCount} likes` : `${likesCount} like`
                                 ) : (
                                     `${numberOfPosts} posts`
                                 )}

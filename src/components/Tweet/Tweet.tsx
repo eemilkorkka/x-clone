@@ -1,5 +1,5 @@
 "use client";
-import ProfilePicture from "../../Profile/ProfilePicture";
+import ProfilePicture from "../Profile/ProfilePicture";
 import TweetStat from "./TweetStat";
 import { tweetStatType } from "@/types/tweetStatType";
 import { tweetContentType } from "@/types/tweetContentType";
@@ -7,7 +7,7 @@ import { BsThreeDots } from "react-icons/bs";
 import Icon from "../TweetBox/Icon";
 import AttachmentsGrid from "./AttachmentsGrid";
 import Media from "./Media";
-import Linkify from "@/components/shared/Linkify";
+import Linkify from "@/components/Shared/Linkify";
 import Username from "@/components/Profile/Username";
 import DisplayName from "@/components/Profile/DisplayName";
 import { useRouter } from "next/navigation";
@@ -138,20 +138,22 @@ const Tweet = ({
                         })}</span>
                     </div>
                 )}
-                {tweetStats.map((stat, index) => {
-                    return (
-                        <TweetStat 
-                            key={index}
-                            type={stat.type}
-                            tweetId={tweetId}
-                            hoverBgColor={stat.hoverBgColor} 
-                            hoverTextColor={stat.hoverTextColor}
-                            clickedColor={stat.clickedColor}
-                            statValue={statValues[index]}
-                            likes={likes}
-                        />
-                    );
-                })}
+                <div className={`flex justify-between ${tweetContent.files.length != 0 ? "mt-2" : ""} ${tweetType === "status" && "border-t border-b border-gray-200 p-2"}`}>
+                    {tweetStats.map((stat, index) => {
+                        return (
+                            <TweetStat 
+                                key={index}
+                                type={stat.type}
+                                tweetId={tweetId}
+                                hoverBgColor={stat.hoverBgColor} 
+                                hoverTextColor={stat.hoverTextColor}
+                                clickedColor={stat.clickedColor}
+                                statValue={statValues[index]}
+                                likes={likes}
+                            />
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );

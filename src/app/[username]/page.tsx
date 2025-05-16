@@ -1,8 +1,8 @@
 import Layout from "@/components/Layout/Layout";
-import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import ProtectedRoute from "@/components/Shared/ProtectedRoute";
 import Profile from "@/components/Profile/Profile";
 import { prisma } from "@/lib/prisma";
-import Tweet from "@/components/home/Tweet/Tweet";
+import Tweet from "@/components/Tweet/Tweet";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
@@ -12,6 +12,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
             users: {
                 Username: username,
             },
+            ParentID: null,
         },
         include: {
             users: {
@@ -37,10 +38,11 @@ export default async function Page({ params }: { params: Promise<{ username: str
         <ProtectedRoute>
             <Layout>
                 <Profile username={username}>
-                    {tweets.map((tweet, index) => {
+                    {tweets.map((tweet) => {
                         return (
-                            <Tweet 
-                                key={index}
+                            <Tweet
+                                tweetType="tweet" 
+                                key={tweet.ID}
                                 tweetId={tweet.ID}
                                 username={tweet.users.Username}
                                 displayName={tweet.users.DisplayName}

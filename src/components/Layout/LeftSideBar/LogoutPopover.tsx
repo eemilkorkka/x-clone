@@ -1,5 +1,5 @@
 "use client"
-import UserCard from "@/components/shared/UserCard";
+import UserCard from "@/components/Shared/UserCard";
 import { Popover } from "radix-ui";
 import { ReactNode } from "react";
 import { IoIosCheckmarkCircle } from "react-icons/io";

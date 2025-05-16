@@ -1,9 +1,9 @@
-import FormInput from "../../form/FormInput";
+import FormInput from "../../Form/FormInput";
 import { z } from "zod";
 import { passwordSchema } from "@/lib/schemas";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { useContext } from "react";
-import { SignupFormContext } from "@/context/SignupFormContext";
+import { SignupFormContext } from "@/Context/SignupFormContext";
 
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
