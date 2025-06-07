@@ -7,7 +7,7 @@ interface UsernameProps {
 
 const Username = ({ username, showProfileHoverCard }: UsernameProps) => {
     const usernameElement = (
-        <span className="text-gray-500 whitespace-nowrap text-[15px]">@{username}</span>
+        <span className="text-gray-500 text-[15px]">@{username}</span>
     );
 
     return (

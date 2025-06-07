@@ -3,27 +3,49 @@ import { useContext, useEffect, useState } from "react";
 import TabSwitcher from "../Shared/TabSwitcher";
 import TweetBox from "../TweetBox/TweetBox";
 import Tweet from "../Tweet/Tweet";
-import { timeAgo } from "@/utils/utilFunctions";
 import { TweetsContext } from "@/Context/TweetsContext";
-import { LoadingSpinner } from "../Shared/LoadingSpinner";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useScrollListener } from "@/hooks/useScrollListener";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import LoadingBlock from "../Shared/LoadingBlock";  
+
+const fetchTweets = async ({ pageParam } : { pageParam: number }) => {
+    const response = await fetch(`http://localhost:3000/api/posts?page=${pageParam}&limit=${10}`);
+    if (!response.ok) {
+        throw new Error("Failed to fetch tweets.");
+    }
+    return response.json();
+}
 
 const HomeWrapper = () => {
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        status
+    } = useInfiniteQuery({
+        queryKey: ['tweets'],
+        queryFn: fetchTweets,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.length < 10) return undefined;
+            return allPages.length + 1;
+        },
+    });
+
     const tabs: string[] = ["For you", "Following"];
     const [currentTab, setCurrentTab] = useState<number>(0);
-    const [loading, setLoading] = useState<boolean>(false);
-    const { tweets, setTweets } = useContext(TweetsContext)!;
+    const {tweets, setTweets } = useContext(TweetsContext)!;
 
     useEffect(() => {
-        const fetchTweets = async () => {
-            setLoading(true);
-            const response = await fetch("http://localhost:3000/api/posts");
-            const tweets = await response.json();
-            setTweets(tweets);
-            setLoading(false);
-        }
+        data?.pages && setTweets(data.pages.flatMap(page => page));
+    }, [data?.pages, setTweets]);
 
-        fetchTweets();
-    }, []);
+    const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
+    useScrollListener("main-scroll-container", handleScroll);
 
     return (
         <>
@@ -34,12 +56,7 @@ const HomeWrapper = () => {
                 style="bg-white/90! backdrop-blur-sm!" 
             />
             <TweetBox type="tweet" />
-            {loading ? (
-                <div className="flex justify-center mt-10 w-full">
-                    <LoadingSpinner variant="blue" />
-                </div>
-            ) : (
-                tweets.map((tweet) => {
+            {tweets.map((tweet) => {
                     return (
                         <Tweet 
                             key={tweet.ID}
@@ -60,10 +77,16 @@ const HomeWrapper = () => {
                             timeStamp={new Date(tweet.created_at!)}
                             statValues={[tweet.replies.length, 0, tweet.likes.length]}
                             likes={tweet.likes}
+                            bookmarks={tweet.bookmarks}
                         />
                     );
                 })
-            )}
+            }
+            <LoadingBlock 
+                isFetchingNextPage={isFetchingNextPage} 
+                hasNextPage={hasNextPage} 
+                status={status} 
+            />
         </>
     );
 }

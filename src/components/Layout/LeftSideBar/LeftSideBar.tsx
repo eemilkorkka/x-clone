@@ -9,6 +9,7 @@ import UserCard from "@/components/Shared/UserCard";
 import { BsThreeDots } from "react-icons/bs";
 import LogoutPopover from "./LogoutPopover";
 import PostButtonDialog from "./PostButtonDialog";
+import { FaFeatherPointed } from "react-icons/fa6";
 
 const LeftSideBar = async () => {
     const session = await auth();
@@ -25,9 +26,9 @@ const LeftSideBar = async () => {
     });
 
     return (
-        <div className="w-full flex flex-col mt-2 pr-2 pl-2 justify-between">
+        <div className="w-full h-screen flex flex-col justify-between">
             <div className="flex flex-col gap-4">
-                <Link href="/home" className="pl-1">
+                <Link href="/home" className="pl-1 xl:pl-0">
                     <button className="hover:bg-gray-200 p-2.5 hover:cursor-pointer rounded-full">
                         <BsTwitterX size="30" className="p-0.5" />
                     </button>
@@ -44,7 +45,12 @@ const LeftSideBar = async () => {
                     );
                 })}
                 <PostButtonDialog>
-                    <Button variant="black" style="p-3.5 xl:w-[90%] mt-2">Post</Button>
+                    <Button variant="black" style="h-14 xl:w-[90%] mt-2">
+                        <span className="hidden xl:inline">Post</span>
+                        <span className="xl:hidden flex justify-center">
+                            <FaFeatherPointed size={22} />
+                        </span>
+                    </Button>
                 </PostButtonDialog>
             </div>
             <div className="mb-4">

@@ -18,16 +18,18 @@ const PostButtonDialog = ({ children }: PostButtonDialogProps) => {
                 {children}
             </Dialog.Trigger>
             <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20"/>
-            <Dialog.Content className="w-full h-full sm:h-fit top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-13 -translate-x-1/2 sm:rounded-2xl">
+            <Dialog.Content className="w-full h-full sm:h-fit sm:max-h-[90vh] top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-13 -translate-x-1/2 sm:rounded-2xl overflow-hidden">
                 <VisuallyHidden.Root>
                     <Dialog.Title />
                 </VisuallyHidden.Root>
-                <Dialog.Close asChild className="ml-2 mt-1.5 hover:cursor-pointer" onClick={() => setPostDialogOpen(false)}>
+                <Dialog.Close asChild className="ml-2 mt-1.5 hover:cursor-pointer text-gray-700" onClick={() => setPostDialogOpen(false)}>
                     <button className="rounded-full p-1.5 hover:bg-gray-200">
                         <IoClose size={23}/>
                     </button>
                 </Dialog.Close>
-                <TweetBox alwaysShowBorder={true} minRows={3} type="tweet" />
+                <div className="max-h-[calc(90vh-48px)] overflow-y-auto overflow-x-hidden">
+                    <TweetBox alwaysShowBorder={true} minRows={3} type="tweet" />
+                </div>
             </Dialog.Content>
         </Dialog.Root>
     );

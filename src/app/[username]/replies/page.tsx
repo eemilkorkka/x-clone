@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout/Layout";
 import ProtectedRoute from "@/components/Shared/ProtectedRoute";
 import Profile from "@/components/Profile/Profile";
+import ProfileFeedWrapper from "@/components/Profile/ProfileFeedWrapper";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
@@ -9,7 +10,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
         <ProtectedRoute>
             <Layout>
                 <Profile username={username}>
-                    replies
+                    <ProfileFeedWrapper type="replies" username={username} />
                 </Profile>
             </Layout>
         </ProtectedRoute>

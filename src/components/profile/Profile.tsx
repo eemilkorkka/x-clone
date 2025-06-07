@@ -1,6 +1,4 @@
 "use server";
-import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa6";
 import DisplayName from "./DisplayName";
 import ProfileBanner from "./ProfileBanner";
 import ProfilePicture from "./ProfilePicture";
@@ -8,8 +6,9 @@ import ProfileInfo from "./ProfileInfo";
 import Button from "../Shared/Button";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-import { ReactNode } from "react";
+import { Children, ReactNode } from "react";
 import TabSwitcher from "../Shared/TabSwitcher";
+import FeedHeader from "../Shared/FeedHeader";
 
 interface ProfileProps {
     username: string;
@@ -52,10 +51,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
 
     return (
         <>
-            <div className="flex gap-8 ps-4 items-center pt-2 pb-2 sticky top-0 z-10 bg-white/90 backdrop-blur-sm">
-                <Link className="rounded-full h-fit p-2 hover:bg-gray-200 hover:cursor-pointer" href="/home">
-                    <FaArrowLeft size={18} />
-                </Link>
+            <FeedHeader>
                 <div className="flex flex-col">
                     {user ? (
                         <>
@@ -72,7 +68,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                         <span className="font-bold text-lg">Profile</span>
                     )}
                 </div>
-            </div>
+            </FeedHeader>
             <ProfileBanner image={user?.CoverPicture ?? undefined}>
                 <ProfilePicture image={user?.ProfilePicture} style="w-full h-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white" />
             </ProfileBanner>
@@ -102,7 +98,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                                 tabs={username === session?.user.username ? profileTabs : profileTabs.slice(0, profileTabs.length - 1)}
                                 useLink={true}
                                 username={username}
-                                style={"border-b-0! static!"}
+                                style={`${Children.count(children) === 0 ? "" : "border-b-0!"} static!`}
                             />
                             {children}
                         </div>

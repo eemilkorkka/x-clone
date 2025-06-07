@@ -9,6 +9,7 @@ import UserCard from "../Shared/UserCard";
 import Button from "../Shared/Button";
 import Link from "next/link";
 import { headers } from "next/headers";
+import { Toaster } from "react-hot-toast";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
     const session = await auth();
@@ -41,12 +42,12 @@ const Layout = async ({ children }: { children: ReactNode }) => {
 
     return (
         <TweetsContextProvider>
-            <div className="flex w-full max-w-fit mx-auto">
-                <div className="shrink-0 flex w-18 xl:w-65">
+            <div className="flex w-full max-w-fit mx-auto overflow-y-auto">
+                <div className="shrink-0 flex w-18 xl:w-65 px-2">
                     <LeftSideBar />
                 </div>
                 <div className="flex w-full min-w-0 gap-8">
-                    <div className="w-3xl md:w-[598px] h-screen border-r border-l border-gray-200 overflow-y-auto no-scrollbar">
+                    <div className="w-3xl md:w-[598px] h-screen border-r border-l border-gray-200 overflow-y-scroll no-scrollbar" id="main-scroll-container">
                         {children}
                     </div>
                     <div className="hidden lg:flex flex-col gap-4 flex-shrink-0">
@@ -54,7 +55,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                         {!isViewingASpecificTweet && (
                             <Widget title="Subscribe to Premium">
                                 <div className="ps-3 p-2 pt-0">
-                                    <p className="text-sm text-gray-700">Subscribe to unlock new features and if eligible, <br></br> receive a share of revenue.
+                                    <p className="text-sm text-gray-500">Subscribe to unlock new features and if eligible, <br></br> receive a share of revenue.
                                     </p>
                                     <Button style="text-sm px-4 pt-2 pb-2 mt-2">Subscribe</Button>
                                 </div>
@@ -65,7 +66,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                                 user && (
                                     <Link href={`/${username}`}>
                                         <div className="hover:bg-gray-100 hover:cursor-pointer w-full p-2">
-                                            <UserCard 
+                                            <UserCard
                                                 image={user.ProfilePicture}
                                                 username={username}
                                                 displayName={user.DisplayName}
@@ -83,7 +84,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                                 users.map((user) => (
                                     <Link key={user.Username} href={`/${user.Username}`}>
                                         <div className="hover:bg-gray-100 hover:cursor-pointer w-full p-2">
-                                            <UserCard 
+                                            <UserCard
                                                 image={user.ProfilePicture}
                                                 username={user.Username}
                                                 displayName={user.DisplayName}
@@ -97,7 +98,8 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                         </Widget>
                     </div>
                 </div>
-            </div>  
+                <Toaster position="bottom-center" />
+            </div>
         </TweetsContextProvider>
     );
 }

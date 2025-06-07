@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getLikedTweets } from "@/utils/tweet/tweetUtils";
 
 export async function PUT(req: Request) {
     try {
@@ -40,7 +41,24 @@ export async function PUT(req: Request) {
             return NextResponse.json({ message: "Post liked successfully." }, { status: 200 });
         }
 
-    } catch (error) {
+    } catch {
         return NextResponse.json({ message: "Internal Server Error. " }, { status: 500 });
+    }
+}
+
+export async function GET(req: NextRequest) {
+    const session = await auth();
+    if (!session?.user) return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+
+    const searchParams = req.nextUrl.searchParams;
+    const userId = parseInt(searchParams.get("userId") || "");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+
+    try {
+        const likedPosts = await getLikedTweets(userId, page, limit);
+        return NextResponse.json(likedPosts, { status: 200 });
+    } catch (erorr) {
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 }

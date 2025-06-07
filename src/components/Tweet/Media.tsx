@@ -12,7 +12,7 @@ const Media = ({ type, url, children }: MediaProps) => {
         <>
             {type.startsWith("image") ? (
                 <Image
-                    className="w-full h-full rounded-xl cursor-pointer object-cover"
+                    className="w-full h-full cursor-pointer object-cover"
                     src={url}
                     alt="Uploaded media"
                     unoptimized
@@ -22,9 +22,10 @@ const Media = ({ type, url, children }: MediaProps) => {
                 />
                 ) : (
                 <video
-                    className="w-full h-full rounded-xl cursor-pointer object-cover"
+                    className="w-full h-full cursor-pointer object-cover"
                     src={url}
                     controls
+                    preload="metadata"
                     onClick={(e) => e.stopPropagation()}
                 />
             )}

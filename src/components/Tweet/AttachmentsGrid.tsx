@@ -7,14 +7,22 @@ interface AttachmentsGridProps {
 const AttachmentsGrid = ({ children }: AttachmentsGridProps) => {
     const itemCount = Children.count(children);
 
+    if (itemCount === 0) return;
+
+    if (itemCount === 1) {
+        return (
+            <div className="inline-block w-full rounded-xl overflow-hidden">
+                {children}
+            </div>
+        );
+    }
+
     return (
         <div
-            className={`grid gap-1 w-full max-h-[500px] ${
+            className={`grid gap-0.5 w-full rounded-xl overflow-hidden h-[42vw] xs:h-[37vw] md:h-[271px] max-h-[500px] ${
                 itemCount > 2
-                    ? "grid-cols-2 h-[300px] grid-rows-2"
-                    : itemCount > 1
-                    ? "grid grid-cols-2"
-                    : "inline"
+                    ? "grid-cols-2 h-75 grid-rows-2"
+                    : "grid-cols-2"
             }`}
         >
             {children}

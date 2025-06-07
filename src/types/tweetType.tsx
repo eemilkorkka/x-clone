@@ -25,4 +25,7 @@ type TweetData = {
     replies: {
         UserID: number;
     }[];
+    bookmarks: {
+        UserID: number
+    }[];
 }

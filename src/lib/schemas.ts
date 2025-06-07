@@ -11,7 +11,7 @@ export const personalInfoSchema = z.object({
             try {
                 const response = await fetch(`http://localhost:3000/api/users/email/${encodeURIComponent(email)}`);
                 return response.status === 404;
-            } catch (error) {
+            } catch {
                 return false;
             }
         }, "This email is already taken"),
@@ -43,7 +43,7 @@ export const verificationCodeSchema = z.object({
                 path: ["verificationCode"]
             });
         }
-    } catch (error) {
+    } catch {
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Something went wrong",
@@ -62,7 +62,7 @@ export const usernameSchema = z.object({
             try {
                 const response = await fetch(`http://localhost:3000/api/users/${encodeURIComponent(username)}`);
                 return response.status === 404;
-            } catch (error) {
+            } catch {
                 return false;
             }
         }, "Username is already in use")

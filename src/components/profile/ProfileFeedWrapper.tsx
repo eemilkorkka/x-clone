@@ -1,25 +1,32 @@
 "use client";
-import { useEffect, useContext } from "react";
-import TweetBox from "../TweetBox/TweetBox";
-import Tweet from "./Tweet";
-import { TweetsContext } from "@/Context/TweetsContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import Tweet from "../Tweet/Tweet";
 import { useScrollListener } from "@/hooks/useScrollListener";
+import { useEffect, useContext } from "react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { TweetsContext } from "@/Context/TweetsContext";
 import LoadingBlock from "../Shared/LoadingBlock";
 
-interface RepliesWrapperProps {
-    parentTweetID: number;
+interface ProfileFeedWrapperProps {
+    type: "tweets" | "replies" | "media" | "like";
+    username: string;
+    userId?: number;
 }
 
-const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
+const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps) => {
 
     const { tweets, setTweets } = useContext(TweetsContext)!;
 
-    const fetchData = async ({ pageParam }: { pageParam: number }) => {
-        const response = await fetch(`http://localhost:3000/api/posts/replies?tweetId=${parentTweetID}&page=${pageParam}&limit=${10}`);
+    const getUrl = (pageParam: number): string => {
+        return type === "tweets" 
+        ? `http://localhost:3000/api/${username}?page=${pageParam}&limit=${10}` 
+        : `http://localhost:3000/api/posts/${type}?username=${username}&userId=${userId}&page=${pageParam}&limit=${10}`;
+    }
+
+    const fetchData = async ({ pageParam } : { pageParam: number }) => {
+        const response = await fetch(getUrl(pageParam));
         if (!response.ok) {
-            throw new Error("Failed to fetch replies.");
+            throw new Error("Failed to fetch data.");
         }
         return response.json();
     }
@@ -33,7 +40,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
         isFetchingNextPage,
         status
     } = useInfiniteQuery({
-        queryKey: ["replies", parentTweetID],
+        queryKey: ['profileFeed', username, type],
         queryFn: fetchData,
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
@@ -45,13 +52,16 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
     useEffect(() => {
         data?.pages && setTweets(data.pages.flatMap(page => page));
     }, [data?.pages, setTweets]);
-    
+
+    useEffect(() => {
+        console.log(hasNextPage);
+    }, [hasNextPage])
+
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
 
-    return (
+    return type !== "media" ? (
         <>
-            <TweetBox type="reply" parentTweetID={parentTweetID} />
             {tweets.map((tweet) => {
                 return (
                     <Tweet
@@ -75,7 +85,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
                         likes={tweet.likes}
                         bookmarks={tweet.bookmarks}
                     />
-                );
+                )
             })}
             <LoadingBlock 
                 hasNextPage={hasNextPage}
@@ -83,7 +93,9 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
                 status={status}
             />
         </>
-    );
+    ) : (
+        <span>page under construction</span>
+    )
 }
 
-export default RepliesWrapper;
+export default ProfileFeedWrapper;

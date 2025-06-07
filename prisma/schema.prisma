@@ -30,6 +30,7 @@ model users {
   Bio            String? @db.VarChar(255)
   likes          likes[]
   posts          posts[]
+  bookmarks bookmarks[]
 }
 
 model files {
@@ -57,9 +58,23 @@ model posts {
 
   @@index([UserID], map: "UserID")
   @@index([ParentID], map: "posts_ParentID_fkey")
+  bookmarks bookmarks[]
 }
 
 model likes {
+  ID         Int       @id @default(autoincrement())
+  UserID     Int
+  PostID     Int
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  post       posts     @relation(fields: [PostID], references: [ID], onDelete: Cascade)
+  user       users     @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+
+  @@unique([UserID, PostID])
+  @@index([UserID])
+  @@index([PostID])
+}
+
+model bookmarks {
   ID         Int       @id @default(autoincrement())
   UserID     Int
   PostID     Int

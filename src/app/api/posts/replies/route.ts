@@ -1,45 +1,29 @@
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { getReplies, getTweetsAndRepliesByUsername } from "@/utils/tweet/tweetUtils";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
     const session = await auth();
     if (!session?.user) return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
 
-    const url = new URL(req.url);
-    const searchParams = new URLSearchParams(url.search);
-    const tweetId = searchParams.get("tweetId");
+    const searchParams = req.nextUrl.searchParams;
+
+    const tweetId = parseInt(searchParams.get("tweetId") ?? "");
+    const username = searchParams.get("username");
+    const page = parseInt(searchParams.get("page") ?? "1");
+    const limit = parseInt(searchParams.get("limit") ?? "10");
 
     try {
-        const replies = await prisma.posts.findMany({
-            where: {
-                ParentID: parseInt(tweetId!)
-            },
-            include: {
-                users: {
-                    select: {
-                        Username: true,
-                        DisplayName: true,
-                        ProfilePicture: true,
-                    },
-                },
-                files: true,
-                likes: {
-                    select: {
-                        UserID: true,
-                    },
-                },
-                replies: {
-                    select: {
-                        UserID: true,
-                    }
-                }
-            },
-        });
-
-        return NextResponse.json(replies, { status: 200 });
-
-    } catch (error) {
-        return NextResponse.json({ message: "Internal Server Error. " }, { status: 500 });
+        if (tweetId) {
+            const replies = await getReplies(tweetId, page, limit);
+            return NextResponse.json(replies, { status: 200 });
+        } else if (username) {
+            const replies = await getTweetsAndRepliesByUsername(username, page, limit);
+            return NextResponse.json(replies, { status: 200 });
+        } else {
+            return NextResponse.json({ message: "No tweet ID or username was provided" }, { status: 400 });
+        }
+    } catch {
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 }

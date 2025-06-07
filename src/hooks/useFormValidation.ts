@@ -44,5 +44,5 @@ export function useFormValidation<T>({ formData, schema, touchedFields = [], set
         isValid: validationResult?.success ?? false,
         getErrorMessage,
         errors: validationResult?.success ? {} : validationResult?.error.formErrors,
-    };
+    }
 } 

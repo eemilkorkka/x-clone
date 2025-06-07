@@ -1,5 +1,3 @@
-import { timeStamp } from "console";
-
 export const sendVerificationEmail = async (email: string, name: string) => {
     try {
         await fetch("http://localhost:3000/api/verify/email", {
@@ -29,6 +27,7 @@ export const uploadFiles = async (files: { url: string, file: File }[], formData
         return await response.json();
     } catch (error) {
         console.log(error);
+        return error;
     }
 }
 

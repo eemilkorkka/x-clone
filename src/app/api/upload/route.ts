@@ -1,7 +1,12 @@
+import { auth } from "@/auth";
 import { storage } from "@/lib/appwrite";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+    const session = await auth();
+    
+    if (!session?.user) return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+
     const formData = await req.formData();
     const files = formData.getAll("file");
     const urls: {url: string; type: string}[] = [];

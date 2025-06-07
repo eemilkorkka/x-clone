@@ -16,15 +16,17 @@ import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgres
 import { TweetsContext } from "@/Context/TweetsContext";
 import Button from "@/components/Shared/Button";
 import EmojiPickerPopover from "./EmojiPickerPopover";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 type tweetBoxType = "reply" | "tweet";
 
 interface TweetBoxProps {
     type: tweetBoxType;
     parentTweetID?: number;
-    setReplies?: Dispatch<SetStateAction<TweetData[]>>;
     alwaysShowBorder?: boolean;
     minRows?: number;
+    isReplyDialog?: boolean;
 }
 
 const icons = [
@@ -32,12 +34,19 @@ const icons = [
     <HiOutlineEmojiHappy />,
     <RxCalendar />,
     <SlLocationPin />
-]
+];
 
 const MAX_FILES = 4;
-const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "video/mp4"];
+const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "image/jfif", "video/mp4"];
 
-const TweetBox = ({ type = "tweet", parentTweetID, setReplies, alwaysShowBorder = true, minRows }: TweetBoxProps) => {
+const TweetBox = 
+({ 
+    type = "tweet", 
+    parentTweetID, 
+    alwaysShowBorder = true, 
+    minRows,
+    isReplyDialog 
+}: TweetBoxProps) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [isFocused, setFocused] = useState<boolean>(false);
@@ -49,8 +58,9 @@ const TweetBox = ({ type = "tweet", parentTweetID, setReplies, alwaysShowBorder 
 
     const files: { url: string; type: string;}[] = [];
 
-    let postButtonIsDisabled = !tweetContent.text && tweetContent.files.length === 0;
+    const postButtonIsDisabled = !tweetContent.text && tweetContent.files.length === 0;
     const { data: session } = useSession();
+    const queryClient = useQueryClient();
     const filePickerRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileAdd = (e: ChangeEvent<HTMLInputElement>) => {
@@ -115,17 +125,21 @@ const TweetBox = ({ type = "tweet", parentTweetID, setReplies, alwaysShowBorder 
         const json = await response.json();
 
         if (response.ok) {
-            if (type === "tweet") {
-                setTweets(prev => [json.post, ...prev]);
-                postDialogOpen && setPostDialogOpen(false);
-            } else {
-                setReplies?.(prev => [json.post, ...prev]);
-            }
-        
+            setTweets(prev => [json.post, ...prev]);
+            postDialogOpen && setPostDialogOpen(false);
+
+            queryClient.removeQueries();
+
+            toast.success(json.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
             setLoading(false);
             setTweetContent({ text: "", files: [] });
         } else {
-            console.error("Failed to create post:", json.message);
+            toast.error(json.message);
             setLoading(false);
         }
     }
@@ -135,7 +149,7 @@ const TweetBox = ({ type = "tweet", parentTweetID, setReplies, alwaysShowBorder 
             { loading && <IndeterminateProgress /> }
             <div className="flex p-4 pb-2">
                 <ProfilePicture image={session?.user.image} />
-                <div className={`flex flex-col ${type === "reply" && !isFocused ? "flex-row justify-between items-center" : ""} pl-1 h-full w-full text-xl`}>
+                <div className={`flex flex-col ${type === "reply" && !isFocused && !isReplyDialog ? "flex-row justify-between items-center" : ""} pl-1 h-full w-full text-xl`}>
                     <div className="p-1">
                         <TextareaAutosize 
                             placeholder={type === "tweet" ? "What's happening?" : "Post your reply"} 
@@ -164,8 +178,8 @@ const TweetBox = ({ type = "tweet", parentTweetID, setReplies, alwaysShowBorder 
                             ))}
                         </AttachmentsGrid>
                     </div>
-                    <div className={`flex pt-2.5 justify-between ${isFocused && alwaysShowBorder ? "border-t mt-8 border-gray-200" : ""}`}>
-                        <div className={`${type === "reply" && !isFocused ? "hidden" : "flex"} items-center h-full`}>
+                    <div className={`flex ${isFocused && "pt-2"} justify-between ${isFocused && alwaysShowBorder ? "border-t mt-8 border-gray-200" : ""}`}>
+                        <div className={`${type === "reply" && !isFocused && !isReplyDialog ? "hidden" : "flex"} items-center h-full`}>
                             <Icon onClick={() => tweetContent.files.length < MAX_FILES && filePickerRef.current?.click()}>
                                 <SlPicture size={17} />
                                 <input 
@@ -180,6 +194,9 @@ const TweetBox = ({ type = "tweet", parentTweetID, setReplies, alwaysShowBorder 
                             {icons.map((icon, index) => (
                                 <React.Fragment key={index}>
                                     {index === 1 ? (
+                                        /* TODO: Make this insert the emoji at the current cursor position instead of just
+                                            inserting at the end of the tweet
+                                        */
                                         <EmojiPickerPopover onEmojiClick={(emoji) => setTweetContent(prev => ({ ...prev, text: prev.text + emoji.emoji }))}
                                         >
                                             <Icon>

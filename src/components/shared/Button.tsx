@@ -8,13 +8,13 @@ const hoverColors = {
 
 interface ButtonProps {
     type?: "submit" | "reset" | "button";
-    variant?: "blue" | "white" | "black" | "outline";
+    variant?: "blue" | "white" | "black" | "red" | "outline";
     textColor?: string;
     hoverColor?: keyof typeof hoverColors;
     style?: string;
     disabled?: boolean;
     children: ReactNode;
-    onClick?: () => void;
+    onClick?: (e: React.MouseEvent) => void;
 }
 
 const Button = ({ type, variant, textColor, hoverColor, style, disabled, children, onClick }: ButtonProps) => { 
@@ -23,6 +23,7 @@ const Button = ({ type, variant, textColor, hoverColor, style, disabled, childre
         blue: "bg-xblue text-white",
         white: "bg-white text-gray-900",
         black: "bg-black text-white",
+        red: "bg-red-500 text-white",
         outline: `bg-transparent ${textColor ?? "text-xblue"} border border-gray-500 ${hoverColors[hoverColor ?? "blue"]}`,
     }; 
 
@@ -31,7 +32,7 @@ const Button = ({ type, variant, textColor, hoverColor, style, disabled, childre
             disabled={disabled}
             type={type ?? "button"} 
             onClick={onClick}
-            className={`${style} rounded-full text-center font-bold text-lg p-2.5 hover:cursor-pointer ${variant ? variants[variant] : variants.blue}`}>
+            className={`${style} rounded-full text-center font-bold text-lg p-2.5 hover:cursor-pointer outline-none ${variant ? variants[variant] : variants.blue}`}>
                 {children}
         </button>
     );
