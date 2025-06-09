@@ -42,7 +42,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
 
     return (
         <TweetsContextProvider>
-            <div className="flex w-full max-w-fit mx-auto overflow-y-auto">
+            <div className="flex flex-col-reverse mobile:flex-row w-full max-w-fit mx-auto overflow-y-auto">
                 <div className="shrink-0 flex w-18 xl:w-65 px-2">
                     <LeftSideBar />
                 </div>

@@ -62,10 +62,10 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
 
     return type !== "media" ? (
         <>
-            {tweets.map((tweet) => {
+            {tweets.map((tweet, index) => {
                 return (
                     <Tweet
-                        key={tweet.ID}
+                        key={index}
                         tweetType="tweet"
                         tweetId={tweet.ID}
                         username={tweet.users.Username}
@@ -81,9 +81,12 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
                             }
                         }
                         timeStamp={new Date(tweet.created_at!)}
-                        statValues={[tweet.replies.length, 0, tweet.likes.length]}
+                        isRetweet={tweet.isRetweet}
+                        profile={username}
+                        statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
                         likes={tweet.likes}
                         bookmarks={tweet.bookmarks}
+                        retweets={tweet.retweets}
                     />
                 )
             })}

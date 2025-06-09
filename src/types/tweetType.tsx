@@ -19,13 +19,9 @@ type TweetData = {
     created_at: string;
     users: TweetUser;
     files: TweetFile[];
-    likes: {
-        UserID: number;
-    }[];
-    replies: {
-        UserID: number;
-    }[];
-    bookmarks: {
-        UserID: number
-    }[];
+    likes: { UserID: number }[];
+    replies: { UserID: number }[];
+    bookmarks: { UserID: number }[];
+    retweets: { UserID: number }[];
+    isRetweet?: boolean;
 }

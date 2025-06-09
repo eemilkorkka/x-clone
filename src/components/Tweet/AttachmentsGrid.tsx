@@ -11,7 +11,7 @@ const AttachmentsGrid = ({ children }: AttachmentsGridProps) => {
 
     if (itemCount === 1) {
         return (
-            <div className="inline-block w-full rounded-xl overflow-hidden">
+            <div className="inline-block w-full rounded-2xl overflow-hidden">
                 {children}
             </div>
         );
@@ -19,7 +19,7 @@ const AttachmentsGrid = ({ children }: AttachmentsGridProps) => {
 
     return (
         <div
-            className={`grid gap-0.5 w-full rounded-xl overflow-hidden h-[42vw] xs:h-[37vw] md:h-[271px] max-h-[500px] ${
+            className={`grid gap-0.5 w-full rounded-2xl overflow-hidden h-[42vw] xs:h-[37vw] md:h-[271px] max-h-[500px] ${
                 itemCount > 2
                     ? "grid-cols-2 h-75 grid-rows-2"
                     : "grid-cols-2"

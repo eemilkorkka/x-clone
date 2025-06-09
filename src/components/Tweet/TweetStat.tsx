@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { TweetsContext } from "@/Context/TweetsContext";
 import { FaRegComment } from "react-icons/fa6";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { GoHeart, GoHeartFill } from "react-icons/go";
@@ -28,19 +29,19 @@ interface TweetStatProps {
     clickedColor?: string;
     statValue: number;
     likes: { UserID: number }[];
-    retweets?: { UserID: number }[];
+    retweets: { UserID: number }[];
     bookmarks: { UserID: number }[];
 }
 
-const TweetStat = ({ 
-    type, 
+const TweetStat = ({
+    type,
     tweetId,
-    hoverBgColor, 
-    hoverTextColor, 
-    clickedColor, 
+    hoverBgColor,
+    hoverTextColor,
+    clickedColor,
     statValue,
     likes,
-    retweets = [],
+    retweets,
     bookmarks
 }: TweetStatProps) => {
     const [clicked, setClicked] = useState<boolean>(false);
@@ -48,6 +49,7 @@ const TweetStat = ({
     const session = useSession();
     const queryClient = useQueryClient();
     const router = useRouter();
+    const { setTweets } = useContext(TweetsContext)!;
 
     useEffect(() => {
         setLocalStatValue(statValue);
@@ -72,12 +74,14 @@ const TweetStat = ({
                 type !== "bookmark" && setLocalStatValue(prev => clicked ? prev + 1 : prev - 1);
                 setClicked(prev => !prev);
             } else {
+                if (type === "retweet" && clicked) setTweets?.(prev => prev.filter(tweet => !(tweet.isRetweet && tweet.ID === tweetId)))
+
                 queryClient.invalidateQueries({ queryKey: ['tweets'] });
                 queryClient.invalidateQueries({ queryKey: ['tweet', tweetId] });
                 queryClient.invalidateQueries({ queryKey: ['replies', tweetId] });
-                
+
                 router.refresh();
-                
+
                 toast.success(json.message, {
                     style: {
                         background: "#1D9BF0",
@@ -99,14 +103,14 @@ const TweetStat = ({
         retweet: {
             icon: <AiOutlineRetweet size={18} />,
             action: async () => handleInteraction('retweet'),
-            checkActive: (userId) => 
+            checkActive: (userId) =>
                 retweets.some(retweet => retweet.UserID === parseInt(userId))
         },
         like: {
             icon: <GoHeart size={18} />,
             activeIcon: <GoHeartFill size={18} />,
             action: async () => handleInteraction('like'),
-            checkActive: (userId) => 
+            checkActive: (userId) =>
                 likes.some(like => like.UserID === parseInt(userId))
         },
         bookmark: {
@@ -124,15 +128,14 @@ const TweetStat = ({
         }
     }, [session.data?.user?.id, type, tweetId]);
 
-    const currentIcon = clicked && statConfigs[type].activeIcon 
-        ? statConfigs[type].activeIcon 
+    const currentIcon = clicked && statConfigs[type].activeIcon
+        ? statConfigs[type].activeIcon
         : statConfigs[type].icon;
 
     const tweetStatElement = (
-        <div 
-            className={`flex items-center text-gray-600 ${
-                clicked && type !== "reply" && (clickedColor ?? "text-xblue")
-            } hover:cursor-pointer`} 
+        <div
+            className={`flex items-center text-gray-600 ${clicked && type !== "reply" && (clickedColor ?? "text-xblue")
+                } hover:cursor-pointer`}
             onClick={(e) => {
                 e.stopPropagation();
                 statConfigs[type].action?.();

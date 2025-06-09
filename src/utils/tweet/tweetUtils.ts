@@ -14,21 +14,10 @@ export const getTweetById = async (tweetId: number) => {
                 }
             },
             files: true,
-            likes: {
-                select: {
-                    UserID: true
-                }
-            },
-            replies: {
-                select: {
-                    UserID: true
-                }
-            },
-            bookmarks: {
-                select: {
-                    UserID: true
-                }
-            }
+            likes: { select: { UserID: true, } },
+            replies: { select: { UserID: true } },
+            bookmarks: { select: { UserID: true } },
+            retweets: { select: { UserID: true } }
         },
     });
 
@@ -52,67 +41,87 @@ export const getTweetsByUsername = async (username: string, page: number, limit:
                 },
             },
             files: true,
-            likes: {
-                select: {
-                    UserID: true,
-                },
-            },
-            replies: {
-                select: {
-                    UserID: true,
-                }
-            },
-            bookmarks: {
-                select: {
-                    UserID: true,
-                }
-            }
+            likes: { select: { UserID: true, } },
+            replies: { select: { UserID: true } },
+            bookmarks: { select: { UserID: true } },
+            retweets: { select: { UserID: true } }
         },
         orderBy: {
-            created_at: "desc",
+            created_at: 'desc'
         },
         skip: (page - 1) * limit,
         take: limit,
     });
 
-    return tweets;
+    const retweets = await prisma.retweets.findMany({
+        where: {
+            user: {
+                Username: username
+            }
+        },
+        include: {
+            post: {
+                include: {
+                    users: {
+                        select: {
+                            Username: true,
+                            DisplayName: true,
+                            ProfilePicture: true,
+                        }
+                    },
+                    files: true,
+                    likes: { select: { UserID: true } },
+                    replies: { select: { UserID: true } },
+                    bookmarks: { select: { UserID: true } },
+                    retweets: { select: { UserID: true } }
+                }
+            }
+        },
+        orderBy: {
+            created_at: 'desc'
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+    });
+
+    const tweetItems = tweets.map(tweet => ({
+        ...tweet,
+        timestamp: new Date(tweet.created_at!).getTime()
+    }));
+
+    const retweetItems = retweets.map(retweet => ({
+        ...retweet.post,
+        timestamp: new Date(retweet.created_at!).getTime(),
+        isRetweet: true
+    }));
+
+    return getSortedItems(tweetItems, retweetItems);
 }
 
 export const getTweets = async (page: number, limit: number) => {
     const tweets = await prisma.posts.findMany({
-            where: {
-                ParentID: null
-            },
-            include: {
-                users: {
-                    select: {
-                        Username: true,
-                        DisplayName: true,
-                        ProfilePicture: true,
-                    },
+        where: {
+            ParentID: null
+        },
+        include: {
+            users: {
+                select: {
+                    Username: true,
+                    DisplayName: true,
+                    ProfilePicture: true,
                 },
-                files: true,
-                likes: {
-                    select: {
-                        UserID: true,
-                    },
-                },
-                replies: {
-                    select: {
-                        UserID: true,
-                    }
-                },
-                bookmarks: {
-                    select: {
-                        UserID: true,
-                    }
-                }
             },
-            orderBy: {
-                created_at: "desc"
-            },
-            skip: (page - 1) * limit,
-            take: limit,
+            files: true,
+            likes: { select: { UserID: true } },
+            replies: { select: { UserID: true } },
+            bookmarks: { select: { UserID: true } },
+            retweets: { select: { UserID: true } }
+        },
+        orderBy: {
+            created_at: "desc"
+        },
+        skip: (page - 1) * limit,
+        take: limit,
     });
 
     return tweets;
@@ -132,21 +141,10 @@ export const getReplies = async (tweetId: number, page: number, limit: number) =
                 },
             },
             files: true,
-            likes: {
-                select: {
-                    UserID: true,
-                },
-            },
-            replies: {
-                select: {
-                    UserID: true,
-                }
-            },
-            bookmarks: {
-                select: {
-                    UserID: true,
-                }
-            }
+            likes: { select: { UserID: true } },
+            replies: { select: { UserID: true } },
+            bookmarks: { select: { UserID: true } },
+            retweets: { select: { UserID: true } }
         },
         orderBy: {
             created_at: "desc",
@@ -174,27 +172,11 @@ export const getTweetsAndRepliesByUsername = async (username: string, page: numb
                 },
             },
             files: true,
-            likes: {
-                select: {
-                    UserID: true,
-                },
-            },
-            replies: {
-                select: {
-                    UserID: true,
-                }
-            },
-            bookmarks: {
-                select: {
-                    UserID: true,
-                }
-            }
-        },
-        orderBy: {
-            created_at: "desc",
-        },
-        skip: (page - 1) * limit,
-        take: limit,
+            likes: { select: { UserID: true } },
+            replies: { select: { UserID: true } },
+            bookmarks: { select: { UserID: true } },
+            retweets: { select: { UserID: true } }
+        }
     });
 
     return tweets;
@@ -217,24 +199,10 @@ export const getLikedTweets = async (userId: number, page: number, limit: number
                         },
                     },
                     files: true,
-                    likes: {
-                        select: {
-                            UserID: true,
-                        },
-                        orderBy: {
-                            created_at: 'desc',
-                        },
-                    },
-                    replies: { 
-                        select: {
-                            UserID: true,
-                        }
-                    },
-                    bookmarks: {
-                        select: {
-                            UserID: true
-                        }
-                    }
+                    likes: { select: { UserID: true } },
+                    replies: { select: { UserID: true } },
+                    bookmarks: { select: { UserID: true } },
+                    retweets: { select: { UserID: true } }
                 },
             },
         },
@@ -244,6 +212,11 @@ export const getLikedTweets = async (userId: number, page: number, limit: number
         skip: (page - 1) * limit,
         take: limit,
     });
-    
+
     return likes.map((like) => like.post);
+}
+
+function getSortedItems<T extends { timestamp: number }>(tweetItems: T[], retweetItems: T[]) {
+    const allItems = [...tweetItems, ...retweetItems].sort((a, b) => b.timestamp - a.timestamp);
+    return allItems;
 }

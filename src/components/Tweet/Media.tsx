@@ -8,6 +8,9 @@ interface MediaProps {
 }
 
 const Media = ({ type, url, children }: MediaProps) => {
+
+    // TODO: Figure out why videos are sometimes shifting up and down when scrolling.
+
     return (
         <>
             {type.startsWith("image") ? (
@@ -18,7 +21,6 @@ const Media = ({ type, url, children }: MediaProps) => {
                     unoptimized
                     width={0}
                     height={0}
-                    onClick={(e) => e.stopPropagation()}
                 />
                 ) : (
                 <video
@@ -26,7 +28,6 @@ const Media = ({ type, url, children }: MediaProps) => {
                     src={url}
                     controls
                     preload="metadata"
-                    onClick={(e) => e.stopPropagation()}
                 />
             )}
             {children}

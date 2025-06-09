@@ -31,6 +31,7 @@ model users {
   likes          likes[]
   posts          posts[]
   bookmarks bookmarks[]
+  retweets retweets[]
 }
 
 model files {
@@ -52,13 +53,14 @@ model posts {
   ParentID   Int?
   files      files[]
   likes      likes[]
+  bookmarks bookmarks[]
+  retweets retweets[]
   parent     posts?    @relation("PostToReplies", fields: [ParentID], references: [ID], onDelete: SetNull)
   replies    posts[]   @relation("PostToReplies")
   users      users     @relation(fields: [UserID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "posts_ibfk_1")
 
   @@index([UserID], map: "UserID")
   @@index([ParentID], map: "posts_ParentID_fkey")
-  bookmarks bookmarks[]
 }
 
 model likes {
@@ -75,6 +77,19 @@ model likes {
 }
 
 model bookmarks {
+  ID         Int       @id @default(autoincrement())
+  UserID     Int
+  PostID     Int
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  post       posts     @relation(fields: [PostID], references: [ID], onDelete: Cascade)
+  user       users     @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+
+  @@unique([UserID, PostID])
+  @@index([UserID])
+  @@index([PostID])
+}
+
+model retweets {
   ID         Int       @id @default(autoincrement())
   UserID     Int
   PostID     Int

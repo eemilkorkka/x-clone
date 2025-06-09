@@ -7,6 +7,7 @@
   --color-xgreen: rgba(84,187,124,255);
   --color-xpink: rgba(241,83,129,255);
   --color-gray: rgb(51, 54, 57);
+  --breakpoint-mobile: 500px
 }
 
 @keyframes progress {

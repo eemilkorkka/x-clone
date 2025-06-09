@@ -38,7 +38,7 @@ const HomeWrapper = () => {
 
     const tabs: string[] = ["For you", "Following"];
     const [currentTab, setCurrentTab] = useState<number>(0);
-    const {tweets, setTweets } = useContext(TweetsContext)!;
+    const { tweets, setTweets } = useContext(TweetsContext)!;
 
     useEffect(() => {
         data?.pages && setTweets(data.pages.flatMap(page => page));
@@ -46,6 +46,8 @@ const HomeWrapper = () => {
 
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
+
+    console.log(tweets);
 
     return (
         <>
@@ -75,9 +77,10 @@ const HomeWrapper = () => {
                                 }
                             }
                             timeStamp={new Date(tweet.created_at!)}
-                            statValues={[tweet.replies.length, 0, tweet.likes.length]}
+                            statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
                             likes={tweet.likes}
                             bookmarks={tweet.bookmarks}
+                            retweets={tweet.retweets}
                         />
                     );
                 })

@@ -71,9 +71,10 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
                             }
                         }
                         timeStamp={new Date(tweet.created_at!)}
-                        statValues={[tweet.replies.length, 0, tweet.likes.length]}
+                        statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
                         likes={tweet.likes}
                         bookmarks={tweet.bookmarks}
+                        retweets={tweet.retweets}
                     />
                 );
             })}

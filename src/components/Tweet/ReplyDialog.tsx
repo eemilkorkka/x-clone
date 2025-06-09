@@ -70,6 +70,7 @@ const ReplyDialog = ({ children, tweetId }: ReplyDialogProps) => {
                                 statValues={[tweet.replies.length, 0, tweet.likes.length]}
                                 likes={tweet.likes}
                                 bookmarks={tweet.bookmarks}
+                                retweets={tweet.retweets}
                             />
                         )}
                         <TweetBox

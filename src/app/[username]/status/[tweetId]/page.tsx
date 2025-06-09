@@ -40,6 +40,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         statValues={[parentTweet.replies.length, 0, parentTweet.likes.length]}
                         likes={parentTweet.likes}
                         bookmarks={parentTweet.bookmarks}
+                        retweets={parentTweet.retweets}
                     />
                 )}
                 {tweet ? (
@@ -62,6 +63,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         statValues={[tweet.replies.length, 0, tweet.likes.length]}
                         likes={tweet.likes}
                         bookmarks={tweet.bookmarks}
+                        retweets={tweet.retweets}
                     />
                 ) : (
                     <div className="flex justify-center">
