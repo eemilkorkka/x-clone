@@ -176,10 +176,57 @@ export const getTweetsAndRepliesByUsername = async (username: string, page: numb
             replies: { select: { UserID: true } },
             bookmarks: { select: { UserID: true } },
             retweets: { select: { UserID: true } }
-        }
+        },
+        orderBy: {
+            created_at: "desc"
+        },
+        skip: (page - 1) * limit,
+        take: limit,
     });
 
-    return tweets;
+    const retweets = await prisma.retweets.findMany({
+        where: {
+            user: {
+                Username: username
+            }
+        },
+        include: {
+            post: {
+                include: {
+                    users: {
+                        select: {
+                            Username: true,
+                            DisplayName: true,
+                            ProfilePicture: true,
+                        }
+                    },
+                    files: true,
+                    likes: { select: { UserID: true } },
+                    replies: { select: { UserID: true } },
+                    bookmarks: { select: { UserID: true } },
+                    retweets: { select: { UserID: true } }
+                }
+            }
+        },
+        orderBy: {
+            created_at: 'desc'
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+    });
+
+    const tweetItems = tweets.map(tweet => ({
+        ...tweet,
+        timestamp: new Date(tweet.created_at!).getTime()
+    }));
+
+    const retweetItems = retweets.map(retweet => ({
+        ...retweet.post,
+        timestamp: new Date(retweet.created_at!).getTime(),
+        isRetweet: true
+    }));
+
+    return getSortedItems(tweetItems, retweetItems);
 }
 
 export const getLikedTweets = async (userId: number, page: number, limit: number) => {

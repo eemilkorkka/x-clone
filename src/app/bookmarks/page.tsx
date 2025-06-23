@@ -27,7 +27,8 @@ export default async function Page() {
             files: true,
             likes: true,
             replies: true,
-            bookmarks: true
+            bookmarks: true,
+            retweets: true,
         },
         orderBy: {
             created_at: "desc"
@@ -62,6 +63,7 @@ export default async function Page() {
                                     statValues={[tweet.replies.length, 0, tweet.likes.length]}
                                     likes={tweet.likes}
                                     bookmarks={tweet.bookmarks}
+                                    retweets={tweet.retweets}
                                 />
                             )
                         })}

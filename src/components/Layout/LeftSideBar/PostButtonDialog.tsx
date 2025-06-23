@@ -7,14 +7,15 @@ import { TweetsContext } from "@/Context/TweetsContext";
 
 interface PostButtonDialogProps {
     children: ReactNode;
+    style?: string;
 }
 
-const PostButtonDialog = ({ children }: PostButtonDialogProps) => {
+const PostButtonDialog = ({ children, style }: PostButtonDialogProps) => {
     const { postDialogOpen, setPostDialogOpen } = useContext(TweetsContext)!;
 
     return (
         <Dialog.Root open={postDialogOpen}>
-            <Dialog.Trigger asChild onClick={() => setPostDialogOpen(true)} className="hidden mobile:inline">
+            <Dialog.Trigger asChild onClick={() => setPostDialogOpen(true)} className={`hidden mobile:inline ${style}`}>
                 {children}
             </Dialog.Trigger>
             <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20"/>

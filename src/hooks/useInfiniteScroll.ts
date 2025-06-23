@@ -15,7 +15,7 @@ export const useInfiniteScroll = (
 
         throttleTimeout.current = setTimeout(() => {
             if (
-                scrollContainer.offsetHeight + scrollContainer.scrollTop >= scrollContainer.scrollHeight
+                scrollContainer.offsetHeight + scrollContainer.scrollTop >= scrollContainer.scrollHeight - 100
             ) {
                 if (!isFetching && hasNextPage) {
                     fetchNextPage();

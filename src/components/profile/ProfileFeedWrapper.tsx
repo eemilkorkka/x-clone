@@ -53,10 +53,6 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
         data?.pages && setTweets(data.pages.flatMap(page => page));
     }, [data?.pages, setTweets]);
 
-    useEffect(() => {
-        console.log(hasNextPage);
-    }, [hasNextPage])
-
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
 

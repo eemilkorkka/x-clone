@@ -10,6 +10,8 @@ import Button from "../Shared/Button";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Toaster } from "react-hot-toast";
+import PostButtonDialog from "./LeftSideBar/PostButtonDialog";
+import { FaFeatherPointed } from "react-icons/fa6";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
     const session = await auth();
@@ -42,6 +44,13 @@ const Layout = async ({ children }: { children: ReactNode }) => {
 
     return (
         <TweetsContextProvider>
+            <div className="mobile:hidden fixed bottom-20 right-5 z-10">
+                <PostButtonDialog style="inline! mobile:hidden!">
+                    <Button variant="blue">
+                        <FaFeatherPointed size={35} className="p-1" />
+                    </Button>
+                </PostButtonDialog>
+            </div>
             <div className="flex flex-col-reverse mobile:flex-row w-full max-w-fit mx-auto overflow-y-auto">
                 <div className="shrink-0 flex w-18 xl:w-65 px-2">
                     <LeftSideBar />

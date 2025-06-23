@@ -7,7 +7,7 @@ import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
 import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
-import React, { ChangeEvent, useRef, useState, useContext, Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, useRef, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
 import Media from "../Tweet/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
@@ -56,7 +56,7 @@ const TweetBox =
         files: [] as { url: string, file: File }[],
     });
 
-    const files: { url: string; type: string;}[] = [];
+    const files: { url: string; type: string; }[] = [];
 
     const postButtonIsDisabled = !tweetContent.text && tweetContent.files.length === 0;
     const { data: session } = useSession();
@@ -149,7 +149,7 @@ const TweetBox =
             { loading && <IndeterminateProgress /> }
             <div className="flex p-4 pb-2">
                 <ProfilePicture image={session?.user.image} />
-                <div className={`flex flex-col ${type === "reply" && !isFocused && !isReplyDialog ? "flex-row justify-between items-center" : ""} pl-1 h-full w-full text-xl`}>
+                <div className={`flex flex-col bg-white ${type === "reply" && !isFocused && !isReplyDialog ? "flex-row justify-between items-center" : ""} pl-1 h-full w-full text-xl`}>
                     <div className="p-1">
                         <TextareaAutosize 
                             placeholder={type === "tweet" ? "What's happening?" : "Post your reply"} 

@@ -25,7 +25,7 @@ const ProfilePicture = ({ image, username, style, href, showProfileHoverCard }: 
   const avatarRoot = (
     <Avatar.Root className={`w-10 h-10 min-w-10 min-h-10 select-none overflow-hidden rounded-full bg-blackA1 ${style}`}>
       {href ? (
-        <Link href={href} onClick={(e) => e.stopPropagation()}>
+        <Link href={href} onClick={(e) => e.stopPropagation()} className="rounded-full">
           {avatarImage}
         </Link>
       ) : (

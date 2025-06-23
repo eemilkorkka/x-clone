@@ -26,7 +26,7 @@ const LeftSideBar = async () => {
     });
 
     return (
-        <div className="fixed mobile:static bg-white bottom-0 left-0 z-10 w-full mobile:w-full h-16 mobile:h-screen flex mobile:flex-col justify-between">
+        <div className="fixed mobile:static bg-white bottom-0 left-0 z-20 w-full mobile:w-full h-16 mobile:h-screen flex mobile:flex-col justify-between">
             <div className="flex mobile:flex-col gap-4">
                 <Link href="/home" className="pl-1 xl:pl-0 hidden mobile:inline">
                     <button className="hover:bg-gray-200 p-2.5 hover:cursor-pointer rounded-full">

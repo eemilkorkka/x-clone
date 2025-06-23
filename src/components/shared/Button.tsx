@@ -24,7 +24,7 @@ const Button = ({ type, variant, textColor, hoverColor, style, disabled, childre
         white: "bg-white text-gray-900",
         black: "bg-black text-white",
         red: "bg-red-500 text-white",
-        outline: `bg-transparent ${textColor ?? "text-xblue"} border border-gray-500 ${hoverColors[hoverColor ?? "blue"]}`,
+        outline: `bg-transparent ${textColor ?? "text-xblue"} border border-gray-300 ${hoverColors[hoverColor ?? "blue"]}`,
     }; 
 
     return (
