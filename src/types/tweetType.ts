@@ -1,4 +1,4 @@
-type TweetFile = {
+export type TweetFile = {
     ID: number;
     PostID: number;
     File_URL: string;
@@ -6,13 +6,13 @@ type TweetFile = {
     created_at: string;
 }
 
-type TweetUser = {
+export type TweetUser = {
     Username: string;
     DisplayName: string;
     ProfilePicture: string;
 }
 
-type TweetData = {
+export type TweetData = {
     ID: number;
     UserID: number;
     Content: string;

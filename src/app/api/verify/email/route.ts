@@ -16,7 +16,6 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request) {
     const { email, name } = await req.json();
     const code: number = await Math.floor(100000 + Math.random() * 900000);
-
     try {
         await storeVerificationCode(email, code);
 

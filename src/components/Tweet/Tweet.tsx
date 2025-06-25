@@ -88,7 +88,7 @@ const Tweet = ({
     );
 
     const displayNameElement = (
-        <a href={`/${username}`} className="truncate" onClick={(e) => e.stopPropagation()}><DisplayName displayName={displayName} username={username} showProfileHoverCard={true} variant="small" /></a>
+        <a href={`/${username}`} className="truncate" onClick={(e) => e.stopPropagation()}><DisplayName displayName={displayName} username={username} showUnderlineOnHover={true} showProfileHoverCard={true} variant="small" /></a>
     );
 
     const threeDots = (

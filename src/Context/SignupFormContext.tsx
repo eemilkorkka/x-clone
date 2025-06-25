@@ -9,7 +9,6 @@ type SignupFormContextType = {
     setFormData: Dispatch<SetStateAction<formDataType>>;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-
 }
 
 export const SignupFormContext = createContext<undefined | SignupFormContextType>(undefined);

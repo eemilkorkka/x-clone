@@ -14,24 +14,26 @@ model verificationtokens {
 }
 
 model users {
-  UserID         Int     @id @default(autoincrement())
-  Name           String  @db.VarChar(255)
-  DisplayName    String  @db.VarChar(255)
-  Email          String  @unique(map: "Email") @db.VarChar(255)
-  BirthDateMonth String  @db.VarChar(255)
-  BirthDateDay   String  @db.VarChar(255)
-  BirthDateYear  String  @db.VarChar(255)
-  Username       String  @unique(map: "Username") @db.VarChar(255)
-  Password       String? @db.VarChar(255)
-  Location       String? @db.VarChar(255)
-  Website        String? @db.VarChar(255)
-  ProfilePicture String  @default("https://cloud.appwrite.io/v1/storage/buckets/67e599e6001b68a099f7/files/67e59ae30013a907b563/view?project=67e599cf000525d1eb9a") @db.VarChar(255)
-  CoverPicture   String? @db.VarChar(255)
-  Bio            String? @db.VarChar(255)
+  UserID         Int         @id @default(autoincrement())
+  Name           String      @db.VarChar(255)
+  DisplayName    String      @db.VarChar(255)
+  Email          String      @unique(map: "Email") @db.VarChar(255)
+  BirthDateMonth String      @db.VarChar(255)
+  BirthDateDay   String      @db.VarChar(255)
+  BirthDateYear  String      @db.VarChar(255)
+  Username       String      @unique(map: "Username") @db.VarChar(255)
+  Password       String?     @db.VarChar(255)
+  Location       String?     @db.VarChar(255)
+  Website        String?     @db.VarChar(255)
+  ProfilePicture String      @default("https://cloud.appwrite.io/v1/storage/buckets/67e599e6001b68a099f7/files/67e59ae30013a907b563/view?project=67e599cf000525d1eb9a") @db.VarChar(255)
+  CoverPicture   String?     @db.VarChar(255)
+  Bio            String?     @db.VarChar(255)
+  bookmarks      bookmarks[]
   likes          likes[]
   posts          posts[]
-  bookmarks bookmarks[]
-  retweets retweets[]
+  retweets       retweets[]
+  followers follows[] @relation("following")
+  following follows[] @relation("follower")
 }
 
 model files {
@@ -46,18 +48,18 @@ model files {
 }
 
 model posts {
-  ID         Int       @id @default(autoincrement())
+  ID         Int         @id @default(autoincrement())
   UserID     Int
-  Content    String    @db.Text
-  created_at DateTime? @default(now()) @db.Timestamp(0)
+  Content    String      @db.Text
+  created_at DateTime?   @default(now()) @db.Timestamp(0)
   ParentID   Int?
+  bookmarks  bookmarks[]
   files      files[]
   likes      likes[]
-  bookmarks bookmarks[]
-  retweets retweets[]
-  parent     posts?    @relation("PostToReplies", fields: [ParentID], references: [ID], onDelete: SetNull)
-  replies    posts[]   @relation("PostToReplies")
-  users      users     @relation(fields: [UserID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "posts_ibfk_1")
+  parent     posts?      @relation("PostToReplies", fields: [ParentID], references: [ID])
+  replies    posts[]     @relation("PostToReplies")
+  users      users       @relation(fields: [UserID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "posts_ibfk_1")
+  retweets   retweets[]
 
   @@index([UserID], map: "UserID")
   @@index([ParentID], map: "posts_ParentID_fkey")
@@ -100,6 +102,15 @@ model retweets {
   @@unique([UserID, PostID])
   @@index([UserID])
   @@index([PostID])
+}
+
+model follows {
+  follower    users @relation("follower", fields: [followerId], references: [UserID])
+  followerId  Int
+  following   users @relation("following", fields: [followingId], references: [UserID])
+  followingId Int
+
+  @@id([followerId, followingId])
 }
 
 enum files_File_Type {

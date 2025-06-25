@@ -5,13 +5,13 @@ import TweetsContextProvider from "@/Context/TweetsContext";
 import Widget from "../Shared/Widget";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import UserCard from "../Shared/UserCard";
 import Button from "../Shared/Button";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Toaster } from "react-hot-toast";
 import PostButtonDialog from "./LeftSideBar/PostButtonDialog";
 import { FaFeatherPointed } from "react-icons/fa6";
+import UserSuggestion from "../Shared/UserSuggestion";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
     const session = await auth();
@@ -28,6 +28,18 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             Username: {
                 not: session?.user?.username
             }
+        },
+        select: {
+            UserID: true,
+            Username: true,
+            DisplayName: true,
+            Website: true,
+            Location: true,
+            ProfilePicture: true,
+            CoverPicture: true,
+            Bio: true,
+            followers: true,
+            following: true,
         }
     });
 
@@ -36,9 +48,16 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             Username: username
         },
         select: {
-            ProfilePicture: true,
+            UserID: true,
+            Username: true,
             DisplayName: true,
-            Bio: true
+            Website: true,
+            Location: true,
+            ProfilePicture: true,
+            CoverPicture: true,
+            Bio: true,
+            followers: true,
+            following: true,
         }
     });
 
@@ -75,17 +94,12 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                                 user && (
                                     <Link href={`/${username}`}>
                                         <div className="hover:bg-gray-100 hover:cursor-pointer w-full p-2">
-                                            <UserCard
-                                                image={user.ProfilePicture}
-                                                username={username}
-                                                displayName={user.DisplayName}
-                                                style="flex-col"
-                                                bio={user.Bio ?? undefined}
-                                            >
-                                                {username !== session?.user.username && (
-                                                    <Button variant="black" hoverColor="white" style="text-sm px-4 pt-2 pb-2">Follow</Button>
-                                                )}
-                                            </UserCard>
+                                            <UserSuggestion 
+                                                user={user} 
+                                                username={username} 
+                                                showBio={true} 
+                                                session={session}
+                                            />
                                         </div>
                                     </Link>
                                 )
@@ -93,13 +107,11 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                                 users.map((user) => (
                                     <Link key={user.Username} href={`/${user.Username}`}>
                                         <div className="hover:bg-gray-100 hover:cursor-pointer w-full p-2">
-                                            <UserCard
-                                                image={user.ProfilePicture}
-                                                username={user.Username}
-                                                displayName={user.DisplayName}
-                                            >
-                                                <Button variant="black" hoverColor="white" style="text-sm px-4 pt-2 pb-2">Follow</Button>
-                                            </UserCard>
+                                            <UserSuggestion 
+                                                user={user} 
+                                                username={user.Username} 
+                                                session={session}
+                                            />
                                         </div>
                                     </Link>
                                 ))

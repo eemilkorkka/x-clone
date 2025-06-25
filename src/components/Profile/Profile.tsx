@@ -38,7 +38,9 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
             Location: true,
             ProfilePicture: true,
             CoverPicture: true,
-            Bio: true
+            Bio: true,
+            followers: true,
+            following: true
         }
     });
 
@@ -90,8 +92,8 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                             displayName={user.DisplayName}
                             username={user.Username}
                             bio={user.Bio ?? ""}
-                            followers={0}
-                            following={0}
+                            followers={user.followers.length}
+                            following={user.following.length}
                         />
                         <div className="-ml-4">
                             <TabSwitcher 

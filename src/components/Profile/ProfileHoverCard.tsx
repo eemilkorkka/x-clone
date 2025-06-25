@@ -1,10 +1,11 @@
 "use client";
-import { ReactNode, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { HoverCard } from "radix-ui";
 import Button from "../Shared/Button";
 import ProfilePicture from "../Profile/ProfilePicture";
 import { useSession } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
+import { follow } from "@/utils/utilFunctions";
 
 interface ProfileHoverCardProps {
     children: ReactNode;
@@ -15,44 +16,75 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
 
     const session = useSession();
     const [data, setData] = useState<any>();
+    const [following, setIsFollowing] = useState<boolean>(false);
+    const [text, setText] = useState<string>("");
+    const [open, setOpen] = useState<boolean>(false);
 
-    const fetchData = async (open: boolean) => {
-        if (!open || username === "") {
-            setData(undefined);
-            return;
+    const isFollowing: boolean = data?.user.followers.some((follower: { followerId: number }) => follower.followerId === parseInt(session.data?.user.id!));
+
+    useEffect(() => {
+        const fetchData = async (open: boolean) => {
+            if (!open || username === "") {
+                setData(undefined);
+                return;
+            }
+
+            const response = await fetch(`http://localhost:3000/api/users/${username}`);
+            const json = await response.json();
+            setData(json);
         }
-        
-        const response = await fetch(`http://localhost:3000/api/users/${username}`);
-        const json = await response.json();
-        setData(json);
-    }
+
+        fetchData(open);
+    }, [open, following]);
+
+    useEffect(() => {
+        setIsFollowing(isFollowing);
+    }, [isFollowing]);
+
+    useEffect(() => {
+        setText(following ? "Following" : "Follow");
+    }, [following]);
 
     return (
-        <HoverCard.Root onOpenChange={(open) => fetchData(open)}>
+        <HoverCard.Root onOpenChange={(open) => setOpen(open)}>
             <HoverCard.Trigger asChild>
                 {children}
             </HoverCard.Trigger>
             <HoverCard.Portal>
                 {data && (
-                    <HoverCard.Content className="flex flex-col gap-4 bg-white shadow-md w-72 justify-between p-4 rounded-xl">
-                        <div className="flex gap-30">
+                    <HoverCard.Content className="flex flex-col gap-4 bg-white shadow-md w-72 justify-between p-4 rounded-xl z-20">
+                        <div className={`flex ${following ? "gap-25" : "gap-30"}`}>
                             <ProfilePicture
-                                style="rounded-full w-15 h-15"
-                                image={data?.user.ProfilePicture}
+                                style="rounded-full w-15 h-15 shrink-0"
+                                image={data.user.ProfilePicture}
                                 href={username}
                             />
                             {session.data?.user?.username !== username && (
                                 <div>
-                                    <Button variant="black" style="text-sm px-4 pt-2 pb-2">Follow</Button>
+                                    <Button
+                                        variant={following ? "outline" : "black"}
+                                        hoverColor={following ? "red" : "gray"}
+                                        textColor="black"
+                                        style={`text-sm px-4 pt-2 pb-2 ${following && "hover:border-red-500! hover:text-red-500"}`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setIsFollowing(prev => !prev);
+                                            follow(username);
+                                        }}
+                                        onMouseOver={() => following && setText("Unfollow")}
+                                        onMouseLeave={() => following && setText("Following")}
+                                    >
+                                        {text}
+                                    </Button>
                                 </div>
                             )}
                         </div>
-                        <ProfileInfo 
-                            displayName={data?.user.DisplayName}
+                        <ProfileInfo
+                            displayName={data.user.DisplayName}
                             username={username}
-                            bio={data?.user.Bio ?? "Lorem ipsum dolor sit amet"}
-                            followers={0}
-                            following={0}
+                            bio={data.user.Bio ?? "Lorem ipsum dolor sit amet"}
+                            followers={data.user.followers.length}
+                            following={data.user.following.length}
                         />
                     </HoverCard.Content>
                 )}

@@ -1,10 +1,11 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { ReactNode, use, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { VisuallyHidden } from "radix-ui";
 import Tweet from "./Tweet";
 import TweetBox from "../TweetBox/TweetBox";
 import { IoClose } from "react-icons/io5";
+import { TweetData } from "../../types/tweetType";
 
 interface ReplyDialogProps {
     children: ReactNode;

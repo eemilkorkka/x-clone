@@ -9,7 +9,7 @@ interface ProfileInfoProps {
     username: string;
     showJoinDate?: boolean;
     joinDate?: string;
-    bio: string;
+    bio?: string;
     followers: number;
     following: number;
 }
@@ -35,7 +35,7 @@ const ProfileInfo = (
             )}
             <div className="flex gap-4 mt-2">
                 <span className="text-black text-sm font-bold">{following} <span className="text-gray-500 text-sm font-normal">Following</span></span>
-                <span className="text-black text-sm font-bold">{followers} <span className="text-gray-500 text-sm font-normal">Followers</span></span>
+                <span className="text-black text-sm font-bold">{followers} <span className="text-gray-500 text-sm font-normal">{followers === 1 ? "Follower" : "Followers"}</span></span>
             </div>
         </div>
     );
