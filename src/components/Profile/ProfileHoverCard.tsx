@@ -29,7 +29,7 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/api/users/${username}`);
+            const response = await fetch(`/api/users/${username}`);
             const json = await response.json();
             setData(json);
         }
@@ -44,6 +44,13 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
     useEffect(() => {
         setText(following ? "Following" : "Follow");
     }, [following]);
+
+
+    const handleFollowClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsFollowing(prev => !prev);
+        follow(username);
+    }
 
     return (
         <HoverCard.Root onOpenChange={(open) => setOpen(open)}>
@@ -66,11 +73,7 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
                                         hoverColor={following ? "red" : "gray"}
                                         textColor="black"
                                         style={`text-sm px-4 pt-2 pb-2 ${following && "hover:border-red-500! hover:text-red-500"}`}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setIsFollowing(prev => !prev);
-                                            follow(username);
-                                        }}
+                                        onClick={(e) => handleFollowClick(e)}
                                         onMouseOver={() => following && setText("Unfollow")}
                                         onMouseLeave={() => following && setText("Following")}
                                     >
@@ -83,8 +86,8 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
                             displayName={data.user.DisplayName}
                             username={username}
                             bio={data.user.Bio ?? "Lorem ipsum dolor sit amet"}
-                            followers={data.user.followers.length}
-                            following={data.user.following.length}
+                            followers={data.user.followers}
+                            following={data.user.following}
                         />
                     </HoverCard.Content>
                 )}

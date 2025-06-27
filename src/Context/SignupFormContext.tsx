@@ -8,7 +8,7 @@ type SignupFormContextType = {
     touchedFields: string[];
     setFormData: Dispatch<SetStateAction<formDataType>>;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
-    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 }
 
 export const SignupFormContext = createContext<undefined | SignupFormContextType>(undefined);
@@ -30,7 +30,7 @@ export default function SignupFormContextProvider({ children }: { children: Reac
     const [touchedFields, setTouchedFields] = useState<string[]>([]);
     const [formInvalid, setFormInvalid] = useState<boolean>(true);
 
-    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
         !touchedFields.includes(name) && setTouchedFields(prev => [...prev, name]);

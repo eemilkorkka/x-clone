@@ -16,7 +16,7 @@ const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogPro
     const queryClient = useQueryClient();
     
     const deleteTweet = async () => {
-        const response = await fetch(`http://localhost:3000/api/posts?tweetId=${tweetId}`, {
+        const response = await fetch(`/api/posts?tweetId=${tweetId}`, {
             method: "DELETE"
         });
     

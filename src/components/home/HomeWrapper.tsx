@@ -10,7 +10,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import LoadingBlock from "../Shared/LoadingBlock";
 
 const fetchTweets = async ({ pageParam }: { pageParam: number }) => {
-    const response = await fetch(`http://localhost:3000/api/posts?page=${pageParam}&limit=${10}`);
+    const response = await fetch(`/api/posts?page=${pageParam}&limit=${10}`);
     if (!response.ok) {
         throw new Error("Failed to fetch tweets.");
     }

@@ -7,6 +7,7 @@ import { TweetsContext } from "@/Context/TweetsContext";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { SlUserFollow } from "react-icons/sl";
 import DeleteTweetDialog from "./DeleteTweetDialog";
+import { follow } from "@/utils/utilFunctions";
 
 interface TweetPopoverProps {
     children: ReactNode;
@@ -22,6 +23,11 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
 
     const isStatus = pathname.includes(`/${username}/status/`);
     const buttonStyles = "hover:bg-gray-100 border-none p-3 flex gap-2 outline-none items-center rounded-lg font-bold hover:cursor-pointer"
+
+    const handleFollowClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        follow(username);
+    }
 
     return (
         <Popover.Root>
@@ -40,7 +46,7 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
                         </DeleteTweetDialog>
                     )}
                     {username !== session?.data?.user.username && (
-                        <button className={`${buttonStyles}`} onClick={(e) => e.stopPropagation()}><SlUserFollow /> Follow @{username}</button>
+                        <button className={`${buttonStyles}`} onClick={(e) => handleFollowClick(e)}><SlUserFollow /> Follow @{username}</button>
                     )}
                 </Popover.Content>
             </Popover.Portal>

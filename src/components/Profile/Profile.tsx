@@ -3,7 +3,6 @@ import DisplayName from "./DisplayName";
 import ProfileBanner from "./ProfileBanner";
 import ProfilePicture from "./ProfilePicture";
 import ProfileInfo from "./ProfileInfo";
-import Button from "../Shared/Button";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { Children, ReactNode } from "react";
@@ -32,6 +31,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
             Username: username
         },
         select: {
+            UserID: true,
             Username: true,
             DisplayName: true,
             Website: true,
@@ -74,26 +74,20 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
             <ProfileBanner image={user?.CoverPicture ?? undefined}>
                 <ProfilePicture image={user?.ProfilePicture} style="w-full h-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white" />
             </ProfileBanner>
-            <div className="flex justify-end mt-4 pr-4">
-                {user && (
-                    <>
-                        {session?.user?.username === username ? (
-                            <Button variant="outline" textColor="black" hoverColor="gray" style="text-sm px-4 pt-2 pb-2 border-gray-300!">Edit Profile</Button>
-                        ) : (
-                            <Button variant="black" style="text-sm px-4 pt-2 pb-2">Follow</Button>
-                        )}
-                    </>
-                )}
-            </div>
-            <div className={`flex flex-col pl-4 ${user ? "mt-7" : "mt-15"}`}>
+            <div className={`flex flex-col pl-4 ${user ? "mt-4" : "mt-18"}`}>
                 {user ? (
                     <div className="flex flex-col gap-4">
                         <ProfileInfo
+                            user={user}
+                            session={session}
                             displayName={user.DisplayName}
                             username={user.Username}
                             bio={user.Bio ?? ""}
-                            followers={user.followers.length}
-                            following={user.following.length}
+                            location={user.Location ?? ""}
+                            joinDate="January 2025"
+                            showJoinDate={true}
+                            followers={user.followers}
+                            following={user.following}
                         />
                         <div className="-ml-4">
                             <TabSwitcher 

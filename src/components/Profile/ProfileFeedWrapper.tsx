@@ -19,8 +19,8 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
 
     const getUrl = (pageParam: number): string => {
         return type === "tweets" 
-        ? `http://localhost:3000/api/${username}?page=${pageParam}&limit=${10}` 
-        : `http://localhost:3000/api/posts/${type}?username=${username}&userId=${userId}&page=${pageParam}&limit=${10}`;
+        ? `/api/${username}?page=${pageParam}&limit=${10}` 
+        : `/api/posts/${type}?username=${username}&userId=${userId}&page=${pageParam}&limit=${10}`;
     }
 
     const fetchData = async ({ pageParam } : { pageParam: number }) => {

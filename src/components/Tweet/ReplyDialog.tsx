@@ -21,7 +21,7 @@ const ReplyDialog = ({ children, tweetId }: ReplyDialogProps) => {
     useEffect(() => {
         const fetchParenTweet = async () => {
             setLoading(true);
-            const response = await fetch(`http://localhost:3000/api/posts/${tweetId}`);
+            const response = await fetch(`/api/posts/${tweetId}`);
             const tweet = await response.json();
             setLoading(false);
             return setTweet(tweet);
@@ -38,13 +38,13 @@ const ReplyDialog = ({ children, tweetId }: ReplyDialogProps) => {
             <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20" />
             {!loading && (
                 <Dialog.Content
-                    className="w-full h-full sm:h-fit sm:max-h-[90vh] top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-13 -translate-x-1/2 sm:rounded-2xl overflow-hidden"
+                    className="p-2 w-full h-full sm:h-fit sm:max-h-[90vh] top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-13 -translate-x-1/2 sm:rounded-2xl overflow-hidden"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <VisuallyHidden.Root>
                         <Dialog.Title />
                     </VisuallyHidden.Root>
-                    <Dialog.Close asChild className="ml-2 mt-1.5 hover:cursor-pointer text-gray-700">
+                    <Dialog.Close asChild className="hover:cursor-pointer text-gray-700">
                         <button className="rounded-full p-1.5 hover:bg-gray-200 outline-0"onClick={() => setOpen(false)}>
                             <IoClose size={23} />
                         </button>

@@ -2,7 +2,7 @@ import { CustomEvents } from "@/types/CustomEvents";
 
 export const sendVerificationEmail = async (email: string, name: string) => {
     try {
-        await fetch("http://localhost:3000/api/verify/email", {
+        await fetch("/api/verify/email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -17,7 +17,7 @@ export const sendVerificationEmail = async (email: string, name: string) => {
 
 export const follow = async (username: string) => {
     try {
-        await fetch(`http://localhost:3000/api/users/${username}/follow`, {
+        await fetch(`/api/users/${username}/follow`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
         });
@@ -43,7 +43,7 @@ export const uploadFiles = async (files: { url: string, file: File }[], formData
     }
 
     try {
-        const response = await fetch("http://localhost:3000/api/upload", {
+        const response = await fetch("/api/upload", {
             method: "POST",
             body: formData
         });

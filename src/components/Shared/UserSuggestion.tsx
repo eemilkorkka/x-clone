@@ -22,7 +22,7 @@ const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProp
 
     useEventListener("follow-event", () => {
         const fetchUserData = async () => {
-            const response = await fetch(`http://localhost:3000/api/users/${username}`);
+            const response = await fetch(`/api/users/${username}`);
             const json = await response.json();
             setUserData(json.user);
         }
