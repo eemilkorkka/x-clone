@@ -15,8 +15,7 @@ const EmojiPickerPopover = ({ children, onEmojiClick }: EmojiPickerPopoverProps)
             </Popover.Trigger>
 		    <Popover.Anchor />
             <Popover.Portal>
-                <Popover.Content side="bottom" sideOffset={20} className="w-fit flex flex-col shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-xl bg-white z-20">
-                    { /* Scrolling doesn't work on the emoji picker for some reason on the PostButtonDialog */ }
+                <Popover.Content side="bottom" align="center" sideOffset={20} className="w-fit flex flex-col shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-xl overflow-y-auto bg-white z-20">
                     <EmojiPicker onEmojiClick={(emoji) => onEmojiClick(emoji)} emojiStyle={EmojiStyle.TWITTER} />
                     <Popover.Arrow fill="white" />
                 </Popover.Content>

@@ -13,6 +13,7 @@ interface FormInputProps {
     error?: string;
     errorStyle?: string;
     isTextArea?: boolean;
+    maxLength?: number;
 }
 
 const FormInput = ({
@@ -25,7 +26,8 @@ const FormInput = ({
     labelStyle,
     error,
     errorStyle,
-    isTextArea = false
+    isTextArea = false,
+    maxLength
 }: FormInputProps) => {
 
     const [inputEmpty, setInputEmpty] = useState<boolean>(formData[name] === "");
@@ -52,6 +54,7 @@ const FormInput = ({
                     name={name}
                     value={formData[name]}
                     onChange={onChange}
+                    maxLength={maxLength}
                     className={inputClassName}
                 />
             )}

@@ -1,13 +1,13 @@
 "use server";
 import DisplayName from "./DisplayName";
-import ProfileBanner from "./ProfileBanner";
-import ProfilePicture from "./ProfilePicture";
 import ProfileInfo from "./ProfileInfo";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { Children, ReactNode } from "react";
 import TabSwitcher from "../Shared/TabSwitcher";
 import FeedHeader from "../Shared/FeedHeader";
+import ProfileBanner from "./ProfileBanner";
+import ProfilePicture from "./ProfilePicture";
 
 interface ProfileProps {
     username: string;
@@ -71,19 +71,23 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                     )}
                 </div>
             </FeedHeader>
-            <ProfileBanner image={user?.CoverPicture ?? undefined}>
-                <ProfilePicture image={user?.ProfilePicture} style="w-full h-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white" />
-            </ProfileBanner>
+            { !user && (
+                <ProfileBanner>
+                    <ProfilePicture image={undefined} style="w-full h-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white" />
+                </ProfileBanner>
+            )}
             <div className={`flex flex-col pl-4 ${user ? "mt-4" : "mt-18"}`}>
                 {user ? (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-6">
                         <ProfileInfo
                             user={user}
                             session={session}
                             displayName={user.DisplayName}
                             username={user.Username}
+                            coverPicture={user.CoverPicture ?? undefined}
                             bio={user.Bio ?? ""}
                             location={user.Location ?? ""}
+                            website={user.Website ?? ""}
                             joinDate="January 2025"
                             showJoinDate={true}
                             followers={user.followers}

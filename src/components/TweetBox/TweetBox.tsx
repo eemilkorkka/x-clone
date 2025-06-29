@@ -27,6 +27,8 @@ interface TweetBoxProps {
     alwaysShowBorder?: boolean;
     minRows?: number;
     isReplyDialog?: boolean;
+    isReplyDialogOpen?: boolean;
+    setReplyDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const icons = [
@@ -45,7 +47,9 @@ const TweetBox =
     parentTweetID, 
     alwaysShowBorder = true, 
     minRows,
-    isReplyDialog 
+    isReplyDialog,
+    isReplyDialogOpen,
+    setReplyDialogOpen 
 }: TweetBoxProps) => {
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -127,6 +131,7 @@ const TweetBox =
         if (response.ok) {
             setTweets(prev => [json.post, ...prev]);
             postDialogOpen && setPostDialogOpen(false);
+            isReplyDialogOpen && setReplyDialogOpen?.(false);
 
             queryClient.removeQueries();
 
@@ -156,6 +161,7 @@ const TweetBox =
                             className="w-full outline-0 resize-none placeholder-gray-600"
                             value={tweetContent.text}
                             minRows={tweetContent.files.length > 0 ? 1 : minRows}
+                            maxLength={280}
                             onChange={(e) => setTweetContent({ ...tweetContent, text: e.target.value })}
                             onFocus={() => setFocused(true)}
                         />

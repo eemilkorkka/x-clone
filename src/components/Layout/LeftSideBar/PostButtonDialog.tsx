@@ -19,7 +19,7 @@ const PostButtonDialog = ({ children, style }: PostButtonDialogProps) => {
                 {children}
             </Dialog.Trigger>
             <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20"/>
-            <Dialog.Content className="p-2 w-full h-full sm:h-fit sm:max-h-[90vh] top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-13 -translate-x-1/2 sm:rounded-2xl overflow-hidden">
+            <Dialog.Content onWheel={(e) => e.stopPropagation()} className="p-2 w-full h-full sm:h-fit sm:max-h-[90vh] top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-13 -translate-x-1/2 sm:rounded-2xl overflow-hidden">
                 <VisuallyHidden.Root>
                     <Dialog.Title />
                 </VisuallyHidden.Root>

@@ -13,10 +13,10 @@ export const displayNameVariants = {
     small: "text-[15px]"
 }
 
-const DisplayName = ({ displayName, showProfileHoverCard, showUnderlineOnHover, username, variant }: DisplayNameProps) => {
+const DisplayName = ({ displayName, showProfileHoverCard, showUnderlineOnHover, username, variant = "default" }: DisplayNameProps) => {
     
     const displayNameElement = (
-        <span className={`font-bold whitespace-nowrap ${showUnderlineOnHover && "hover:underline"} ${displayNameVariants[variant ?? "default"]}`}>{displayName}</span>
+        <span className={`font-bold whitespace-nowrap ${showUnderlineOnHover && "hover:underline"} ${displayNameVariants[variant]}`}>{displayName}</span>
     );
 
     return (
