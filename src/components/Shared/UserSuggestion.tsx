@@ -38,6 +38,18 @@ const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProp
         setText(following ? "Following" : "Follow");
     }, [following]);
 
+    const handleFollowClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setFollowing(prev => !prev);
+        
+        try {
+            follow(username);
+        } catch (error) {
+            setFollowing(prev => !prev);
+            console.error('Failed to follow/unfollow:', error);
+        }
+    }
+
     return (
         <UserCard
             image={user.ProfilePicture}
@@ -52,11 +64,7 @@ const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProp
                     hoverColor={following ? "red" : "gray"}
                     textColor="black"
                     style={`text-sm px-4 pt-2 pb-2 ${following && "hover:border-red-500! hover:text-red-500"}`}
-                    onClick={(e) => {
-                        setFollowing(prev => !prev);
-                        follow(username);
-                        e.preventDefault();
-                    }}
+                    onClick={(e) => handleFollowClick(e)}
                     onMouseOver={() => following && setText("Unfollow")}
                     onMouseLeave={() => following && setText("Following")}
                 >

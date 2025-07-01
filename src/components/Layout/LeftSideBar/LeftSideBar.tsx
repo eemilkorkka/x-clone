@@ -41,6 +41,8 @@ const LeftSideBar = async () => {
                             href={option.href}
                             darkIcon={option.darkIcon}
                             lightIcon={option.lightIcon}
+                            style={option.style}
+                            disabled={option.disabled}
                         />
                     );
                 })}

@@ -6,7 +6,7 @@ import { tweetContentType } from "@/types/tweetContentType";
 import { BsThreeDots } from "react-icons/bs";
 import Icon from "../TweetBox/Icon";
 import AttachmentsGrid from "./AttachmentsGrid";
-import Media from "./Media";
+import Media from "../Media/Media";
 import Linkify from "@/components/Shared/Linkify";
 import Username from "@/components/Profile/Username";
 import DisplayName from "@/components/Profile/DisplayName";

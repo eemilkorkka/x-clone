@@ -46,6 +46,7 @@ const FormInput = ({
                     name={name}
                     value={formData[name]}
                     onChange={onChange}
+                    maxLength={maxLength}
                     className={inputClassName}
                 />
             ) : (
@@ -57,7 +58,7 @@ const FormInput = ({
                     maxLength={maxLength}
                     className={inputClassName}
                 />
-            )}
+            )}          
             <label className={`absolute
              text-gray-400 ${labelStyle} ${error && !inputEmpty ? "text-red-500" : "group-focus-within:text-xblue"}
                 group-focus-within:text-[0.8em] transition-all group-focus-within:top-1 group-focus-within:left-3 

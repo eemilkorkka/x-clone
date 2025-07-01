@@ -56,6 +56,7 @@ const HomeWrapper = () => {
                 style="bg-white/90! backdrop-blur-sm!"
             />
             <TweetBox type="tweet" />
+            {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span> }
             {tweets.map((tweet) => {
                 return (
                     <Tweet
@@ -81,8 +82,7 @@ const HomeWrapper = () => {
                         retweets={tweet.retweets}
                     />
                 );
-            })
-            }
+            })}
             <LoadingBlock
                 isFetchingNextPage={isFetchingNextPage}
                 hasNextPage={hasNextPage}

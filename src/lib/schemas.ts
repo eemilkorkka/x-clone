@@ -20,6 +20,13 @@ export const personalInfoSchema = z.object({
     birthDateYear: z.string().min(1),
 });
 
+export const editProfileSchema = z.object({
+    name: z.string().min(1).max(50),
+    bio: z.string().max(160, "Bio cannot exceed 160 characters").optional(),
+    location: z.string().max(30, "Location cannot exceed 30 characters").optional(),
+    website: z.string().url("Please enter a valid URL").optional(),
+});
+
 export const verificationCodeSchema = z.object({
     email: z.string(),
     verificationCode: z.string().min(6, "").max(6, "The verification code you entered is invalid")

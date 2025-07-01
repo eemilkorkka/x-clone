@@ -6,6 +6,9 @@ import { useEffect, useContext } from "react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { TweetsContext } from "@/Context/TweetsContext";
 import LoadingBlock from "../Shared/LoadingBlock";
+import MediaGrid from "../Media/MediaGrid";
+import Media from "../Media/Media";
+import Link from "next/link";
 
 interface ProfileFeedWrapperProps {
     type: "tweets" | "replies" | "media" | "like";
@@ -56,6 +59,10 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
 
+    if (error) return (
+        <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span>
+    )
+
     return type !== "media" ? (
         <>
             {tweets.map((tweet, index) => {
@@ -93,7 +100,15 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
             />
         </>
     ) : (
-        <span>page under construction</span>
+        <MediaGrid>
+            {tweets.map((tweet) => {
+                return (
+                    <Link href={`/${username}/status/${tweet.ID}`} className="aspect-square w-full max-w-xs" key={tweet.ID}>
+                        <Media type={tweet.files[0].File_Type} url={tweet.files[0].File_URL} />
+                    </Link>
+                )
+            })}
+        </MediaGrid>
     )
 }
 

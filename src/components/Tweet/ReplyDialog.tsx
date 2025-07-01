@@ -31,11 +31,11 @@ const ReplyDialog = ({ children, tweetId }: ReplyDialogProps) => {
     }, [tweetId, open]);
 
     return (
-        <Dialog.Root open={open}>
+        <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild onClick={() => setOpen(true)}>
                 {children}
             </Dialog.Trigger>
-            <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20" onClick={(e) => { e.stopPropagation(); setOpen(false); }} />
+            <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20" onClick={(e) => e.stopPropagation()} />
             {!loading && (
                 <Dialog.Content
                     className="p-2 w-full h-full sm:h-fit sm:max-h-[90vh] top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-13 -translate-x-1/2 sm:rounded-2xl overflow-hidden"

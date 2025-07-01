@@ -33,7 +33,12 @@ const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogPro
                 }
             }); 
         } else {
-            toast.error(json.message);
+            toast.error(json.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
         }
     }
 

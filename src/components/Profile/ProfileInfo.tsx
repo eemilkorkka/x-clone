@@ -72,12 +72,17 @@ const ProfileInfo = (
         setText(isFollowing ? "Following" : "Follow");
     }, [isFollowing])
 
-    const handleFollowClick = (e: React.MouseEvent) => {
+    const handleFollowClick = async (e: React.MouseEvent) => {
         e.preventDefault();
         setIsFollowing(prev => !prev);
-        follow(username);
+        try {
+            await follow(username);
+        } catch (error) {
+            setIsFollowing(prev => !prev);
+            console.error('Failed to follow/unfollow:', error);
+        }
     }
-
+    
     return (
         <>
             {showJoinDate && (
@@ -138,7 +143,7 @@ const ProfileInfo = (
                         {website && (
                             <div className="flex items-center gap-1">
                                 <IoIosLink />
-                                <a href={website} target="_blank" className="text-xblue whitespace-nowrap hover:underline">{website}</a>
+                                <a href={website} target="_blank" rel="noopener noreferrer" className="text-xblue whitespace-nowrap hover:underline">{website}</a>
                             </div>
                         )}
                         <div className="flex items-center gap-1 whitespace-nowrap">

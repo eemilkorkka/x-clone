@@ -49,7 +49,13 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
     const handleFollowClick = (e: React.MouseEvent) => {
         e.preventDefault();
         setIsFollowing(prev => !prev);
-        follow(username);
+        
+        try {
+            follow(username);
+        } catch (error) {
+            setIsFollowing(prev => !prev);
+            console.error('Failed to follow/unfollow:', error);
+        }
     }
 
     return (

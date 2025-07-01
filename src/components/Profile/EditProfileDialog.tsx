@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { ReactNode, useState, ChangeEvent, Dispatch, SetStateAction } from "react";
+import React from "react";
+import { ReactNode, useState, ChangeEvent, Dispatch, SetStateAction, useRef } from "react";
 import { Dialog, VisuallyHidden } from "radix-ui";
 import { IoClose } from "react-icons/io5";
 import Button from "../Shared/Button";
@@ -13,6 +13,7 @@ import { TbCameraPlus } from "react-icons/tb";
 import { uploadFiles } from "@/utils/utilFunctions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface EditProfileDialogProps {
     children: ReactNode;
@@ -25,6 +26,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
 
     const [open, setOpen] = useState<boolean>(false);
     const router = useRouter();
+    const { data: session, update } = useSession();
     const [localFormData, setLocalFormData] = useState<formDataType>(formData);
     const [preview, setPreview] = useState<{ profilePicture: string; coverPicture: string }>({
         profilePicture: initialState.profilePicture,
@@ -111,20 +113,22 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                 keys.push("coverPicture");
             }
 
-            const uploadResponse = filesToUpload.length > 0 && await uploadFiles(filesToUpload, formDataToUpload);
+            if (filesToUpload.length > 0) {
+                const uploadResponse = await uploadFiles(filesToUpload, formDataToUpload);
 
-            if (uploadResponse?.urls) {
-                const updatedFields: Record<string, string> = {};
-                uploadResponse.urls.forEach((url: { url: string }, i: number) => {
-                    updatedFields[keys[i]] = url.url;
-                });
+                if (uploadResponse?.urls) {
+                    const updatedFields: Record<string, string> = {};
+                    uploadResponse.urls.forEach((url: { url: string }, i: number) => {
+                        updatedFields[keys[i]] = url.url;
+                    });
 
-                updatedFormData = {
-                    ...updatedFormData,
-                    ...updatedFields
-                };
+                    updatedFormData = {
+                        ...updatedFormData,
+                        ...updatedFields
+                    };
 
-                setLocalFormData(updatedFormData);
+                    setLocalFormData(updatedFormData);
+                }
             }
         }
 
@@ -139,6 +143,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
         const json = await response.json();
 
         if (response.ok) {
+            await update();
             setFormData(updatedFormData);
             toast.success(json.message, {
                 style: {
@@ -148,7 +153,12 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
             });
             router.refresh();
         } else {
-            toast.error(json.message);
+            toast.error(json.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
         }
 
         setOpen(false);
@@ -164,7 +174,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
             <Dialog.Trigger asChild onClick={() => setOpen(true)}>
                 {children}
             </Dialog.Trigger>
-            <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20" />
+            <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20" onClick={() => setOpen(false)} />
             <Dialog.Content className="flex flex-col w-full h-full sm:h-fit sm:max-h-[78vh] top-0 sm:w-[600px] bg-white z-20 fixed left-1/2 sm:top-20 -translate-x-1/2 sm:rounded-2xl overflow-hidden">
                 <VisuallyHidden.Root>
                     <Dialog.Title />

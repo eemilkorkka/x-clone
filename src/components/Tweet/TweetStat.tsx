@@ -79,6 +79,9 @@ const TweetStat = ({
                 queryClient.invalidateQueries({ queryKey: ['tweets'] });
                 queryClient.invalidateQueries({ queryKey: ['tweet', tweetId] });
                 queryClient.invalidateQueries({ queryKey: ['replies', tweetId] });
+                queryClient.invalidateQueries({ queryKey: ['profileFeed'] });
+                queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
+
 
                 router.refresh();
 

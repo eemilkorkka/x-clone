@@ -14,19 +14,25 @@ export const sideBarOptions = (username: string) => [
         text: "Explore",
         href: "/explore",
         darkIcon: <IoSearch size="30" />,
-        lightIcon: <IoSearchOutline size="30" />
+        lightIcon: <IoSearchOutline size="30" />,
+        style: "hover:cursor-not-allowed!",
+        disabled: true,
     },
     {
         text: "Notifications",
         href: "/notifications",
         darkIcon: <HiBell size="30" />,
-        lightIcon: <HiOutlineBell size="30" />
+        lightIcon: <HiOutlineBell size="30" />,
+        style: "hover:cursor-not-allowed!",
+        disabled: true
     },
     {
         text: "Messages",
         href: "/messages",
         darkIcon: <HiEnvelope size="30" />,
-        lightIcon: <HiOutlineEnvelope size="30" />
+        lightIcon: <HiOutlineEnvelope size="30" />,
+        style: "hover:cursor-not-allowed!",
+        disabled: true
     },
     {
         text: "Bookmarks",
@@ -38,7 +44,9 @@ export const sideBarOptions = (username: string) => [
         text: "Communities",
         href: "/communities",
         darkIcon: <BsPeopleFill size="30" />,
-        lightIcon: <BsPeople size="30" />
+        lightIcon: <BsPeople size="30" />,
+        style: "hover:cursor-not-allowed!",
+        disabled: true
     },
     {
         text: "Profile",

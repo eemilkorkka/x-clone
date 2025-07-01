@@ -9,7 +9,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
 import React, { ChangeEvent, useRef, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
-import Media from "../Tweet/Media";
+import Media from "../Media/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
 import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
@@ -144,7 +144,12 @@ const TweetBox =
             setLoading(false);
             setTweetContent({ text: "", files: [] });
         } else {
-            toast.error(json.message);
+            toast.error(json.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
             setLoading(false);
         }
     }
