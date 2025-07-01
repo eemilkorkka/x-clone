@@ -9,7 +9,7 @@ export const personalInfoSchema = z.object({
         .refine(async (email) => {
             if (!emailRegex.test(email)) return
             try {
-                const response = await fetch(`http://localhost:3000/api/users/email/${encodeURIComponent(email)}`);
+                const response = await fetch(`/api/users/email/${encodeURIComponent(email)}`);
                 return response.status === 404;
             } catch {
                 return false;
@@ -20,13 +20,20 @@ export const personalInfoSchema = z.object({
     birthDateYear: z.string().min(1),
 });
 
+export const editProfileSchema = z.object({
+    name: z.string().min(1).max(50),
+    bio: z.string().max(160, "Bio cannot exceed 160 characters").optional(),
+    location: z.string().max(30, "Location cannot exceed 30 characters").optional(),
+    website: z.string().url("Please enter a valid URL").optional(),
+});
+
 export const verificationCodeSchema = z.object({
     email: z.string(),
     verificationCode: z.string().min(6, "").max(6, "The verification code you entered is invalid")
 }).superRefine(async (data, ctx) => {
     if (data.verificationCode.length > 6 || data.verificationCode.length < 6) return;
     try {
-        const response = await fetch('http://localhost:3000/api/verify/code', {
+        const response = await fetch('/api/verify/code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +67,7 @@ export const usernameSchema = z.object({
         })
         .refine(async (username) => {
             try {
-                const response = await fetch(`http://localhost:3000/api/users/${encodeURIComponent(username)}`);
+                const response = await fetch(`/api/users/${encodeURIComponent(username)}`);
                 return response.status === 404;
             } catch {
                 return false;

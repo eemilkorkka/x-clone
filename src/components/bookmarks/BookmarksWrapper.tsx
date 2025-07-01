@@ -1,29 +1,21 @@
 "use client";
-import { useEffect, useContext } from "react";
-import TweetBox from "../TweetBox/TweetBox";
-import Tweet from "./Tweet";
-import { TweetsContext } from "@/Context/TweetsContext";
+import { useState, useEffect } from "react";
+import { TweetData } from "@/types/tweetType";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import LoadingBlock from "../Shared/LoadingBlock";
+import Tweet from "@/components/Tweet/Tweet";
+import LoadingBlock from "@/components/Shared/LoadingBlock";
 
-interface RepliesWrapperProps {
-    parentTweetID: number;
+const fetchBookmarks = async ({ pageParam }: { pageParam: number }) => {
+    const response = await fetch(`/api/posts/bookmark?page=${pageParam}&limit=${10}`);
+    if (!response.ok) {
+        throw new Error("Failed to fetch bookmarks.");
+    }
+    return response.json();
 }
 
-const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
-
-    const { tweets, setTweets } = useContext(TweetsContext)!;
-
-    const fetchData = async ({ pageParam }: { pageParam: number }) => {
-        const response = await fetch(`/api/posts/replies?tweetId=${parentTweetID}&page=${pageParam}&limit=${10}`);
-        if (!response.ok) {
-            throw new Error("Failed to fetch replies.");
-        }
-        return response.json();
-    }
-
+const BookmarksWrapper = () => {
     const {
         data,
         error,
@@ -33,8 +25,8 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
         isFetchingNextPage,
         status
     } = useInfiniteQuery({
-        queryKey: ["replies", parentTweetID],
-        queryFn: fetchData,
+        queryKey: ['bookmarks'],
+        queryFn: fetchBookmarks,
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
             if (lastPage.length < 10) return undefined;
@@ -42,18 +34,19 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
         },
     });
 
+    const [bookmarks, setBookmarks] = useState<TweetData[]>([]);
+
     useEffect(() => {
-        data?.pages && setTweets(data.pages.flatMap(page => page));
-    }, [data?.pages, setTweets]);
-    
+        data?.pages && setBookmarks(data.pages.flatMap(page => page));
+    }, [data?.pages, setBookmarks]);
+
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
 
     return (
         <>
-            <TweetBox type="reply" parentTweetID={parentTweetID} />
-            { error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span> }
-            {tweets.map((tweet) => {
+            {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load bookmarks, try again later.</span> }
+            {bookmarks.map((tweet) => {
                 return (
                     <Tweet
                         key={tweet.ID}
@@ -79,13 +72,13 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
                     />
                 );
             })}
-            <LoadingBlock 
-                hasNextPage={hasNextPage}
+            <LoadingBlock
                 isFetchingNextPage={isFetchingNextPage}
+                hasNextPage={hasNextPage}
                 status={status}
             />
         </>
-    );
+    )
 }
 
-export default RepliesWrapper;
+export default BookmarksWrapper;

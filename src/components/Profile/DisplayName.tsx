@@ -3,6 +3,7 @@ import ProfileHoverCard from "@/components/Profile/ProfileHoverCard";
 interface DisplayNameProps {
     displayName: string;
     showProfileHoverCard?: boolean;
+    showUnderlineOnHover?: boolean;
     username?: string;
     variant?: keyof typeof displayNameVariants;
 }
@@ -12,10 +13,10 @@ export const displayNameVariants = {
     small: "text-[15px]"
 }
 
-const DisplayName = ({ displayName, showProfileHoverCard, username, variant }: DisplayNameProps) => {
+const DisplayName = ({ displayName, showProfileHoverCard, showUnderlineOnHover, username, variant = "default" }: DisplayNameProps) => {
     
     const displayNameElement = (
-        <span className={`font-bold whitespace-nowrap hover:underline ${displayNameVariants[variant ?? "default"]}`}>{displayName}</span>
+        <span className={`font-bold whitespace-nowrap ${showUnderlineOnHover && "hover:underline"} ${displayNameVariants[variant]}`}>{displayName}</span>
     );
 
     return (

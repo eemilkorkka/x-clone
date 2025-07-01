@@ -14,7 +14,7 @@ const ProfilePicture = ({ image, username, style, href, showProfileHoverCard }: 
   
   const avatarImage = (
     <Avatar.Image
-      className="w-full h-full rounded-[inherit] object-cover"
+      className="w-full h-full rounded-[inherit] object-cover relative"
       src={image}
       width={40}
       height={40}

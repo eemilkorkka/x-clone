@@ -27,7 +27,7 @@ const LeftSideBar = async () => {
 
     return (
         <div className="fixed mobile:static bg-white bottom-0 left-0 z-20 w-full mobile:w-full h-16 mobile:h-screen flex mobile:flex-col justify-between">
-            <div className="flex mobile:flex-col gap-4">
+            <div className="flex mobile:flex-col gap-4 justify-between w-full">
                 <Link href="/home" className="pl-1 xl:pl-0 hidden mobile:inline">
                     <button className="hover:bg-gray-200 p-2.5 hover:cursor-pointer rounded-full">
                         <BsTwitterX size="30" className="p-0.5" />
@@ -41,6 +41,8 @@ const LeftSideBar = async () => {
                             href={option.href}
                             darkIcon={option.darkIcon}
                             lightIcon={option.lightIcon}
+                            style={option.style}
+                            disabled={option.disabled}
                         />
                     );
                 })}

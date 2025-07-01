@@ -8,9 +8,9 @@ interface ProfileBannerProps {
 
 const ProfileBanner = ({ image, children }: ProfileBannerProps) => {
     return (
-        <div className="w-full max-h-[200px] relative">
+        <div className="w-full h-[200px] max-h-[200px] relative">
             {image ? (
-                <Image className="w-full h-full" alt="Banner" src={image} width={0} height={0} unoptimized />
+                <Image className="object-cover" fill alt="Banner" src={image} width={0} height={0} unoptimized />
             ) : (
                 <div className="w-full h-[200px] bg-gray-300"></div>
             )}

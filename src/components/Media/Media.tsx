@@ -27,6 +27,9 @@ const Media = ({ type, url, children }: MediaProps) => {
                     className="w-full h-full cursor-pointer object-cover"
                     src={url}
                     controls
+                    autoPlay
+                    playsInline
+                    muted
                     preload="metadata"
                 />
             )}

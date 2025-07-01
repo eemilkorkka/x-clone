@@ -9,13 +9,16 @@ export async function GET(req: Request, { params }: { params: Promise<{ username
             Username: username
         },
         select: {
+            UserID: true,
             Username: true,
             DisplayName: true,
             Website: true,
             Location: true,
             ProfilePicture: true,
             CoverPicture: true,
-            Bio: true
+            Bio: true,
+            followers: true,
+            following: true,
         }
     });
 

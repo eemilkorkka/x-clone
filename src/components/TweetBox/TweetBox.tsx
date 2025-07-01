@@ -9,7 +9,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
 import React, { ChangeEvent, useRef, useState, useContext } from "react";
 import { useSession } from "next-auth/react";
-import Media from "../Tweet/Media";
+import Media from "../Media/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
 import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
@@ -27,6 +27,8 @@ interface TweetBoxProps {
     alwaysShowBorder?: boolean;
     minRows?: number;
     isReplyDialog?: boolean;
+    isReplyDialogOpen?: boolean;
+    setReplyDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const icons = [
@@ -45,7 +47,9 @@ const TweetBox =
     parentTweetID, 
     alwaysShowBorder = true, 
     minRows,
-    isReplyDialog 
+    isReplyDialog,
+    isReplyDialogOpen,
+    setReplyDialogOpen 
 }: TweetBoxProps) => {
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -114,7 +118,7 @@ const TweetBox =
             ...(parentTweetID && { parentTweetID }),
         };
 
-        const response = await fetch("http://localhost:3000/api/posts", {
+        const response = await fetch("/api/posts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -127,6 +131,7 @@ const TweetBox =
         if (response.ok) {
             setTweets(prev => [json.post, ...prev]);
             postDialogOpen && setPostDialogOpen(false);
+            isReplyDialogOpen && setReplyDialogOpen?.(false);
 
             queryClient.removeQueries();
 
@@ -139,7 +144,12 @@ const TweetBox =
             setLoading(false);
             setTweetContent({ text: "", files: [] });
         } else {
-            toast.error(json.message);
+            toast.error(json.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
             setLoading(false);
         }
     }
@@ -156,6 +166,7 @@ const TweetBox =
                             className="w-full outline-0 resize-none placeholder-gray-600"
                             value={tweetContent.text}
                             minRows={tweetContent.files.length > 0 ? 1 : minRows}
+                            maxLength={280}
                             onChange={(e) => setTweetContent({ ...tweetContent, text: e.target.value })}
                             onFocus={() => setFocused(true)}
                         />

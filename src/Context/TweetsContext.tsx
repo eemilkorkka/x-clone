@@ -1,5 +1,6 @@
 "use client";
 import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { TweetData } from "../types/tweetType";
 
 type TweetsContextType = {
     tweets: TweetData[];

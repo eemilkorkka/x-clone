@@ -10,7 +10,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import LoadingBlock from "../Shared/LoadingBlock";
 
 const fetchTweets = async ({ pageParam }: { pageParam: number }) => {
-    const response = await fetch(`http://localhost:3000/api/posts?page=${pageParam}&limit=${10}`);
+    const response = await fetch(`/api/posts?page=${pageParam}&limit=${10}`);
     if (!response.ok) {
         throw new Error("Failed to fetch tweets.");
     }
@@ -56,6 +56,7 @@ const HomeWrapper = () => {
                 style="bg-white/90! backdrop-blur-sm!"
             />
             <TweetBox type="tweet" />
+            {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span> }
             {tweets.map((tweet) => {
                 return (
                     <Tweet
@@ -81,8 +82,7 @@ const HomeWrapper = () => {
                         retweets={tweet.retweets}
                     />
                 );
-            })
-            }
+            })}
             <LoadingBlock
                 isFetchingNextPage={isFetchingNextPage}
                 hasNextPage={hasNextPage}

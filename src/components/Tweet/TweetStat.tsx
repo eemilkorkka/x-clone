@@ -62,7 +62,7 @@ const TweetStat = ({
             type !== "bookmark" && setLocalStatValue(prev => clicked ? prev - 1 : prev + 1);
             setClicked(prev => !prev);
 
-            const response = await fetch(`http://localhost:3000/api/posts/${endpoint}`, {
+            const response = await fetch(`/api/posts/${endpoint}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ postId: tweetId }),
@@ -79,6 +79,9 @@ const TweetStat = ({
                 queryClient.invalidateQueries({ queryKey: ['tweets'] });
                 queryClient.invalidateQueries({ queryKey: ['tweet', tweetId] });
                 queryClient.invalidateQueries({ queryKey: ['replies', tweetId] });
+                queryClient.invalidateQueries({ queryKey: ['profileFeed'] });
+                queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
+
 
                 router.refresh();
 

@@ -263,6 +263,73 @@ export const getLikedTweets = async (userId: number, page: number, limit: number
     return likes.map((like) => like.post);
 }
 
+export const getBookmarkedTweets = async (userId: number, page: number, limit: number) => {
+    const bookmarks = await prisma.posts.findMany({
+        where: {
+            bookmarks: {
+                some: {
+                    UserID: userId
+                }
+            }
+        },
+        include: {
+            users: {
+                select: {
+                    Username: true,
+                    DisplayName: true,
+                    ProfilePicture: true,
+                }
+            },
+            files: true,
+            likes: true,
+            replies: true,
+            bookmarks: true,
+            retweets: true,
+        },
+        orderBy: {
+            created_at: "desc"
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+    });
+
+    return bookmarks;
+}
+
+export const getTweetsWithMediaByUsername = async (page: number, limit: number, username: string) => {
+    const tweets = await prisma.posts.findMany({
+        where: {
+            users: {
+                Username: username
+            },
+            files: {
+                some: {}
+            }
+        },
+        include: {
+            users: {
+                select: {
+                    Username: true,
+                    DisplayName: true,
+                    ProfilePicture: true,
+                },
+            },
+            files: true,
+            likes: { select: { UserID: true } },
+            replies: { select: { UserID: true } },
+            bookmarks: { select: { UserID: true } },
+            retweets: { select: { UserID: true } }
+        },
+        orderBy: {
+            created_at: "desc"
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+    });
+
+    return tweets;
+}
+
 function getSortedItems<T extends { timestamp: number }>(tweetItems: T[], retweetItems: T[]) {
     const allItems = [...tweetItems, ...retweetItems].sort((a, b) => b.timestamp - a.timestamp);
     return allItems;

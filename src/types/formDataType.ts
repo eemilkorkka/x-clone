@@ -1,4 +1,4 @@
-type formDataType = {
+export type formDataType = {
     [key: string]: string;
 }
 

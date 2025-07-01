@@ -49,38 +49,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
-          scope: "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/user.birthday.read"
+          scope: "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/user.birthday.read",
+          prompt: "select_account"
         }
       },
     })
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (user) {
-        token.email = user.email;
-        token.picture = user.image;
-    
-        if (account?.provider === "google") {
-          const dbUser = await prisma.users.findUnique({
-            where: { Email: user.email! },
-          });
-    
-          token.id = dbUser?.UserID.toString();
-          token.username = dbUser?.Username;  
-        } else {
-          token.id = user.id; 
-          token.username = user.username;
-        }
-      } else if (!token.id && token.email) {
+    async jwt({ token, user }) {
+      if (token.email) {
         const dbUser = await prisma.users.findUnique({
           where: { Email: token.email },
         });
-    
-        token.id = dbUser?.UserID.toString();
+
+        if (dbUser) {
+          token.id = dbUser.UserID.toString();
+          token.username = dbUser.Username;
+          token.picture = dbUser.ProfilePicture;
+          token.email = dbUser.Email;
+        }
       }
-    
+
+      if (user) {
+        token.email = user.email;
+      }
+
       return token;
-    },    
+    },
     async session({ session, token }) {
       return {
         ...session,
@@ -106,10 +101,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (!user) {
-          
+
           const res = await fetch(`https://people.googleapis.com/v1/people/me?personFields=birthdays&access_token=${account.access_token}`);
           const data = await res.json();
-          
+
           const { year, month, day } = data.birthdays[0].date;
 
           const newUser = await prisma.users.create({
@@ -128,9 +123,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           account.userId = newUser?.UserID.toString();
         }
+
         return true;
       }
-      return false; 
+      return false;
     }
   }
 });

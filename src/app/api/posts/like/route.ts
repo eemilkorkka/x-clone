@@ -41,8 +41,8 @@ export async function PUT(req: Request) {
             return NextResponse.json({ message: "Post liked successfully." }, { status: 200 });
         }
 
-    } catch {
-        return NextResponse.json({ message: "Internal Server Error. " }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ message: "Internal Server Error.", error: error }, { status: 500 });
     }
 }
 
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
     try {
         const likedPosts = await getLikedTweets(userId, page, limit);
         return NextResponse.json(likedPosts, { status: 200 });
-    } catch (erorr) {
-        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ message: "Internal Server Error", error: error }, { status: 500 });
     }
 }

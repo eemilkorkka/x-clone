@@ -31,6 +31,7 @@ const UserCard = ({ image, username, displayName, bio, style, children }: UserCa
                             displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName}
                             username={username}
                             showProfileHoverCard={session.data?.user?.username !== username}
+                            showUnderlineOnHover={true}
                             variant="small"
                         />
                         <Username 

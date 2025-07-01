@@ -35,7 +35,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
         return () => window.removeEventListener(DIALOG_EVENTS.OPEN_SIGNIN, handleOpenSignin);
     }, []);
 
-    const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
         setFormData((prevFormData) => ({
