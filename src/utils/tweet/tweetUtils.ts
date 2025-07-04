@@ -330,6 +330,45 @@ export const getTweetsWithMediaByUsername = async (page: number, limit: number, 
     return tweets;
 }
 
+export const getTweetsFromFollowing = async (page: number, limit: number, userId: number) => {
+    const following = await prisma.follows.findMany({
+        where: { followerId: userId },
+        select: { followingId: true }
+    });
+
+    const followingIds = following.map(f => f.followingId);
+
+    const tweets = await prisma.posts.findMany({
+        where: {
+            users: {
+                UserID: { in: followingIds }
+            },
+            ParentID: null
+        },
+        include: {
+            users: {
+                select: {
+                    Username: true,
+                    DisplayName: true,
+                    ProfilePicture: true,
+                }
+            },
+            files: true,
+            likes: { select: { UserID: true } },
+            replies: { select: { UserID: true } },
+            bookmarks: { select: { UserID: true } },
+            retweets: { select: { UserID: true } }
+        },
+        orderBy: {
+            created_at: "desc"
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+    });
+
+    return tweets;
+}
+
 function getSortedItems<T extends { timestamp: number }>(tweetItems: T[], retweetItems: T[]) {
     const allItems = [...tweetItems, ...retweetItems].sort((a, b) => b.timestamp - a.timestamp);
     return allItems;

@@ -64,7 +64,7 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
     )
 
     return type !== "media" ? (
-        <>
+        <div className="h-screen">
             {tweets.map((tweet, index) => {
                 return (
                     <Tweet
@@ -98,7 +98,7 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
                 isFetchingNextPage={isFetchingNextPage}
                 status={status}
             />
-        </>
+        </div>
     ) : (
         <MediaGrid>
             {tweets.map((tweet) => {

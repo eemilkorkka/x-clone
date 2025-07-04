@@ -8,6 +8,8 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { SlUserFollow, SlUserUnfollow } from "react-icons/sl";
 import DeleteTweetDialog from "./DeleteTweetDialog";
 import { follow } from "@/utils/utilFunctions";
+import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface TweetPopoverProps {
     children: ReactNode;
@@ -19,24 +21,43 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
 
     const { data } = useSession();
     const pathname = usePathname();
+    const queryClient = useQueryClient();
     const { setTweets } = useContext(TweetsContext)!;
 
     const isStatus = pathname.includes(`/${username}/status/`);
     const buttonStyles = "hover:bg-gray-100 border-none p-3 flex gap-2 outline-none items-center rounded-lg font-bold hover:cursor-pointer"
 
     const [open, setOpen] = useState<boolean>(false);
-    const [followers, setFollowers] = useState<{ followerId: number }[]>([]);
-    const [isFollowing, setIsFollowing] = useState<boolean>(false);
+    const [followers, setFollowers] = useState<{ followerId: number }[] | undefined>(undefined);
+    const isFollowing = followers && followers.some((follower: { followerId: number }) => follower.followerId === parseInt(data?.user.id!));
 
-    const handleFollowClick = (e: React.MouseEvent) => {
+    const handleFollowClick = async (e: React.MouseEvent) => {
         setOpen(false);
         e.stopPropagation();
-        follow(username);
+        const response = await follow(username);
+        const json = await response?.json();
+        queryClient.invalidateQueries({ queryKey: ["follows"]});
+
+        if (response?.ok) {
+            toast.success(json.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
+        } else {
+            toast.error(json.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
+        }
     }
 
     useEffect(() => {
         if (!open) return;
-        
+
         const fetchFollowers = async () => {
             const response = await fetch(`/api/users/${username}`);
             if (response.ok) {
@@ -47,10 +68,6 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
 
         fetchFollowers();
     }, [open, username]);
-
-    useEffect(() => {
-        setIsFollowing(followers.some((follower: { followerId: number }) => follower.followerId === parseInt(data?.user.id!)));
-    }, [followers, data?.user.id]);
 
     return (
         <Popover.Root open={open} onOpenChange={setOpen}>
@@ -76,7 +93,7 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
                                 </>
                             ) : (
                                 <>
-                                    <SlUserUnfollow /> Follow @{username}
+                                    <SlUserFollow /> Follow @{username}
                                 </>
                             )}
                         </button>

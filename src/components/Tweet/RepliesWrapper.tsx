@@ -50,7 +50,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
     useScrollListener("main-scroll-container", handleScroll);
 
     return (
-        <>
+        <div className="h-screen">
             <TweetBox type="reply" parentTweetID={parentTweetID} />
             { error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span> }
             {tweets.map((tweet) => {
@@ -84,7 +84,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
                 isFetchingNextPage={isFetchingNextPage}
                 status={status}
             />
-        </>
+        </div>
     );
 }
 

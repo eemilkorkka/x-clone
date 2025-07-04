@@ -17,24 +17,14 @@ export const sendVerificationEmail = async (email: string, name: string) => {
 
 export const follow = async (username: string) => {
     try {
-        await fetch(`/api/users/${username}/follow`, {
+        const response = await fetch(`/api/users/${username}/follow`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
         });
-        await triggerCustomEvent("follow-event", { action: "follow" })
+        return response;
     } catch (error) {
         console.log(error);
     }
-}
-
-// https://dev.to/adrianknapp/managing-application-state-with-custom-events-in-react-a-simple-yet-powerful-approach-ngd
-
-export const triggerCustomEvent = <EventName extends keyof CustomEvents>(
-    eventName: EventName,
-    data: CustomEvents[EventName]
-) => {
-    const event = new CustomEvent(eventName, { detail: data })
-    document.dispatchEvent(event)
 }
 
 export const uploadFiles = async (files: { url: string, file: File }[], formData: FormData) => {

@@ -51,10 +51,6 @@ const TweetStat = ({
     const router = useRouter();
     const { setTweets } = useContext(TweetsContext)!;
 
-    useEffect(() => {
-        setLocalStatValue(statValue);
-    }, [statValue, tweetId]);
-
     const handleInteraction = async (endpoint: StatType) => {
         if (type === "reply") return;
 

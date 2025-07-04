@@ -43,7 +43,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ user
                 }
             });
 
-            return NextResponse.json({ message: `Unfollowed ${username} successfully.` }, { status: 200 });
+            return NextResponse.json({ message: `Unfollowed ${username}` }, { status: 200 });
         } else {
             await prisma.follows.create({
                 data: {
@@ -52,7 +52,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ user
                 }
             });
 
-            return NextResponse.json({ message: `Followed ${username} successfully.` }, { status: 200 });
+            return NextResponse.json({ message: `Followed ${username}` }, { status: 200 });
         }
     } catch {
         return NextResponse.json({ message: "Internal Server Error." }, { status: 500 });

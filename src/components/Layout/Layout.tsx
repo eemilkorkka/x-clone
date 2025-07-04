@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 import PostButtonDialog from "./LeftSideBar/PostButtonDialog";
 import { FaFeatherPointed } from "react-icons/fa6";
 import UserSuggestion from "../Shared/UserSuggestion";
+import TrendingWidget from "../Trending/TrendingWidget";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
     const session = await auth();
@@ -20,13 +21,21 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     const pathname = (await headersList).get("x-url") || "";
     const endpoint = pathname.split("//")[1].slice(14, pathname.length - 1);
     const isViewingASpecificTweet = /^\/[^/]+\/status\/\d+$/.test(endpoint);
-    const username = isViewingASpecificTweet && endpoint.split("/")[1];
 
-    const users = await prisma.users.findMany({
+    const username = endpoint.split("/")[1];
+
+    const users = session && await prisma.users.findMany({
         take: 3,
         where: {
             Username: {
-                not: session?.user?.username
+                notIn: [session.user.username, username]
+            },
+            NOT: {
+                followers: {
+                    some: {
+                        followerId: parseInt(session.user.id)
+                    }
+                }
             }
         },
         select: {
@@ -63,22 +72,24 @@ const Layout = async ({ children }: { children: ReactNode }) => {
 
     return (
         <TweetsContextProvider>
-            <div className="mobile:hidden fixed bottom-20 right-5 z-10">
-                <PostButtonDialog style="inline! mobile:hidden!">
-                    <Button variant="blue">
-                        <FaFeatherPointed size={35} className="p-1" />
-                    </Button>
-                </PostButtonDialog>
-            </div>
+            {!isViewingASpecificTweet && (
+                <div className="mobile:hidden fixed bottom-20 right-5 z-10">
+                    <PostButtonDialog style="inline! mobile:hidden!">
+                        <Button variant="blue">
+                            <FaFeatherPointed size={35} className="p-1" />
+                        </Button>
+                    </PostButtonDialog>
+                </div>
+            )}
             <div className="flex flex-col-reverse mobile:flex-row w-full max-w-fit mx-auto overflow-y-auto">
                 <div className="shrink-0 flex w-18 xl:w-65 px-2">
                     <LeftSideBar />
                 </div>
                 <div className="flex w-full min-w-0 gap-8">
-                    <div className="w-3xl md:w-[598px] h-screen border-r border-l border-gray-200 overflow-y-scroll no-scrollbar" id="main-scroll-container">
+                    <div className="w-3xl md:w-[598px] h-full border-r border-l border-gray-200 overflow-y-scroll no-scrollbar" id="main-scroll-container">
                         {children}
                     </div>
-                    <div className="hidden lg:flex flex-col gap-4 flex-shrink-0">
+                    <div className="hidden lg:flex flex-col gap-4 flex-shrink-0 pb-8">
                         <SearchBar />
                         {!isViewingASpecificTweet && (
                             <Widget title="Subscribe to Premium">
@@ -89,34 +100,39 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                                 </div>
                             </Widget>
                         )}
-                        <Widget title={isViewingASpecificTweet ? "Relevant people" : "Who to follow"}>
-                            {isViewingASpecificTweet ? (
-                                user && (
+                        {isViewingASpecificTweet ? (
+                            user && (
+                                <Widget title="Relevant people">
                                     <Link href={`/${username}`}>
                                         <div className="hover:bg-gray-100 hover:cursor-pointer w-full p-2">
-                                            <UserSuggestion 
-                                                user={user} 
-                                                username={username} 
-                                                showBio={true} 
+                                            <UserSuggestion
+                                                user={user}
+                                                username={username}
+                                                showBio={true}
                                                 session={session}
                                             />
                                         </div>
                                     </Link>
-                                )
-                            ) : (
-                                users.map((user) => (
-                                    <Link key={user.Username} href={`/${user.Username}`}>
-                                        <div className="hover:bg-gray-100 hover:cursor-pointer w-full p-2">
-                                            <UserSuggestion 
-                                                user={user} 
-                                                username={user.Username} 
-                                                session={session}
-                                            />
-                                        </div>
-                                    </Link>
-                                ))
-                            )}
-                        </Widget>
+                                </Widget>
+                            )
+                        ) : (
+                            users && users.length > 0 && (
+                                <Widget title="Who to follow">
+                                    {users.map((user) => (
+                                        <Link key={user.Username} href={`/${user.Username}`}>
+                                            <div className="hover:bg-gray-100 hover:cursor-pointer w-full p-2">
+                                                <UserSuggestion
+                                                    user={user}
+                                                    username={user.Username}
+                                                    session={session}
+                                                />
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </Widget>
+                            )
+                        )}
+                        <TrendingWidget />
                     </div>
                 </div>
                 <Toaster position="bottom-center" />

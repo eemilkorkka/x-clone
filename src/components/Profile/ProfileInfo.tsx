@@ -24,9 +24,11 @@ interface ProfileInfoProps {
     coverPicture?: string;
     showJoinDate?: boolean;
     joinDate?: string;
+    showBio?: boolean;
     bio?: string;
     location?: string;
     website?: string;
+    isProfileHoverCard?: boolean;
     followers: { followerId: number }[];
     following: { followingId: number }[];
 }
@@ -40,15 +42,18 @@ const ProfileInfo = (
         coverPicture,
         showJoinDate,
         joinDate,
+        showBio = true,
         bio,
         location,
         website,
+        isProfileHoverCard = false,
         followers,
         following
     }: ProfileInfoProps) => {
 
     const [isFollowing, setIsFollowing] = useState<boolean>(followers.some(follower => follower.followerId === parseInt(session?.user.id!)));
     const [text, setText] = useState<string>("");
+    const [followerCount, setFollowerCount] = useState<number>(followers.length);
 
     const initialState = {
         profilePicture: user?.ProfilePicture ?? "",
@@ -75,8 +80,10 @@ const ProfileInfo = (
     const handleFollowClick = async (e: React.MouseEvent) => {
         e.preventDefault();
         setIsFollowing(prev => !prev);
+       
         try {
             await follow(username);
+            isFollowing ? setFollowerCount(prev => prev - 1) : setFollowerCount(prev => prev + 1);
         } catch (error) {
             setIsFollowing(prev => !prev);
             console.error('Failed to follow/unfollow:', error);
@@ -131,7 +138,7 @@ const ProfileInfo = (
                     <DisplayName displayName={formData.name} />
                     <Username username={username} />
                 </div>
-                <p>{formData.bio}</p>
+                { showBio && <p>{formData.bio}</p> }
                 {showJoinDate && (
                     <span className="text-gray-500 flex flex-wrap items-left gap-2">
                         {location && (
@@ -154,7 +161,7 @@ const ProfileInfo = (
                 )}
                 <div className="flex gap-4">
                     <span className="text-black text-sm font-bold">{following.length} <span className="text-gray-500 text-sm font-normal">Following</span></span>
-                    <span className="text-black text-sm font-bold">{followers.length} <span className="text-gray-500 text-sm font-normal">{followers.length === 1 ? "Follower" : "Followers"}</span></span>
+                    <span className="text-black text-sm font-bold">{isProfileHoverCard ? followers.length : followerCount} <span className="text-gray-500 text-sm font-normal">{followers.length === 1 ? "Follower" : "Followers"}</span></span>
                 </div>
             </div>
         </>

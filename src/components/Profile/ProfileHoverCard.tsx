@@ -6,82 +6,77 @@ import ProfilePicture from "../Profile/ProfilePicture";
 import { useSession } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
 import { follow } from "@/utils/utilFunctions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@/types/userType";
+import { useFollowMutation } from "@/hooks/useFollowMutation";
 
 interface ProfileHoverCardProps {
     children: ReactNode;
     username: string;
 }
 
+const fetchUserData = async (username: string): Promise<User> => {
+    const response = await fetch(`/api/users/${username}`);
+    const json = await response.json();
+    return json.user;
+};
+
 const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
-
     const session = useSession();
-    const [data, setData] = useState<any>();
-    const [following, setIsFollowing] = useState<boolean>(false);
-    const [text, setText] = useState<string>("");
+    const queryClient = useQueryClient();
+
+    const {
+        data
+    } = useQuery({
+        queryKey: ["follows", username],
+        queryFn: () => fetchUserData(username)
+    });
+
+    const isFollowing = data?.followers.some((follower: { followerId: number }) => follower.followerId === parseInt(session.data?.user.id!));
     const [open, setOpen] = useState<boolean>(false);
-
-    const isFollowing: boolean = data?.user.followers.some((follower: { followerId: number }) => follower.followerId === parseInt(session.data?.user.id!));
-
-    useEffect(() => {
-        const fetchData = async (open: boolean) => {
-            if (!open || username === "") {
-                setData(undefined);
-                return;
-            }
-
-            const response = await fetch(`/api/users/${username}`);
-            const json = await response.json();
-            setData(json);
-        }
-
-        fetchData(open);
-    }, [open, following]);
+    const [text, setText] = useState(isFollowing ? "Following" : "Follow");
 
     useEffect(() => {
-        setIsFollowing(isFollowing);
+        setText(isFollowing ? "Following" : "Follow");
     }, [isFollowing]);
 
-    useEffect(() => {
-        setText(following ? "Following" : "Follow");
-    }, [following]);
-
-
-    const handleFollowClick = (e: React.MouseEvent) => {
-        e.preventDefault();
-        setIsFollowing(prev => !prev);
-        
+    const handleFollowClick = async () => {
         try {
-            follow(username);
+            await follow(username);
+            queryClient.invalidateQueries({ queryKey: ["follows"] });
         } catch (error) {
-            setIsFollowing(prev => !prev);
             console.error('Failed to follow/unfollow:', error);
         }
-    }
+    };
+
+    const followMutation = useFollowMutation(handleFollowClick, ["follows", username], isFollowing, data?.UserID!);
+
+    console.log(data?.followers);
 
     return (
-        <HoverCard.Root onOpenChange={(open) => setOpen(open)}>
+        <HoverCard.Root open={open} onOpenChange={setOpen}>
             <HoverCard.Trigger asChild>
                 {children}
             </HoverCard.Trigger>
             <HoverCard.Portal>
                 {data && (
                     <HoverCard.Content className="flex flex-col gap-4 bg-white shadow-md w-72 justify-between p-4 rounded-xl z-20">
-                        <div className={`flex ${following ? "gap-25" : "gap-30"}`}>
+                        <div className={`flex ${isFollowing ? "gap-25" : "gap-30"}`}>
                             <ProfilePicture
                                 style="rounded-full w-15 h-15 shrink-0"
-                                image={data.user.ProfilePicture}
+                                image={data.ProfilePicture}
                                 href={username}
                             />
                             {session.data?.user?.username !== username && (
                                 <div>
                                     <Button
-                                        variant={following ? "outline" : "black"}
-                                        hoverColor={following ? "red" : "gray"}
+                                        variant={isFollowing ? "outline" : "black"}
+                                        hoverColor={isFollowing ? "red" : "gray"}
                                         textColor="black"
-                                        style={`text-sm px-4 pt-2 pb-2 ${following && "hover:border-red-500! hover:text-red-500"}`}
-                                        onClick={(e) => handleFollowClick(e)}
-                                        onMouseOver={() => following && setText("Unfollow")}
-                                        onMouseLeave={() => following && setText("Following")}
+                                        style={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
+                                        onClick={(e) => { e.preventDefault(); followMutation?.mutate(); }}
+                                        onMouseOver={() => isFollowing && setText("Unfollow")}
+                                        onMouseLeave={() => isFollowing && setText("Following")}
                                     >
                                         {text}
                                     </Button>
@@ -89,17 +84,18 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
                             )}
                         </div>
                         <ProfileInfo
-                            displayName={data.user.DisplayName}
+                            displayName={data.DisplayName}
                             username={username}
-                            bio={data.user.Bio ?? "Lorem ipsum dolor sit amet"}
-                            followers={data.user.followers}
-                            following={data.user.following}
+                            bio={data.Bio ?? "Lorem ipsum dolor sit amet"}
+                            followers={data.followers}
+                            following={data.following}
+                            isProfileHoverCard={true}
                         />
                     </HoverCard.Content>
                 )}
             </HoverCard.Portal>
         </HoverCard.Root>
     );
-}
+};
 
 export default ProfileHoverCard;

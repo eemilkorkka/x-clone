@@ -4,6 +4,9 @@ import Tweet from "@/components/Tweet/Tweet";
 import RepliesWrapper from "@/components/Tweet/RepliesWrapper";
 import FeedHeader from "@/components/Shared/FeedHeader";
 import { getTweetById } from "@/utils/tweet/tweetUtils";
+import ReplyDialog from "@/components/Tweet/ReplyDialog";
+import { BsChat } from "react-icons/bs";
+import Button from "@/components/Shared/Button";
 
 export default async function Page({ params }: { params: Promise<{ username: string, tweetId: string }> }) {
     const { username, tweetId } = await params;
@@ -20,10 +23,10 @@ export default async function Page({ params }: { params: Promise<{ username: str
             <Layout>
                 <FeedHeader title={tweet ? "Post" : ""} />
                 {parentTweet && (
-                    <Tweet 
+                    <Tweet
                         tweetType="tweet"
                         tweetContent={
-                            { 
+                            {
                                 text: parentTweet.Content,
                                 files: parentTweet.files.map((file: { File_URL: string; File_Type: string }) => ({
                                     url: file.File_URL,
@@ -44,10 +47,10 @@ export default async function Page({ params }: { params: Promise<{ username: str
                     />
                 )}
                 {tweet ? (
-                    <Tweet 
+                    <Tweet
                         tweetType="status"
                         tweetContent={
-                            { 
+                            {
                                 text: tweet.Content,
                                 files: tweet.files.map((file: { File_URL: string; File_Type: string }) => ({
                                     url: file.File_URL,
@@ -70,7 +73,16 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         <p className="text-gray-500 p-20">Hmm...this page doesn't exist.</p>
                     </div>
                 )}
-                { tweet && <RepliesWrapper parentTweetID={parseInt(tweetId)} /> }
+                {tweet && <RepliesWrapper parentTweetID={parseInt(tweetId)} />}
+                {tweet && (
+                    <div className="mobile:hidden fixed bottom-20 right-5 z-20">
+                        <ReplyDialog tweetId={tweetId ? parseInt(tweetId) : undefined}>
+                            <Button variant="blue">
+                                <BsChat size={35} className="p-1" />
+                            </Button>
+                        </ReplyDialog>
+                    </div>
+                )}
             </Layout>
         </ProtectedRoute>
     );

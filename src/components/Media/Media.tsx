@@ -8,9 +8,6 @@ interface MediaProps {
 }
 
 const Media = ({ type, url, children }: MediaProps) => {
-
-    // TODO: Figure out why videos are sometimes shifting up and down when scrolling.
-
     return (
         <>
             {type.startsWith("image") ? (

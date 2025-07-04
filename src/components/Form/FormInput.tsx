@@ -1,6 +1,6 @@
 "use client";
 import formDataType from "@/types/formDataType";
-import { ChangeEvent, HTMLInputTypeAttribute, useEffect, useState } from "react";
+import { ChangeEvent, HTMLInputTypeAttribute } from "react";
 
 interface FormInputProps {
     type?: HTMLInputTypeAttribute;
@@ -30,11 +30,7 @@ const FormInput = ({
     maxLength
 }: FormInputProps) => {
 
-    const [inputEmpty, setInputEmpty] = useState<boolean>(formData[name] === "");
-
-    useEffect(() => {
-        setInputEmpty(formData[name] === "");
-    }, [formData[name]]);
+    const inputEmpty: boolean = formData[name] === "";
 
     const inputClassName = `w-full p-2.5 pt-5 border border-gray outline-none 
         rounded-md ${style} ${error && !inputEmpty ? "border-red-500" : "group-focus-within:border-xblue"}`;

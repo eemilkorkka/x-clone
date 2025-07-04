@@ -8,16 +8,31 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import LoadingBlock from "../Shared/LoadingBlock";
+import MobileHeader from "../Layout/MobileHeader/MobileHeader";
+import { User } from "@/types/userType";
 
-const fetchTweets = async ({ pageParam }: { pageParam: number }) => {
-    const response = await fetch(`/api/posts?page=${pageParam}&limit=${10}`);
-    if (!response.ok) {
-        throw new Error("Failed to fetch tweets.");
-    }
-    return response.json();
+interface HomeWrapperProps {
+    user: User;
 }
 
-const HomeWrapper = () => {
+const HomeWrapper = ({ user }: HomeWrapperProps) => {
+
+    const [currentTab, setCurrentTab] = useState<number>(0);
+    const tabs: string[] = ["For you", "Following"];
+    const { tweets, setTweets } = useContext(TweetsContext)!;
+
+    const fetchTweets = async ({ pageParam }: { pageParam: number }) => {
+        const url = currentTab === 0 ? `/api/posts?page=${pageParam}&limit=${10}` : `/api/posts/following?page=${pageParam}&limit=${10}`
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error("Failed to fetch tweets.");
+        }
+
+        return response.json();
+    }
+
     const {
         data,
         error,
@@ -27,7 +42,7 @@ const HomeWrapper = () => {
         isFetchingNextPage,
         status
     } = useInfiniteQuery({
-        queryKey: ['tweets'],
+        queryKey: ['tweets', currentTab],
         queryFn: fetchTweets,
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
@@ -35,10 +50,6 @@ const HomeWrapper = () => {
             return allPages.length + 1;
         },
     });
-
-    const tabs: string[] = ["For you", "Following"];
-    const [currentTab, setCurrentTab] = useState<number>(0);
-    const { tweets, setTweets } = useContext(TweetsContext)!;
 
     useEffect(() => {
         data?.pages && setTweets(data.pages.flatMap(page => page));
@@ -48,7 +59,8 @@ const HomeWrapper = () => {
     useScrollListener("main-scroll-container", handleScroll);
 
     return (
-        <>
+        <div className="h-screen">
+            <MobileHeader user={user} />
             <TabSwitcher
                 tabs={tabs}
                 currentTab={currentTab}
@@ -56,8 +68,8 @@ const HomeWrapper = () => {
                 style="bg-white/90! backdrop-blur-sm!"
             />
             <TweetBox type="tweet" />
-            {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span> }
-            {tweets.map((tweet) => {
+            {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span>}
+            {!error && tweets.map((tweet) => {
                 return (
                     <Tweet
                         key={tweet.ID}
@@ -88,7 +100,7 @@ const HomeWrapper = () => {
                 hasNextPage={hasNextPage}
                 status={status}
             />
-        </>
+        </div>
     );
 }
 

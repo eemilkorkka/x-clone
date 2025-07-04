@@ -44,7 +44,7 @@ const BookmarksWrapper = () => {
     useScrollListener("main-scroll-container", handleScroll);
 
     return (
-        <>
+        <div className="h-screen">
             {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load bookmarks, try again later.</span> }
             {bookmarks.map((tweet) => {
                 return (
@@ -77,7 +77,7 @@ const BookmarksWrapper = () => {
                 hasNextPage={hasNextPage}
                 status={status}
             />
-        </>
+        </div>
     )
 }
 

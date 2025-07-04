@@ -19,7 +19,7 @@ import EmojiPickerPopover from "./EmojiPickerPopover";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-type tweetBoxType = "reply" | "tweet";
+export type tweetBoxType = "reply" | "tweet";
 
 interface TweetBoxProps {
     type: tweetBoxType;
