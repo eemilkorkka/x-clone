@@ -9,12 +9,21 @@ interface UserCardProps {
     image: string;
     username: string;
     displayName: string;
+    showUnderlineOnDisplayname?: boolean;
     bio?: string;
     children?: ReactNode;
     style?: string;
 }
 
-const UserCard = ({ image, username, displayName, bio, style, children }: UserCardProps) => {
+const UserCard = ({ 
+    image, 
+    username, 
+    displayName, 
+    showUnderlineOnDisplayname = true, 
+    bio, 
+    style, 
+    children 
+}: UserCardProps) => {
     const session = useSession();
 
     return (
@@ -31,7 +40,7 @@ const UserCard = ({ image, username, displayName, bio, style, children }: UserCa
                             displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName}
                             username={username}
                             showProfileHoverCard={session.data?.user?.username !== username}
-                            showUnderlineOnHover={true}
+                            showUnderlineOnHover={showUnderlineOnDisplayname}
                             variant="small"
                         />
                         <Username 

@@ -49,7 +49,7 @@ const Button = (
             onClick={onClick}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
-            className={`${style} rounded-full text-center font-bold text-lg p-2.5 hover:cursor-pointer outline-none ${variant ? variants[variant] : variants.blue}`}>
+            className={`${style} rounded-full text-center font-bold text-lg p-2.5 ${!disabled && "hover:cursor-pointer"} outline-none ${variant ? variants[variant] : variants.blue}`}>
                 {children}
         </button>
     );

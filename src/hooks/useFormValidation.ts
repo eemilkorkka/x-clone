@@ -22,7 +22,6 @@ export function useFormValidation<T>({ formData, schema, touchedFields = [], set
                 setFormInvalid(!result.success);
             } catch (error) {
                 const result = await schema.safeParseAsync(debouncedFormData);
-                console.log(result);
                 setValidationResult(result);
                 setFormInvalid(!result.success);
             }

@@ -10,7 +10,8 @@ datasource db {
 model verificationtokens {
   Id    Int    @id @default(autoincrement())
   Email String @unique(map: "Email") @db.VarChar(255)
-  Code  Int?
+  VerificationCode  Int?
+  PasswordResetCode Int?
 }
 
 model users {

@@ -36,7 +36,7 @@ export async function POST(req: Request) {
 
 const storeVerificationCode = async (email: string, code: number) => {
     try {
-        const user = await prisma.verificationtokens.findFirst({
+        const user = await prisma.verificationtokens.findUnique({
             where: {
                 Email: email
             }
@@ -48,7 +48,7 @@ const storeVerificationCode = async (email: string, code: number) => {
                     Email: email
                 },
                 data: {
-                    Code: code
+                    VerificationCode: code
                 }
             });
         }
@@ -56,7 +56,7 @@ const storeVerificationCode = async (email: string, code: number) => {
             await prisma.verificationtokens.create({
                 data: {
                     Email: email,
-                    Code: code
+                    VerificationCode: code
                 }
             });
         }

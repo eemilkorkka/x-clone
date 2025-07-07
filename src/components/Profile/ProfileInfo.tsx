@@ -14,6 +14,7 @@ import ProfileBanner from "./ProfileBanner";
 import ProfilePicture from "./ProfilePicture";
 import { IoIosLink } from "react-icons/io";
 import { LuMapPin } from "react-icons/lu";
+import MediaViewDialog from "../Media/MediaViewDialog";
 
 
 interface ProfileInfoProps {
@@ -80,7 +81,7 @@ const ProfileInfo = (
     const handleFollowClick = async (e: React.MouseEvent) => {
         e.preventDefault();
         setIsFollowing(prev => !prev);
-       
+
         try {
             await follow(username);
             isFollowing ? setFollowerCount(prev => prev - 1) : setFollowerCount(prev => prev + 1);
@@ -89,13 +90,17 @@ const ProfileInfo = (
             console.error('Failed to follow/unfollow:', error);
         }
     }
-    
+
     return (
         <>
             {showJoinDate && (
                 <div className="-m-4">
                     <ProfileBanner image={formData.coverPicture ?? undefined}>
-                        <ProfilePicture image={formData.profilePicture} style="w-full h-full top-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white" />
+                        <MediaViewDialog type="image" url={formData.profilePicture}>
+                            <div>
+                                <ProfilePicture image={formData.profilePicture} style="w-full h-full top-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white hover:cursor-pointer" />
+                            </div>
+                        </MediaViewDialog>
                     </ProfileBanner>
                 </div>
             )}
@@ -138,7 +143,7 @@ const ProfileInfo = (
                     <DisplayName displayName={formData.name} />
                     <Username username={username} />
                 </div>
-                { showBio && <p>{formData.bio}</p> }
+                {showBio && <p>{formData.bio}</p>}
                 {showJoinDate && (
                     <span className="text-gray-500 flex flex-wrap items-left gap-2">
                         {location && (

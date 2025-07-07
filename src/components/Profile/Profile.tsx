@@ -11,7 +11,7 @@ import ProfilePicture from "./ProfilePicture";
 
 interface ProfileProps {
     username: string;
-    likesCount?: number; 
+    likesCount?: number;
     children: ReactNode;
 }
 
@@ -71,7 +71,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                     )}
                 </div>
             </FeedHeader>
-            { !user && (
+            {!user && (
                 <ProfileBanner>
                     <ProfilePicture image={undefined} style="w-full h-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white" />
                 </ProfileBanner>
@@ -94,7 +94,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                             following={user.following}
                         />
                         <div className="-ml-4">
-                            <TabSwitcher 
+                            <TabSwitcher
                                 tabs={username === session?.user.username ? profileTabs : profileTabs.slice(0, profileTabs.length - 1)}
                                 useLink={true}
                                 username={username}
@@ -106,9 +106,11 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                 ) : (
                     <>
                         <DisplayName displayName={`@${username}`} />
-                        <div className="flex flex-col gap-2 mt-25 h-full mx-25">
-                            <p className="text-3xl font-extrabold">This account doesn't exist</p>
-                            <p className="text-gray-500">Try searching for another.</p>
+                        <div className="flex flex-col gap-2 mt-20 h-full w-full items-center">
+                            <div className="flex flex-col gap-2">
+                                <p className="text-2xl mobile:text-3xl font-extrabold">This account doesn't <br/> exist</p>
+                                <p className="text-gray-500">Try searching for another.</p>
+                            </div>
                         </div>
                     </>
                 )}

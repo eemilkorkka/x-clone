@@ -51,8 +51,6 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
 
     const followMutation = useFollowMutation(handleFollowClick, ["follows", username], isFollowing, data?.UserID!);
 
-    console.log(data?.followers);
-
     return (
         <HoverCard.Root open={open} onOpenChange={setOpen}>
             <HoverCard.Trigger asChild>

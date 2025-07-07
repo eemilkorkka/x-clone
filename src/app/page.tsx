@@ -40,7 +40,7 @@ export default async function Root() {
             <span className="font-bold">Already have an account?</span>
             <div className="mt-5">
               <SignInFormDialog>
-                <Button variant="outline" hoverColor="blue" style="w-72">Sign in</Button>
+                <Button variant="outline" hoverColor="blue" style="w-72 border-gray-500">Sign in</Button>
               </SignInFormDialog>
             </div>
           </div>

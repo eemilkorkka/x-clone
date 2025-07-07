@@ -1,5 +1,3 @@
-import { CustomEvents } from "@/types/CustomEvents";
-
 export const sendVerificationEmail = async (email: string, name: string) => {
     try {
         await fetch("/api/verify/email", {
@@ -13,6 +11,28 @@ export const sendVerificationEmail = async (email: string, name: string) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const sendPasswordResetEmail = async (email_or_username: string): Promise<string> => {
+    try {
+        const response = await fetch("/api/resetpassword/email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email_or_username: email_or_username
+            })
+        });
+
+        const json = await response.json();
+
+        return json.email;
+    } catch (error) {
+        console.log(error);
+    }
+
+    return "";
 }
 
 export const follow = async (username: string) => {

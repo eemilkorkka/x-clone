@@ -38,9 +38,9 @@ export const verificationCodeSchema = z.object({
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 email: data.email,
-                verificationCode: data.verificationCode 
+                verificationCode: data.verificationCode
             })
         });
         if (response.status !== 200) {
@@ -93,3 +93,57 @@ export const passwordSchema = z.object({
         });
     }
 });
+
+export const emailOrUsernameSchema = z.object({
+    email_or_username: z.string().min(4, "Enter a valid username or email.")
+}).superRefine(async (val, ctx) => {
+    const str = val.email_or_username;
+    const url = str.includes("@") ? `/api/users/email/${encodeURIComponent(str)}` : `/api/users/${encodeURIComponent(str)}`;
+
+    try {
+        const response = await fetch(url);
+        if (response.status !== 200) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: `We couldn't find the account associated with the email \n or username you provided.`,
+                path: ["email_or_username"]
+            });
+        }
+    } catch {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Something went wrong",
+            path: ["email_or_username"]
+        });
+    }
+});
+
+export const passwordResetCodeSchema = z.object({
+    passwordResetCode: z.string().min(6, "").max(6, "The code you entered is invalid."),
+    email_or_username: z.string()
+}).superRefine(async (data, ctx) => {
+    if (data.passwordResetCode.length > 6 || data.passwordResetCode.length < 6) return;
+
+    try {
+        const response = await fetch("/api/resetpassword/verify", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ code: data.passwordResetCode, email: data.email_or_username })
+        });
+        if (response.status !== 200) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "The code you entered is invalid.",
+                path: ["passwordResetCode"]
+            });
+        }
+    } catch {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Something went wrong.",
+            path: ["passwordResetCode"]
+        });
+    }
+})

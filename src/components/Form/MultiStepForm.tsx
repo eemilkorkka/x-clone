@@ -6,9 +6,10 @@ interface MultiStepFormProps {
     formInvalid: boolean;
     handleNextClick: (e: MouseEvent<HTMLButtonElement>) => void;
     handleFormSubmit: (e: FormEvent<HTMLFormElement>) => void;
+    buttonText: string;
 }
 
-const MultiStepForm = ({ step, steps, formInvalid, handleNextClick, handleFormSubmit }: MultiStepFormProps) => {
+const MultiStepForm = ({ step, steps, formInvalid, buttonText, handleNextClick, handleFormSubmit }: MultiStepFormProps) => {
     return (
         <form className="flex-1 flex flex-col justify-between" onSubmit={handleFormSubmit}>
             {steps[step]}
@@ -17,7 +18,8 @@ const MultiStepForm = ({ step, steps, formInvalid, handleNextClick, handleFormSu
                 type={step === steps.length - 1 ? "submit" : "button"} 
                 className="bg-white mb-6 p-4 rounded-full hover:cursor-pointer text-black font-bold mt-auto disabled:opacity-40" 
                 onClick={step < steps.length - 1 ? handleNextClick : undefined}
-            >{step < steps.length - 1 ? "Next" : "Sign up"}
+            >
+                {buttonText}
             </button>
         </form>
     );

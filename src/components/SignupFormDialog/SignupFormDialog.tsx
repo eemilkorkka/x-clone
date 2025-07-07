@@ -1,6 +1,6 @@
 "use client";
 import { Dialog } from "radix-ui";
-import { FormEvent, MouseEvent, ReactNode, useContext, useState, useEffect } from "react";
+import { FormEvent, MouseEvent, ReactNode, useContext, useState, useEffect, JSX } from "react";
 import { sendVerificationEmail } from "@/utils/utilFunctions";
 import { IoClose } from "react-icons/io5";
 import { FaXTwitter, FaArrowLeft } from "react-icons/fa6";
@@ -30,7 +30,7 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
         return () => window.removeEventListener(DIALOG_EVENTS.OPEN_SIGNUP, handleOpenSignup);
     }, []);
 
-    const steps: React.JSX.Element[] = [
+    const steps: JSX.Element[] = [
         <PersonalInfo key={0} />,
         <VerificationCode key={1} />,
         <Username key={2} />,
@@ -63,14 +63,14 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                        formData: formData
+                    formData: formData
                 })
             });
-    
+
             const result = await response.json();
-            
+
             if (response.status === 201) {
-                toast.success(result.message); 
+                toast.success(result.message);
                 setOpen(false);
             } else {
                 toast.error(result.message);
@@ -87,13 +87,12 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                     {children}
                 </Dialog.Trigger>
                 <Dialog.Portal>
-                    <Dialog.Overlay className="fixed inset-0 bg-gray-700/50"/>
-                    <Dialog.Content className="text-white w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black lg:rounded-2xl">
+                    <Dialog.Overlay className="fixed inset-0 bg-gray-700/50" />
+                    <Dialog.Content className="text-white w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col gap-4 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black lg:rounded-2xl">
                         <div className="flex items-center justify-between p-3">
                             {step > 0 ? (
                                 <FaArrowLeft size={20} className="hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
-                            ) 
-                            : (
+                            ) : (
                                 <Dialog.Close asChild>
                                     <IoClose size={25} className="hover:cursor-pointer" />
                                 </Dialog.Close>
@@ -101,11 +100,12 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                             <FaXTwitter size={35} className="m-auto" />
                         </div>
                         <div className="px-10 md:px-20 flex flex-col flex-1">
-                            <Dialog.Title className="text-3xl font-bold mt-5 mb-5">{stepTitles[step]}</Dialog.Title>
-                            <MultiStepForm 
-                                step={step} 
+                            <Dialog.Title className="text-3xl font-bold mb-5">{stepTitles[step]}</Dialog.Title>
+                            <MultiStepForm
+                                step={step}
                                 steps={steps}
                                 formInvalid={formInvalid}
+                                buttonText={step < steps.length - 1 ? "Next" : "Sign up"}
                                 handleNextClick={(e) => handleNextClick(e)}
                                 handleFormSubmit={handleFormSubmit}
                             />

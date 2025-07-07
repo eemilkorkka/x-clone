@@ -18,7 +18,7 @@ interface SignInFormDialogProps {
 }
 
 const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
-    
+
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false);
     const [hasSubmitted, setSubmitted] = useState<boolean>(false);
@@ -69,7 +69,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
             setSubmitted(false);
             toast.error("Something went wrong");
         }
-    }   
+    }
 
     return (
         <>
@@ -78,8 +78,8 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                     {children}
                 </Dialog.Trigger>
                 <Dialog.Portal>
-                    <Dialog.Overlay className="fixed inset-0 bg-gray-700/50"/>
-                    <Dialog.Content className="text-white w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black lg:rounded-2xl">
+                    <Dialog.Overlay className="fixed inset-0 bg-gray-700/50" />
+                    <Dialog.Content className="text-white w-full h-full lg:w-[600px] lg:h-[650px] flex flex-col lg:gap-4 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black lg:rounded-2xl">
                         <div className="flex items-center justify-between p-3">
                             <Dialog.Close asChild>
                                 <IoClose size={25} className="hover:cursor-pointer" />
@@ -87,37 +87,45 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                             <FaXTwitter size={35} className="m-auto" />
                         </div>
                         <div className="flex flex-1 flex-col items-center justify-center lg:justify-start">
-                            <div className="mt-5">
+                            <div>
                                 <Dialog.Title className="text-3xl font-bold">Sign in to X</Dialog.Title>
                                 <div className="mt-5 flex flex-col gap-6">
-                                    <GoogleSignIn buttonText="Sign in with Google" onClick={() => setSubmitted(true) } />
+                                    <GoogleSignIn buttonText="Sign in with Google" onClick={() => setSubmitted(true)} />
                                     <div className="flex items-center gap-3">
                                         <hr className="h-1 w-31 text-gray-600"></hr>
                                         <span>or</span>
                                         <hr className="h-1 w-31 text-gray-600"></hr>
                                     </div>
                                     <form className="flex flex-col gap-6" onSubmit={handleFormSubmit}>
-                                        <FormInput 
-                                            type="text" 
-                                            name="identifier" 
-                                            label="Username or email" 
-                                            formData={formData} 
-                                            onChange={(e) => { onInputChange(e); setErrorText(""); }} 
+                                        <FormInput
+                                            type="text"
+                                            name="identifier"
+                                            label="Username or email"
+                                            formData={formData}
+                                            onChange={(e) => { onInputChange(e); setErrorText(""); }}
                                         />
-                                        <FormInput 
-                                            type="password" 
-                                            name="password" 
-                                            label="Password" 
-                                            formData={formData} 
-                                            onChange={(e) => { onInputChange(e); setErrorText(""); }} 
+                                        <FormInput
+                                            type="password"
+                                            name="password"
+                                            label="Password"
+                                            formData={formData}
+                                            onChange={(e) => { onInputChange(e); setErrorText(""); }}
                                         />
                                         <div className="flex justify-center">
                                             { errorText ? <p className="text-red-500">{errorText} </p> : hasSubmitted && <LoadingSpinner /> }
                                         </div>
                                         <Button type="submit" variant="white">Sign in</Button>
                                     </form>
-                                    <Button variant="outline" textColor="white" hoverColor="white">Forgot password?</Button>
-                                    <p>Don't have an account?
+                                    <Button
+                                        variant="outline"
+                                        textColor="white"
+                                        hoverColor="white"
+                                        style="border-gray-500"
+                                        onClick={() => router.push("/forgotpassword")}
+                                    >
+                                        Forgot password?
+                                    </Button>
+                                    <p className="text-gray-500">Don't have an account?
                                         <span className="text-xblue hover:cursor-pointer" onClick={() => {
                                             setOpen(false);
                                             window.dispatchEvent(new CustomEvent(DIALOG_EVENTS.OPEN_SIGNUP));
