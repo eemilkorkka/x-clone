@@ -27,7 +27,7 @@ interface EditProfileDialogProps {
 const EditProfileDialog = ({ children, initialState, formData, setFormData }: EditProfileDialogProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const router = useRouter();
-    const { data: session, update } = useSession();
+    const { update } = useSession();
     const [localFormData, setLocalFormData] = useState<formDataType>(formData);
     const [preview, setPreview] = useState<{ profilePicture: string; coverPicture: string }>({
         profilePicture: initialState.profilePicture,
@@ -205,7 +205,15 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                                         type="file"
                                         className="hidden"
                                         ref={coverPicturePickerRef}
-                                        onChange={() => setPreview((prev) => ({ ...prev, coverPicture: URL.createObjectURL(coverPicturePickerRef.current?.files![0]!) }))}
+                                        onChange={() => {
+                                            const file = coverPicturePickerRef.current?.files?.[0];
+                                            if (file) {
+                                                setPreview((prev) => ({
+                                                    ...prev,
+                                                    coverPicture: URL.createObjectURL(file),
+                                                }));
+                                            }
+                                        }}
                                         multiple
                                         accept="image/*"
                                     />
@@ -226,7 +234,15 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                                         type="file"
                                         className="hidden"
                                         ref={profilePicturePickerRef}
-                                        onChange={() => setPreview((prev) => ({ ...prev, profilePicture: URL.createObjectURL(profilePicturePickerRef.current?.files![0]!) }))}
+                                        onChange={() => {
+                                            const file = profilePicturePickerRef.current?.files?.[0];
+                                            if (file) {
+                                                setPreview((prev) => ({
+                                                    ...prev,
+                                                    profilePicture: URL.createObjectURL(file),
+                                                }));
+                                            }
+                                        }}
                                         multiple
                                         accept="image/*"
                                     />

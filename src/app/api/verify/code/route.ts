@@ -25,6 +25,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "Could not find verification code."}, { status: 404 });
         }
     } catch (error) {
-        return NextResponse.json({ message: "Internal Server Error."}, { status: 500 });
+        return NextResponse.json({ message: "Internal Server Error.", error: error }, { status: 500 });
     }
 }

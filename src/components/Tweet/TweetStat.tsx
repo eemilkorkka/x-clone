@@ -55,7 +55,11 @@ const TweetStat = ({
         if (type === "reply") return;
 
         try {
-            type !== "bookmark" && setLocalStatValue(prev => clicked ? prev - 1 : prev + 1);
+
+            if (type !== "bookmark") {
+                setLocalStatValue(prev => clicked ? prev - 1 : prev + 1);
+            }
+
             setClicked(prev => !prev);
 
             const response = await fetch(`/api/posts/${endpoint}`, {
@@ -67,7 +71,11 @@ const TweetStat = ({
             const json = await response.json();
 
             if (!response.ok) {
-                type !== "bookmark" && setLocalStatValue(prev => clicked ? prev + 1 : prev - 1);
+
+                if (type !== "bookmark") {
+                    setLocalStatValue(prev => clicked ? prev + 1 : prev - 1);
+                }
+
                 setClicked(prev => !prev);
             } else {
                 if (type === "retweet" && clicked) setTweets?.(prev => prev.filter(tweet => !(tweet.isRetweet && tweet.ID === tweetId)))
@@ -88,9 +96,11 @@ const TweetStat = ({
                     }
                 });
             }
-        } catch (error) {
-            console.error(`Error ${endpoint}ing post:`, error);
-            type !== "bookmark" && setLocalStatValue(prev => clicked ? prev + 1 : prev - 1);
+        } catch {
+            if (type !== "bookmark") {
+                setLocalStatValue(prev => clicked ? prev + 1 : prev - 1);
+            }
+
             setClicked(prev => !prev);
         }
     };
@@ -125,7 +135,7 @@ const TweetStat = ({
         if (session.data?.user?.id && statConfigs[type].checkActive) {
             setClicked(statConfigs[type].checkActive(session.data.user.id, tweetId));
         }
-    }, [session.data?.user?.id, type, tweetId]);
+    }, [session.data?.user?.id, type, tweetId, statConfigs]);
 
     const currentIcon = clicked && statConfigs[type].activeIcon
         ? statConfigs[type].activeIcon

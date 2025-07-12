@@ -65,7 +65,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                 setSubmitted(false);
                 router.push("/home");
             }
-        } catch (error) {
+        } catch {
             setSubmitted(false);
             toast.error("Something went wrong");
         }
@@ -125,7 +125,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                                     >
                                         Forgot password?
                                     </Button>
-                                    <p className="text-gray-500">Don't have an account?
+                                    <p className="text-gray-500">{"Don't have an account?"}
                                         <span className="text-xblue hover:cursor-pointer" onClick={() => {
                                             setOpen(false);
                                             window.dispatchEvent(new CustomEvent(DIALOG_EVENTS.OPEN_SIGNUP));

@@ -9,12 +9,12 @@ export const useFollowMutation =
     mutationFn: MutationFunction<unknown, void> | undefined, 
     queryKey: [string, string], 
     currentFollowState: boolean | undefined, 
-    followingId: number
+    followingId: number | undefined
 ) => {
     const queryClient = useQueryClient();
     const { data } = useSession();
 
-    const userId = parseInt(data?.user.id!);
+    const userId = parseInt(data?.user.id ?? "");
 
     return useMutation({
         mutationFn: mutationFn,
@@ -25,9 +25,7 @@ export const useFollowMutation =
 
             queryClient.setQueryData(queryKey, (old: User) => {
 
-                let newFollowers;
-
-                newFollowers = currentFollowState ? 
+                const newFollowers = currentFollowState ? 
                 old.followers.filter(f => f.followerId !== userId) : 
                 [...(old.followers), { followerId: userId, followingId: followingId }];
 

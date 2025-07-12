@@ -44,7 +44,9 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
     });
 
     useEffect(() => {
-        data?.pages && setTweets(data.pages.flatMap(page => page));
+        if (data?.pages) {
+            setTweets(data.pages.flatMap(page => page));
+        }
     }, [data?.pages, setTweets]);
     
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
@@ -81,7 +83,6 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
                 );
             })}
             <LoadingBlock 
-                hasNextPage={hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 status={status}
             />

@@ -39,7 +39,7 @@ const VerificationCode = () => {
                 error={getErrorMessage("verificationCode")}
             />
             <p 
-                className="text-gray-500 mt-3">Didn't receive code?
+                className="text-gray-500 mt-3">{"Didn't receive code?"}
                 <span 
                     className="text-xblue hover:cursor-pointer" 
                     onClick={handleResendCode}

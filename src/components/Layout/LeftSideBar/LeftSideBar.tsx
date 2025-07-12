@@ -1,5 +1,5 @@
 import SideBarOption from "./SidebarOption";
-import { sideBarOptions, mobileBottomNavigationOptions, Option } from "@/utils/sidebarOptions";
+import { sideBarOptions, mobileBottomNavigationOptions } from "@/utils/sidebarOptions";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import Button from "@/components/Shared/Button";
@@ -35,7 +35,7 @@ const LeftSideBar = async () => {
                     </button>
                 </Link>
                 <div className="hidden items-center mobile:items-start mobile:flex flex-col gap-4 w-full">
-                    {sideBarOptions(user?.Username!).map((option, index) => (
+                    {sideBarOptions(user?.Username ?? "").map((option, index) => (
                         <SideBarOption
                             key={index}
                             text={option.text}
@@ -74,11 +74,11 @@ const LeftSideBar = async () => {
                 </PostButtonDialog>
             </div>
             <div className="mb-4 fixed bottom-0 xl:w-61 hidden mobile:inline">
-                <LogoutPopover image={user?.ProfilePicture ?? ""} username={user?.Username!} displayName={user?.DisplayName!} >
+                <LogoutPopover image={user?.ProfilePicture ?? ""} username={user?.Username ?? ""} displayName={user?.DisplayName ?? ""} >
                     <button className="flex w-full p-2.5 hover:bg-gray-200 hover:cursor-pointer rounded-full">
                         <UserCard
-                            username={user?.Username!}
-                            displayName={user?.DisplayName!}
+                            username={user?.Username ?? ""}
+                            displayName={user?.DisplayName ?? ""}
                             showUnderlineOnDisplayname={false}
                             image={user?.ProfilePicture ?? ""}
                             style="hidden"

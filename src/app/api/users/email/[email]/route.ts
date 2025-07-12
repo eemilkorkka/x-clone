@@ -17,6 +17,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ email: s
         })
         return user ? NextResponse.json({ user: user, message: "The email you entered is already in use." }, { status: 200 }) : NextResponse.json({ user: null }, { status: 404 });
     } catch (error) {
-        return NextResponse.json({ message: "Internal Server Error." }, { status: 500 });
+        return NextResponse.json({ message: "Internal Server Error.", error: error }, { status: 500 });
     }
 }

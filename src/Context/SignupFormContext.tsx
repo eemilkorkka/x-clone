@@ -13,8 +13,8 @@ type SignupFormContextType = {
 
 export const SignupFormContext = createContext<undefined | SignupFormContextType>(undefined);
 
-export default function SignupFormContextProvider({ children }: { children: ReactNode })  {
-    
+export default function SignupFormContextProvider({ children }: { children: ReactNode }) {
+
     const [formData, setFormData] = useState<formDataType>({
         name: "",
         email: "",
@@ -33,7 +33,9 @@ export default function SignupFormContextProvider({ children }: { children: Reac
     const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
-        !touchedFields.includes(name) && setTouchedFields(prev => [...prev, name]);
+        if (!touchedFields.includes(name)) {
+            setTouchedFields(prev => [...prev, name]);
+        }
 
         setFormData((prevFormData) => ({
             ...prevFormData,

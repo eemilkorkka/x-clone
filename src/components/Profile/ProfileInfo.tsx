@@ -58,7 +58,7 @@ const ProfileInfo = (
         following
     }: ProfileInfoProps) => {
 
-    const [isFollowing, setIsFollowing] = useState<boolean>(followers.some(follower => follower.followerId === parseInt(session?.user.id!)));
+    const [isFollowing, setIsFollowing] = useState<boolean>(followers.some(follower => follower.followerId === parseInt(session?.user.id ?? "")));
     const [text, setText] = useState<string>("");
     const [followerCount, setFollowerCount] = useState<number>(followers.length);
 
@@ -96,7 +96,13 @@ const ProfileInfo = (
 
         try {
             await follow(username);
-            isFollowing ? setFollowerCount(prev => prev - 1) : setFollowerCount(prev => prev + 1);
+
+            if (isFollowing) {
+                setFollowerCount(prev => prev - 1)
+            } else {
+                setFollowerCount(prev => prev + 1)
+            }
+            
         } catch (error) {
             setIsFollowing(prev => !prev);
             console.error('Failed to follow/unfollow:', error);

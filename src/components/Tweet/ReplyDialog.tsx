@@ -27,7 +27,9 @@ const ReplyDialog = ({ children, tweetId }: ReplyDialogProps) => {
             return setTweet(tweet);
         }
 
-        open && fetchParenTweet();
+        if (open) {
+            fetchParenTweet();
+        }
     }, [tweetId, open]);
 
     return (

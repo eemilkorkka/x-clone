@@ -54,7 +54,9 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
     });
 
     useEffect(() => {
-        data?.pages && setTweets(data.pages.flatMap(page => page));
+        if (data?.pages) {
+            setTweets(data.pages.flatMap(page => page));
+        }
     }, [data?.pages, setTweets]);
 
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
@@ -95,7 +97,6 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
                 )
             })}
             <LoadingBlock 
-                hasNextPage={hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 status={status}
             />

@@ -38,7 +38,9 @@ const BookmarksWrapper = () => {
     const [bookmarks, setBookmarks] = useState<TweetData[]>([]);
 
     useEffect(() => {
-        data?.pages && setBookmarks(data.pages.flatMap(page => page));
+        if (data?.pages) {
+            setBookmarks(data.pages.flatMap(page => page));
+        }
     }, [data?.pages, setBookmarks]);
 
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
@@ -75,7 +77,6 @@ const BookmarksWrapper = () => {
             })}
             <LoadingBlock
                 isFetchingNextPage={isFetchingNextPage}
-                hasNextPage={hasNextPage}
                 status={status}
             />
         </div>

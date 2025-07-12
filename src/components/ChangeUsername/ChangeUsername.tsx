@@ -33,7 +33,9 @@ const ChangeUsername = ({ session }: ChangeUsernameProps) => {
     const onInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
-        if (!touchedFields.includes(name)) setTouchedFields(prev => [...prev, name]);
+        if (!touchedFields.includes(name)) {
+            setTouchedFields(prev => [...prev, name]);
+        }
 
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -81,7 +83,7 @@ const ChangeUsername = ({ session }: ChangeUsernameProps) => {
                     error={getErrorMessage("username")}
                     style="border-gray-300"
                 />
-                <Button style="w-18 text-sm py-2 justify-end self-end" onClick={saveChanges}>Save</Button>
+                <Button disabled={formInvalid} style="w-18 text-sm py-2 justify-end self-end" onClick={saveChanges}>Save</Button>
             </form>
         </div>
     );

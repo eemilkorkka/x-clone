@@ -14,14 +14,14 @@ interface DeleteTweetDialogProps {
 const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const queryClient = useQueryClient();
-    
+
     const deleteTweet = async () => {
         const response = await fetch(`/api/posts?tweetId=${tweetId}`, {
             method: "DELETE"
         });
-    
+
         const json = await response.json();
-    
+
         if (response.ok) {
             onDelete?.();
             queryClient.removeQueries();
@@ -31,7 +31,7 @@ const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogPro
                     background: "#1D9BF0",
                     color: "white"
                 }
-            }); 
+            });
         } else {
             toast.error(json.message, {
                 style: {
@@ -56,17 +56,17 @@ const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogPro
                         <div className="flex flex-col gap-2">
                             <span className="font-bold text-xl">Delete post?</span>
                             <p className="text-gray-500 text-[15px]">
-                                This can't be undone and it will be removed from your profile, 
+                                {`This can't be undone and it will be removed from your profile, 
                                 the timeline of any accounts that follow you, 
-                                and from Twitter search results.
+                                and from Twitter search results.`}
                             </p>
                         </div>
                         <div className="flex flex-col gap-2">
                             <Button variant="red" onClick={(e) => { e.stopPropagation(); deleteTweet(); }}>Delete</Button>
-                            <Button 
-                                variant="outline" 
-                                style="text-black! border-gray-300!" 
-                                hoverColor="gray" 
+                            <Button
+                                variant="outline"
+                                style="text-black! border-gray-300!"
+                                hoverColor="gray"
                                 onClick={(e) => { e.stopPropagation(); setOpen(false); }}
                             >
                                 Cancel

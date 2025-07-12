@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                     />
                 ) : (
                     <div className="flex justify-center">
-                        <p className="text-gray-500 p-20">Hmm...this page doesn't exist.</p>
+                        <p className="text-gray-500 p-20">{"Hmm...this page doesn't exist."}</p>
                     </div>
                 )}
                 {tweet && <RepliesWrapper parentTweetID={parseInt(tweetId)} />}

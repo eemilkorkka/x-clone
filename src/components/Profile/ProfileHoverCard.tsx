@@ -32,7 +32,7 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
         queryFn: () => fetchUserData(username)
     });
 
-    const isFollowing = data?.followers.some((follower: { followerId: number }) => follower.followerId === parseInt(session.data?.user.id!));
+    const isFollowing = data?.followers.some((follower: { followerId: number }) => follower.followerId === parseInt(session.data?.user.id ?? ""));
     const [open, setOpen] = useState<boolean>(false);
     const [text, setText] = useState(isFollowing ? "Following" : "Follow");
 
@@ -47,9 +47,9 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
         } catch (error) {
             console.error('Failed to follow/unfollow:', error);
         }
-    };
+    }
 
-    const followMutation = useFollowMutation(handleFollowClick, ["follows", username], isFollowing, data?.UserID!);
+    const followMutation = useFollowMutation(handleFollowClick, ["follows", username], isFollowing, data?.UserID);
 
     return (
         <HoverCard.Root open={open} onOpenChange={setOpen}>

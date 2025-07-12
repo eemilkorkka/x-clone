@@ -3,12 +3,11 @@ import HomeWrapper from "@/components/home/HomeWrapper"
 import Layout from "@/components/Layout/Layout";
 import ProtectedRoute from "@/components/Shared/ProtectedRoute";
 import { prisma } from "@/lib/prisma";
-import { User } from "@/types/userType";
 
 export default async function Page() {
     const session = await auth();
 
-    let user;
+    let user = null;
 
     if (session) {
         user = await prisma.users.findUnique({

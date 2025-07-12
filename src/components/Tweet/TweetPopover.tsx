@@ -29,7 +29,7 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
 
     const [open, setOpen] = useState<boolean>(false);
     const [followers, setFollowers] = useState<{ followerId: number }[] | undefined>(undefined);
-    const isFollowing = followers && followers.some((follower: { followerId: number }) => follower.followerId === parseInt(data?.user.id!));
+    const isFollowing = followers && followers.some((follower: { followerId: number }) => follower.followerId === parseInt(data?.user.id ?? ""));
 
     const handleFollowClick = async (e: React.MouseEvent) => {
         setOpen(false);

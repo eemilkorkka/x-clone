@@ -31,7 +31,7 @@ const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProp
         queryFn: () => fetchUserData(username),
     });
 
-    const isFollowing = data?.followers.some(follower => follower.followerId === parseInt(session?.user.id!));
+    const isFollowing = data?.followers.some(follower => follower.followerId === parseInt(session?.user.id ?? ""));
     const [text, setText] = useState<string>(!isFollowing ? "Follow" : "Following");
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProp
         }
     }
 
-    const followMutation = useFollowMutation(handleFollowClick, ["follows", username], isFollowing, data?.UserID!);
+    const followMutation = useFollowMutation(handleFollowClick, ["follows", username], isFollowing, data?.UserID);
 
     return (
         <UserCard

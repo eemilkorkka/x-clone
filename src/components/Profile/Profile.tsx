@@ -116,7 +116,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                         <DisplayName displayName={`@${username}`} />
                         <div className="flex flex-col gap-2 mt-20 h-full w-full items-center">
                             <div className="flex flex-col gap-2">
-                                <p className="text-2xl mobile:text-3xl font-extrabold">This account doesn't <br/> exist</p>
+                                <p className="text-2xl mobile:text-3xl font-extrabold">{`This account doesn't ${<br/>} exist`}</p>
                                 <p className="text-gray-500">Try searching for another.</p>
                             </div>
                         </div>

@@ -30,7 +30,9 @@ const ForgotPasswordDialog = () => {
     const onInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
-        !touchedFields.includes(name) && setTouchedFields(prev => [...prev, name]);
+        if (!touchedFields.includes(name)) {
+            setTouchedFields(prev => [...prev, name]);
+        }
 
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -79,9 +81,9 @@ const ForgotPasswordDialog = () => {
     }
 
     const steps: JSX.Element[] = [
-        <FindAccount formData={formData} onInputChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
-        <Verify formData={formData} onInputChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
-        <ResetPassword formData={formData} onInputChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />
+        <FindAccount key={0} formData={formData} onInputChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
+        <Verify key={1} formData={formData} onInputChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />,
+        <ResetPassword key={2} formData={formData} onInputChange={onInputChange} setFormInvalid={setFormInvalid} touchedFields={touchedFields} />
     ];
 
     return (

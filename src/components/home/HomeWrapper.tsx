@@ -53,7 +53,9 @@ const HomeWrapper = ({ user }: HomeWrapperProps) => {
     });
 
     useEffect(() => {
-        data?.pages && setTweets(data.pages.flatMap(page => page));
+        if (data?.pages) {
+            setTweets(data.pages.flatMap(page => page));
+        }
     }, [data?.pages, setTweets]);
 
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
@@ -98,7 +100,6 @@ const HomeWrapper = ({ user }: HomeWrapperProps) => {
             })}
             <LoadingBlock
                 isFetchingNextPage={isFetchingNextPage}
-                hasNextPage={hasNextPage}
                 status={status}
             />
         </div>
