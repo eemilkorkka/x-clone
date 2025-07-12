@@ -7,7 +7,6 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import Button from "../Shared/Button";
 import Link from "next/link";
-import { headers } from "next/headers";
 import { Toaster } from "react-hot-toast";
 import PostButtonDialog from "./LeftSideBar/PostButtonDialog";
 import { FaFeatherPointed } from "react-icons/fa6";
@@ -16,10 +15,10 @@ import TrendingWidget from "../Trending/TrendingWidget";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
     const session = await auth();
-    const headersList = headers();
 
-    const pathname = (await headersList).get("x-url") || "";
-    const endpoint = pathname.split("//")[1].slice(14, pathname.length - 1);
+    const pathname = process.env.NEXT_PUBLIC_BASE_URL?.split("//") || "";
+
+    const endpoint = pathname[1].slice(pathname[1].split("/")[0].length);
     const isViewingASpecificTweet = /^\/[^/]+\/status\/\d+$/.test(endpoint);
 
     const username = endpoint.split("/")[1];
