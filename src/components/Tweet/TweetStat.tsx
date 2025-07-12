@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState, useEffect, useContext, useMemo } from "react";
+import { useState, useEffect, useContext, useMemo, useCallback } from "react";
 import { TweetsContext } from "@/Context/TweetsContext";
 import { FaRegComment } from "react-icons/fa6";
 import { AiOutlineRetweet } from "react-icons/ai";
@@ -51,7 +51,7 @@ const TweetStat = ({
     const router = useRouter();
     const { setTweets } = useContext(TweetsContext)!;
 
-    const handleInteraction = async (endpoint: StatType) => {
+    const handleInteraction = useCallback(async (endpoint:StatType) => {
         if (type === "reply") return;
 
         try {
@@ -103,7 +103,7 @@ const TweetStat = ({
 
             setClicked(prev => !prev);
         }
-    };
+    }, [type, clicked, setLocalStatValue, setClicked, tweetId, setTweets, queryClient, router, toast]);
 
     const statConfigs = useMemo<Record<StatType, StatConfig>>(() => ({
         reply: {
