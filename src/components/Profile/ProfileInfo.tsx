@@ -20,7 +20,7 @@ import MediaViewDialog from "../Media/MediaViewDialog";
 interface ProfileInfoProps {
     user?: User;
     session?: Session | null;
-    displayName?: string;
+    displayName: string;
     username: string;
     coverPicture?: string;
     showJoinDate?: boolean;
@@ -29,6 +29,9 @@ interface ProfileInfoProps {
     bio?: string;
     location?: string;
     website?: string;
+    birthDateDay?: string;
+    birthDateMonth?: string;
+    birthDateYear?: string;
     isProfileHoverCard?: boolean;
     followers: { followerId: number }[];
     following: { followingId: number }[];
@@ -47,6 +50,9 @@ const ProfileInfo = (
         bio,
         location,
         website,
+        birthDateDay,
+        birthDateMonth,
+        birthDateYear,
         isProfileHoverCard = false,
         followers,
         following
@@ -62,7 +68,10 @@ const ProfileInfo = (
         name: displayName ?? "",
         bio: bio ?? "",
         location: location ?? "",
-        website: website ?? ""
+        website: website ?? "",
+        birthDateDay: birthDateDay ?? "",
+        birthDateMonth: birthDateMonth ?? "",
+        birthDateYear: birthDateYear ?? ""
     };
 
     const [formData, setFormData] = useState<formDataType>({
@@ -72,6 +81,9 @@ const ProfileInfo = (
         bio: initialState.bio,
         location: initialState.location,
         website: initialState.website,
+        birthDateDay: initialState.birthDateDay,
+        birthDateMonth: initialState.birthDateMonth,
+        birthDateYear: initialState.birthDateYear,
     });
 
     useEffect(() => {
@@ -98,14 +110,14 @@ const ProfileInfo = (
                     <ProfileBanner image={formData.coverPicture ?? undefined}>
                         <MediaViewDialog type="image" url={formData.profilePicture}>
                             <div>
-                                <ProfilePicture image={formData.profilePicture} style="w-full h-full top-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white hover:cursor-pointer" />
+                                <ProfilePicture image={formData.profilePicture} style="w-full h-full top-full max-w-[100px] max-h-[100px] mobile:max-w-[133px] mobile:max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white hover:cursor-pointer" />
                             </div>
                         </MediaViewDialog>
                     </ProfileBanner>
                 </div>
             )}
             {user && (
-                <div className="flex justify-end mt-4 pr-4">
+                <div className="flex justify-end mt-2 pr-4">
                     {session?.user?.username === username ? (
                         <EditProfileDialog
                             initialState={initialState}
@@ -138,7 +150,7 @@ const ProfileInfo = (
                     )}
                 </div>
             )}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 -mt-2 mobile:mt-0">
                 <div className="flex flex-col">
                     <DisplayName displayName={formData.name} />
                     <Username username={username} />

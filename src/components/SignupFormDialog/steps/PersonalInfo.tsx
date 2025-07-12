@@ -22,7 +22,7 @@ const PersonalInfo = () => {
 
     return (
         <>
-            <FormInput type="text" name="name" label="Name" formData={formData} onChange={onChange} />
+            <FormInput type="text" name="name" label="Name" formData={formData} onChange={onChange} error={getErrorMessage("name")} />
             <div className="mt-7">
                 <FormInput 
                     type="email"

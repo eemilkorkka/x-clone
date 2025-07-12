@@ -1,11 +1,19 @@
+import { ReactNode } from "react";
 import { GoHomeFill, GoHome } from "react-icons/go";
-import { IoSearchOutline, IoPerson, IoPersonOutline, IoBookmark, IoBookmarkOutline} from "react-icons/io5";
+import { IoSearchOutline, IoPerson, IoPersonOutline, IoBookmark, IoBookmarkOutline, IoSettingsOutline} from "react-icons/io5";
 import { HiOutlineBell, HiOutlineEnvelope } from "react-icons/hi2";
 import { BsPeople,  BsTwitterX } from "react-icons/bs";
 import { RiFileList2Line } from "react-icons/ri";
-import { IoLogInOutline } from "react-icons/io5";
 
-export const sideBarOptions = (username: string) => [
+export interface Option {
+    text: string;
+    href?: string;
+    darkIcon?: ReactNode;
+    lightIcon: ReactNode; 
+    style?: string; 
+}
+
+export const sideBarOptions = (username: string): Option[] => [
     {
         text: "Home",
         href: "/home",
@@ -69,8 +77,13 @@ export const mobileSideBarOptions = (username: string) => [
         text: "Bookmarks",
         href: "/bookmarks",
         lightIcon: <IoBookmarkOutline size={25} />
+    },
+    {
+        text: "Settings and privacy",
+        href: "/settings/account",
+        lightIcon: <IoSettingsOutline size={25} />
     }
-]
+];
 
 export const mobileBottomNavigationOptions = [
     {
@@ -94,4 +107,4 @@ export const mobileBottomNavigationOptions = [
         lightIcon: <BsPeople size={30} />,
         style: "hover:cursor-not-allowed!",
     }
-]
+];

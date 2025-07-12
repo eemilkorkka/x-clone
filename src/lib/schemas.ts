@@ -3,7 +3,7 @@ import { z } from "zod";
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export const personalInfoSchema = z.object({
-    name: z.string().min(1).max(50),
+    name: z.string().min(1, "Name cannot be empty").max(50),
     email: z.string()
         .email("Please enter a valid email address")
         .refine(async (email) => {
@@ -24,7 +24,10 @@ export const editProfileSchema = z.object({
     name: z.string().min(1).max(50),
     bio: z.string().max(160, "Bio cannot exceed 160 characters").optional(),
     location: z.string().max(30, "Location cannot exceed 30 characters").optional(),
-    website: z.string().url("Please enter a valid URL").optional(),
+    website: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
+    birthDateMonth: z.string(),
+    birthDateDay: z.string(),
+    birthDateYear: z.string()
 });
 
 export const verificationCodeSchema = z.object({
@@ -60,7 +63,7 @@ export const verificationCodeSchema = z.object({
 });
 
 export const usernameSchema = z.object({
-    username: z.string()
+    username: z.string().min(1, "Username cannot be empty")
         .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, underscores and dashes")
         .refine((username) => username.length >= 4 && username.length <= 15, {
             message: "Username should be between 4 and 15 characters"
@@ -69,8 +72,8 @@ export const usernameSchema = z.object({
             try {
                 const response = await fetch(`/api/users/${encodeURIComponent(username)}`);
                 return response.status === 404;
-            } catch {
-                return false;
+            } catch (error) {
+                return error;
             }
         }, "Username is already in use")
 });

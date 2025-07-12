@@ -29,6 +29,7 @@ model users {
   ProfilePicture String      @default("https://cloud.appwrite.io/v1/storage/buckets/67e599e6001b68a099f7/files/67e59ae30013a907b563/view?project=67e599cf000525d1eb9a") @db.VarChar(255)
   CoverPicture   String?     @db.VarChar(255)
   Bio            String?     @db.VarChar(255)
+  created_at DateTime       @default(now()) @db.Timestamp(0)
   bookmarks      bookmarks[]
   likes          likes[]
   posts          posts[]

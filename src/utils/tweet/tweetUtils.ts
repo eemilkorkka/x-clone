@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
+export const tweetsLimit: number = 50;
+
 export const getTweetById = async (tweetId: number) => {
     const tweet = await prisma.posts.findUnique({
         where: {

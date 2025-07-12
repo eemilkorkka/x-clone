@@ -30,13 +30,14 @@ export function useFormValidation<T>({ formData, schema, touchedFields = [], set
         validateForm();
     }, [debouncedFormData, schema, setFormInvalid]);
 
-    const getErrorMessage = (field: keyof T) => {
-        if (!touchedFields.includes(field as string) || formData !== debouncedFormData) return "";
+    const getErrorMessage = (field: keyof T) => {   
+        if (formData !== debouncedFormData) return "";
+
+        console.log(touchedFields);
         
-        if (!validationResult?.success) {
+        if (!validationResult?.success && touchedFields.includes(field as string)) {
             return validationResult?.error?.issues.find(issue => issue.path[0] === field)?.message;
         }
-        return "";
     };
 
     return {

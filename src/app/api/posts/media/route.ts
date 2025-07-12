@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
     const username = req.nextUrl.searchParams.get("username") || "";
     const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
-    const limit = parseInt(req.nextUrl.searchParams.get("limit") || "10");
+    const limit = parseInt(req.nextUrl.searchParams.get("limit") || "50");
 
     try {
         const tweetsWithMedia = await getTweetsWithMediaByUsername(page, limit, username);

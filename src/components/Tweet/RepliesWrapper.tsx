@@ -7,6 +7,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import LoadingBlock from "../Shared/LoadingBlock";
+import { tweetsLimit } from "@/utils/tweet/tweetUtils";
 
 interface RepliesWrapperProps {
     parentTweetID: number;
@@ -17,7 +18,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
     const { tweets, setTweets } = useContext(TweetsContext)!;
 
     const fetchData = async ({ pageParam }: { pageParam: number }) => {
-        const response = await fetch(`/api/posts/replies?tweetId=${parentTweetID}&page=${pageParam}&limit=${10}`);
+        const response = await fetch(`/api/posts/replies?tweetId=${parentTweetID}&page=${pageParam}&limit=${tweetsLimit}`);
         if (!response.ok) {
             throw new Error("Failed to fetch replies.");
         }
@@ -50,7 +51,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
     useScrollListener("main-scroll-container", handleScroll);
 
     return (
-        <div className="h-screen">
+        <div className={`${tweets.length > 0 && "h-screen"}`}>
             <TweetBox type="reply" parentTweetID={parentTweetID} />
             { error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span> }
             {tweets.map((tweet) => {

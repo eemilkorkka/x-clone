@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { editProfileSchema} from "@/lib/schemas";
+import { editProfileSchema, usernameSchema } from "@/lib/schemas";
 
 export async function PUT(req: Request) {
     const session = await auth();
@@ -9,19 +9,25 @@ export async function PUT(req: Request) {
 
     const { formData } = await req.json();
 
-    const result = editProfileSchema.safeParseAsync(formData);
+    const profileResult = formData.username == undefined && editProfileSchema.safeParseAsync(formData);
 
-    if ((await result).success) {
+    const usernameResult = formData.username && usernameSchema.safeParseAsync(formData);
+
+    if (profileResult && (await profileResult).success || usernameResult && (await usernameResult).success) {
         try {
             const updatedUser = await prisma.users.update({
                 where: { UserID: parseInt(session.user.id) },
                 data: {
+                    Username: formData.username,
                     DisplayName: formData.name,
                     Bio: formData.bio,
                     Location: formData.location,
                     Website: formData.website,
                     ProfilePicture: formData.profilePicture,
-                    CoverPicture: formData.coverPicture
+                    CoverPicture: formData.coverPicture,
+                    BirthDateDay: formData.birthDateDay,
+                    BirthDateMonth: formData.birthDateMonth,
+                    BirthDateYear: formData.birthDateYear
                 }
             });
 

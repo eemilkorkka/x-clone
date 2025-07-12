@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     try {
         const searchParams = req.nextUrl.searchParams;
         const page = parseInt(searchParams.get('page') || '1');
-        const limit = parseInt(searchParams.get('limit') || '10');
+        const limit = parseInt(searchParams.get('limit') || '50');
         
         const posts = await getTweets(page, limit);
         return NextResponse.json(posts, { status: 200 });

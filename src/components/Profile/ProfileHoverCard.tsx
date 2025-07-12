@@ -19,7 +19,7 @@ const fetchUserData = async (username: string): Promise<User> => {
     const response = await fetch(`/api/users/${username}`);
     const json = await response.json();
     return json.user;
-};
+}
 
 const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
     const session = useSession();

@@ -8,6 +8,7 @@ import TabSwitcher from "../Shared/TabSwitcher";
 import FeedHeader from "../Shared/FeedHeader";
 import ProfileBanner from "./ProfileBanner";
 import ProfilePicture from "./ProfilePicture";
+import { months } from "@/utils/birthDateDropdowns";
 
 interface ProfileProps {
     username: string;
@@ -39,6 +40,10 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
             ProfilePicture: true,
             CoverPicture: true,
             Bio: true,
+            BirthDateDay: true,
+            BirthDateMonth: true,
+            BirthDateYear: true,
+            created_at: true,
             followers: true,
             following: true
         }
@@ -76,7 +81,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                     <ProfilePicture image={undefined} style="w-full h-full max-w-[133px] max-h-[133px] absolute left-4 -translate-y-1/2 border-4 border-white bg-white" />
                 </ProfileBanner>
             )}
-            <div className={`flex flex-col pl-4 ${user ? "mt-4" : "mt-18"}`}>
+            <div className={`flex flex-col px-4 ${user ? "mt-4" : "mt-18"}`}>
                 {user ? (
                     <div className="flex flex-col gap-6">
                         <ProfileInfo
@@ -88,12 +93,15 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                             bio={user.Bio ?? ""}
                             location={user.Location ?? ""}
                             website={user.Website ?? ""}
-                            joinDate="January 2025"
+                            birthDateDay={user.BirthDateDay}
+                            birthDateMonth={user.BirthDateMonth}
+                            birthDateYear={user.BirthDateYear}
+                            joinDate={`${[months[user.created_at.getMonth()]]} ${user.created_at.getFullYear()}`}
                             showJoinDate={true}
                             followers={user.followers}
                             following={user.following}
                         />
-                        <div className="-ml-4">
+                        <div className="-ml-4 -mr-4">
                             <TabSwitcher
                                 tabs={username === session?.user.username ? profileTabs : profileTabs.slice(0, profileTabs.length - 1)}
                                 useLink={true}

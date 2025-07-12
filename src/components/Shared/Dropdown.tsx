@@ -7,15 +7,28 @@ interface DropdownProps {
     data: string[];
     label: string;
     formData: formDataType;
+    value?: string;
+    bgColor?: "bg-white" | "bg-black";
+    borderColor?: "border-gray" | "border-gray-300";
     onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const Dropdown = ({ name, data, label, formData, onChange }: DropdownProps) => {
+const Dropdown = ({ 
+    name, 
+    data, 
+    label, 
+    formData,
+    value, 
+    bgColor = "bg-black",
+    borderColor = "border-gray", 
+    onChange 
+}: DropdownProps) => {
     return (
         <div className="relative group">
             <select 
-                className="w-full bg-black p-2.5 pt-5 border border-gray outline-none appearance-none rounded-md group-focus-within:border-xblue hover:cursor-pointer" 
+                className={`w-full ${bgColor} p-2.5 pt-5 border ${borderColor} outline-none appearance-none rounded-md group-focus-within:border-xblue hover:cursor-pointer`} 
                 name={name}
+                value={value}
                 onChange={onChange}>
                     <option disabled selected>{formData[name]}</option>
                     {data.map((item, index) => {

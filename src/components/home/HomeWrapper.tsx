@@ -10,6 +10,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import LoadingBlock from "../Shared/LoadingBlock";
 import MobileHeader from "../Layout/MobileHeader/MobileHeader";
 import { User } from "@/types/userType";
+import { tweetsLimit } from "@/utils/tweet/tweetUtils";
 
 interface HomeWrapperProps {
     user: User;
@@ -22,10 +23,10 @@ const HomeWrapper = ({ user }: HomeWrapperProps) => {
     const { tweets, setTweets } = useContext(TweetsContext)!;
 
     const fetchTweets = async ({ pageParam }: { pageParam: number }) => {
-        const url = currentTab === 0 ? `/api/posts?page=${pageParam}&limit=${10}` : `/api/posts/following?page=${pageParam}&limit=${10}`
-        
+        const url = currentTab === 0 ? `/api/posts?page=${pageParam}&limit=${tweetsLimit}` : `/api/posts/following?page=${pageParam}&limit=${tweetsLimit}`
+
         const response = await fetch(url);
-        
+
         if (!response.ok) {
             throw new Error("Failed to fetch tweets.");
         }

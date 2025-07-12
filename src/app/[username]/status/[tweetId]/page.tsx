@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         tweetId={parentTweet.ID}
                         profilePicture={parentTweet.users.ProfilePicture}
                         displayName={parentTweet.users.DisplayName}
-                        username={username}
+                        username={parentTweet.users.Username}
                         timeStamp={parentTweet.created_at!}
                         isParentTweet={true}
                         statValues={[parentTweet.replies.length, 0, parentTweet.likes.length]}

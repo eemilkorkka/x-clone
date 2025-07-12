@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const userId = parseInt(session.user.id);
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const limit = parseInt(searchParams.get("limit") || "50");
 
     try {
         const bookmarkedTweets = await getBookmarkedTweets(userId, page, limit);

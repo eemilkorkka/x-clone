@@ -133,8 +133,6 @@ const TweetBox =
             postDialogOpen && setPostDialogOpen(false);
             isReplyDialogOpen && setReplyDialogOpen?.(false);
 
-            queryClient.removeQueries();
-
             toast.success(json.message, {
                 style: {
                     background: "#1D9BF0",
@@ -227,7 +225,7 @@ const TweetBox =
                                 disabled={postButtonIsDisabled} 
                                 variant="black" 
                                 onClick={handlePostTweet}
-                                style={`text-sm px-4 pt-2 pb-1.5 ${postButtonIsDisabled ? "opacity-50" : ""}`}>
+                                style={`text-sm px-4 py-2 ${postButtonIsDisabled ? "opacity-50" : ""}`}>
                                     {type === "tweet" ? "Post" : "Reply"}
                             </Button>
                         </div>

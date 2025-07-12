@@ -1,5 +1,5 @@
 import SideBarOption from "./SidebarOption";
-import { sideBarOptions, mobileBottomNavigationOptions } from "@/utils/sidebarOptions";
+import { sideBarOptions, mobileBottomNavigationOptions, Option } from "@/utils/sidebarOptions";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import Button from "@/components/Shared/Button";
@@ -10,6 +10,7 @@ import { BsThreeDots } from "react-icons/bs";
 import LogoutPopover from "./LogoutPopover";
 import PostButtonDialog from "./PostButtonDialog";
 import { FaFeatherPointed } from "react-icons/fa6";
+import { CiCircleMore } from "react-icons/ci";
 
 const LeftSideBar = async () => {
     const session = await auth();
@@ -44,6 +45,12 @@ const LeftSideBar = async () => {
                             style={option.style}
                         />
                     ))}
+                    <SideBarOption
+                        text={"More"}
+                        href={"/settings/account"}
+                        lightIcon={<CiCircleMore size={30} />}
+                        style={"font-normal"}
+                    />
                 </div>
                 {/* Mobile bottom navigation */}
                 <div className="flex justify-around items-center mobile:hidden flex-row w-full">
@@ -69,12 +76,12 @@ const LeftSideBar = async () => {
             <div className="mb-4 fixed bottom-0 xl:w-61 hidden mobile:inline">
                 <LogoutPopover image={user?.ProfilePicture ?? ""} username={user?.Username!} displayName={user?.DisplayName!} >
                     <button className="flex w-full p-2.5 hover:bg-gray-200 hover:cursor-pointer rounded-full">
-                        <UserCard 
-                            username={user?.Username!} 
-                            displayName={user?.DisplayName!} 
-                            showUnderlineOnDisplayname={false} 
-                            image={user?.ProfilePicture ?? ""} 
-                            style="hidden" 
+                        <UserCard
+                            username={user?.Username!}
+                            displayName={user?.DisplayName!}
+                            showUnderlineOnDisplayname={false}
+                            image={user?.ProfilePicture ?? ""}
+                            style="hidden"
                         >
                             <BsThreeDots className="hidden xl:inline" />
                         </UserCard>

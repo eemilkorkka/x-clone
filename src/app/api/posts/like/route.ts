@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const userId = parseInt(searchParams.get("userId") || "");
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const limit = parseInt(searchParams.get("limit") || "50");
 
     try {
         const likedPosts = await getLikedTweets(userId, page, limit);

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request, { params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
 
-    const user = await prisma.users.findFirst({
+    const user = await prisma.users.findUnique({
         where: {
             Username: username
         },
@@ -17,6 +17,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ username
             ProfilePicture: true,
             CoverPicture: true,
             Bio: true,
+            created_at: true,
             followers: true,
             following: true,
         }

@@ -6,9 +6,10 @@ import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Tweet from "@/components/Tweet/Tweet";
 import LoadingBlock from "@/components/Shared/LoadingBlock";
+import { tweetsLimit } from "@/utils/tweet/tweetUtils";
 
 const fetchBookmarks = async ({ pageParam }: { pageParam: number }) => {
-    const response = await fetch(`/api/posts/bookmark?page=${pageParam}&limit=${10}`);
+    const response = await fetch(`/api/posts/bookmark?page=${pageParam}&limit=${tweetsLimit}`);
     if (!response.ok) {
         throw new Error("Failed to fetch bookmarks.");
     }

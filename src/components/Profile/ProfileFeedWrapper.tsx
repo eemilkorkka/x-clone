@@ -9,6 +9,7 @@ import LoadingBlock from "../Shared/LoadingBlock";
 import MediaGrid from "../Media/MediaGrid";
 import Media from "../Media/Media";
 import Link from "next/link";
+import { tweetsLimit } from "@/utils/tweet/tweetUtils";
 
 interface ProfileFeedWrapperProps {
     type: "tweets" | "replies" | "media" | "like";
@@ -22,8 +23,8 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
 
     const getUrl = (pageParam: number): string => {
         return type === "tweets" 
-        ? `/api/${username}?page=${pageParam}&limit=${10}` 
-        : `/api/posts/${type}?username=${username}&userId=${userId}&page=${pageParam}&limit=${10}`;
+        ? `/api/${username}?page=${pageParam}&limit=${tweetsLimit}` 
+        : `/api/posts/${type}?username=${username}&userId=${userId}&page=${pageParam}&limit=${tweetsLimit}`;
     }
 
     const fetchData = async ({ pageParam } : { pageParam: number }) => {

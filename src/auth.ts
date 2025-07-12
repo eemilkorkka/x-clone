@@ -11,7 +11,8 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60 // 30 days
   },
   providers: [
     Credentials({
@@ -110,7 +111,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const newUser = await prisma.users.create({
             data: {
               Name: profile.name || "Google User",
-              DisplayName: profile.nickname || "GoogleUser",
+              DisplayName: profile.name || "GoogleUser",
               Email: profile.email,
               BirthDateMonth: months[month - 1],
               BirthDateDay: day.toString(),

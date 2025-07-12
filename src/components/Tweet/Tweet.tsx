@@ -84,11 +84,21 @@ const Tweet = ({
     const { data } = useSession();
 
     const usernameElement = (
-        <a href={`/${username}`} className="truncate" onClick={(e) => e.stopPropagation()}><Username username={username} showProfileHoverCard={true} /></a>
+        <a href={`/${username}`} className="truncate" onClick={(e) => e.stopPropagation()}>
+            <Username username={username} showProfileHoverCard={true} />
+        </a>
     );
 
     const displayNameElement = (
-        <a href={`/${username}`} className="truncate" onClick={(e) => e.stopPropagation()}><DisplayName displayName={displayName} username={username} showUnderlineOnHover={true} showProfileHoverCard={true} variant="small" /></a>
+        <a href={`/${username}`} className="truncate" onClick={(e) => e.stopPropagation()}>
+            <DisplayName 
+                displayName={displayName} 
+                username={username} 
+                showUnderlineOnHover={true} 
+                showProfileHoverCard={true} 
+                variant="small" 
+            />
+        </a>
     );
 
     const threeDots = (
@@ -107,7 +117,7 @@ const Tweet = ({
             {isRetweet && (
                 <div className="flex items-center gap-2 text-gray-500 font-bold text-sm">
                     <AiOutlineRetweet size={18} />
-                    <span className="flex-1">{profile === data?.user.username ? "You reposted" : profile + " reposted" }</span>
+                    <span className="flex-1">{profile === data?.user.username ? "You reposted" : profile + " reposted"}</span>
                 </div>
             )}
             <div
