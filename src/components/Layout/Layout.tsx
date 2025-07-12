@@ -10,14 +10,15 @@ import Link from "next/link";
 import { Toaster } from "react-hot-toast";
 import PostButtonDialog from "./LeftSideBar/PostButtonDialog";
 import { FaFeatherPointed } from "react-icons/fa6";
+import { headers } from "next/headers";
 import UserSuggestion from "../Shared/UserSuggestion";
 import TrendingWidget from "../Trending/TrendingWidget";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
     const session = await auth();
+    const headersList = headers();
 
-    const pathname = process.env.NEXT_PUBLIC_BASE_URL?.split("//") || "";
-
+    const pathname = (await headersList).get("x-url")?.split("//") || "";
     const endpoint = pathname[1].slice(pathname[1].split("/")[0].length);
     const isViewingASpecificTweet = /^\/[^/]+\/status\/\d+$/.test(endpoint);
 
