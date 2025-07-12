@@ -36,7 +36,7 @@ export const verificationCodeSchema = z.object({
 }).superRefine(async (data, ctx) => {
     if (data.verificationCode.length > 6 || data.verificationCode.length < 6) return;
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/verify/code`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/verify/code`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
