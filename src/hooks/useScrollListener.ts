@@ -7,5 +7,5 @@ export const useScrollListener = (scrollContainerId: string, handleScroll: () =>
             
         scrollContainer.addEventListener('scroll', handleScroll);
         return () => scrollContainer.removeEventListener('scroll', handleScroll);
-    }, [handleScroll]);
+    }, [handleScroll, scrollContainerId]);
 }

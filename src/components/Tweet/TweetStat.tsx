@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { TweetsContext } from "@/Context/TweetsContext";
 import { FaRegComment } from "react-icons/fa6";
 import { AiOutlineRetweet } from "react-icons/ai";
@@ -105,31 +105,31 @@ const TweetStat = ({
         }
     };
 
-    const statConfigs: Record<StatType, StatConfig> = {
+    const statConfigs = useMemo<Record<StatType, StatConfig>>(() => ({
         reply: {
             icon: <FaRegComment size={18} />,
         },
         retweet: {
             icon: <AiOutlineRetweet size={18} />,
             action: async () => handleInteraction('retweet'),
-            checkActive: (userId) =>
+            checkActive: (userId: string) =>
                 retweets.some(retweet => retweet.UserID === parseInt(userId))
         },
         like: {
             icon: <GoHeart size={18} />,
             activeIcon: <GoHeartFill size={18} />,
             action: async () => handleInteraction('like'),
-            checkActive: (userId) =>
+            checkActive: (userId: string) =>
                 likes.some(like => like.UserID === parseInt(userId))
         },
         bookmark: {
             icon: <IoBookmarkOutline size={18} />,
             activeIcon: <IoBookmark size={18} />,
             action: async () => handleInteraction("bookmark"),
-            checkActive: (userId) =>
+            checkActive: (userId: string) =>
                 bookmarks.some(bookmark => bookmark.UserID === parseInt(userId))
         }
-    };
+    }), [retweets, likes, bookmarks, handleInteraction]);
 
     useEffect(() => {
         if (session.data?.user?.id && statConfigs[type].checkActive) {
