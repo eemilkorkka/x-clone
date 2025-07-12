@@ -13,6 +13,8 @@ export async function POST(req: Request) {
 
     const result = formDataSchema.safeParseAsync(formData);
 
+    const error = await (await result).error;
+
     if ((await result).success) {
         try {
             const hashedPassword = await bcrypt.hash(formData.password, 10);
@@ -35,7 +37,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "Signup failed." }, { status: 500 });
         }
     } else {
-        console.log((await result).error);
-        return NextResponse.json({ message: "Something went wrong." }, { status: 400 });
+        return NextResponse.json({ message: "Something went wrong.", error: error }, { status: 400 });
     }
 }
