@@ -103,7 +103,7 @@ const TweetStat = ({
 
             setClicked(prev => !prev);
         }
-    }, [type, clicked, setLocalStatValue, setClicked, tweetId, setTweets, queryClient, router, toast]);
+    }, [type, clicked, setLocalStatValue, setClicked, tweetId, setTweets, queryClient, router]);
 
     const statConfigs = useMemo<Record<StatType, StatConfig>>(() => ({
         reply: {
