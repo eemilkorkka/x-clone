@@ -135,7 +135,7 @@ const TweetStat = ({
         if (session.data?.user?.id && statConfigs[type].checkActive) {
             setClicked(statConfigs[type].checkActive(session.data.user.id, tweetId));
         }
-    }, [session.data?.user?.id, type, tweetId, statConfigs]);
+    }, [session.data?.user?.id, type, tweetId]);
 
     const currentIcon = clicked && statConfigs[type].activeIcon
         ? statConfigs[type].activeIcon
