@@ -11,8 +11,8 @@ export const personalInfoSchema = z.object({
             try {
                 const response = await fetch(`/api/users/email/${encodeURIComponent(email)}`);
                 return response.status === 404;
-            } catch {
-                return false;
+            } catch (error) {
+                return error;
             }
         }, "This email is already taken"),
     birthDateMonth: z.string().min(1),
