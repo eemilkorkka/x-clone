@@ -83,7 +83,7 @@ const ChangeUsername = ({ session }: ChangeUsernameProps) => {
                     error={getErrorMessage("username")}
                     style="border-gray-300"
                 />
-                <Button disabled={formInvalid} style="w-18 text-sm py-2 justify-end self-end" onClick={saveChanges}>Save</Button>
+                <Button disabled={formInvalid} style="w-18 text-sm py-2 self-end" onClick={saveChanges}>Save</Button>
             </form>
         </div>
     );

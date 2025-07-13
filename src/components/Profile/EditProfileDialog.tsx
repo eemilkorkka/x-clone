@@ -5,7 +5,6 @@ import { Dialog, VisuallyHidden } from "radix-ui";
 import { IoClose } from "react-icons/io5";
 import Button from "../Shared/Button";
 import ProfilePicture from "./ProfilePicture";
-import FormInput from "../Form/FormInput";
 import formDataType from "@/types/formDataType";
 import ProfileBanner from "./ProfileBanner";
 import Icon from "../TweetBox/Icon";
@@ -14,8 +13,8 @@ import { uploadFiles } from "@/utils/utilFunctions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Dropdown from "../Shared/Dropdown";
-import { dropdownFields } from "@/utils/birthDateDropdowns";
+import Form from "../Form/Form";
+import BirthDateDropdowns from "../Form/Dropdown/BirthDateDropdowns";
 
 interface EditProfileDialogProps {
     children: ReactNode;
@@ -40,8 +39,6 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
     const onInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
-        console.log(name);
-
         setLocalFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value
@@ -58,6 +55,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
             onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onInputChange(e)
         },
         {
+            type: "text",
             name: "bio",
             label: "Bio",
             style: "border-gray-300",
@@ -66,6 +64,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
             onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onInputChange(e)
         },
         {
+            type: "text",
             name: "location",
             label: "Location",
             style: "border-gray-300",
@@ -73,6 +72,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
             onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onInputChange(e)
         },
         {
+            type: "text",
             name: "website",
             label: "Website",
             style: "border-gray-300",
@@ -96,23 +96,23 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
             const keys: string[] = [];
             const filesToUpload: { url: string; file: File }[] = [];
 
-            const profilePictureChanged = preview.profilePicture !== initialState.profilePicture;
-            const coverPictureChanged = preview.coverPicture !== initialState.coverPicture;
             const formDataToUpload = new FormData();
 
             if (!profilePicturePickerRef.current?.files || !coverPicturePickerRef.current?.files) return;
 
-            if (profilePictureChanged && coverPictureChanged && profilePicturePickerRef.current?.files[0] && coverPicturePickerRef.current?.files[0]) {
-                filesToUpload.push(
-                    { url: preview.profilePicture, file: profilePicturePickerRef.current?.files[0] },
-                    { url: preview.coverPicture, file: coverPicturePickerRef.current?.files![0] }
-                );
-                keys.push("profilePicture", "coverPicture");
-            } else if (profilePictureChanged && profilePicturePickerRef.current?.files[0]) {
-                filesToUpload.push({ url: preview.profilePicture, file: profilePicturePickerRef.current?.files[0] });
+            if (preview.profilePicture !== initialState.profilePicture && profilePicturePickerRef.current.files?.[0]) {
+                filesToUpload.push({
+                    url: preview.profilePicture,
+                    file: profilePicturePickerRef.current.files[0],
+                });
                 keys.push("profilePicture");
-            } else if (coverPictureChanged && coverPicturePickerRef.current?.files[0]) {
-                filesToUpload.push({ url: preview.coverPicture, file: coverPicturePickerRef.current?.files[0] });
+            }
+            
+            if (preview.coverPicture !== initialState.coverPicture && coverPicturePickerRef.current.files?.[0]) {
+                filesToUpload.push({
+                    url: preview.coverPicture,
+                    file: coverPicturePickerRef.current.files[0],
+                });
                 keys.push("coverPicture");
             }
 
@@ -183,17 +183,17 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                     <Dialog.Title />
                 </VisuallyHidden.Root>
                 <div className="sticky top-0 z-10 bg-white/90 p-2 backdrop-blur-sm flex justify-between">
-                    <div className="flex gap-4 items-center">
+                    <div className="w-full flex gap-4 items-center">
                         <Dialog.Close asChild className="hover:cursor-pointer text-gray-700">
                             <button className="rounded-full p-1.5 hover:bg-gray-200 outline-0" onClick={() => setOpen(false)}>
                                 <IoClose size={23} />
                             </button>
                         </Dialog.Close>
                         <span className="font-bold text-xl">Edit profile</span>
+                        <Button style="text-sm px-4 pt-2 pb-2 border-gray-300! ml-auto" variant="black" onClick={saveProfileChanges}>
+                            Save
+                        </Button>
                     </div>
-                    <Button style="text-sm px-4 pt-2 pb-2 border-gray-300!" variant="black" onClick={saveProfileChanges}>
-                        Save
-                    </Button>
                 </div>
                 <div className="h-full overflow-y-auto p-2">
                     <div className="-m-2">
@@ -250,42 +250,9 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                             </div>
                         </div>
                     </div>
-                    <form className="flex flex-col gap-8 p-2 -mt-10 mobile:-mt-15">
-                        {formInputs.map((input, index) => {
-                            return (
-                                <React.Fragment key={index}>
-                                    <FormInput
-                                        type={input.type}
-                                        name={input.name}
-                                        label={input.label}
-                                        formData={localFormData}
-                                        style={input.style}
-                                        maxLength={input.maxLength}
-                                        isTextArea={input.isTextArea}
-                                        onChange={input.onChange}
-                                    />
-                                </React.Fragment>
-                            )
-                        })}
-                        <div className="flex gap-2">
-                            {dropdownFields.map((dropdown, index) => {
-                                return (
-                                    <div key={index} className={dropdown.style}>
-                                        <Dropdown
-                                            name={dropdown.name}
-                                            data={dropdown.data}
-                                            label={dropdown.label}
-                                            formData={formData}
-                                            value={localFormData[dropdown.name]}
-                                            bgColor="bg-white"
-                                            borderColor={"border-gray-300"}
-                                            onChange={onInputChange}
-                                        />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </form>
+                    <Form formInputs={formInputs} localFormData={localFormData} style="-mt-10 mobile:-mt-15">
+                        <BirthDateDropdowns formData={localFormData} onChange={onInputChange} bgColor="bg-white" borderColor={"border-gray-300"} />
+                    </Form>
                 </div>
             </Dialog.Content>
         </Dialog.Root>

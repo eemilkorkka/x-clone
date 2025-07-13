@@ -32,7 +32,7 @@ const ProfilePicture = ({ image, username, style, href, showProfileHoverCard }: 
         avatarImage
       )}
       <Avatar.Fallback
-        className="flex w-full h-full items-center justify-center bg-gray-100"
+        className="flex w-full h-full items-center justify-center bg-gray-100 rounded-full"
       />
     </Avatar.Root>
   );
