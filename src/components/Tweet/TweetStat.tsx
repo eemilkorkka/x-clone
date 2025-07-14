@@ -73,7 +73,9 @@ const TweetStat = ({
             queryClient.invalidateQueries({ queryKey: ["profileFeed"] });
             queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
 
-            isViewingASpecificTweet && router.refresh();
+            if (isViewingASpecificTweet) {
+                router.refresh();
+            }
 
             toast.success(data.message, {
                 style: {
