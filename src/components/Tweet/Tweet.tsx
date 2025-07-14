@@ -1,7 +1,5 @@
 "use client";
 import ProfilePicture from "../Profile/ProfilePicture";
-import TweetStat from "./TweetStat";
-import { tweetStatType } from "@/types/tweetStatType";
 import { tweetContentType } from "@/types/tweetContentType";
 import { BsThreeDots } from "react-icons/bs";
 import Icon from "../TweetBox/Icon";
@@ -15,6 +13,7 @@ import { timeAgo } from "@/utils/utilFunctions";
 import TweetPopover from "./TweetPopover";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { useSession } from "next-auth/react";
+import TweetStats from "./TweetStats";
 
 type tweetType = "status" | "tweet";
 
@@ -36,27 +35,6 @@ interface TweetProps {
     bookmarks: { UserID: number }[];
     retweets: { UserID: number }[];
 }
-
-export const tweetStats: tweetStatType[] = [
-    {
-        type: "reply",
-    },
-    {
-        type: "retweet",
-        hoverBgColor: "hover:bg-xgreen/20",
-        hoverTextColor: "group-hover:text-xgreen",
-        clickedColor: "text-xgreen",
-    },
-    {
-        type: "like",
-        hoverBgColor: "hover:bg-xpink/20",
-        hoverTextColor: "group-hover:text-xpink",
-        clickedColor: "text-xpink",
-    },
-    {
-        type: "bookmark",
-    }
-];
 
 const Tweet = ({
     tweetType = "tweet",
@@ -198,24 +176,15 @@ const Tweet = ({
                             })}</span>
                         </div>
                     )}
-                    <div className={`${isReplyDialog ? "hidden" : "flex"} justify-between ${tweetContent.files.length != 0 ? "mt-2" : ""} ${tweetType === "status" && "border-t border-b border-gray-200 p-2"}`}>
-                        {tweetStats.map((stat, index) => {
-                            return (
-                                <TweetStat
-                                    key={index}
-                                    type={stat.type}
-                                    tweetId={tweetId}
-                                    hoverBgColor={stat.hoverBgColor}
-                                    hoverTextColor={stat.hoverTextColor}
-                                    clickedColor={stat.clickedColor}
-                                    statValue={statValues[index]}
-                                    likes={likes}
-                                    bookmarks={bookmarks}
-                                    retweets={retweets}
-                                />
-                            );
-                        })}
-                    </div>
+                    <TweetStats
+                        tweetId={tweetId}
+                        statValues={statValues}
+                        likes={likes}
+                        bookmarks={bookmarks}
+                        retweets={retweets} 
+                        style={`${isReplyDialog ? "hidden" : "flex"} ${tweetContent.files.length != 0 ? "mt-2" : ""} 
+                        ${tweetType === "status" && "border-t border-b border-gray-200 p-2"}`} 
+                    />
                 </div>
             </div>
         </div>

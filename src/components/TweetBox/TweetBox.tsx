@@ -17,6 +17,8 @@ import { TweetsContext } from "@/Context/TweetsContext";
 import Button from "@/components/Shared/Button";
 import EmojiPickerPopover from "./EmojiPickerPopover";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export type tweetBoxType = "reply" | "tweet";
 
@@ -53,7 +55,9 @@ const TweetBox =
 
         const [loading, setLoading] = useState<boolean>(false);
         const [isFocused, setFocused] = useState<boolean>(false);
-        const { setTweets, postDialogOpen, setPostDialogOpen } = useContext(TweetsContext)!;
+        const queryClient = useQueryClient();
+        const router = useRouter();
+        const { postDialogOpen, setPostDialogOpen } = useContext(TweetsContext)!;
         const [tweetContent, setTweetContent] = useState({
             text: "",
             files: [] as { url: string, file: File }[],
@@ -127,7 +131,12 @@ const TweetBox =
             const json = await response.json();
 
             if (response.ok) {
-                setTweets(prev => [json.post, ...prev]);
+                queryClient.invalidateQueries({ queryKey: ["tweets"] });
+                queryClient.invalidateQueries({ queryKey: ["replies", parentTweetID ]});
+                queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+                queryClient.invalidateQueries({ queryKey: ["profileFeed"] });
+
+                router.refresh();
 
                 if (postDialogOpen) {
                     setPostDialogOpen(false);

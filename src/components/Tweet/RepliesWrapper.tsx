@@ -18,6 +18,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
     const { tweets, setTweets } = useContext(TweetsContext)!;
 
     const fetchData = async ({ pageParam }: { pageParam: number }) => {
+        console.log("this ran");
         const response = await fetch(`/api/posts/replies?tweetId=${parentTweetID}&page=${pageParam}&limit=${tweetsLimit}`);
         if (!response.ok) {
             throw new Error("Failed to fetch replies.");

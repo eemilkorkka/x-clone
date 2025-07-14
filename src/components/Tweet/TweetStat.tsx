@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { useState, useEffect, useContext, useMemo, useCallback } from "react";
-import { TweetsContext } from "@/Context/TweetsContext";
+import { useMemo, useCallback } from "react";
 import { FaRegComment } from "react-icons/fa6";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { GoHeart, GoHeartFill } from "react-icons/go";
@@ -9,8 +8,9 @@ import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ReplyDialog from "./ReplyDialog";
+import { useMutation } from "@tanstack/react-query";
 
 type StatType = "reply" | "retweet" | "like" | "bookmark";
 
@@ -18,7 +18,7 @@ interface StatConfig {
     icon: React.JSX.Element;
     activeIcon?: React.JSX.Element;
     action?: () => Promise<void>;
-    checkActive?: (userId: string, tweetId: number) => boolean;
+    checkActive?: (userId: number, tweetId: number) => boolean;
 }
 
 interface TweetStatProps {
@@ -44,24 +44,20 @@ const TweetStat = ({
     retweets,
     bookmarks
 }: TweetStatProps) => {
-    const [clicked, setClicked] = useState<boolean>(false);
-    const [localStatValue, setLocalStatValue] = useState<number>(statValue);
     const session = useSession();
-    const queryClient = useQueryClient();
+    const pathname = usePathname();
     const router = useRouter();
-    const { setTweets } = useContext(TweetsContext)!;
+    const queryClient = useQueryClient();
 
-    const handleInteraction = useCallback(async (endpoint:StatType) => {
-        if (type === "reply") return;
+    const userId = session.data && parseInt(session.data.user.id);
 
-        try {
+    const isViewingASpecificTweet = React.useMemo(() => {
+        const match = /^\/[^/]+\/status\/\d+$/.test(pathname);
+        return match;
+    }, [pathname]);
 
-            if (type !== "bookmark") {
-                setLocalStatValue(prev => clicked ? prev - 1 : prev + 1);
-            }
-
-            setClicked(prev => !prev);
-
+    const mutation = useMutation({
+        mutationFn: async (endpoint: StatType) => {
             const response = await fetch(`/api/posts/${endpoint}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -69,41 +65,37 @@ const TweetStat = ({
             });
 
             const json = await response.json();
+            return json;
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["tweets"] });
+            queryClient.invalidateQueries({ queryKey: ["replies", tweetId] });
+            queryClient.invalidateQueries({ queryKey: ["profileFeed"] });
+            queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
 
-            if (!response.ok) {
+            isViewingASpecificTweet && router.refresh();
 
-                if (type !== "bookmark") {
-                    setLocalStatValue(prev => clicked ? prev + 1 : prev - 1);
+            toast.success(data.message, {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
                 }
-
-                setClicked(prev => !prev);
-            } else {
-                if (type === "retweet" && clicked) setTweets?.(prev => prev.filter(tweet => !(tweet.isRetweet && tweet.ID === tweetId)))
-
-                queryClient.invalidateQueries({ queryKey: ['tweets'] });
-                queryClient.invalidateQueries({ queryKey: ['tweet', tweetId] });
-                queryClient.invalidateQueries({ queryKey: ['replies', tweetId] });
-                queryClient.invalidateQueries({ queryKey: ['profileFeed'] });
-                queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-
-
-                router.refresh();
-
-                toast.success(json.message, {
-                    style: {
-                        background: "#1D9BF0",
-                        color: "white"
-                    }
-                });
-            }
-        } catch {
-            if (type !== "bookmark") {
-                setLocalStatValue(prev => clicked ? prev + 1 : prev - 1);
-            }
-
-            setClicked(prev => !prev);
+            });
+        },
+        onError: () => {
+            toast.error("Action failed.", {
+                style: {
+                    background: "#1D9BF0",
+                    color: "white"
+                }
+            });
         }
-    }, [type, clicked, setLocalStatValue, setClicked, tweetId, setTweets, queryClient, router]);
+    });
+
+    const handleInteraction = useCallback(async (endpoint: StatType) => {
+        if (type === "reply") return;
+        mutation.mutate(endpoint);
+    }, [type, mutation]);
 
     const statConfigs = useMemo<Record<StatType, StatConfig>>(() => ({
         reply: {
@@ -112,30 +104,26 @@ const TweetStat = ({
         retweet: {
             icon: <AiOutlineRetweet size={18} />,
             action: async () => handleInteraction('retweet'),
-            checkActive: (userId: string) =>
-                retweets.some(retweet => retweet.UserID === parseInt(userId))
+            checkActive: (userId: number) =>
+                retweets.some(retweet => retweet.UserID === userId)
         },
         like: {
             icon: <GoHeart size={18} />,
             activeIcon: <GoHeartFill size={18} />,
             action: async () => handleInteraction('like'),
-            checkActive: (userId: string) =>
-                likes.some(like => like.UserID === parseInt(userId))
+            checkActive: (userId: number) =>
+                likes.some(like => like.UserID === userId)
         },
         bookmark: {
             icon: <IoBookmarkOutline size={18} />,
             activeIcon: <IoBookmark size={18} />,
             action: async () => handleInteraction("bookmark"),
-            checkActive: (userId: string) =>
-                bookmarks.some(bookmark => bookmark.UserID === parseInt(userId))
+            checkActive: (userId: number) =>
+                bookmarks.some(bookmark => bookmark.UserID === userId)
         }
     }), [retweets, likes, bookmarks, handleInteraction]);
 
-    useEffect(() => {
-        if (session.data?.user?.id && statConfigs[type].checkActive) {
-            setClicked(statConfigs[type].checkActive(session.data.user.id, tweetId));
-        }
-    }, [session.data?.user?.id, type, tweetId]);
+    const clicked = userId && statConfigs[type].checkActive?.(userId, tweetId);
 
     const currentIcon = clicked && statConfigs[type].activeIcon
         ? statConfigs[type].activeIcon
@@ -154,9 +142,9 @@ const TweetStat = ({
                 <div className={`rounded-full p-2 ${hoverBgColor ?? "hover:bg-xblue/10"} ${hoverTextColor ?? "hover:text-xblue"}`}>
                     {currentIcon}
                 </div>
-                {localStatValue > 0 && (
+                {statValue > 0 && (
                     <span className={`text-sm ${hoverTextColor ?? "group-hover:text-xblue"}`}>
-                        {localStatValue}
+                        {statValue}
                     </span>
                 )}
             </div>

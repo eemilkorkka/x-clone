@@ -3,7 +3,7 @@ import { Dialog, VisuallyHidden } from "radix-ui";
 import { ReactNode, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "../Shared/Button";
-import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 interface DeleteTweetDialogProps {
     children: ReactNode
@@ -13,7 +13,7 @@ interface DeleteTweetDialogProps {
 
 const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogProps) => {
     const [open, setOpen] = useState<boolean>(false);
-    const queryClient = useQueryClient();
+    const router = useRouter();
 
     const deleteTweet = async () => {
         const response = await fetch(`/api/posts?tweetId=${tweetId}`, {
@@ -24,7 +24,7 @@ const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogPro
 
         if (response.ok) {
             onDelete?.();
-            queryClient.removeQueries();
+            router.refresh();
             setOpen(false);
             toast.success(json.message, {
                 style: {

@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         username={parentTweet.users.Username}
                         timeStamp={parentTweet.created_at!}
                         isParentTweet={true}
-                        statValues={[parentTweet.replies.length, 0, parentTweet.likes.length]}
+                        statValues={[parentTweet.replies.length, parentTweet.retweets.length, parentTweet.likes.length]}
                         likes={parentTweet.likes}
                         bookmarks={parentTweet.bookmarks}
                         retweets={parentTweet.retweets}
@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                         displayName={tweet.users.DisplayName}
                         username={username}
                         timeStamp={tweet.created_at!}
-                        statValues={[tweet.replies.length, 0, tweet.likes.length]}
+                        statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
                         likes={tweet.likes}
                         bookmarks={tweet.bookmarks}
                         retweets={tweet.retweets}
