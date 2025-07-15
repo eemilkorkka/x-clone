@@ -6,7 +6,7 @@ import { GoHeart, GoHeartFill } from "react-icons/go";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, InfiniteData } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import ReplyDialog from "./ReplyDialog";
 import { useMutation } from "@tanstack/react-query";
@@ -81,35 +81,35 @@ const TweetStat = ({
             const previousProfileFeed = queryClient.getQueryData<TweetData[]>(["profileFeed", queryKeys.username, queryKeys.type]);
             const previousBookmarks = queryClient.getQueryData<TweetData[]>(["bookmarks"]);
 
-            const updateTweetInPages = (oldData: any) => {
+            const updateTweetInPages = (oldData: InfiniteData<TweetData[]> | undefined) => {
                 if (!oldData) return oldData;
                 return {
                     ...oldData,
-                    pages: oldData.pages.map((page: any) =>
+                    pages: oldData.pages.map((page: TweetData[]) =>
                         page.map((tweet: TweetData) => {
                             if (tweet.ID !== tweetId) return tweet;
-                            const alreadyActive = (arr: any[]) => arr.some((item: any) => item.UserID === userId);
+                            const alreadyActive = (arr: { UserID: number }[]) => arr.some((item: { UserID: number }) => item.UserID === userId);
                             if (endpoint === "like") {
                                 return {
                                     ...tweet,
                                     likes: alreadyActive(tweet.likes)
-                                        ? tweet.likes.filter((like: any) => like.UserID !== userId)
+                                        ? tweet.likes.filter((like: { UserID: number }) => like.UserID !== userId)
                                         : [...tweet.likes, { UserID: userId }],
-                                }
+                                };
                             } else if (endpoint === "retweet") {
                                 return {
                                     ...tweet,
                                     retweets: alreadyActive(tweet.retweets)
-                                        ? tweet.retweets.filter((retweet: any) => retweet.UserID !== userId)
+                                        ? tweet.retweets.filter((retweet: { UserID: number }) => retweet.UserID !== userId)
                                         : [...tweet.retweets, { UserID: userId }],
-                                }
+                                };
                             } else if (endpoint === "bookmark") {
                                 return {
                                     ...tweet,
                                     bookmarks: alreadyActive(tweet.bookmarks)
-                                        ? tweet.bookmarks.filter((bookmark: any) => bookmark.UserID !== userId)
+                                        ? tweet.bookmarks.filter((bookmark: { UserID: number }) => bookmark.UserID !== userId)
                                         : [...tweet.bookmarks, { UserID: userId }],
-                                }
+                                };
                             }
                             return tweet;
                         })

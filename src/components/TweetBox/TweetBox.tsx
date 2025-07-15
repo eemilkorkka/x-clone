@@ -173,23 +173,22 @@ const TweetBox =
                 }
 
                 const updateData = (queryKey: QueryKey) => {
-                    queryClient.setQueryData<InfiniteData<Array<TweetData>>>(queryKey,
-                        (old: any) => {
+                    queryClient.setQueryData<InfiniteData<TweetData[]>>(queryKey,
+                        (old: InfiniteData<TweetData[]> | undefined) => {
                             if (!old) {
-                                return { pages: [newTweet], pageParams: [] };
+                                return { pages: [[newTweet]], pageParams: [] };
                             }
 
-                            const lastPageIndex = old.pages.length - 1;
-
-                            old.pages[lastPageIndex] = [...old.pages[lastPageIndex], newTweet];
+                            const newPages = [...old.pages];
+                            newPages[0] = [newTweet, ...newPages[0]];
 
                             return {
                                 ...old,
-                                pages: [...old.pages],
-                            }
+                                pages: newPages,
+                            };
                         }
                     );
-                }
+                };
 
                 if (type === "tweet") {
                     if (!isViewingOwnProfile) {
