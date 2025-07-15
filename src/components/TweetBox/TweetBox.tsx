@@ -11,7 +11,7 @@ import React, { ChangeEvent, useRef, useState, useContext, Dispatch, SetStateAct
 import { useSession } from "next-auth/react";
 import Media from "../Media/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
-import { timeAgo, uploadFiles } from "@/utils/utilFunctions";
+import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
 import { PostDialogContext } from "@/Context/PostDialogContext";
 import Button from "@/components/Shared/Button";
@@ -159,7 +159,7 @@ const TweetBox =
                     ID: Date.now(),
                     UserID: parseInt(session?.user.id ?? ""),
                     Content: tweetContent.text,
-                    created_at: timeAgo(new Date(Date.now())),
+                    created_at: Date.now().toString(),
                     users: {
                         Username: session?.user.username ?? "",
                         DisplayName: session?.user.name ?? "",
