@@ -25,13 +25,21 @@ export const tweetStats: tweetStatType[] = [
 interface TweetStatsProps {
     tweetId: number;
     statValues: number[];
+    currentTab?: string;
     likes: { UserID: number }[];
     bookmarks: { UserID: number }[];
     retweets: { UserID: number }[];
     style?: string;
 }
 
-const TweetStats = ({ style, tweetId, statValues, likes, bookmarks, retweets }: TweetStatsProps) => {
+const TweetStats = ({ 
+    style, 
+    tweetId, 
+    statValues, 
+    likes, 
+    bookmarks, 
+    retweets 
+}: TweetStatsProps) => {
     return (
         <div className={`justify-between ${style}`}>
             {tweetStats.map((stat, index) => {

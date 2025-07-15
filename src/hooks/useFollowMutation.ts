@@ -42,7 +42,7 @@ export const useFollowMutation =
             queryClient.invalidateQueries({ queryKey: ["follows"] });
         },
         onError: (err, newData, context) => {
-            queryClient.setQueryData(queryKey, context!.previousData)
+            queryClient.setQueryData(queryKey, context?.previousData)
         }
     });
 }

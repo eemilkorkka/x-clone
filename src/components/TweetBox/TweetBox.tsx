@@ -7,18 +7,20 @@ import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
 import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
-import React, { ChangeEvent, useRef, useState, useContext } from "react";
+import React, { ChangeEvent, useRef, useState, useContext, Dispatch, SetStateAction } from "react";
 import { useSession } from "next-auth/react";
 import Media from "../Media/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
 import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
-import { TweetsContext } from "@/Context/TweetsContext";
+import { PostDialogContext } from "@/Context/PostDialogContext";
 import Button from "@/components/Shared/Button";
 import EmojiPickerPopover from "./EmojiPickerPopover";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient, InfiniteData, QueryKey } from "@tanstack/react-query";
+import { QueryKeysContext } from "@/Context/QueryKeysContext";
+import { TweetData, TweetFile } from "@/types/tweetType";
+import { usePathname } from "next/navigation";
 
 export type tweetBoxType = "reply" | "tweet";
 
@@ -29,7 +31,7 @@ interface TweetBoxProps {
     minRows?: number;
     isReplyDialog?: boolean;
     isReplyDialogOpen?: boolean;
-    setReplyDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setReplyDialogOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 const icons = [
@@ -53,11 +55,13 @@ const TweetBox =
         setReplyDialogOpen
     }: TweetBoxProps) => {
 
-        const [loading, setLoading] = useState<boolean>(false);
         const [isFocused, setFocused] = useState<boolean>(false);
         const queryClient = useQueryClient();
-        const router = useRouter();
-        const { postDialogOpen, setPostDialogOpen } = useContext(TweetsContext)!;
+        const pathname = usePathname();
+
+        const { postDialogOpen, setPostDialogOpen } = useContext(PostDialogContext)!;
+        const { queryKeys } = useContext(QueryKeysContext)!;
+
         const [tweetContent, setTweetContent] = useState({
             text: "",
             files: [] as { url: string, file: File }[],
@@ -67,6 +71,7 @@ const TweetBox =
 
         const postButtonIsDisabled = !tweetContent.text && tweetContent.files.length === 0;
         const { data: session } = useSession();
+        const isViewingOwnProfile = pathname.split("/")[1] === session?.user.username;
         const filePickerRef = useRef<HTMLInputElement | null>(null);
 
         const handleFileAdd = (e: ChangeEvent<HTMLInputElement>) => {
@@ -100,44 +105,114 @@ const TweetBox =
             setTweetContent?.((prev) => ({ ...prev, files: newFiles }));
         }
 
-        const handlePostTweet = async () => {
-            setLoading(true);
+        const { mutate: postTweetMutation, isPending } = useMutation({
+            mutationFn: async () => {
+                const formData = new FormData();
 
-            const formData = new FormData();
+                if (tweetContent.files.length > 0) {
+                    const data = await uploadFiles(tweetContent.files, formData);
 
-            if (tweetContent.files.length > 0) {
-                const data = await uploadFiles(tweetContent.files, formData);
+                    data.urls?.forEach((url: { url: string; type: string }) => {
+                        files.push({ url: url.url, type: url.type });
+                    });
+                }
 
-                data.urls?.forEach((url: { url: string; type: string }) => {
-                    files.push({ url: url.url, type: url.type });
+                const requestBody = {
+                    text: tweetContent.text,
+                    userID: parseInt(session?.user.id ?? ""),
+                    files: files,
+                    ...(parentTweetID && { parentTweetID }),
+                };
+
+                const response = await fetch("/api/posts", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(requestBody)
                 });
-            }
 
-            const requestBody = {
-                text: tweetContent.text,
-                userID: parseInt(session?.user.id ?? ""),
-                files: files,
-                ...(parentTweetID && { parentTweetID }),
-            };
+                const json = await response.json();
+                return json;
+            },
+            onMutate: async () => {
+                await queryClient.cancelQueries({ queryKey: ["tweets", queryKeys.currentTab] });
+                await queryClient.cancelQueries({ queryKey: ["replies", parentTweetID] });
 
-            const response = await fetch("/api/posts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(requestBody)
-            });
+                const previousTweets = queryClient.getQueryData<TweetData[]>(["tweets", queryKeys.currentTab]);
+                const previousReplies = queryClient.getQueryData<TweetData[]>(["replies", parentTweetID]);
+                const previousProfileFeed = queryClient.getQueryData<TweetData[]>(["profileFeed", queryKeys.username, queryKeys.type]);
 
-            const json = await response.json();
+                const tweetFiles: TweetFile[] = [];
 
-            if (response.ok) {
-                queryClient.invalidateQueries({ queryKey: ["tweets"] });
-                queryClient.invalidateQueries({ queryKey: ["replies", parentTweetID ]});
-                queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
-                queryClient.invalidateQueries({ queryKey: ["profileFeed"] });
+                tweetContent.files.map((file) => {
+                    tweetFiles.push({
+                        ID: Date.now(),
+                        PostID: Date.now(),
+                        File_URL: file.url,
+                        File_Type: file.file.type.split("/")[0],
+                        created_at: Date.now().toString()
+                    })
+                });
 
-                router.refresh();
+                const newTweet: TweetData = {
+                    ID: Date.now(),
+                    UserID: parseInt(session?.user.id ?? ""),
+                    Content: tweetContent.text,
+                    created_at: Date.now().toString(),
+                    users: {
+                        Username: session?.user.username ?? "",
+                        DisplayName: session?.user.name ?? "",
+                        ProfilePicture: session?.user.image ?? ""
+                    },
+                    files: tweetFiles,
+                    likes: [],
+                    replies: [],
+                    bookmarks: [],
+                    retweets: [],
+                }
 
+                const updateData = (queryKey: QueryKey) => {
+                    queryClient.setQueryData<InfiniteData<Array<TweetData>>>(queryKey,
+                        (old: any) => {
+                            if (!old) {
+                                return { pages: [newTweet], pageParams: [] };
+                            }
+
+                            const lastPageIndex = old.pages.length - 1;
+
+                            old.pages[lastPageIndex] = [...old.pages[lastPageIndex], newTweet];
+
+                            return {
+                                ...old,
+                                pages: [...old.pages],
+                            }
+                        }
+                    );
+                }
+
+                if (type === "tweet") {
+                    if (!isViewingOwnProfile) {
+                        updateData(["tweets", queryKeys.currentTab])
+                        return { previousTweets }
+                    }
+
+                    updateData(["profileFeed", queryKeys.username, queryKeys.type]);
+                    return { previousProfileFeed }
+                } else if (type === "reply") {
+                    updateData(["replies", parentTweetID])
+                    return { previousReplies }
+                }
+            },
+            onSettled: () => {
+                queryClient.invalidateQueries({ queryKey: ["tweets", queryKeys.currentTab] });
+                queryClient.invalidateQueries({ queryKey: ["replies", parentTweetID] });
+                
+                if (isViewingOwnProfile) {
+                    queryClient.invalidateQueries({ queryKey: ["profileFeed", queryKeys.username, queryKeys.type ]});
+                }
+            },
+            onSuccess: (data) => {
                 if (postDialogOpen) {
                     setPostDialogOpen(false);
                 }
@@ -146,28 +221,27 @@ const TweetBox =
                     setReplyDialogOpen?.(false);
                 }
 
-                toast.success(json.message, {
+                toast.success(data.message, {
                     style: {
                         background: "#1D9BF0",
                         color: "white"
                     }
                 });
-                setLoading(false);
                 setTweetContent({ text: "", files: [] });
-            } else {
-                toast.error(json.message, {
+            },
+            onError: (data) => {
+                toast.error(data.message, {
                     style: {
                         background: "#1D9BF0",
                         color: "white"
                     }
                 });
-                setLoading(false);
             }
-        }
+        });
 
         return (
             <>
-                {loading && <IndeterminateProgress />}
+                {isPending && <IndeterminateProgress />}
                 <div className="flex p-4 pb-2">
                     <ProfilePicture image={session?.user.image} />
                     <div className={`flex flex-col bg-white ${type === "reply" && !isFocused && !isReplyDialog ? "flex-row justify-between items-center" : ""} pl-1 h-full w-full text-xl`}>
@@ -236,7 +310,7 @@ const TweetBox =
                                 <Button
                                     disabled={postButtonIsDisabled}
                                     variant="black"
-                                    onClick={handlePostTweet}
+                                    onClick={() => postTweetMutation()}
                                     style={`text-sm px-4 py-2 ${postButtonIsDisabled ? "opacity-50" : ""}`}>
                                     {type === "tweet" ? "Post" : "Reply"}
                                 </Button>

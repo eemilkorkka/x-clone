@@ -3,13 +3,13 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Popover } from "radix-ui"
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { TweetsContext } from "@/Context/TweetsContext";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { SlUserFollow, SlUserUnfollow } from "react-icons/sl";
 import DeleteTweetDialog from "./DeleteTweetDialog";
 import { follow } from "@/utils/utilFunctions";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { QueryKeysContext } from "@/Context/QueryKeysContext";
 
 interface TweetPopoverProps {
     children: ReactNode;
@@ -22,7 +22,7 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
     const { data } = useSession();
     const pathname = usePathname();
     const queryClient = useQueryClient();
-    const { setTweets } = useContext(TweetsContext)!;
+    const { queryKeys } = useContext(QueryKeysContext)!;
 
     const isStatus = pathname.includes(`/${username}/status/`);
     const buttonStyles = "hover:bg-gray-100 border-none p-3 flex gap-2 outline-none items-center rounded-lg font-bold hover:cursor-pointer"
@@ -79,7 +79,9 @@ const TweetPopover = ({ children, username, tweetId }: TweetPopoverProps) => {
                 <Popover.Content side={isStatus ? "bottom" : "left"} sideOffset={-22} align="end" alignOffset={6} className="w-72 flex flex-col shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg bg-white border-gray-200">
                     {username === data?.user.username && (
                         <DeleteTweetDialog tweetId={tweetId} onDelete={() => {
-                            setTweets?.(prev => prev.filter(tweet => tweet.ID !== tweetId));
+                            queryClient.invalidateQueries({ queryKey: ["tweets", queryKeys.currentTab] });
+                            queryClient.invalidateQueries({ queryKey: ["replies", queryKeys.parentTweetID] });
+                            queryClient.invalidateQueries({ queryKey: ["profileFeed", queryKeys.username, queryKeys.type ]})
                         }}
                         >
                             <button className={`${buttonStyles} ${"text-red-500"}`} onClick={(e) => e.stopPropagation()}><FaRegTrashCan /> Delete</button>

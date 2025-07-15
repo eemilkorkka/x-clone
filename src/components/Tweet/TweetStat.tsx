@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useContext } from "react";
 import { FaRegComment } from "react-icons/fa6";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { GoHeart, GoHeartFill } from "react-icons/go";
@@ -11,6 +10,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import ReplyDialog from "./ReplyDialog";
 import { useMutation } from "@tanstack/react-query";
+import { TweetData } from "@/types/tweetType";
+import { QueryKeysContext } from "@/Context/QueryKeysContext";
 
 type StatType = "reply" | "retweet" | "like" | "bookmark";
 
@@ -48,10 +49,12 @@ const TweetStat = ({
     const pathname = usePathname();
     const router = useRouter();
     const queryClient = useQueryClient();
+    
+    const { queryKeys } = useContext(QueryKeysContext)!;
 
     const userId = session.data && parseInt(session.data.user.id);
 
-    const isViewingASpecificTweet = React.useMemo(() => {
+    const isViewingASpecificTweet = useMemo(() => {
         const match = /^\/[^/]+\/status\/\d+$/.test(pathname);
         return match;
     }, [pathname]);
@@ -67,16 +70,77 @@ const TweetStat = ({
             const json = await response.json();
             return json;
         },
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["tweets"] });
-            queryClient.invalidateQueries({ queryKey: ["replies", tweetId] });
-            queryClient.invalidateQueries({ queryKey: ["profileFeed"] });
-            queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+        onMutate: async (endpoint: StatType) => {
+            await queryClient.cancelQueries({ queryKey: ["tweets", queryKeys.currentTab] });
+            await queryClient.cancelQueries({ queryKey: ["replies", queryKeys.parentTweetID] });
+            await queryClient.cancelQueries({ queryKey: ["profileFeed", queryKeys.username, queryKeys.type] });
+            await queryClient.cancelQueries({ queryKey: ["bookmarks"] });
 
+            const previousTweets = queryClient.getQueryData<TweetData[]>(["tweets", queryKeys.currentTab]);
+            const previousReplies = queryClient.getQueryData<TweetData[]>(["replies", queryKeys.parentTweetID]);
+            const previousProfileFeed = queryClient.getQueryData<TweetData[]>(["profileFeed", queryKeys.username, queryKeys.type]);
+            const previousBookmarks = queryClient.getQueryData<TweetData[]>(["bookmarks"]);
+
+            const updateTweetInPages = (oldData: any) => {
+                if (!oldData) return oldData;
+                return {
+                    ...oldData,
+                    pages: oldData.pages.map((page: any) =>
+                        page.map((tweet: TweetData) => {
+                            if (tweet.ID !== tweetId) return tweet;
+                            const alreadyActive = (arr: any[]) => arr.some((item: any) => item.UserID === userId);
+                            if (endpoint === "like") {
+                                return {
+                                    ...tweet,
+                                    likes: alreadyActive(tweet.likes)
+                                        ? tweet.likes.filter((like: any) => like.UserID !== userId)
+                                        : [...tweet.likes, { UserID: userId }],
+                                }
+                            } else if (endpoint === "retweet") {
+                                return {
+                                    ...tweet,
+                                    retweets: alreadyActive(tweet.retweets)
+                                        ? tweet.retweets.filter((retweet: any) => retweet.UserID !== userId)
+                                        : [...tweet.retweets, { UserID: userId }],
+                                }
+                            } else if (endpoint === "bookmark") {
+                                return {
+                                    ...tweet,
+                                    bookmarks: alreadyActive(tweet.bookmarks)
+                                        ? tweet.bookmarks.filter((bookmark: any) => bookmark.UserID !== userId)
+                                        : [...tweet.bookmarks, { UserID: userId }],
+                                }
+                            }
+                            return tweet;
+                        })
+                    ),
+                };
+            };
+
+            queryClient.setQueryData(["tweets", queryKeys.currentTab], updateTweetInPages);
+            queryClient.setQueryData(["replies", queryKeys.parentTweetID], updateTweetInPages);
+            queryClient.setQueryData(["profileFeed", queryKeys.username, queryKeys.type], updateTweetInPages);
+            queryClient.setQueryData(["bookmarks"], updateTweetInPages);
+
+            return { previousTweets, previousReplies, previousProfileFeed, previousBookmarks };
+        },
+        onError: (err, endpoint, context) => {
+            if (context?.previousTweets) queryClient.setQueryData(["tweets", queryKeys.currentTab], context.previousTweets);
+            if (context?.previousReplies) queryClient.setQueryData(["replies", queryKeys.parentTweetID], context.previousReplies);
+            if (context?.previousProfileFeed) queryClient.setQueryData(["profileFeed", queryKeys.username, queryKeys.type], context.previousProfileFeed);
+            if (context?.previousBookmarks) queryClient.setQueryData(["bookmarks"], context.previousBookmarks);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["tweets", queryKeys.currentTab] });
+            queryClient.invalidateQueries({ queryKey: ["replies", queryKeys.parentTweetID] });
+            queryClient.invalidateQueries({ queryKey: ["profileFeed", queryKeys.username, queryKeys.type] });
+            queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+        },
+        onSuccess: (data) => {
             if (isViewingASpecificTweet) {
                 router.refresh();
             }
-
+            
             toast.success(data.message, {
                 style: {
                     background: "#1D9BF0",
@@ -84,14 +148,6 @@ const TweetStat = ({
                 }
             });
         },
-        onError: () => {
-            toast.error("Action failed.", {
-                style: {
-                    background: "#1D9BF0",
-                    color: "white"
-                }
-            });
-        }
     });
 
     const handleInteraction = useCallback(async (endpoint: StatType) => {

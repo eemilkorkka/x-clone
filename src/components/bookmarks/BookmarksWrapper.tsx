@@ -1,6 +1,4 @@
 "use client";
-import { useState, useEffect } from "react";
-import { TweetData } from "@/types/tweetType";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -35,21 +33,15 @@ const BookmarksWrapper = () => {
         },
     });
 
-    const [bookmarks, setBookmarks] = useState<TweetData[]>([]);
-
-    useEffect(() => {
-        if (data?.pages) {
-            setBookmarks(data.pages.flatMap(page => page));
-        }
-    }, [data?.pages, setBookmarks]);
-
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
 
+    const tweets = data?.pages.flatMap(page => page) || [];
+
     return (
         <div className="h-screen">
-            {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load bookmarks, try again later.</span> }
-            {bookmarks.map((tweet) => {
+            {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load bookmarks, try again later.</span>}
+            {tweets.map((tweet) => {
                 return (
                     <Tweet
                         key={tweet.ID}

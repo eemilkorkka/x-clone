@@ -1,22 +1,20 @@
 "use client";
-import { useEffect, useContext } from "react";
 import TweetBox from "../TweetBox/TweetBox";
 import Tweet from "./Tweet";
-import { TweetsContext } from "@/Context/TweetsContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import LoadingBlock from "../Shared/LoadingBlock";
 import { tweetsLimit } from "@/utils/tweet/tweetUtils";
+import { useContext, useEffect } from "react";
+import { QueryKeysContext } from "@/Context/QueryKeysContext";
 
 interface RepliesWrapperProps {
     parentTweetID: number;
 }
 
 const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
-
-    const { tweets, setTweets } = useContext(TweetsContext)!;
-
+    
     const fetchData = async ({ pageParam }: { pageParam: number }) => {
         console.log("this ran");
         const response = await fetch(`/api/posts/replies?tweetId=${parentTweetID}&page=${pageParam}&limit=${tweetsLimit}`);
@@ -25,6 +23,10 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
         }
         return response.json();
     }
+
+    const { setQueryKeys } = useContext(QueryKeysContext)!;
+
+    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["parentTweetID"]: parentTweetID })), [parentTweetID]);
 
     const {
         data,
@@ -43,15 +45,11 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
             return allPages.length + 1;
         },
     });
-
-    useEffect(() => {
-        if (data?.pages) {
-            setTweets(data.pages.flatMap(page => page));
-        }
-    }, [data?.pages, setTweets]);
     
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
+
+    const tweets = data?.pages.flatMap(page => page) || [];
 
     return (
         <div className={`${tweets.length > 0 && "h-screen"}`}>

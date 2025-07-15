@@ -22,7 +22,7 @@ const MobileHeader = ({ user }: MobileHeaderProps) => {
                 <div className="flex items-end w-full px-4 mobile:hidden">
                     <div className="w-2/3">
                         <LeftSideBarMobile user={user}>
-                            <div className="w-[32px] h-[32px]">
+                            <div className="w-[35px] h-[35px]">
                                 <ProfilePicture image={data?.user.image} />
                             </div>
                         </LeftSideBarMobile>

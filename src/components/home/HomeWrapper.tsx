@@ -1,9 +1,8 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import TabSwitcher from "../Shared/TabSwitcher";
 import TweetBox from "../TweetBox/TweetBox";
 import Tweet from "../Tweet/Tweet";
-import { TweetsContext } from "@/Context/TweetsContext";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -11,6 +10,7 @@ import LoadingBlock from "../Shared/LoadingBlock";
 import MobileHeader from "../Layout/MobileHeader/MobileHeader";
 import { User } from "@/types/userType";
 import { tweetsLimit } from "@/utils/tweet/tweetUtils";
+import { QueryKeysContext } from "@/Context/QueryKeysContext";
 
 interface HomeWrapperProps {
     user: User;
@@ -19,8 +19,10 @@ interface HomeWrapperProps {
 const HomeWrapper = ({ user }: HomeWrapperProps) => {
 
     const [currentTab, setCurrentTab] = useState<number>(0);
+    const { setQueryKeys } = useContext(QueryKeysContext)!;
     const tabs: string[] = ["For you", "Following"];
-    const { tweets, setTweets } = useContext(TweetsContext)!;
+
+    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["currentTab"]: currentTab })), [currentTab]);
 
     const fetchTweets = async ({ pageParam }: { pageParam: number }) => {
         const url = currentTab === 0 ? `/api/posts?page=${pageParam}&limit=${tweetsLimit}` : `/api/posts/following?page=${pageParam}&limit=${tweetsLimit}`
@@ -52,14 +54,10 @@ const HomeWrapper = ({ user }: HomeWrapperProps) => {
         },
     });
 
-    useEffect(() => {
-        if (data?.pages) {
-            setTweets(data.pages.flatMap(page => page));
-        }
-    }, [data?.pages, setTweets]);
-
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
+
+    const tweets = data?.pages.flatMap(page => page) || [];
 
     return (
         <div className="h-screen">

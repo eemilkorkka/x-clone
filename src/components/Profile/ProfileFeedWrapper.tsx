@@ -2,14 +2,14 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Tweet from "../Tweet/Tweet";
 import { useScrollListener } from "@/hooks/useScrollListener";
-import { useEffect, useContext } from "react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { TweetsContext } from "@/Context/TweetsContext";
 import LoadingBlock from "../Shared/LoadingBlock";
 import MediaGrid from "../Media/MediaGrid";
 import Media from "../Media/Media";
 import Link from "next/link";
 import { tweetsLimit } from "@/utils/tweet/tweetUtils";
+import { useContext, useEffect } from "react";
+import { QueryKeysContext } from "@/Context/QueryKeysContext";
 
 interface ProfileFeedWrapperProps {
     type: "tweets" | "replies" | "media" | "like";
@@ -18,8 +18,6 @@ interface ProfileFeedWrapperProps {
 }
 
 const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps) => {
-
-    const { tweets, setTweets } = useContext(TweetsContext)!;
 
     const getUrl = (pageParam: number): string => {
         return type === "tweets" 
@@ -34,6 +32,10 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
         }
         return response.json();
     }
+
+    const { setQueryKeys } = useContext(QueryKeysContext)!;
+
+    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["username"]: username, ["type"]: type })), [username, type]);
 
     const {
         data,
@@ -53,18 +55,14 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
         },
     });
 
-    useEffect(() => {
-        if (data?.pages) {
-            setTweets(data.pages.flatMap(page => page));
-        }
-    }, [data?.pages, setTweets]);
-
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
 
     if (error) return (
         <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load tweets, try again later.</span>
     )
+
+    const tweets = data?.pages.flatMap(page => page) || [];
 
     return type !== "media" ? (
         <div className="h-screen">
@@ -103,7 +101,7 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
         </div>
     ) : (
         <MediaGrid>
-            {tweets.map((tweet) => {
+            {data?.pages.flatMap(page => page).map((tweet) => {
                 return (
                     <Link href={`/${username}/status/${tweet.ID}`} className="aspect-square w-full max-w-xs" key={tweet.ID}>
                         <Media type={tweet.files[0].File_Type} url={tweet.files[0].File_URL} />

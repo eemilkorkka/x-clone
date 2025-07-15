@@ -3,7 +3,7 @@ import { Dialog, VisuallyHidden } from "radix-ui";
 import { ReactNode, useContext } from "react";
 import { IoClose } from "react-icons/io5";
 import TweetBox from "@/components/TweetBox/TweetBox";
-import { TweetsContext } from "@/Context/TweetsContext";
+import { PostDialogContext } from "@/Context/PostDialogContext";
 
 interface PostButtonDialogProps {
     children: ReactNode;
@@ -11,7 +11,7 @@ interface PostButtonDialogProps {
 }
 
 const PostButtonDialog = ({ children, style }: PostButtonDialogProps) => {
-    const { postDialogOpen, setPostDialogOpen } = useContext(TweetsContext)!;
+    const { postDialogOpen, setPostDialogOpen } = useContext(PostDialogContext)!;
 
     return (
         <Dialog.Root open={postDialogOpen} onOpenChange={setPostDialogOpen}>
