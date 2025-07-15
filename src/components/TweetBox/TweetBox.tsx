@@ -159,7 +159,7 @@ const TweetBox =
                     ID: Date.now(),
                     UserID: parseInt(session?.user.id ?? ""),
                     Content: tweetContent.text,
-                    created_at: Date.now().toString(),
+                    created_at: new Date(Date.now()).toISOString(),
                     users: {
                         Username: session?.user.username ?? "",
                         DisplayName: session?.user.name ?? "",
