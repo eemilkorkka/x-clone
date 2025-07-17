@@ -15,6 +15,10 @@ import ProfilePicture from "./ProfilePicture";
 import { IoIosLink } from "react-icons/io";
 import { LuMapPin } from "react-icons/lu";
 import MediaViewDialog from "../Media/MediaViewDialog";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useFollowMutation } from "@/hooks/useFollowMutation";
+import { fetchUserData } from "@/utils/utilFunctions";
+import { LoadingSpinner } from "../Shared/LoadingSpinner";
 
 
 interface ProfileInfoProps {
@@ -32,9 +36,6 @@ interface ProfileInfoProps {
     birthDateDay?: string;
     birthDateMonth?: string;
     birthDateYear?: string;
-    isProfileHoverCard?: boolean;
-    followers: { followerId: number }[];
-    following: { followingId: number }[];
 }
 
 const ProfileInfo = (
@@ -53,14 +54,21 @@ const ProfileInfo = (
         birthDateDay,
         birthDateMonth,
         birthDateYear,
-        isProfileHoverCard = false,
-        followers,
-        following
     }: ProfileInfoProps) => {
 
-    const [isFollowing, setIsFollowing] = useState<boolean>(followers.some(follower => follower.followerId === parseInt(session?.user.id ?? "")));
+    const queryClient = useQueryClient();
+
+    const {
+        data,
+        isLoading
+    } = useQuery({
+        queryKey: ["follows", username],
+        queryFn: () => fetchUserData(username)
+    });
+
+    const isFollowing = data?.followers.some((follower: { followerId: number }) => follower.followerId === parseInt(session?.user.id ?? ""));
+
     const [text, setText] = useState<string>("");
-    const [followerCount, setFollowerCount] = useState<number>(followers.length);
 
     const initialState = {
         profilePicture: user?.ProfilePicture ?? "",
@@ -90,24 +98,16 @@ const ProfileInfo = (
         setText(isFollowing ? "Following" : "Follow");
     }, [isFollowing])
 
-    const handleFollowClick = async (e: React.MouseEvent) => {
-        e.preventDefault();
-        setIsFollowing(prev => !prev);
-
+    const handleFollowClick = async () => {
         try {
             await follow(username);
-
-            if (isFollowing) {
-                setFollowerCount(prev => prev - 1)
-            } else {
-                setFollowerCount(prev => prev + 1)
-            }
-            
+            queryClient.invalidateQueries({ queryKey: ["follows"] });
         } catch (error) {
-            setIsFollowing(prev => !prev);
             console.error('Failed to follow/unfollow:', error);
         }
     }
+
+    const followMutation = useFollowMutation(handleFollowClick, ["follows", username], isFollowing, user?.UserID);
 
     return (
         <>
@@ -142,21 +142,23 @@ const ProfileInfo = (
                             </div>
                         </EditProfileDialog>
                     ) : (
-                        <Button
-                            variant={`${isFollowing ? "outline" : "black"}`}
-                            hoverColor={isFollowing ? "red" : "gray"}
-                            textColor="black"
-                            style={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
-                            onClick={(e) => handleFollowClick(e)}
-                            onMouseOver={() => isFollowing && setText("Unfollow")}
-                            onMouseLeave={() => isFollowing && setText("Following")}
-                        >
-                            {text}
-                        </Button>
+                        !isLoading && (
+                            <Button
+                                variant={`${isFollowing ? "outline" : "black"}`}
+                                hoverColor={isFollowing ? "red" : "gray"}
+                                textColor="black"
+                                style={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
+                                onClick={() => followMutation.mutate()}
+                                onMouseOver={() => isFollowing && setText("Unfollow")}
+                                onMouseLeave={() => isFollowing && setText("Following")}
+                            >
+                                {text}
+                            </Button>
+                        )
                     )}
                 </div>
             )}
-            <div className="flex flex-col gap-2 -mt-2 mobile:mt-0">
+            <div className={`flex flex-col gap-2  ${isLoading ? "mobile:mt-8 mt-4" : "mobile:mt-0 -mt-2"}`}>
                 <div className="flex flex-col">
                     <DisplayName displayName={formData.name} />
                     <Username username={username} />
@@ -182,10 +184,16 @@ const ProfileInfo = (
                         </div>
                     </span>
                 )}
-                <div className="flex gap-4">
-                    <span className="text-black text-sm font-bold">{following.length} <span className="text-gray-500 text-sm font-normal">Following</span></span>
-                    <span className="text-black text-sm font-bold">{isProfileHoverCard ? followers.length : followerCount} <span className="text-gray-500 text-sm font-normal">{followers.length === 1 ? "Follower" : "Followers"}</span></span>
-                </div>
+                {isLoading ? (
+                    <div className="w-full flex justify-center">
+                        <LoadingSpinner variant="blue" />
+                    </div>
+                ) : (
+                    <div className="flex gap-4">
+                        <span className="text-black text-sm font-bold">{data?.following.length} <span className="text-gray-500 text-sm font-normal">Following</span></span>
+                        <span className="text-black text-sm font-bold">{data?.followers.length} <span className="text-gray-500 text-sm font-normal">{data?.followers.length === 1 ? "Follower" : "Followers"}</span></span>
+                    </div>
+                )}
             </div>
         </>
     );

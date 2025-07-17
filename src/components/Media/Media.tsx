@@ -11,7 +11,7 @@ interface MediaProps {
 const Media = ({ type, url, children }: MediaProps) => {
     return (
         <MediaViewDialog type={type} url={url}>
-            <div>
+            <div className="w-full h-full">
                 {type.startsWith("image") ? (
                     <Image
                         className="w-full h-full cursor-pointer object-cover"

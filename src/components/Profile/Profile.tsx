@@ -98,8 +98,6 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                             birthDateYear={user.BirthDateYear}
                             joinDate={`${[months[user.created_at.getMonth()]]} ${user.created_at.getFullYear()}`}
                             showJoinDate={true}
-                            followers={user.followers}
-                            following={user.following}
                         />
                         <div className="-ml-4 -mr-4">
                             <TabSwitcher

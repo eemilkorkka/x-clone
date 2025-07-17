@@ -21,6 +21,7 @@ import { useMutation, useQueryClient, InfiniteData, QueryKey } from "@tanstack/r
 import { QueryKeysContext } from "@/Context/QueryKeysContext";
 import { TweetData, TweetFile } from "@/types/tweetType";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export type tweetBoxType = "reply" | "tweet";
 
@@ -57,6 +58,7 @@ const TweetBox =
 
         const [isFocused, setFocused] = useState<boolean>(false);
         const queryClient = useQueryClient();
+        const router = useRouter();
         const pathname = usePathname();
 
         const { postDialogOpen, setPostDialogOpen } = useContext(PostDialogContext)!;
@@ -71,7 +73,10 @@ const TweetBox =
 
         const postButtonIsDisabled = !tweetContent.text && tweetContent.files.length === 0;
         const { data: session } = useSession();
+
         const isViewingOwnProfile = pathname.split("/")[1] === session?.user.username;
+        const isViewingBookmarks = pathname.split("/")[1] === "bookmarks";
+
         const filePickerRef = useRef<HTMLInputElement | null>(null);
 
         const handleFileAdd = (e: ChangeEvent<HTMLInputElement>) => {
@@ -142,6 +147,7 @@ const TweetBox =
                 const previousTweets = queryClient.getQueryData<TweetData[]>(["tweets", queryKeys.currentTab]);
                 const previousReplies = queryClient.getQueryData<TweetData[]>(["replies", parentTweetID]);
                 const previousProfileFeed = queryClient.getQueryData<TweetData[]>(["profileFeed", queryKeys.username, queryKeys.type]);
+                const previousBookmarks = queryClient.getQueryData<TweetData[]>(["bookmarks"]);
 
                 const tweetFiles: TweetFile[] = [];
 
@@ -193,23 +199,26 @@ const TweetBox =
                 if (type === "tweet") {
                     if (!isViewingOwnProfile) {
                         updateData(["tweets", queryKeys.currentTab])
-                        return { previousTweets }
+                        return previousTweets;
+                    } else if (!isViewingBookmarks) {
+                        updateData(["profileFeed", queryKeys.username, queryKeys.type]);
+                        return previousProfileFeed;
                     }
 
-                    updateData(["profileFeed", queryKeys.username, queryKeys.type]);
-                    return { previousProfileFeed }
+                    updateData(["bookmarks"]);
+                    return previousBookmarks;
                 } else if (type === "reply") {
                     updateData(["replies", parentTweetID])
-                    return { previousReplies }
+                    return previousReplies;
                 }
             },
             onSettled: () => {
                 queryClient.invalidateQueries({ queryKey: ["tweets", queryKeys.currentTab] });
                 queryClient.invalidateQueries({ queryKey: ["replies", parentTweetID] });
-                
-                if (isViewingOwnProfile) {
-                    queryClient.invalidateQueries({ queryKey: ["profileFeed", queryKeys.username, queryKeys.type ]});
-                }
+                queryClient.invalidateQueries({ queryKey: ["profileFeed", queryKeys.username, queryKeys.type] });
+                queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+
+                router.refresh();
             },
             onSuccess: (data) => {
                 if (postDialogOpen) {

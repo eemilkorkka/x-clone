@@ -1,3 +1,5 @@
+import { User } from "@/types/userType";
+
 export const sendVerificationEmail = async (email: string, name: string) => {
     try {
         await fetch("/api/verify/email", {
@@ -63,6 +65,12 @@ export const uploadFiles = async (files: { url: string, file: File }[], formData
         console.log(error);
         return error;
     }
+}
+
+export const fetchUserData = async (username: string): Promise<User> => {
+    const response = await fetch(`/api/users/${username}`);
+    const json = await response.json();
+    return json.user;
 }
 
 export const timeAgo = (timeStamp: Date) => {

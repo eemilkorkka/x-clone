@@ -5,20 +5,13 @@ import Button from "../Shared/Button";
 import ProfilePicture from "../Profile/ProfilePicture";
 import { useSession } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
-import { follow } from "@/utils/utilFunctions";
+import { fetchUserData, follow } from "@/utils/utilFunctions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { User } from "@/types/userType";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
 
 interface ProfileHoverCardProps {
     children: ReactNode;
     username: string;
-}
-
-const fetchUserData = async (username: string): Promise<User> => {
-    const response = await fetch(`/api/users/${username}`);
-    const json = await response.json();
-    return json.user;
 }
 
 const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
@@ -85,9 +78,6 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
                             displayName={data.DisplayName}
                             username={username}
                             bio={data.Bio ?? "Lorem ipsum dolor sit amet"}
-                            followers={data.followers}
-                            following={data.following}
-                            isProfileHoverCard={true}
                         />
                     </HoverCard.Content>
                 )}

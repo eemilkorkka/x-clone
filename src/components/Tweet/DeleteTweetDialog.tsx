@@ -1,19 +1,31 @@
 "use client";
 import { Dialog, VisuallyHidden } from "radix-ui";
-import { ReactNode, useState } from "react";
+import { ReactNode, useContext, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "../Shared/Button";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { InfiniteData, QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import { QueryKeysContext } from "@/Context/QueryKeysContext";
+import { tweetType } from "./Tweet";
+import { TweetData } from "@/types/tweetType";
+import { useSession } from "next-auth/react";
 
 interface DeleteTweetDialogProps {
     children: ReactNode
     tweetId: number;
-    onDelete?: () => void;
+    tweetType: tweetType;
 }
 
-const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogProps) => {
+const DeleteTweetDialog = ({ children, tweetId, tweetType }: DeleteTweetDialogProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const router = useRouter();
+    const pathname = usePathname();
+    const { data } = useSession();
+    const queryClient = useQueryClient();
+    const { queryKeys } = useContext(QueryKeysContext)!;
+
+    const isViewingOwnProfile = pathname.split("/")[1] === data?.user.username;
+    const isViewingBookmarks = pathname.split("/")[1] === "bookmarks";
 
     const deleteTweet = async () => {
         const response = await fetch(`/api/posts?tweetId=${tweetId}`, {
@@ -21,26 +33,71 @@ const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogPro
         });
 
         const json = await response.json();
+        return json;
+    }
 
-        if (response.ok) {
-            onDelete?.();
+    const { mutate: deleteTweetMutation } = useMutation({
+        mutationFn: deleteTweet,
+        onMutate: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["tweets", queryKeys.currentTab] });
+            await queryClient.invalidateQueries({ queryKey: ["replies", queryKeys.parentTweetID] });
+
+            const updateData = (queryKey: QueryKey) => {
+                queryClient.setQueryData<InfiniteData<TweetData[]>>(queryKey,
+                    (old: InfiniteData<TweetData[]> | undefined) => {
+                        if (!old) {
+                            return { pages: [], pageParams: [] };
+                        }
+
+                        const newPages = old.pages.map(page =>
+                            page.filter(tweet => tweet.ID !== tweetId)
+                        );
+
+                        return {
+                            ...old,
+                            pages: newPages,
+                        };
+                    }
+                );
+            };
+
+            if (tweetType === "status") {
+                updateData(["replies", queryKeys.parentTweetID]);
+            } else {
+                if (!isViewingOwnProfile) {
+                    updateData(["tweets", queryKeys.currentTab]);
+                } else if (!isViewingBookmarks) {
+                    updateData(["profileFeed", queryKeys.username, queryKeys.type]);
+                }
+
+                updateData(["bookmarks"]);
+            }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["tweets", queryKeys.currentTab] });
+            queryClient.invalidateQueries({ queryKey: ["replies", queryKeys.parentTweetID] });
+            queryClient.invalidateQueries({ queryKey: ["profileFeed", queryKeys.username, queryKeys.type] });
+            queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
             router.refresh();
+        },
+        onSuccess: (data) => {
             setOpen(false);
-            toast.success(json.message, {
+            toast.success(data.message, {
                 style: {
                     background: "#1D9BF0",
                     color: "white"
                 }
             });
-        } else {
-            toast.error(json.message, {
+        },
+        onError: (data) => {
+            toast.error(data.message, {
                 style: {
                     background: "#1D9BF0",
                     color: "white"
                 }
             });
         }
-    }
+    });
 
     return (
         <Dialog.Root open={open}>
@@ -62,7 +119,7 @@ const DeleteTweetDialog = ({ children, tweetId, onDelete }: DeleteTweetDialogPro
                             </p>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Button variant="red" onClick={(e) => { e.stopPropagation(); deleteTweet(); }}>Delete</Button>
+                            <Button variant="red" onClick={(e) => { e.stopPropagation(); deleteTweetMutation(); }}>Delete</Button>
                             <Button
                                 variant="outline"
                                 style="text-black! border-gray-300!"

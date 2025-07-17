@@ -2,10 +2,10 @@
 import UserCard from "./UserCard";
 import Button from "./Button";
 import { useEffect, useState } from "react";
-import { follow } from "@/utils/utilFunctions";
+import { fetchUserData, follow } from "@/utils/utilFunctions";
 import { Session } from "next-auth";
 import { User } from "@/types/userType";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
 
 interface UserSuggestionProps {
@@ -15,21 +15,16 @@ interface UserSuggestionProps {
     session: Session | null;
 }
 
-const fetchUserData = async (username: string): Promise<User> => {
-    const response = await fetch(`/api/users/${username}`);
-    const json = await response.json();
-    return json.user;
-}
-
 const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProps) => {
 
     const {
         data,
-        refetch
     } = useQuery({
         queryKey: ["follows", username],
         queryFn: () => fetchUserData(username),
     });
+
+    const queryClient = useQueryClient();
 
     const isFollowing = data?.followers.some(follower => follower.followerId === parseInt(session?.user.id ?? ""));
     const [text, setText] = useState<string>(!isFollowing ? "Follow" : "Following");
@@ -41,7 +36,7 @@ const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProp
     const handleFollowClick = async () => {
         try {
             await follow(username);
-            await refetch();
+            queryClient.invalidateQueries({ queryKey: ["follows"] });
         } catch (error) {
             console.error('Failed to follow/unfollow:', error);
         }

@@ -15,7 +15,7 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { useSession } from "next-auth/react";
 import TweetStats from "./TweetStats";
 
-type tweetType = "status" | "tweet";
+export type tweetType = "status" | "tweet";
 
 interface TweetProps {
     tweetType: tweetType;
@@ -83,6 +83,7 @@ const Tweet = ({
         <TweetPopover
             username={username}
             tweetId={tweetId}
+            tweetType={tweetType}
         >
             <Icon onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                 <BsThreeDots className="text-gray-500 group-hover:text-xblue" />
