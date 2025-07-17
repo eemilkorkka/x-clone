@@ -32,8 +32,6 @@ const LeftSideBarMobile = ({ children, user }: LeftSideBarMobileProps) => {
                     <ProfileInfo
                         displayName={user.DisplayName}
                         username={user.Username}
-                        followers={user.followers}
-                        following={user.following}
                     />
                 </div>
                 {mobileSideBarOptions(user.Username).map((option, index) => {
