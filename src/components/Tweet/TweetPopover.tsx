@@ -2,7 +2,7 @@
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Popover } from "radix-ui"
-import { ReactNode, useContext, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { SlUserFollow, SlUserUnfollow } from "react-icons/sl";
 import DeleteTweetDialog from "./DeleteTweetDialog";
