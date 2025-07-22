@@ -66,6 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (dbUser) {
           token.id = dbUser.UserID.toString();
           token.username = dbUser.Username;
+          token.name = dbUser.DisplayName;
           token.picture = dbUser.ProfilePicture;
           token.email = dbUser.Email;
         }

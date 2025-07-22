@@ -27,7 +27,7 @@ const LeftSideBarMobile = ({ children, user }: LeftSideBarMobileProps) => {
                 <VisuallyHidden.Root>
                     <Dialog.Title />
                 </VisuallyHidden.Root>
-                <div className="flex flex-col gap-1.5 p-4">
+                <div className="flex flex-col gap-4 p-4">
                     <ProfilePicture image={user.ProfilePicture} href={`/${user.Username}`} />
                     <ProfileInfo
                         displayName={user.DisplayName}

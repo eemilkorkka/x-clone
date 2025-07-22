@@ -3,7 +3,7 @@ import React from "react";
 import { ReactNode, useState, ChangeEvent, Dispatch, SetStateAction, useRef } from "react";
 import { Dialog, VisuallyHidden } from "radix-ui";
 import { IoClose } from "react-icons/io5";
-import Button from "../Shared/Button";
+import Button from "../Button/Button";
 import ProfilePicture from "./ProfilePicture";
 import formDataType from "@/types/formDataType";
 import ProfileBanner from "./ProfileBanner";
@@ -190,7 +190,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                             </button>
                         </Dialog.Close>
                         <span className="font-bold text-xl">Edit profile</span>
-                        <Button style="text-sm px-4 pt-2 pb-2 border-gray-300! ml-auto" variant="black" onClick={saveProfileChanges}>
+                        <Button styles="text-sm px-4 pt-2 pb-2 border-gray-300! ml-auto" variant="black" onClick={saveProfileChanges}>
                             Save
                         </Button>
                     </div>

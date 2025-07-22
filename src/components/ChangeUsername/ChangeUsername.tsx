@@ -1,13 +1,15 @@
 "use client";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useContext } from "react";
 import { Session } from "next-auth";
 import FormInput from "../Form/FormInput";
 import formDataType from "@/types/formDataType";
-import Button from "../Shared/Button";
+import Button from "../Button/Button";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { usernameSchema } from "@/lib/schemas";
 import { z } from "zod";
 import toast from "react-hot-toast";
+import { DisplayContext } from "@/Context/DisplayContext";
+import { bgColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
 
 interface ChangeUsernameProps {
     session: Session | null;
@@ -22,6 +24,8 @@ const ChangeUsername = ({ session }: ChangeUsernameProps) => {
     const [formData, setFormData] = useState<formDataType>({
         username: session?.user.username ?? ""
     });
+
+    const { selectedIndex } = useContext(DisplayContext)!;
 
     const { getErrorMessage } = useFormValidation<usernameFormData>({
         formData: formData as usernameFormData,
@@ -83,7 +87,7 @@ const ChangeUsername = ({ session }: ChangeUsernameProps) => {
                     error={getErrorMessage("username")}
                     style="border-gray-300"
                 />
-                <Button disabled={formInvalid} style="w-18 text-sm py-2 self-end" onClick={saveChanges}>Save</Button>
+                <Button disabled={formInvalid} styles={`w-18 text-sm py-2 self-end ${bgColors[selectedIndex ?? 0].color}`} onClick={saveChanges}>Save</Button>
             </form>
         </div>
     );

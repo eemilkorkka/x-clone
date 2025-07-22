@@ -1,7 +1,7 @@
 "use client";
 import { ReactNode, useEffect, useState } from "react"
 import { HoverCard } from "radix-ui";
-import Button from "../Shared/Button";
+import Button from "../Button/Button";
 import ProfilePicture from "../Profile/ProfilePicture";
 import { useSession } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
@@ -64,7 +64,7 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
                                         variant={isFollowing ? "outline" : "black"}
                                         hoverColor={isFollowing ? "red" : "gray"}
                                         textColor="black"
-                                        style={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
+                                        styles={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
                                         onClick={(e) => { e.preventDefault(); followMutation?.mutate(); }}
                                         onMouseOver={() => isFollowing && setText("Unfollow")}
                                         onMouseLeave={() => isFollowing && setText("Following")}
@@ -77,7 +77,7 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
                         <ProfileInfo
                             displayName={data.DisplayName}
                             username={username}
-                            bio={data.Bio ?? "Lorem ipsum dolor sit amet"}
+                            bio={data.Bio ?? ""}
                         />
                     </HoverCard.Content>
                 )}

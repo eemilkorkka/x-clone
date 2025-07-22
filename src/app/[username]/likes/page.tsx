@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
         <ProtectedRoute>
             <Layout>
                 <Profile username={username} likesCount={likes || 0}>
-                    <ProfileFeedWrapper type="like" username={username} userId={userId?.UserID} />
+                    <ProfileFeedWrapper type="like" username={username} displayName={session.user.name} userId={userId?.UserID} />
                 </Profile>
             </Layout>
         </ProtectedRoute>

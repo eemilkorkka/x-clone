@@ -4,6 +4,9 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-xblue: rgb(29, 155, 240);
+  --color-xyellow: rgba(255,212,0,255);
+  --color-xpurple: rgba(120,86,255,255);
+  --color-xorange: rgba(255,122,0,255);
   --color-xgreen: rgba(84,187,124,255);
   --color-xpink: rgba(241,83,129,255);
   --color-gray: rgb(51, 54, 57);

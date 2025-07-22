@@ -7,14 +7,14 @@ import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
 import TextareaAutosize from 'react-textarea-autosize';
 import Icon from "./Icon";
-import React, { ChangeEvent, useRef, useState, useContext, Dispatch, SetStateAction } from "react";
+import React, { useRef, useState, useContext, Dispatch, SetStateAction } from "react";
 import { useSession } from "next-auth/react";
 import Media from "../Media/Media";
 import AttachmentsGrid from "../Tweet/AttachmentsGrid";
 import { uploadFiles } from "@/utils/utilFunctions";
 import IndeterminateProgress from "@/components/ProgressBar/IndeterminateProgress";
 import { PostDialogContext } from "@/Context/PostDialogContext";
-import Button from "@/components/Shared/Button";
+import Button from "@/components/Button/Button";
 import EmojiPickerPopover from "./EmojiPickerPopover";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient, InfiniteData, QueryKey } from "@tanstack/react-query";
@@ -22,6 +22,7 @@ import { QueryKeysContext } from "@/Context/QueryKeysContext";
 import { TweetData, TweetFile } from "@/types/tweetType";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { MAX_FILES, useFilePicker } from "@/hooks/useFilePicker";
 
 export type tweetBoxType = "reply" | "tweet";
 
@@ -42,9 +43,6 @@ const icons = [
     <SlLocationPin key={3} />
 ];
 
-const MAX_FILES = 4;
-const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "image/jfif", "video/mp4"];
-
 const TweetBox =
     ({
         type = "tweet",
@@ -64,14 +62,12 @@ const TweetBox =
         const { postDialogOpen, setPostDialogOpen } = useContext(PostDialogContext)!;
         const { queryKeys } = useContext(QueryKeysContext)!;
 
-        const [tweetContent, setTweetContent] = useState({
-            text: "",
-            files: [] as { url: string, file: File }[],
-        });
+        const [tweetContent, setTweetContent] = useState<string>("");
+        const { pickedFiles, handleFileAdd, handleFileRemove } = useFilePicker();
 
         const files: { url: string; type: string; }[] = [];
 
-        const postButtonIsDisabled = !tweetContent.text && tweetContent.files.length === 0;
+        const postButtonIsDisabled = !tweetContent && pickedFiles.length === 0;
         const { data: session } = useSession();
 
         const isViewingOwnProfile = pathname.split("/")[1] === session?.user.username;
@@ -79,43 +75,12 @@ const TweetBox =
 
         const filePickerRef = useRef<HTMLInputElement | null>(null);
 
-        const handleFileAdd = (e: ChangeEvent<HTMLInputElement>) => {
-            const files = e.target.files;
-            if (!files) return;
-
-            const newFiles = [...tweetContent.files];
-
-            for (let i = 0; i < files.length; i++) {
-                if (newFiles.length >= MAX_FILES) break;
-
-                const file = files[i];
-
-                if (ALLOWED_TYPES.includes(file.type)) {
-                    const url = URL.createObjectURL(file);
-                    newFiles.push({ url, file });
-                }
-            }
-
-            setTweetContent(prev => ({ ...prev, files: newFiles }));
-            e.target.value = "";
-        }
-
-        const handleFileRemove = (index: number) => {
-            const newFiles = [...tweetContent.files];
-            const fileToRemove = newFiles[index];
-
-            URL.revokeObjectURL(fileToRemove.url);
-            newFiles.splice(index, 1);
-
-            setTweetContent?.((prev) => ({ ...prev, files: newFiles }));
-        }
-
         const { mutate: postTweetMutation, isPending } = useMutation({
             mutationFn: async () => {
                 const formData = new FormData();
 
-                if (tweetContent.files.length > 0) {
-                    const data = await uploadFiles(tweetContent.files, formData);
+                if (pickedFiles.length > 0) {
+                    const data = await uploadFiles(pickedFiles, formData);
 
                     data.urls?.forEach((url: { url: string; type: string }) => {
                         files.push({ url: url.url, type: url.type });
@@ -123,7 +88,7 @@ const TweetBox =
                 }
 
                 const requestBody = {
-                    text: tweetContent.text,
+                    text: tweetContent,
                     userID: parseInt(session?.user.id ?? ""),
                     files: files,
                     ...(parentTweetID && { parentTweetID }),
@@ -151,7 +116,7 @@ const TweetBox =
 
                 const tweetFiles: TweetFile[] = [];
 
-                tweetContent.files.map((file) => {
+                pickedFiles.map((file) => {
                     tweetFiles.push({
                         ID: Date.now(),
                         PostID: Date.now(),
@@ -164,7 +129,7 @@ const TweetBox =
                 const newTweet: TweetData = {
                     ID: Date.now(),
                     UserID: parseInt(session?.user.id ?? ""),
-                    Content: tweetContent.text,
+                    Content: tweetContent,
                     created_at: new Date(Date.now()).toISOString(),
                     users: {
                         Username: session?.user.username ?? "",
@@ -235,7 +200,7 @@ const TweetBox =
                         color: "white"
                     }
                 });
-                setTweetContent({ text: "", files: [] });
+                setTweetContent("");
             },
             onError: (data) => {
                 toast.error(data.message, {
@@ -251,28 +216,28 @@ const TweetBox =
             <>
                 {isPending && <IndeterminateProgress />}
                 <div className="flex p-4 pb-2">
-                    <ProfilePicture image={session?.user.image} />
+                    <ProfilePicture image={session?.user.image ?? ""} />
                     <div className={`flex flex-col bg-white ${type === "reply" && !isFocused && !isReplyDialog ? "flex-row justify-between items-center" : ""} pl-1 h-full w-full text-xl`}>
                         <div className="p-1">
                             <TextareaAutosize
                                 placeholder={type === "tweet" ? "What's happening?" : "Post your reply"}
                                 className="w-full outline-0 resize-none placeholder-gray-600"
-                                value={tweetContent.text}
-                                minRows={tweetContent.files.length > 0 ? 1 : minRows}
+                                value={tweetContent}
+                                minRows={pickedFiles.length > 0 ? 1 : minRows}
                                 maxLength={280}
-                                onChange={(e) => setTweetContent({ ...tweetContent, text: e.target.value })}
+                                onChange={(e) => setTweetContent(e.target.value)}
                                 onFocus={() => setFocused(true)}
                             />
                             <AttachmentsGrid>
-                                {tweetContent.files.map((file, index) => (
+                                {pickedFiles.map((file, index) => (
                                     <div
                                         key={index}
-                                        className={`relative ${tweetContent.files.length === 3 && index === 0 ? "row-span-2 h-full" : "h-full"
+                                        className={`relative ${pickedFiles.length === 3 && index === 0 ? "row-span-2 h-full" : "h-full"
                                             }`}>
                                         <Media type={file.file.type} url={file.url}>
                                             <button
                                                 className="absolute top-1 right-1 bg-black/70 p-1 rounded-full hover:cursor-pointer"
-                                                onClick={() => handleFileRemove(index)}
+                                                onClick={(e) => { handleFileRemove(index); e.stopPropagation(); }}
                                             >
                                                 <IoClose size="23" fill="white" />
                                             </button>
@@ -283,7 +248,7 @@ const TweetBox =
                         </div>
                         <div className={`flex ${isFocused && "pt-2"} justify-between ${isFocused && alwaysShowBorder ? "border-t mt-8 border-gray-200" : ""}`}>
                             <div className={`${type === "reply" && !isFocused && !isReplyDialog ? "hidden" : "flex"} items-center h-full`}>
-                                <Icon onClick={() => tweetContent.files.length < MAX_FILES && filePickerRef.current?.click()}>
+                                <Icon onClick={() => pickedFiles.length < MAX_FILES && filePickerRef.current?.click()}>
                                     <SlPicture size={17} />
                                     <input
                                         type="file"
@@ -300,7 +265,7 @@ const TweetBox =
                                             /* TODO: Make this insert the emoji at the current cursor position instead of just
                                                 inserting at the end of the tweet
                                             */
-                                            <EmojiPickerPopover onEmojiClick={(emoji) => setTweetContent(prev => ({ ...prev, text: prev.text + emoji.emoji }))}
+                                            <EmojiPickerPopover onEmojiClick={(emoji) => setTweetContent(prev => prev + emoji.emoji)}
                                             >
                                                 <Icon>
                                                     {icon}
@@ -319,7 +284,7 @@ const TweetBox =
                                     disabled={postButtonIsDisabled}
                                     variant="black"
                                     onClick={() => postTweetMutation()}
-                                    style={`text-sm px-4 py-2 ${postButtonIsDisabled ? "opacity-50" : ""}`}>
+                                    styles={`text-sm px-4 py-2 ${postButtonIsDisabled ? "opacity-50" : ""}`}>
                                     {type === "tweet" ? "Post" : "Reply"}
                                 </Button>
                             </div>

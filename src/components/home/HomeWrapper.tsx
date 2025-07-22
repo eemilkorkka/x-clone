@@ -22,7 +22,7 @@ const HomeWrapper = ({ user }: HomeWrapperProps) => {
     const { setQueryKeys } = useContext(QueryKeysContext)!;
     const tabs: string[] = ["For you", "Following"];
 
-    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["currentTab"]: currentTab })), [currentTab]);
+    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["currentTab"]: currentTab })), [currentTab, setQueryKeys]);
 
     const fetchTweets = async ({ pageParam }: { pageParam: number }) => {
         const url = currentTab === 0 ? `/api/posts?page=${pageParam}&limit=${tweetsLimit}` : `/api/posts/following?page=${pageParam}&limit=${tweetsLimit}`

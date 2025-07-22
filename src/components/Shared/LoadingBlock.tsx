@@ -8,7 +8,7 @@ interface LoadingBlockProps {
 const LoadingBlock = ({ isFetchingNextPage, status }: LoadingBlockProps) => {
     return  (
         <div className={`flex justify-center p-10 w-full`}>
-            {(status === "pending" || isFetchingNextPage) && <LoadingSpinner variant="blue" />}
+            {(status === "pending" || isFetchingNextPage) && <LoadingSpinner variant="color" />}
         </div>
     );
 }

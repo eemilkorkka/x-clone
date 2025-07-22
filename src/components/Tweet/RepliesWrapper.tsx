@@ -16,7 +16,6 @@ interface RepliesWrapperProps {
 const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
     
     const fetchData = async ({ pageParam }: { pageParam: number }) => {
-        console.log("this ran");
         const response = await fetch(`/api/posts/replies?tweetId=${parentTweetID}&page=${pageParam}&limit=${tweetsLimit}`);
         if (!response.ok) {
             throw new Error("Failed to fetch replies.");
@@ -26,7 +25,7 @@ const RepliesWrapper = ({ parentTweetID }: RepliesWrapperProps) => {
 
     const { setQueryKeys } = useContext(QueryKeysContext)!;
 
-    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["parentTweetID"]: parentTweetID })), [parentTweetID]);
+    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["parentTweetID"]: parentTweetID })), [parentTweetID, setQueryKeys]);
 
     const {
         data,

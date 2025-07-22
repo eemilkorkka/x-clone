@@ -5,15 +5,14 @@ import PostDialogContextProvider from "@/Context/PostDialogContext";
 import Widget from "../Shared/Widget";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import Button from "../Shared/Button";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
-import PostButtonDialog from "./LeftSideBar/PostButtonDialog";
-import { FaFeatherPointed } from "react-icons/fa6";
 import { headers } from "next/headers";
 import UserSuggestion from "../Shared/UserSuggestion";
 import TrendingWidget from "../Trending/TrendingWidget";
 import QueryKeysContextProvider from "@/Context/QueryKeysContext";
+import PremiumWidget from "../PremiumWidget/PremiumWidget";
+import FloatingPostButton from "../Button/FloatingPostButton/FloatingPostButton";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
     const session = await auth();
@@ -75,13 +74,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
         <QueryKeysContextProvider>
             <PostDialogContextProvider>
                 {!isViewingASpecificTweet && (
-                    <div className="mobile:hidden fixed bottom-20 right-5 z-10">
-                        <PostButtonDialog style="inline! mobile:hidden!">
-                            <Button variant="blue">
-                                <FaFeatherPointed size={35} className="p-1" />
-                            </Button>
-                        </PostButtonDialog>
-                    </div>
+                    <FloatingPostButton />
                 )}
                 <div className="flex flex-col-reverse mobile:flex-row w-full max-w-fit mx-auto overflow-y-auto">
                     <div className="shrink-0 flex w-18 xl:w-65 px-2">
@@ -94,13 +87,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                         <div className="hidden lg:flex flex-col gap-4 flex-shrink-0 pb-8">
                             <SearchBar />
                             {!isViewingASpecificTweet && (
-                                <Widget title="Subscribe to Premium">
-                                    <div className="ps-3 p-2 pt-0">
-                                        <p className="text-sm text-gray-500">Subscribe to unlock new features and if eligible, <br></br> receive a share of revenue.
-                                        </p>
-                                        <Button style="text-sm px-4 pt-2 pb-2 mt-2">Subscribe</Button>
-                                    </div>
-                                </Widget>
+                                <PremiumWidget />
                             )}
                             {isViewingASpecificTweet ? (
                                 user && (

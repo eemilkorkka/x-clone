@@ -1,6 +1,6 @@
 import Image from "next/image";
 import logo from "../assets/logo-white.png";
-import Button from "@/components/Shared/Button";
+import Button from "@/components/Button/Button";
 import SignupFormDialog from "@/components/SignupFormDialog/SignupFormDialog";
 import SignupFormContextProvider from "@/Context/SignupFormContext";
 import SignInFormDialog from "@/components/SignInFormDialog/SignInFormDialog";
@@ -31,7 +31,7 @@ export default async function Root() {
             <div>
               <SignupFormContextProvider>
                 <SignupFormDialog>
-                  <Button style="w-72">Create account</Button>
+                  <Button styles="w-72">Create account</Button>
                 </SignupFormDialog>
               </SignupFormContextProvider>
             </div>
@@ -40,7 +40,7 @@ export default async function Root() {
             <span className="font-bold">Already have an account?</span>
             <div className="mt-5">
               <SignInFormDialog>
-                <Button variant="outline" hoverColor="blue" style="w-72 border-gray-500">Sign in</Button>
+                <Button variant="outline" hoverColor="blue" styles="w-72 border-gray-500">Sign in</Button>
               </SignInFormDialog>
             </div>
           </div>

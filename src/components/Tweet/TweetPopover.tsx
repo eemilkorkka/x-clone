@@ -2,8 +2,9 @@
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Popover } from "radix-ui"
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, MouseEvent } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { RiPushpin2Line } from "react-icons/ri";
 import { SlUserFollow, SlUserUnfollow } from "react-icons/sl";
 import DeleteTweetDialog from "./DeleteTweetDialog";
 import { follow } from "@/utils/utilFunctions";
@@ -31,12 +32,12 @@ const TweetPopover = ({ children, username, tweetId, tweetType }: TweetPopoverPr
     const [followers, setFollowers] = useState<{ followerId: number }[] | undefined>(undefined);
     const isFollowing = followers && followers.some((follower: { followerId: number }) => follower.followerId === parseInt(data?.user.id ?? ""));
 
-    const handleFollowClick = async (e: React.MouseEvent) => {
+    const handleFollowClick = async (e: MouseEvent) => {
         setOpen(false);
         e.stopPropagation();
         const response = await follow(username);
         const json = await response?.json();
-        queryClient.invalidateQueries({ queryKey: ["follows"]});
+        queryClient.invalidateQueries({ queryKey: ["follows"] });
 
         if (response?.ok) {
             toast.success(json.message, {
@@ -53,6 +54,17 @@ const TweetPopover = ({ children, username, tweetId, tweetType }: TweetPopoverPr
                 }
             });
         }
+    }
+
+    const pinTweetToProfile = (e: MouseEvent) => {
+        e.stopPropagation();
+        
+        toast.error("Sorry, this feature hasn't been implemented yet!", {
+            style: {
+                background: "#1D9BF0",
+                color: "white"
+            }
+        });
     }
 
     useEffect(() => {
@@ -78,9 +90,12 @@ const TweetPopover = ({ children, username, tweetId, tweetType }: TweetPopoverPr
             <Popover.Portal>
                 <Popover.Content side={isStatus ? "bottom" : "left"} sideOffset={-22} align="end" alignOffset={6} className="w-72 flex flex-col shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg bg-white border-gray-200">
                     {username === data?.user.username && (
-                        <DeleteTweetDialog tweetId={tweetId} tweetType={tweetType}>
-                            <button className={`${buttonStyles} ${"text-red-500"}`} onClick={(e) => e.stopPropagation()}><FaRegTrashCan /> Delete</button>
-                        </DeleteTweetDialog>
+                        <>
+                            <DeleteTweetDialog tweetId={tweetId} tweetType={tweetType}>
+                                <button className={`${buttonStyles} ${"text-red-500"}`} onClick={(e) => e.stopPropagation()}><FaRegTrashCan /> Delete</button>
+                            </DeleteTweetDialog>
+                            <button className={buttonStyles} onClick={(e) => pinTweetToProfile(e)}><RiPushpin2Line /> Pin to your profile</button>
+                        </>
                     )}
                     {username !== data?.user.username && (
                         <button className={`${buttonStyles}`} onClick={(e) => handleFollowClick(e)}>

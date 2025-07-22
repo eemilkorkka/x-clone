@@ -14,10 +14,11 @@ import { QueryKeysContext } from "@/Context/QueryKeysContext";
 interface ProfileFeedWrapperProps {
     type: "tweets" | "replies" | "media" | "like";
     username: string;
+    displayName: string;
     userId?: number;
 }
 
-const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps) => {
+const ProfileFeedWrapper = ({ type, username, displayName, userId }: ProfileFeedWrapperProps) => {
 
     const getUrl = (pageParam: number): string => {
         return type === "tweets" 
@@ -35,7 +36,7 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
 
     const { setQueryKeys } = useContext(QueryKeysContext)!;
 
-    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["username"]: username, ["type"]: type })), [username, type]);
+    useEffect(() => setQueryKeys((prevQueryKeys) => ({ ...prevQueryKeys, ["username"]: username, ["type"]: type })), [username, type, setQueryKeys]);
 
     const {
         data,
@@ -86,7 +87,7 @@ const ProfileFeedWrapper = ({ type, username, userId }: ProfileFeedWrapperProps)
                         }
                         timeStamp={new Date(tweet.created_at!)}
                         isRetweet={tweet.isRetweet}
-                        profile={username}
+                        profile={displayName}
                         statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
                         likes={tweet.likes}
                         bookmarks={tweet.bookmarks}

@@ -1,7 +1,9 @@
 "use client";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { DisplayContext } from "@/Context/DisplayContext";
+import { bgColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
 
 interface TabsSwitcherProps {
     tabs: string[];
@@ -14,10 +16,12 @@ interface TabsSwitcherProps {
 
 const buttonStyles = "w-full flex justify-center h-13 font-bold hover:bg-gray-200 hover:cursor-pointer";
 const spanStyles = "relative flex flex-col w-fit justify-center h-full";
-const underlineStyles = "w-full h-1 absolute bottom-0 bg-xblue rounded-full";
 
 const TabSwitcher = ({ tabs, currentTab, setCurrentTab, useLink, username, style }: TabsSwitcherProps) => {
     const pathname = usePathname();
+    const { selectedIndex } = useContext(DisplayContext)!;
+
+    const underlineStyles = `w-full h-1 absolute bottom-0 ${bgColors[selectedIndex ?? 0].color} rounded-full`;
 
     const isTabActive = (tab: string) => {
         if (tab.toLowerCase() === 'posts') {

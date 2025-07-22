@@ -6,7 +6,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import GoogleSignIn from "../Shared/GoogleSignIn";
 import FormInput from "../Form/FormInput";
 import formDataType from "@/types/formDataType";
-import Button from "../Shared/Button";
+import Button from "../Button/Button";
 import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 import { signIn } from "next-auth/react";
 import toast, { Toaster } from "react-hot-toast";
@@ -120,7 +120,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                                         variant="outline"
                                         textColor="white"
                                         hoverColor="white"
-                                        style="border-gray-500"
+                                        styles="border-gray-500"
                                         onClick={() => router.push("/forgotpassword")}
                                     >
                                         Forgot password?

@@ -2,7 +2,7 @@ import SideBarOption from "./SidebarOption";
 import { sideBarOptions, mobileBottomNavigationOptions } from "@/utils/sidebarOptions";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import Button from "@/components/Shared/Button";
+import Button from "@/components/Button/Button";
 import Link from "next/link";
 import { BsTwitterX } from "react-icons/bs";
 import UserCard from "@/components/Shared/UserCard";
@@ -11,6 +11,7 @@ import LogoutPopover from "./LogoutPopover";
 import PostButtonDialog from "./PostButtonDialog";
 import { FaFeatherPointed } from "react-icons/fa6";
 import { CiCircleMore } from "react-icons/ci";
+import MorePopover from "./MorePopover/MorePopover";
 
 const LeftSideBar = async () => {
     const session = await auth();
@@ -45,12 +46,15 @@ const LeftSideBar = async () => {
                             style={option.style}
                         />
                     ))}
-                    <SideBarOption
-                        text={"More"}
-                        href={"/settings/account"}
-                        lightIcon={<CiCircleMore size={30} />}
-                        style={"font-normal"}
-                    />
+                    <MorePopover>
+                        <div>
+                            <SideBarOption
+                                text={"More"}
+                                lightIcon={<CiCircleMore size={30} />}
+                                style={"font-normal"}
+                            />
+                        </div>
+                    </MorePopover>
                 </div>
                 {/* Mobile bottom navigation */}
                 <div className="flex justify-around items-center mobile:hidden flex-row w-full">
@@ -65,7 +69,7 @@ const LeftSideBar = async () => {
                     ))}
                 </div>
                 <PostButtonDialog>
-                    <Button variant="black" style="h-12 w-12 xl:h-13 xl:w-[92%] mt-2">
+                    <Button variant="black" styles="h-12 w-12 xl:h-13 xl:w-[92%]">
                         <span className="hidden xl:inline">Post</span>
                         <span className="xl:hidden flex justify-center">
                             <FaFeatherPointed size={22} />

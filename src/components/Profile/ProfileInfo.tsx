@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import DisplayName from "./DisplayName";
 import Username from "./Username";
 import { RxCalendar } from "react-icons/rx";
 import { User } from "@/types/userType";
 import { Session } from "next-auth";
-import Button from "../Shared/Button";
+import Button from "../Button/Button";
 import { follow } from "@/utils/utilFunctions";
 import EditProfileDialog from "./EditProfileDialog";
 import formDataType from "@/types/formDataType";
@@ -19,6 +19,8 @@ import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
 import { fetchUserData } from "@/utils/utilFunctions";
 import { LoadingSpinner } from "../Shared/LoadingSpinner";
+import { DisplayContext } from "@/Context/DisplayContext";
+import { textColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
 
 
 interface ProfileInfoProps {
@@ -57,6 +59,7 @@ const ProfileInfo = (
     }: ProfileInfoProps) => {
 
     const queryClient = useQueryClient();
+    const { selectedIndex } = useContext(DisplayContext)!;
 
     const {
         data,
@@ -135,7 +138,7 @@ const ProfileInfo = (
                                     variant="outline"
                                     textColor="black"
                                     hoverColor="gray"
-                                    style="text-sm px-4 pt-2 pb-2 border-gray-300!"
+                                    styles="text-sm px-4 pt-2 pb-2 border-gray-300!"
                                 >
                                     Edit Profile
                                 </Button>
@@ -147,7 +150,7 @@ const ProfileInfo = (
                                 variant={`${isFollowing ? "outline" : "black"}`}
                                 hoverColor={isFollowing ? "red" : "gray"}
                                 textColor="black"
-                                style={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
+                                styles={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
                                 onClick={() => followMutation.mutate()}
                                 onMouseOver={() => isFollowing && setText("Unfollow")}
                                 onMouseLeave={() => isFollowing && setText("Following")}
@@ -175,7 +178,7 @@ const ProfileInfo = (
                         {website && (
                             <div className="flex items-center gap-1">
                                 <IoIosLink />
-                                <a href={website} target="_blank" rel="noopener noreferrer" className="text-xblue whitespace-nowrap hover:underline">{website}</a>
+                                <a href={website} target="_blank" rel="noopener noreferrer" className={`${textColors[selectedIndex ?? 0].color} whitespace-nowrap hover:underline`}>{website}</a>
                             </div>
                         )}
                         <div className="flex items-center gap-1 whitespace-nowrap">
@@ -186,7 +189,7 @@ const ProfileInfo = (
                 )}
                 {isLoading ? (
                     <div className="w-full flex justify-center">
-                        <LoadingSpinner variant="blue" />
+                        <LoadingSpinner variant="color" />
                     </div>
                 ) : (
                     <div className="flex gap-4">

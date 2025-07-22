@@ -12,7 +12,7 @@ interface ButtonProps {
     variant?: "blue" | "white" | "black" | "red" | "outline";
     textColor?: string;
     hoverColor?: keyof typeof hoverColors;
-    style?: string;
+    styles?: string;
     disabled?: boolean;
     children: ReactNode;
     onClick?: (e: React.MouseEvent) => void;
@@ -26,7 +26,7 @@ const Button = (
         variant, 
         textColor, 
         hoverColor, 
-        style, 
+        styles, 
         disabled, 
         children, 
         onClick, 
@@ -49,7 +49,7 @@ const Button = (
             onClick={onClick}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
-            className={`${style} rounded-full text-center font-bold text-lg p-2.5 ${!disabled && "hover:cursor-pointer"} outline-none ${variant ? variants[variant] : variants.blue}`}>
+            className={`${styles} rounded-full text-center font-bold text-lg p-2.5 ${!disabled && "hover:cursor-pointer"} outline-none ${variant ? variants[variant] : variants.blue}`}>
                 {children}
         </button>
     );

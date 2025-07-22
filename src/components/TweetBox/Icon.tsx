@@ -1,4 +1,7 @@
-import { ReactNode } from "react";
+"use client";
+import { DisplayContext } from "@/Context/DisplayContext";
+import { ReactNode, useContext } from "react";
+import { bgColors, textColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
 
 interface IconProps {
     children: ReactNode
@@ -7,8 +10,11 @@ interface IconProps {
 }
 
 const Icon = ({ children, onClick, style }: IconProps) => {
+
+    const { selectedIndex } = useContext(DisplayContext)!;
+
     return (
-        <div className={`relative hover:bg-xblue/10 hover:cursor-pointer p-2 rounded-full text-xblue ${style}`} onClick={onClick}>
+        <div className={`relative ${bgColors[selectedIndex ?? 0].hoverColor} hover:cursor-pointer p-2 rounded-full ${textColors[selectedIndex ?? 0].color} ${style}`} onClick={onClick}>
             {children}
         </div>
     );

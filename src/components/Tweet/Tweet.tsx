@@ -96,7 +96,7 @@ const Tweet = ({
             {isRetweet && (
                 <div className="flex items-center gap-2 text-gray-500 font-bold text-sm">
                     <AiOutlineRetweet size={18} />
-                    <span className="flex-1">{profile === data?.user.username ? "You reposted" : profile + " reposted"}</span>
+                    <span className="flex-1">{profile === data?.user.name ? "You reposted" : profile + " reposted"}</span>
                 </div>
             )}
             <div
@@ -118,7 +118,7 @@ const Tweet = ({
                                 {displayNameElement}
                                 {usernameElement}
                             </div>
-                            <div className="h-fit">
+                            <div className="group">
                                 {threeDots}
                             </div>
                         </div>
@@ -136,7 +136,7 @@ const Tweet = ({
                             {threeDots}
                         </div>
                     </div>
-                    <div className={`whitespace-pre-line break-words ${tweetType !== "status" ? "mt-[-5px]" : "mt-4"}`}>
+                    <div className={`whitespace-pre-line break-words ${tweetType !== "status" ? "mt-[-5px]" : "mt-2"}`}>
                         { /* Tweets can include links, this component will detect them and turn them into anchor tags. */}
                         <Linkify text={tweetContent.text} />
                     </div>

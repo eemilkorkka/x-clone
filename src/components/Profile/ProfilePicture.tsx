@@ -1,9 +1,12 @@
+"use client";
 import Link from "next/link";
 import { Avatar } from "radix-ui";
 import ProfileHoverCard from "../Profile/ProfileHoverCard";
+import defaultPfp from "../../../public/default-pfp.png";
+import { useCheckImageAvailability } from "@/hooks/useCheckImageAvailability";
 
 interface ProfilePictureProps {
-  image: string | undefined;
+  image?: string;
   username?: string;
   showProfileHoverCard?: boolean;
   style?: string;
@@ -11,11 +14,13 @@ interface ProfilePictureProps {
 }
 
 const ProfilePicture = ({ image, username, style, href, showProfileHoverCard }: ProfilePictureProps) => {
-  
+
+  const { success, isAppwriteResource } = useCheckImageAvailability(image ?? "");
+
   const avatarImage = (
     <Avatar.Image
       className="w-full h-full rounded-[inherit] object-cover relative"
-      src={image}
+      src={isAppwriteResource ? (success ? image : defaultPfp.src) : image}
       width={40}
       height={40}
       alt="Profile Picture"

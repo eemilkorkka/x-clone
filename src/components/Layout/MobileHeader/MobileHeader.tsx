@@ -1,5 +1,5 @@
 import ProfilePicture from "@/components/Profile/ProfilePicture";
-import Button from "@/components/Shared/Button";
+import Button from "@/components/Button/Button";
 import Link from "next/link";
 import { BsTwitterX } from "react-icons/bs";
 import { useSession } from "next-auth/react";
@@ -36,7 +36,7 @@ const MobileHeader = ({ user }: MobileHeaderProps) => {
                         <Button
                             variant="outline"
                             textColor="black"
-                            style="px-4 text-sm p-2!"
+                            styles="px-4 text-sm p-2!"
                             hoverColor="gray"
                         >
                             Get Premium

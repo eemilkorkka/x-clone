@@ -80,7 +80,7 @@ export const mobileSideBarOptions = (username: string) => [
     },
     {
         text: "Settings and privacy",
-        href: "/settings/account",
+        href: "/settings",
         lightIcon: <IoSettingsOutline size={25} />
     }
 ];

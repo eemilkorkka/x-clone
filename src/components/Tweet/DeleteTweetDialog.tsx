@@ -2,7 +2,7 @@
 import { Dialog, VisuallyHidden } from "radix-ui";
 import { ReactNode, useContext, useState } from "react";
 import toast from "react-hot-toast";
-import Button from "../Shared/Button";
+import Button from "../Button/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { InfiniteData, QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { QueryKeysContext } from "@/Context/QueryKeysContext";
@@ -122,7 +122,7 @@ const DeleteTweetDialog = ({ children, tweetId, tweetType }: DeleteTweetDialogPr
                             <Button variant="red" onClick={(e) => { e.stopPropagation(); deleteTweetMutation(); }}>Delete</Button>
                             <Button
                                 variant="outline"
-                                style="text-black! border-gray-300!"
+                                styles="text-black! border-gray-300!"
                                 hoverColor="gray"
                                 onClick={(e) => { e.stopPropagation(); setOpen(false); }}
                             >

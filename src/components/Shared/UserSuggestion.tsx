@@ -1,6 +1,6 @@
 "use client";
 import UserCard from "./UserCard";
-import Button from "./Button";
+import Button from "../Button/Button";
 import { useEffect, useState } from "react";
 import { fetchUserData, follow } from "@/utils/utilFunctions";
 import { Session } from "next-auth";
@@ -57,7 +57,7 @@ const UserSuggestion = ({ user, username, showBio, session }: UserSuggestionProp
                     variant={isFollowing ? "outline" : "black"}
                     hoverColor={isFollowing ? "red" : "gray"}
                     textColor="black"
-                    style={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
+                    styles={`text-sm px-4 pt-2 pb-2 ${isFollowing && "hover:border-red-500! hover:text-red-500"}`}
                     onClick={(e) => { e.preventDefault(); followMutation?.mutate(); }}
                     onMouseOver={() => isFollowing && setText("Unfollow")}
                     onMouseLeave={() => isFollowing && setText("Following")}

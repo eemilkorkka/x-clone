@@ -4,9 +4,7 @@ import Tweet from "@/components/Tweet/Tweet";
 import RepliesWrapper from "@/components/Tweet/RepliesWrapper";
 import FeedHeader from "@/components/Shared/FeedHeader";
 import { getTweetById } from "@/utils/tweet/tweetUtils";
-import ReplyDialog from "@/components/Tweet/ReplyDialog";
-import { BsChat } from "react-icons/bs";
-import Button from "@/components/Shared/Button";
+import FloatingReplyButton from "@/components/Button/FloatingReplyButton/FloatingReplyButton";
 
 export default async function Page({ params }: { params: Promise<{ username: string, tweetId: string }> }) {
     const { username, tweetId } = await params;
@@ -75,13 +73,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
                 )}
                 {tweet && <RepliesWrapper parentTweetID={parseInt(tweetId)} />}
                 {tweet && (
-                    <div className="mobile:hidden fixed bottom-20 right-5 z-20">
-                        <ReplyDialog tweetId={tweetId ? parseInt(tweetId) : undefined}>
-                            <Button variant="blue">
-                                <BsChat size={35} className="p-1" />
-                            </Button>
-                        </ReplyDialog>
-                    </div>
+                    <FloatingReplyButton tweetId={tweetId} />
                 )}
             </Layout>
         </ProtectedRoute>

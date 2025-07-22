@@ -1,6 +1,6 @@
 import { Dialog, VisuallyHidden } from "radix-ui";
 import { ReactNode, useState } from "react";
-import Button from "@/components/Shared/Button";
+import Button from "@/components/Button/Button";
 import { BsTwitterX } from "react-icons/bs";
 import { signOut } from "next-auth/react";
 

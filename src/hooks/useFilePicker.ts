@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react"
 
-const MAX_FILES = 4;
+export const MAX_FILES = 4;
 const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "image/jfif", "video/mp4"];
 
 export const useFilePicker = () => {

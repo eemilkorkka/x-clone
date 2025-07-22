@@ -39,7 +39,7 @@ const UserCard = ({
                         <DisplayName 
                             displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName}
                             username={username}
-                            showProfileHoverCard={session.data?.user?.username !== username}
+                            showProfileHoverCard={showUnderlineOnDisplayname ? true : false}
                             showUnderlineOnHover={showUnderlineOnDisplayname}
                             variant="small"
                         />
