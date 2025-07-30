@@ -6,9 +6,11 @@ A fully responsive full-stack clone of X (formerly known as Twitter) built using
 I decided to build this project to learn about more about Next.js and full-stack web development. 
 
 
-## Screenshots
+## Screenshots 📸
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![Login / Signup page](https://github.com/eemilkorkka/x-clone/blob/main/public/Screenshot%202025-07-30%20205529.png)
+![Home page](https://github.com/eemilkorkka/x-clone/blob/main/public/Screenshot%202025-07-30%20205312.png)
+![Profile page](https://github.com/eemilkorkka/x-clone/blob/main/public/Screenshot%202025-07-30%20205345.png)
 
 
 ## Features 🖌️
