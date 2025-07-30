@@ -1,15 +1,15 @@
 "use client";
 import { DisplayContext } from "@/Context/DisplayContext";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import { ChangeEvent, HTMLInputTypeAttribute, useContext } from "react";
-import { borderColors, textColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { borderColors, textColors } from "@/utils/colors";
 import { usePathname } from "next/navigation";
 
 interface FormInputProps {
     type?: HTMLInputTypeAttribute;
     name: string;
     label: string;
-    formData: formDataType;
+    formData: Formdata;
     onChange: (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => void;
     style?: string;
     labelStyle?: string;

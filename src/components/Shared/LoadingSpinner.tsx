@@ -2,7 +2,7 @@ import { FaSpinner } from "react-icons/fa6";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useContext } from "react";
 import { DisplayContext } from "@/Context/DisplayContext";
-import { textColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { textColors } from "@/utils/colors";
 
 type variant = "default" | "color"
 

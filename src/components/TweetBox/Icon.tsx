@@ -1,7 +1,7 @@
 "use client";
 import { DisplayContext } from "@/Context/DisplayContext";
 import { ReactNode, useContext } from "react";
-import { bgColors, textColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { bgColors, textColors } from "@/utils/colors";
 
 interface IconProps {
     children: ReactNode

@@ -1,6 +1,6 @@
 import { DisplayContext } from "@/Context/DisplayContext";
 import React, { useContext } from "react"
-import { textColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { textColors } from "@/utils/colors";
 const Linkify = ({ text }: { text: string }) => {
     const urlPattern = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g;
     const words = text.split(" ");

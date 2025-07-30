@@ -5,7 +5,7 @@ import { Dialog, VisuallyHidden } from "radix-ui";
 import { IoClose } from "react-icons/io5";
 import Button from "../Button/Button";
 import ProfilePicture from "./ProfilePicture";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import ProfileBanner from "./ProfileBanner";
 import Icon from "../TweetBox/Icon";
 import { TbCameraPlus } from "react-icons/tb";
@@ -18,16 +18,16 @@ import BirthDateDropdowns from "../Form/Dropdown/BirthDateDropdowns";
 
 interface EditProfileDialogProps {
     children: ReactNode;
-    initialState: formDataType;
-    formData: formDataType;
-    setFormData: Dispatch<SetStateAction<formDataType>>;
+    initialState: Formdata;
+    formData: Formdata;
+    setFormData: Dispatch<SetStateAction<Formdata>>;
 }
 
 const EditProfileDialog = ({ children, initialState, formData, setFormData }: EditProfileDialogProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const router = useRouter();
     const { update } = useSession();
-    const [localFormData, setLocalFormData] = useState<formDataType>(formData);
+    const [localFormData, setLocalFormData] = useState<Formdata>(formData);
     const [preview, setPreview] = useState<{ profilePicture: string; coverPicture: string }>({
         profilePicture: initialState.profilePicture,
         coverPicture: initialState.coverPicture

@@ -19,7 +19,7 @@ import EmojiPickerPopover from "./EmojiPickerPopover";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient, InfiniteData, QueryKey } from "@tanstack/react-query";
 import { QueryKeysContext } from "@/Context/QueryKeysContext";
-import { TweetData, TweetFile } from "@/types/tweetType";
+import { TweetData, TweetFile } from "@/types/Tweet";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { MAX_FILES, useFilePicker } from "@/hooks/useFilePicker";
@@ -63,7 +63,7 @@ const TweetBox =
         const { queryKeys } = useContext(QueryKeysContext)!;
 
         const [tweetContent, setTweetContent] = useState<string>("");
-        const { pickedFiles, handleFileAdd, handleFileRemove } = useFilePicker();
+        const { pickedFiles, setPickedFiles, handleFileAdd, handleFileRemove } = useFilePicker();
 
         const files: { url: string; type: string; }[] = [];
 
@@ -82,7 +82,11 @@ const TweetBox =
                 if (pickedFiles.length > 0) {
                     const data = await uploadFiles(pickedFiles, formData);
 
-                    data.urls?.forEach((url: { url: string; type: string }) => {
+                    if (data.error || !data.urls) {
+                        throw new Error("File upload failed.");
+                    }
+
+                    data.urls.forEach((url: { url: string; type: string }) => {
                         files.push({ url: url.url, type: url.type });
                     });
                 }
@@ -200,7 +204,9 @@ const TweetBox =
                         color: "white"
                     }
                 });
+
                 setTweetContent("");
+                setPickedFiles([]);
             },
             onError: (data) => {
                 toast.error(data.message, {

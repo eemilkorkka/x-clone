@@ -10,6 +10,8 @@ export async function POST(req: Request) {
 
     const { text, userID, files, parentTweetID } = await req.json();
 
+    if (!text && files.length === 0) return NextResponse.json({ message: "Tweet cannot be empty." }, { status: 400 });
+
     try {
         const post = await prisma.posts.create({
             data: {

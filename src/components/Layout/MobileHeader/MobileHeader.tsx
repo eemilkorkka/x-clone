@@ -5,7 +5,7 @@ import { BsTwitterX } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import LeftSideBarMobile from "../LeftSideBarMobile/LeftSideBarMobile";
-import { User } from "@/types/userType";
+import { User } from "@/types/User";
 
 interface MobileHeaderProps {
     user: User;

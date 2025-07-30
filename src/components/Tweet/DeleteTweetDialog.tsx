@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { InfiniteData, QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { QueryKeysContext } from "@/Context/QueryKeysContext";
 import { tweetType } from "./Tweet";
-import { TweetData } from "@/types/tweetType";
+import { TweetData } from "@/types/Tweet";
 import { useSession } from "next-auth/react";
 
 interface DeleteTweetDialogProps {

@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation } from "@tanstack/react-query";
 import { MutationFunction } from "@tanstack/react-query";
-import { User } from "@/types/userType";
+import { User } from "@/types/User";
 import { useSession } from "next-auth/react";
 
 export const useFollowMutation = 

@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 import { useEffect, useState } from "react";
 import { fetchUserData, follow } from "@/utils/utilFunctions";
 import { Session } from "next-auth";
-import { User } from "@/types/userType";
+import { User } from "@/types/User";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
 

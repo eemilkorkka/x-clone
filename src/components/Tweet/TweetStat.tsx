@@ -10,7 +10,7 @@ import { useQueryClient, InfiniteData } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import ReplyDialog from "./ReplyDialog";
 import { useMutation } from "@tanstack/react-query";
-import { TweetData } from "@/types/tweetType";
+import { TweetData } from "@/types/Tweet";
 import { QueryKeysContext } from "@/Context/QueryKeysContext";
 
 type StatType = "reply" | "retweet" | "like" | "bookmark";

@@ -1,4 +1,4 @@
-import { User } from "@/types/userType";
+import { User } from "@/types/User";
 
 export const sendVerificationEmail = async (email: string, name: string) => {
     try {

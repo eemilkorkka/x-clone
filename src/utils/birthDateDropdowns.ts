@@ -1,4 +1,4 @@
-import dropdownType from "@/types/dropdownType";
+import Dropdown from "@/types/Dropdown";
 
 export const months: string[] = [
     "January", 
@@ -15,7 +15,7 @@ export const months: string[] = [
     "December"
 ];
 
-export const dropdownFields: dropdownType[] = [
+export const dropdownFields: Dropdown[] = [
     {
         name: "birthDateMonth",
         data: months,

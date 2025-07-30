@@ -1,6 +1,6 @@
 "use client";
 import ProfilePicture from "../Profile/ProfilePicture";
-import { tweetContentType } from "@/types/tweetContentType";
+import { TweetContent } from "@/types/TweetContent";
 import { BsThreeDots } from "react-icons/bs";
 import Icon from "../TweetBox/Icon";
 import AttachmentsGrid from "./AttachmentsGrid";
@@ -19,7 +19,7 @@ export type tweetType = "status" | "tweet";
 
 interface TweetProps {
     tweetType: tweetType;
-    tweetContent: tweetContentType;
+    tweetContent: TweetContent;
     tweetId: number;
     profilePicture: string | undefined;
     displayName: string;

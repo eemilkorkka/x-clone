@@ -37,5 +37,5 @@ export const useFilePicker = () => {
         setPickedFiles(newFiles);
     }
 
-    return { pickedFiles, handleFileAdd, handleFileRemove };
+    return { pickedFiles, setPickedFiles, handleFileAdd, handleFileRemove };
 }

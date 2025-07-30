@@ -1,12 +1,12 @@
 "use client"
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import { ChangeEvent, createContext, Dispatch, ReactNode, SetStateAction, useState } from "react"
 
 type SignupFormContextType = {
-    formData: formDataType;
+    formData: Formdata;
     formInvalid: boolean;
     touchedFields: string[];
-    setFormData: Dispatch<SetStateAction<formDataType>>;
+    setFormData: Dispatch<SetStateAction<Formdata>>;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 }
@@ -15,7 +15,7 @@ export const SignupFormContext = createContext<undefined | SignupFormContextType
 
 export default function SignupFormContextProvider({ children }: { children: ReactNode }) {
 
-    const [formData, setFormData] = useState<formDataType>({
+    const [formData, setFormData] = useState<Formdata>({
         name: "",
         email: "",
         birthDateMonth: "",

@@ -5,7 +5,7 @@ import { VisuallyHidden } from "radix-ui";
 import Tweet from "./Tweet";
 import TweetBox from "../TweetBox/TweetBox";
 import { IoClose } from "react-icons/io5";
-import { TweetData } from "../../types/tweetType";
+import { TweetData } from "../../types/Tweet";
 
 interface ReplyDialogProps {
     children: ReactNode;

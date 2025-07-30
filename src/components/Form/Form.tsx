@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import FormInput from "./FormInput";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 
 type FormInputs = {
     type: string;
@@ -13,7 +13,7 @@ type FormInputs = {
 }
 
 interface FormProps {
-    localFormData: formDataType;
+    localFormData: Formdata;
     formInputs: FormInputs[];
     style?: string;
     children: ReactNode;

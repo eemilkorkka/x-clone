@@ -3,7 +3,7 @@ import Widget from "../Shared/Widget";
 import Button from "../Button/Button";
 import { useContext } from "react";
 import { DisplayContext } from "@/Context/DisplayContext";
-import { bgColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { bgColors } from "@/utils/colors";
 
 const PremiumWidget = () => {
     

@@ -1,10 +1,10 @@
 import { ChangeEvent } from "react";
 import { dropdownFields } from "@/utils/birthDateDropdowns";
 import Dropdown from "./Dropdown";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 
 interface BirthDateDropdownsProps {
-    formData: formDataType;
+    formData: Formdata;
     bgColor?: "bg-white" | "bg-black";
     borderColor?: "border-gray" | "border-gray-300";
     style?: string;

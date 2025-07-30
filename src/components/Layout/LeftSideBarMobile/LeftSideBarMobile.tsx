@@ -1,7 +1,7 @@
 "use client";
 import ProfileInfo from "@/components/Profile/ProfileInfo";
 import ProfilePicture from "@/components/Profile/ProfilePicture";
-import { User } from "@/types/userType";
+import { User } from "@/types/User";
 import { mobileSideBarOptions } from "@/utils/sidebarOptions";
 import { Dialog, VisuallyHidden } from "radix-ui";
 import { ReactNode, useState } from "react";

@@ -1,12 +1,12 @@
 import FormInput from "@/components/Form/FormInput";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { passwordSchema } from "@/lib/schemas";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 
 interface ResetPasswordProps {
-    formData: formDataType;
+    formData: Formdata;
     onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
     touchedFields: string[];

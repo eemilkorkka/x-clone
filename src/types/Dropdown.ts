@@ -1,8 +1,8 @@
-export type dropdownType = {
+export type Dropdown = {
     name: string;
     data: string[];
     label: string;
     style: string;
 }
 
-export default dropdownType;
+export default Dropdown;

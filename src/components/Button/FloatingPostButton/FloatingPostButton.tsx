@@ -4,7 +4,7 @@ import Button from "../Button";
 import { FaFeatherPointed } from "react-icons/fa6";
 import { useContext } from "react";
 import { DisplayContext } from "@/Context/DisplayContext";
-import { bgColors } from "@/components/Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { bgColors } from "@/utils/colors";
 
 const FloatingPostButton = () => {
 

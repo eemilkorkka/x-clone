@@ -8,7 +8,7 @@ import { useScrollListener } from "@/hooks/useScrollListener";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import LoadingBlock from "../Shared/LoadingBlock";
 import MobileHeader from "../Layout/MobileHeader/MobileHeader";
-import { User } from "@/types/userType";
+import { User } from "@/types/User";
 import { tweetsLimit } from "@/utils/tweet/tweetUtils";
 import { QueryKeysContext } from "@/Context/QueryKeysContext";
 

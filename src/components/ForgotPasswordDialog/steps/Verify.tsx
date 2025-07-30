@@ -1,12 +1,12 @@
 import FormInput from "@/components/Form/FormInput";
 import { useFormValidation } from "@/hooks/useFormValidation";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import { ChangeEvent, SetStateAction, Dispatch } from "react";
 import { passwordResetCodeSchema } from "@/lib/schemas";
 import { z } from "zod";
 
 interface VerifyProps {
-    formData: formDataType,
+    formData: Formdata,
     onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
     touchedFields: string[];

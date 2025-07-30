@@ -1,7 +1,7 @@
-import { tweetStatType } from "@/types/tweetStatType";
+import { TweetStatType } from "@/types/TweetStat";
 import TweetStat from "./TweetStat";
 
-export const tweetStats: tweetStatType[] = [
+export const tweetStats: TweetStatType[] = [
     {
         type: "reply",
     },

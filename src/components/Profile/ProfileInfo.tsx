@@ -4,12 +4,12 @@ import { useState } from "react";
 import DisplayName from "./DisplayName";
 import Username from "./Username";
 import { RxCalendar } from "react-icons/rx";
-import { User } from "@/types/userType";
+import { User } from "@/types/User";
 import { Session } from "next-auth";
 import Button from "../Button/Button";
 import { follow } from "@/utils/utilFunctions";
 import EditProfileDialog from "./EditProfileDialog";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import ProfileBanner from "./ProfileBanner";
 import ProfilePicture from "./ProfilePicture";
 import { IoIosLink } from "react-icons/io";
@@ -20,7 +20,7 @@ import { useFollowMutation } from "@/hooks/useFollowMutation";
 import { fetchUserData } from "@/utils/utilFunctions";
 import { LoadingSpinner } from "../Shared/LoadingSpinner";
 import { DisplayContext } from "@/Context/DisplayContext";
-import { textColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { textColors } from "@/utils/colors";
 
 
 interface ProfileInfoProps {
@@ -85,7 +85,7 @@ const ProfileInfo = (
         birthDateYear: birthDateYear ?? ""
     };
 
-    const [formData, setFormData] = useState<formDataType>({
+    const [formData, setFormData] = useState<Formdata>({
         profilePicture: initialState.profilePicture,
         coverPicture: initialState.coverPicture,
         name: initialState.name,

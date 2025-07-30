@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useContext } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DisplayContext } from "@/Context/DisplayContext";
-import { bgColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { bgColors } from "@/utils/colors";
 
 interface TabsSwitcherProps {
     tabs: string[];

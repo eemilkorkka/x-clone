@@ -1,7 +1,7 @@
 "use client";
-import { borderColors, textColors } from "@/components/Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { borderColors, textColors } from "@/utils/colors";
 import { DisplayContext } from "@/Context/DisplayContext";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, useContext } from "react";
 import { IoIosArrowDown } from "react-icons/io";
@@ -10,7 +10,7 @@ interface DropdownProps {
     name: string;
     data: string[];
     label: string;
-    formData: formDataType;
+    formData: Formdata;
     value?: string;
     bgColor?: "bg-white" | "bg-black";
     borderColor?: "border-gray" | "border-gray-300";

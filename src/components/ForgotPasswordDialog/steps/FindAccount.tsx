@@ -1,12 +1,12 @@
 import FormInput from "@/components/Form/FormInput";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { emailOrUsernameSchema } from "@/lib/schemas";
 import { z } from "zod";
 
 interface FindAccountProps {
-    formData: formDataType,
+    formData: Formdata,
     onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     setFormInvalid: Dispatch<SetStateAction<boolean>>;
     touchedFields: string[];

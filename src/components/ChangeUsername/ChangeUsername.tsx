@@ -2,14 +2,14 @@
 import { useState, ChangeEvent, useContext } from "react";
 import { Session } from "next-auth";
 import FormInput from "../Form/FormInput";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import Button from "../Button/Button";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { usernameSchema } from "@/lib/schemas";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { DisplayContext } from "@/Context/DisplayContext";
-import { bgColors } from "../Layout/LeftSideBar/DisplayDialog/DisplayDialog";
+import { bgColors } from "@/utils/colors";
 
 interface ChangeUsernameProps {
     session: Session | null;
@@ -21,7 +21,7 @@ const ChangeUsername = ({ session }: ChangeUsernameProps) => {
 
     const [formInvalid, setFormInvalid] = useState<boolean>(true);
     const [touchedFields, setTouchedFields] = useState<string[]>([]);
-    const [formData, setFormData] = useState<formDataType>({
+    const [formData, setFormData] = useState<Formdata>({
         username: session?.user.username ?? ""
     });
 

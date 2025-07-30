@@ -5,7 +5,7 @@ import { IoClose } from "react-icons/io5";
 import { FaXTwitter } from "react-icons/fa6";
 import GoogleSignIn from "../Shared/GoogleSignIn";
 import FormInput from "../Form/FormInput";
-import formDataType from "@/types/formDataType";
+import Formdata from "@/types/Formdata";
 import Button from "../Button/Button";
 import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 import { signIn } from "next-auth/react";
@@ -24,7 +24,7 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
     const [hasSubmitted, setSubmitted] = useState<boolean>(false);
     const [errorText, setErrorText] = useState<string>("");
 
-    const [formData, setFormData] = useState<formDataType>({
+    const [formData, setFormData] = useState<Formdata>({
         identifier: "",
         password: ""
     });
