@@ -5,13 +5,11 @@ A fully responsive full-stack clone of X (formerly known as Twitter) built using
 
 I decided to build this project to learn about more about Next.js and full-stack web development. 
 
-
 ## Screenshots 📸
 
 ![Login / Signup page](https://github.com/eemilkorkka/x-clone/blob/main/public/Screenshot%202025-07-30%20205529.png)
 ![Home page](https://github.com/eemilkorkka/x-clone/blob/main/public/Screenshot%202025-07-30%20205312.png)
 ![Profile page](https://github.com/eemilkorkka/x-clone/blob/main/public/Screenshot%202025-07-30%20205345.png)
-
 
 ## Features 🖌️
 
@@ -29,7 +27,7 @@ Features such as being able to pin tweets, darkmode/lightmode toggle and seeing 
 
 ## Installation locally 💻
 
-You may install the apllication locally by cloning the repository:
+You may install the application locally by cloning the repository:
 
 ```bash
 git clone https://github.com/eemilkorkka/x-clone.git
