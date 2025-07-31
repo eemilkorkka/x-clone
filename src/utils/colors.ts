@@ -1,3 +1,5 @@
+import { group } from "console";
+
 export const bgColors = [
     {
         color: "bg-xblue",
@@ -28,31 +30,37 @@ export const bgColors = [
 export const textColors = [
     {
         color: "text-xblue",
+        groupHoverText: "group-hover:text-xblue",
         groupFocusText: "group-focus-within:text-xblue",
         fillColor: "group-focus-within:fill-xblue"
     },
     {
         color: "text-xyellow",
+        groupHoverText: "group-hover:text-xyellow",
         groupFocusText: "group-focus-within:text-xyellow",
         fillColor: "group-focus-within:fill-xyellow"
     },
     {
         color: "text-xpink",
+        groupHoverText: "group-hover:text-xpink",
         groupFocusText: "group-focus-within:text-xpink",
         fillColor: "group-focus-within:fill-xpink"
     },
     {
         color: "text-xpurple",
+        groupHoverText: "group-hover:text-xpurple",
         groupFocusText: "group-focus-within:text-xpurple",
         fillColor: "group-focus-within:fill-xpurple"
     },
     {
         color: "text-xorange",
+        groupHoverText: "group-hover:text-xorange",
         groupFocusText: "group-focus-within:text-xorange",
         fillColor: "group-focus-within:fill-xorange"
     },
     {
         color: "text-xgreen",
+        groupHoverText: "group-hover:text-xgreen",
         groupFocusText: "group-focus-within:text-xgreen",
         fillColor: "group-focus-within:fill-xgreen"
     }

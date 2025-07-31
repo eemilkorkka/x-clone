@@ -14,6 +14,9 @@ import TweetPopover from "./TweetPopover";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { useSession } from "next-auth/react";
 import TweetStats from "./TweetStats";
+import { useContext } from "react";
+import { DisplayContext } from "@/Context/DisplayContext";
+import { textColors } from "@/utils/colors";
 
 export type tweetType = "status" | "tweet";
 
@@ -60,6 +63,7 @@ const Tweet = ({
 
     const router = useRouter();
     const { data } = useSession();
+    const { selectedIndex } = useContext(DisplayContext)!;
 
     const usernameElement = (
         <a href={`/${username}`} className="truncate" onClick={(e) => e.stopPropagation()}>
@@ -86,7 +90,7 @@ const Tweet = ({
             tweetType={tweetType}
         >
             <Icon onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <BsThreeDots className="text-gray-500 group-hover:text-xblue" />
+                <BsThreeDots className={`text-gray-500 ${textColors[selectedIndex ?? 0].groupHoverText}`} />
             </Icon>
         </TweetPopover>
     );
