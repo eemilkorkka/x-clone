@@ -31,7 +31,7 @@ export default async function Root() {
             <div>
               <SignupFormContextProvider>
                 <SignupFormDialog>
-                  <Button styles="w-72">Create account</Button>
+                  <Button styles="w-72" variant="blue">Create account</Button>
                 </SignupFormDialog>
               </SignupFormContextProvider>
             </div>

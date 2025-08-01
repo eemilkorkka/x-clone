@@ -1,4 +1,7 @@
-import { ReactNode } from "react";
+"use client"
+import { ReactNode, useContext } from "react";
+import { DisplayContext } from "@/Context/DisplayContext";
+import { bgColors } from "@/utils/colors";
 
 const hoverColors = {
     blue: "hover:bg-blue-400/10",
@@ -33,6 +36,8 @@ const Button = (
         onMouseOver,
         onMouseLeave, 
     }: ButtonProps) => { 
+    
+    const { selectedIndex } = useContext(DisplayContext)!;
 
     const variants = {
         blue: "bg-xblue text-white",
@@ -49,7 +54,7 @@ const Button = (
             onClick={onClick}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
-            className={`${styles} rounded-full text-center font-bold text-lg p-2.5 ${!disabled && "hover:cursor-pointer"} outline-none ${variant ? variants[variant] : variants.blue}`}>
+            className={`${styles} rounded-full text-center font-bold text-lg p-2.5 ${!disabled && "hover:cursor-pointer"} outline-none ${variant ? variants[variant] : bgColors[selectedIndex ?? 0].color + " text-white"}`}>
                 {children}
         </button>
     );

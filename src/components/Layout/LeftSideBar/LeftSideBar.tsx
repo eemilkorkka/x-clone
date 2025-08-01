@@ -84,6 +84,7 @@ const LeftSideBar = async () => {
                             username={user?.Username ?? ""}
                             displayName={user?.DisplayName ?? ""}
                             showUnderlineOnDisplayname={false}
+                            isLogOutButton={true}
                             image={user?.ProfilePicture ?? ""}
                             style="hidden"
                         >

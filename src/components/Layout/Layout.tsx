@@ -11,7 +11,7 @@ import { headers } from "next/headers";
 import UserSuggestion from "../Shared/UserSuggestion";
 import TrendingWidget from "../Trending/TrendingWidget";
 import QueryKeysContextProvider from "@/Context/QueryKeysContext";
-import PremiumWidget from "../PremiumWidget/PremiumWidget";
+import Button from "../Button/Button";
 import FloatingPostButton from "../Button/FloatingPostButton/FloatingPostButton";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
@@ -87,7 +87,14 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                         <div className="hidden lg:flex flex-col gap-4 flex-shrink-0 pb-8">
                             <SearchBar />
                             {!isViewingASpecificTweet && (
-                                <PremiumWidget />
+                                <Widget title="Subscribe to Premium">
+                                    <div className="ps-3 p-2 pt-0">
+                                        <p className="text-sm text-gray-500">Subscribe to unlock new features and if eligible, <br /> receive a share of revenue.
+                                        </p>
+
+                                        <Button styles={`text-sm px-4 pt-2 pb-2 mt-2`}>Subscribe</Button>
+                                    </div>
+                                </Widget>
                             )}
                             {isViewingASpecificTweet ? (
                                 user && (

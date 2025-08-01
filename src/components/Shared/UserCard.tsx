@@ -10,6 +10,7 @@ interface UserCardProps {
     username: string;
     displayName: string;
     showUnderlineOnDisplayname?: boolean;
+    isLogOutButton?: boolean;
     bio?: string;
     children?: ReactNode;
     style?: string;
@@ -19,7 +20,8 @@ const UserCard = ({
     image, 
     username, 
     displayName, 
-    showUnderlineOnDisplayname = true, 
+    showUnderlineOnDisplayname = true,
+    isLogOutButton = false, 
     bio, 
     style, 
     children 
@@ -31,7 +33,8 @@ const UserCard = ({
             <ProfilePicture 
                 image={image} 
                 username={username}
-                showProfileHoverCard={session.data?.user?.username !== username}
+                showProfileHoverCard={isLogOutButton ? false : true}
+                darkenOnHover={isLogOutButton ? false : true}
             />
             <div className={`xl:flex flex-1 pl-2.5 ${style}`}>
                 <div className="flex items-center w-full justify-between">
@@ -39,13 +42,13 @@ const UserCard = ({
                         <DisplayName 
                             displayName={displayName.length > 15 ? displayName.substring(0, 15) + "..." : displayName}
                             username={username}
-                            showProfileHoverCard={showUnderlineOnDisplayname ? true : false}
+                            showProfileHoverCard={showUnderlineOnDisplayname && !isLogOutButton ? true : false}
                             showUnderlineOnHover={showUnderlineOnDisplayname}
                             variant="small"
                         />
                         <Username 
                             username={username}
-                            showProfileHoverCard={session.data?.user?.username !== username}
+                            showProfileHoverCard={isLogOutButton ? false : true}
                         />
                     </div>
                     {children}
