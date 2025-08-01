@@ -1,6 +1,5 @@
 "use client";
 import { ReactNode } from "react";
-import { useSession } from "next-auth/react";
 import ProfilePicture from "../Profile/ProfilePicture";
 import Username from "../Profile/Username";  
 import DisplayName from "../Profile/DisplayName";
@@ -26,8 +25,6 @@ const UserCard = ({
     style, 
     children 
 }: UserCardProps) => {
-    const session = useSession();
-
     return (
         <div className="w-full flex items-start justify-center">
             <ProfilePicture 
