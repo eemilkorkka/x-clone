@@ -11,34 +11,36 @@ const Linkify = ({ text }: { text: string }) => {
 
     return (
         <div className="break-words">
-            {lines.map((line, lineIndex) => (
-                <div key={lineIndex}>
-                    {line.split(" ").map((word, index) => {
-                        const isUsername = word.includes("@");
+            {lines.map((line, index) => {
+                return (
+                    <div key={index}>
+                        {line.split(" ").map((word, index) => {
+                            const isUsername = word.includes("@");
 
-                        return isUsername ? (
-                            <ProfileHoverCard username={word.slice(1)} key={index}>
-                                <span>
-                                    <a href={`/${word.slice(1)}`} target="_parent" className={`${textColors[selectedIndex ?? 0].color} no-underline hover:underline`}>{word}</a>
-                                    {' '}
-                                </span>
-                            </ProfileHoverCard>
-                        ) : (
-                            word.match(urlPattern) ? (
-                                <React.Fragment key={index}>
-                                    <a href={word} target="_blank" className={`${textColors[selectedIndex ?? 0].color} no-underline hover:underline`}>{word}</a>
-                                    {' '}
-                                </React.Fragment>
+                            return isUsername ? (
+                                <ProfileHoverCard username={word.slice(1)} key={index}>
+                                    <span>
+                                        <a href={`/${word.slice(1)}`} target="_parent" className={`${textColors[selectedIndex ?? 0].color} no-underline hover:underline`}>{word}</a>
+                                        {' '}
+                                    </span>
+                                </ProfileHoverCard>
                             ) : (
-                                <React.Fragment key={index}>
-                                    {word}
-                                    {' '}
-                                </React.Fragment>
-                            )
-                        );
-                    })}
-                </div>
-            ))}
+                                word.match(urlPattern) ? (
+                                    <React.Fragment key={index}>
+                                        <a href={word} target="_blank" className={`${textColors[selectedIndex ?? 0].color} no-underline hover:underline`}>{word}</a>
+                                        {' '}
+                                    </React.Fragment>
+                                ) : (
+                                    <React.Fragment key={index}>
+                                        {word}
+                                        {' '}
+                                    </React.Fragment>
+                                )
+                            );
+                        })}
+                    </div>
+                )
+            })}
         </div>
     );
 };
