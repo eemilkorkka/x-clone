@@ -37,10 +37,12 @@ const FormInput = ({
     const pathname = usePathname();
 
     const isRootPath = pathname === "/";
+    const isForgotPasswordPath = pathname.includes("/forgotpassword");
+
     const inputEmpty: boolean = formData[name] === "";
 
     const inputClassName = `w-full p-2.5 pt-5 border border-gray outline-none 
-        rounded-md ${style} ${error ? "border-red-500" : (isRootPath ? "group-focus-within:border-xblue" : borderColors[selectedIndex ?? 0].color)}`;
+        rounded-md ${style} ${error ? "border-red-500" : (isRootPath || isForgotPasswordPath ? "group-focus-within:border-xblue" : borderColors[selectedIndex ?? 0].color)}`;
 
     return (
         <div className="relative group hover:cursor-pointer">
@@ -63,7 +65,7 @@ const FormInput = ({
                 />
             )}          
             <label className={`absolute
-             text-gray-400 ${labelStyle} ${error ? "text-red-500" : (isRootPath ? "group-focus-within:text-xblue" : textColors[selectedIndex ?? 0].groupFocusText)}
+             text-gray-400 ${labelStyle} ${error ? "text-red-500" : (isRootPath || isForgotPasswordPath ? "group-focus-within:text-xblue" : textColors[selectedIndex ?? 0].groupFocusText)}
                 group-focus-within:text-[0.8em] transition-all group-focus-within:top-1 group-focus-within:left-3 
               ${!inputEmpty ? "text-[0.8em] top-1 left-3" : "top-4 left-3"}`}
             >{label}

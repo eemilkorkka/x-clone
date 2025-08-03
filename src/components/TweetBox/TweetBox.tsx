@@ -278,7 +278,7 @@ const TweetBox =
                                                 </Icon>
                                             </EmojiPickerPopover>
                                         ) : (
-                                            <Icon>
+                                            <Icon style={"hover:cursor-not-allowed!"}>
                                                 {icon}
                                             </Icon>
                                         )}
