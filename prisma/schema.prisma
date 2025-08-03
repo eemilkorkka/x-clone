@@ -12,6 +12,7 @@ model verificationtokens {
   Email String @unique(map: "Email") @db.VarChar(255)
   VerificationCode  Int?
   PasswordResetCode Int?
+  PasswordResetCodeExpiry DateTime?
 }
 
 model users {

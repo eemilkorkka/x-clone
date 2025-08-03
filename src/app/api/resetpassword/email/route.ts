@@ -57,20 +57,24 @@ const storePasswordResetCode = async (email: string, code: number) => {
         }
     });
 
+    const expirationTime = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes expiry
+
     if (user) {
         await prisma.verificationtokens.update({
             where: {
                 Email: email
             },
             data: {
-                PasswordResetCode: code
+                PasswordResetCode: code,
+                PasswordResetCodeExpiry: expirationTime
             }
         });
     } else {
         await prisma.verificationtokens.create({
             data: {
                 Email: email,
-                PasswordResetCode: code
+                PasswordResetCode: code,
+                PasswordResetCodeExpiry: expirationTime
             }
         });
     }

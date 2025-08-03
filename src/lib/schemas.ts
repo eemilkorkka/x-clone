@@ -137,10 +137,13 @@ export const passwordResetCodeSchema = z.object({
             },
             body: JSON.stringify({ code: data.passwordResetCode, email: data.email_or_username })
         });
+
+        const json = await response.json();
+
         if (response.status !== 200) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                message: "The code you entered is invalid.",
+                message: json.message,
                 path: ["passwordResetCode"]
             });
         }
