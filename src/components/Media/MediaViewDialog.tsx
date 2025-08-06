@@ -1,5 +1,6 @@
+"use client";
 import { Dialog, VisuallyHidden } from "radix-ui";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Image from "next/image";
 
 interface MediaViewDialogProps {
@@ -9,13 +10,16 @@ interface MediaViewDialogProps {
 }
 
 const MediaViewDialog = ({ children, type, url }: MediaViewDialogProps) => {
+
+    const [open, setOpen] = useState<boolean>(false);
+
     return (
-        <Dialog.Root>
-            <Dialog.Trigger asChild>
+        <Dialog.Root open={open}>
+            <Dialog.Trigger asChild onClick={() => setOpen(true)}>
                 {children}
             </Dialog.Trigger>
             <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 bg-black/90 z-50">
+                <Dialog.Overlay className="fixed inset-0 bg-black/90 z-50" onClick={() => setOpen(false)}>
                     <Dialog.Content className="flex flex-col fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 focus:outline-none">
                         <VisuallyHidden.Root>
                             <Dialog.Title />
