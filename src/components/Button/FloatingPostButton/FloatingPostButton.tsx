@@ -12,7 +12,7 @@ const FloatingPostButton = () => {
 
     return (
         <div className="mobile:hidden fixed bottom-20 right-5 z-10">
-            <PostButtonDialog style="inline! mobile:hidden!">
+            <PostButtonDialog>
                 <Button styles={`${bgColors[selectedIndex ?? 0].color}`}>
                     <FaFeatherPointed size={35} className="p-1" />
                 </Button>

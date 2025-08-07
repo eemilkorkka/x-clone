@@ -23,10 +23,11 @@ export async function POST(req: Request) {
             const fileUrl = `https://${process.env.APPWRITE_ENDPOINT}/storage/buckets/${process.env.APPWRITE_BUCKET_ID}/files/${fileId}/view?project=${process.env.APPWRITE_PROJECT_ID}`;
             urls.push({ url: fileUrl, type: file.type });
 
-            return NextResponse.json({ urls: urls }, { status: 200 });
         } catch (error) {
             console.log(error);
             return NextResponse.json({ message: "Internal Server Error." }, { status: 500 });
         }
     }
+
+    return NextResponse.json({ urls: urls }, { status: 200 });
 }

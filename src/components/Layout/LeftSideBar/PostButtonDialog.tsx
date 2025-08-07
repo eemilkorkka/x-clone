@@ -15,7 +15,7 @@ const PostButtonDialog = ({ children, style }: PostButtonDialogProps) => {
 
     return (
         <Dialog.Root open={postDialogOpen} onOpenChange={setPostDialogOpen}>
-            <Dialog.Trigger onClick={() => setPostDialogOpen(true)} className={`hidden mobile:inline ${style}`}>
+            <Dialog.Trigger onClick={() => setPostDialogOpen(true)} className={style} asChild>
                 {children}
             </Dialog.Trigger>
             <Dialog.Overlay className="fixed inset-0 bg-gray-700/50 z-20" />

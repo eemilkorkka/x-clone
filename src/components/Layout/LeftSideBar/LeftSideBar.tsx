@@ -69,7 +69,7 @@ const LeftSideBar = async () => {
                     ))}
                 </div>
                 <PostButtonDialog>
-                    <Button variant="black" styles="h-12 w-12 xl:h-13 xl:w-[92%]">
+                    <Button variant="black" styles="hidden mobile:inline h-12 w-12 xl:h-13 xl:w-[92%]">
                         <span className="hidden xl:inline">Post</span>
                         <span className="xl:hidden flex justify-center">
                             <FaFeatherPointed size={22} />
