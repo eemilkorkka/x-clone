@@ -28,7 +28,6 @@ const FollowList = ({ type }: { type: "followers" | "following" }) => {
 
     const {
         data,
-        error,
         fetchNextPage,
         hasNextPage,
         isFetching,
