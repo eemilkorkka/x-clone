@@ -20,9 +20,7 @@ I decided to build this project to learn more about Next.js and full-stack web d
 - The ability to edit your profile and change your username.
 - Authentication with Auth.js. Supported authentication methods are credentials and Google Account.
 
-Features such as being able to pin tweets, darkmode/lightmode toggle and seeing the list of people who follow you haven't been implemented yet, but are planned 🚧
-
-
+Features such as being able to pin tweets and darkmode/lightmode toggle haven't been implemented yet, but are planned 🚧
 
 
 ## Installation locally 💻
