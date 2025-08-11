@@ -21,6 +21,7 @@ import { fetchUserData } from "@/utils/utilFunctions";
 import { LoadingSpinner } from "../Shared/LoadingSpinner";
 import { DisplayContext } from "@/Context/DisplayContext";
 import { textColors } from "@/utils/colors";
+import Link from "next/link";
 
 
 interface ProfileInfoProps {
@@ -193,8 +194,8 @@ const ProfileInfo = (
                     </div>
                 ) : (
                     <div className="flex gap-4">
-                        <span className="text-black text-sm font-bold">{data?.following.length} <span className="text-gray-500 text-sm font-normal">Following</span></span>
-                        <span className="text-black text-sm font-bold">{data?.followers.length} <span className="text-gray-500 text-sm font-normal">{data?.followers.length === 1 ? "Follower" : "Followers"}</span></span>
+                        <Link href={`/${username}/following`} className="text-black text-sm font-bold hover:underline">{data?.following.length} <span className="text-gray-500 text-sm font-normal">Following</span></Link>
+                        <Link href={`/${username}/followers`} className="text-black text-sm font-bold hover:underline">{data?.followers.length} <span className="text-gray-500 text-sm font-normal">{data?.followers.length === 1 ? "Follower" : "Followers"}</span></Link>
                     </div>
                 )}
             </div>

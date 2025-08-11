@@ -43,7 +43,7 @@ const TabSwitcher = ({ tabs, currentTab, setCurrentTab, useLink, username, style
                         <Link
                             key={index}
                             className={buttonStyles}
-                            href={index == 0 ? `/${username}` : `/${username}/${tab.toLowerCase()}`}
+                            href={`/${username}/${tab.toLowerCase()}`}
                         >
                             <button
                                 className={`hover:cursor-pointer ${isActive ? "text-black" : "text-gray-500"}`}
