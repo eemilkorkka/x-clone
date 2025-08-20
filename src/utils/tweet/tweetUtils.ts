@@ -266,7 +266,7 @@ export const getLikedTweets = async (userId: number, page: number, limit: number
 }
 
 export const getBookmarkedTweets = async (userId: number, page: number, limit: number) => {
-    const bookmarks = await prisma.posts.findMany({
+    /*const bookmarks = await prisma.posts.findMany({
         where: {
             bookmarks: {
                 some: {
@@ -287,6 +287,36 @@ export const getBookmarkedTweets = async (userId: number, page: number, limit: n
             replies: true,
             bookmarks: true,
             retweets: true,
+        },
+        orderBy: {
+            created_at: "desc"
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+    });*/
+
+    const bookmarks = await prisma.bookmarks.findMany({
+        where: {
+            UserID: userId
+        },
+        include: {
+            post: {
+                include: {
+                    users: {
+                        select: {
+                            Username: true,
+                            DisplayName: true,
+                            UserID: true,
+                            ProfilePicture: true,
+                        },
+                    },
+                    files: true,
+                    likes: { select: { UserID: true } },
+                    replies: { select: { UserID: true } },
+                    bookmarks: { select: { UserID: true } },
+                    retweets: { select: { UserID: true } }
+                },
+            }
         },
         orderBy: {
             created_at: "desc"

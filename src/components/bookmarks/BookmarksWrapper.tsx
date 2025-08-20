@@ -36,34 +36,34 @@ const BookmarksWrapper = () => {
     const handleScroll = useInfiniteScroll(isFetching, hasNextPage, fetchNextPage);
     useScrollListener("main-scroll-container", handleScroll);
 
-    const tweets = data?.pages.flatMap(page => page) || [];
+    const bookmarks = data?.pages.flatMap(page => page) || [];
 
     return (
         <div className="h-screen">
             {error && <span className="flex font-bold text-lg text-black justify-center p-4">Failed to load bookmarks, try again later.</span>}
-            {tweets.map((tweet) => {
+            {bookmarks.map((bookmark) => {
                 return (
                     <Tweet
-                        key={tweet.ID}
+                        key={bookmark.ID}
                         tweetType="tweet"
-                        tweetId={tweet.ID}
-                        username={tweet.users.Username}
-                        displayName={tweet.users.DisplayName}
-                        profilePicture={tweet.users.ProfilePicture}
+                        tweetId={bookmark.PostID}
+                        username={bookmark.post.users.Username}
+                        displayName={bookmark.post.users.DisplayName}
+                        profilePicture={bookmark.post.users.ProfilePicture}
                         tweetContent={
                             {
-                                text: tweet.Content,
-                                files: tweet.files.map((file: { File_URL: string; File_Type: string }) => ({
+                                text: bookmark.post.Content,
+                                files: bookmark.post.files.map((file: { File_URL: string; File_Type: string }) => ({
                                     url: file.File_URL,
                                     type: file.File_Type
                                 }))
                             }
                         }
-                        timeStamp={new Date(tweet.created_at!)}
-                        statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
-                        likes={tweet.likes}
-                        bookmarks={tweet.bookmarks}
-                        retweets={tweet.retweets}
+                        timeStamp={new Date(bookmark.post.created_at)}
+                        statValues={[bookmark.post.replies.length, bookmark.post.retweets.length, bookmark.post.likes.length]}
+                        likes={bookmark.post.likes}
+                        bookmarks={bookmark.post.bookmarks}
+                        retweets={bookmark.post.retweets}
                     />
                 );
             })}
