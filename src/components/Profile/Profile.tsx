@@ -67,7 +67,7 @@ const Profile = async ({ username, likesCount, children }: ProfileProps) => {
                                 {likesCount ? (
                                     likesCount > 1 ? `${likesCount} likes` : `${likesCount} like`
                                 ) : (
-                                    `${numberOfPosts} posts`
+                                    numberOfPosts > 1 ? `${numberOfPosts} posts` : `${numberOfPosts} post`
                                 )}
                             </span>
                         </>
