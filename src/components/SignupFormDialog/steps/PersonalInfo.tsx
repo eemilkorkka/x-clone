@@ -21,24 +21,22 @@ const PersonalInfo = () => {
 
     return (
         <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-8">
-                <FormInput
-                    type="text"
-                    name="name"
-                    label="Name"
-                    formData={formData}
-                    onChange={onChange}
-                    error={getErrorMessage("name")}
-                />
-                <FormInput
-                    type="email"
-                    name="email"
-                    label="Email"
-                    formData={formData}
-                    onChange={(e) => { onChange(e); setFormInvalid(true); }}
-                    error={getErrorMessage("email")}
-                />
-            </div>
+            <FormInput
+                type="text"
+                name="name"
+                label="Name"
+                formData={formData}
+                onChange={onChange}
+                error={getErrorMessage("name")}
+            />
+            <FormInput
+                type="email"
+                name="email"
+                label="Email"
+                formData={formData}
+                onChange={(e) => { onChange(e); setFormInvalid(true); }}
+                error={getErrorMessage("email")}
+            />
             <div className="flex flex-col gap-1">
                 <span className="font-bold">Date of birth</span>
                 <p className="text-gray-500 text-[0.9em]">This will not be shown publicly. Confirm your own age,

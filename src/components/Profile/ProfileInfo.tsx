@@ -100,7 +100,7 @@ const ProfileInfo = (
 
     useEffect(() => {
         setText(isFollowing ? "Following" : "Follow");
-    }, [isFollowing])
+    }, [isFollowing]);
 
     const handleFollowClick = async () => {
         try {

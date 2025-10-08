@@ -13,7 +13,7 @@ import { uploadFiles } from "@/utils/utilFunctions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Form from "../Form/Form";
+import FormInput from "../Form/FormInput";
 import BirthDateDropdowns from "../Form/Dropdown/BirthDateDropdowns";
 
 interface EditProfileDialogProps {
@@ -107,7 +107,7 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                 });
                 keys.push("profilePicture");
             }
-            
+
             if (preview.coverPicture !== initialState.coverPicture && coverPicturePickerRef.current.files?.[0]) {
                 filesToUpload.push({
                     url: preview.coverPicture,
@@ -250,9 +250,25 @@ const EditProfileDialog = ({ children, initialState, formData, setFormData }: Ed
                             </div>
                         </div>
                     </div>
-                    <Form formInputs={formInputs} localFormData={localFormData} style="-mt-10 mobile:-mt-15">
+                    <form className="flex flex-col gap-8 p-2 -mt-10 mobile:-mt-15">
+                        {formInputs.map((input, index) => {
+                            return (
+                                <React.Fragment key={index}>
+                                    <FormInput
+                                        type={input.type}
+                                        name={input.name}
+                                        label={input.label}
+                                        formData={localFormData}
+                                        style={input.style}
+                                        maxLength={input.maxLength}
+                                        isTextArea={input.isTextArea}
+                                        onChange={input.onChange}
+                                    />
+                                </React.Fragment>
+                            )
+                        })}
                         <BirthDateDropdowns formData={localFormData} onChange={onInputChange} bgColor="bg-white" borderColor={"border-gray-300"} />
-                    </Form>
+                    </form>
                 </div>
             </Dialog.Content>
         </Dialog.Root>

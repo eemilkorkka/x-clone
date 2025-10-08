@@ -8,10 +8,10 @@ datasource db {
 }
 
 model verificationtokens {
-  Id    Int    @id @default(autoincrement())
-  Email String @unique(map: "Email") @db.VarChar(255)
-  VerificationCode  Int?
-  PasswordResetCode Int?
+  Id                      Int       @id @default(autoincrement())
+  Email                   String    @unique(map: "Email") @db.VarChar(255)
+  PasswordResetCode       Int?
+  VerificationCode        Int?
   PasswordResetCodeExpiry DateTime?
 }
 
@@ -30,13 +30,13 @@ model users {
   ProfilePicture String      @default("https://cloud.appwrite.io/v1/storage/buckets/67e599e6001b68a099f7/files/67e59ae30013a907b563/view?project=67e599cf000525d1eb9a") @db.VarChar(255)
   CoverPicture   String?     @db.VarChar(255)
   Bio            String?     @db.VarChar(255)
-  created_at DateTime       @default(now()) @db.Timestamp(0)
+  created_at     DateTime    @default(now()) @db.Timestamp(0)
   bookmarks      bookmarks[]
+  following      follows[]   @relation("follower")
+  followers      follows[]   @relation("following")
   likes          likes[]
   posts          posts[]
   retweets       retweets[]
-  followers follows[] @relation("following")
-  following follows[] @relation("follower")
 }
 
 model files {
@@ -108,12 +108,13 @@ model retweets {
 }
 
 model follows {
-  follower    users @relation("follower", fields: [followerId], references: [UserID])
   followerId  Int
-  following   users @relation("following", fields: [followingId], references: [UserID])
   followingId Int
+  follower    users @relation("follower", fields: [followerId], references: [UserID])
+  following   users @relation("following", fields: [followingId], references: [UserID])
 
   @@id([followerId, followingId])
+  @@index([followingId], map: "follows_followingId_fkey")
 }
 
 enum files_File_Type {

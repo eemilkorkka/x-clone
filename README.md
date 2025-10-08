@@ -1,7 +1,7 @@
 
 # X-clone
 
-A fully responsive full-stack clone of X (formerly known as Twitter) built using technologies like Next.js, tailwindcss, Radix UI, MySQL, Appwrite Storage for storing videos & images and NextAuth for authentication. 
+A fully responsive full-stack clone of X (formerly known as Twitter) built using technologies like Next.js, tailwindcss, Radix UI, MySQL, Appwrite Storage for storing videos & images and Auth.js for authentication. 
 
 I decided to build this project to learn more about Next.js and full-stack web development. 
 

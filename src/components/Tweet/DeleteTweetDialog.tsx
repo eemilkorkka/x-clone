@@ -33,7 +33,12 @@ const DeleteTweetDialog = ({ children, tweetId, tweetType }: DeleteTweetDialogPr
         });
 
         const json = await response.json();
-        return json;
+
+        if (response.ok) {
+            return json
+        } else {
+            throw new Error(json.message);
+        }
     }
 
     const { mutate: deleteTweetMutation } = useMutation({

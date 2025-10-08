@@ -83,7 +83,7 @@ const TweetPopover = ({ children, username, tweetId, tweetType }: TweetPopoverPr
 
     return (
         <Popover.Root open={open} onOpenChange={setOpen}>
-            <Popover.Trigger asChild onClick={() => setOpen(true)}>
+            <Popover.Trigger asChild>
                 {children}
             </Popover.Trigger>
             <Popover.Anchor />
