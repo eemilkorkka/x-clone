@@ -102,7 +102,7 @@ const ProfileFeedWrapper = ({ type, username, displayName, userId }: ProfileFeed
         </div>
     ) : (
         <MediaGrid>
-            {tweets.map((tweet) => {
+            {data?.pages.flatMap(page => page).map((tweet) => {
                 return (
                     <Link href={`/${username}/status/${tweet.ID}`} className="aspect-square w-full max-w-xs" key={tweet.ID}>
                         <Media type={tweet.files[0].File_Type} url={tweet.files[0].File_URL} />
