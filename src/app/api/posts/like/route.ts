@@ -51,11 +51,9 @@ export async function GET(req: NextRequest) {
     if (!session?.user) return NextResponse.json({ message: "Not authenticated." }, { status: 401 });
 
     const searchParams = req.nextUrl.searchParams;
-    const userId = parseInt(searchParams.get("userId") || "");
+    const userId = parseInt(session.user.id);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
-
-    if (userId != parseInt(session.user.id)) return NextResponse.json({ message: "Forbidden." }, { status: 403 });
 
     try {
         const likedPosts = await getLikedTweets(userId, page, limit);
