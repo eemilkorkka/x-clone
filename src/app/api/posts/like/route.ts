@@ -48,17 +48,19 @@ export async function PUT(req: Request) {
 
 export async function GET(req: NextRequest) {
     const session = await auth();
-    if (!session?.user) return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+    if (!session?.user) return NextResponse.json({ message: "Not authenticated." }, { status: 401 });
 
     const searchParams = req.nextUrl.searchParams;
     const userId = parseInt(searchParams.get("userId") || "");
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
 
+    if (userId != parseInt(session.user.id)) return NextResponse.json({ message: "Forbidden." }, { status: 403 });
+
     try {
         const likedPosts = await getLikedTweets(userId, page, limit);
         return NextResponse.json(likedPosts, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ message: "Internal Server Error", error: error }, { status: 500 });
+        return NextResponse.json({ message: "Internal Server Error.", error: error }, { status: 500 });
     }
 }
