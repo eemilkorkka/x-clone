@@ -21,12 +21,12 @@ interface ProfileFeedWrapperProps {
 const ProfileFeedWrapper = ({ type, username, displayName, userId }: ProfileFeedWrapperProps) => {
 
     const getUrl = (pageParam: number): string => {
-        return type === "tweets" 
-        ? `/api/${username}?page=${pageParam}&limit=${tweetsLimit}` 
-        : `/api/posts/${type}?username=${username}&userId=${userId}&page=${pageParam}&limit=${tweetsLimit}`;
+        return type === "tweets"
+            ? `/api/${username}?page=${pageParam}&limit=${tweetsLimit}`
+            : `/api/posts/${type}?username=${username}&userId=${userId}&page=${pageParam}&limit=${tweetsLimit}`;
     }
 
-    const fetchData = async ({ pageParam } : { pageParam: number }) => {
+    const fetchData = async ({ pageParam }: { pageParam: number }) => {
         const response = await fetch(getUrl(pageParam));
         if (!response.ok) {
             throw new Error("Failed to fetch data.");
@@ -65,51 +65,53 @@ const ProfileFeedWrapper = ({ type, username, displayName, userId }: ProfileFeed
 
     const tweets = data?.pages.flatMap(page => page) || [];
 
-    return type !== "media" ? (
+    return (
         <div className="h-screen">
-            {tweets.map((tweet, index) => {
-                return (
-                    <Tweet
-                        key={index}
-                        tweetType="tweet"
-                        tweetId={tweet.ID}
-                        username={tweet.users.Username}
-                        displayName={tweet.users.DisplayName}
-                        profilePicture={tweet.users.ProfilePicture}
-                        tweetContent={
-                            {
-                                text: tweet.Content,
-                                files: tweet.files.map((file: { File_URL: string; File_Type: string }) => ({
-                                    url: file.File_URL,
-                                    type: file.File_Type
-                                }))
+            {type !== "media" ? (
+                tweets.map((tweet, index) => {
+                    return (
+                        <Tweet
+                            key={index}
+                            tweetType="tweet"
+                            tweetId={tweet.ID}
+                            username={tweet.users.Username}
+                            displayName={tweet.users.DisplayName}
+                            profilePicture={tweet.users.ProfilePicture}
+                            tweetContent={
+                                {
+                                    text: tweet.Content,
+                                    files: tweet.files.map((file: { File_URL: string; File_Type: string }) => ({
+                                        url: file.File_URL,
+                                        type: file.File_Type
+                                    }))
+                                }
                             }
-                        }
-                        timeStamp={new Date(tweet.created_at!)}
-                        isRetweet={tweet.isRetweet}
-                        profile={displayName}
-                        statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
-                        likes={tweet.likes}
-                        bookmarks={tweet.bookmarks}
-                        retweets={tweet.retweets}
-                    />
-                )
-            })}
-            <LoadingBlock 
+                            timeStamp={new Date(tweet.created_at!)}
+                            isRetweet={tweet.isRetweet}
+                            profile={displayName}
+                            statValues={[tweet.replies.length, tweet.retweets.length, tweet.likes.length]}
+                            likes={tweet.likes}
+                            bookmarks={tweet.bookmarks}
+                            retweets={tweet.retweets}
+                        />
+                    )
+                })
+            ) : (
+                <MediaGrid>
+                    {tweets.map((tweet) => {
+                        return (
+                            <Link href={`/${username}/status/${tweet.ID}`} className="aspect-square w-full max-w-xs" key={tweet.ID}>
+                                <Media type={tweet.files[0].File_Type} url={tweet.files[0].File_URL} />
+                            </Link>
+                        )
+                    })}
+                </MediaGrid>
+            )}
+            <LoadingBlock
                 isFetchingNextPage={isFetchingNextPage}
                 status={status}
             />
         </div>
-    ) : (
-        <MediaGrid>
-            {data?.pages.flatMap(page => page).map((tweet) => {
-                return (
-                    <Link href={`/${username}/status/${tweet.ID}`} className="aspect-square w-full max-w-xs" key={tweet.ID}>
-                        <Media type={tweet.files[0].File_Type} url={tweet.files[0].File_URL} />
-                    </Link>
-                )
-            })}
-        </MediaGrid>
     )
 }
 

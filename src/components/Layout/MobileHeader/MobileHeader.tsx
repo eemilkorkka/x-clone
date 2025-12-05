@@ -1,9 +1,7 @@
 import ProfilePicture from "@/components/Profile/ProfilePicture";
 import Button from "@/components/Button/Button";
-import Link from "next/link";
 import { BsTwitterX } from "react-icons/bs";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 import LeftSideBarMobile from "../LeftSideBarMobile/LeftSideBarMobile";
 import { User } from "@/types/User";
 
@@ -14,36 +12,29 @@ interface MobileHeaderProps {
 const MobileHeader = ({ user }: MobileHeaderProps) => {
 
     const { data } = useSession();
-    const pathname = usePathname();
 
     return (
         <>
-            {pathname.split("/")[1] === "home" && (
-                <div className="flex items-end w-full px-4 mobile:hidden">
-                    <div className="w-2/3">
-                        <LeftSideBarMobile user={user}>
-                            <div className="w-[35px] h-[35px]">
-                                <ProfilePicture image={data?.user.image} />
-                            </div>
-                        </LeftSideBarMobile>
-                    </div>
-                    <Link href="/home">
-                        <button className="hover:bg-gray-200 p-2.5 hover:cursor-pointer rounded-full">
-                            <BsTwitterX size="26" className="p-0.5" />
-                        </button>
-                    </Link>
-                    <div className="w-2/3 flex justify-end">
-                        <Button
-                            variant="outline"
-                            textColor="black"
-                            styles="px-4 text-sm p-2!"
-                            hoverColor="gray"
-                        >
-                            Get Premium
-                        </Button>
-                    </div>
+            <div className="flex items-center w-full px-4 mobile:hidden">
+                <div className="w-2/3">
+                    <LeftSideBarMobile user={user}>
+                        <div className="w-[35px] h-[35px]">
+                            <ProfilePicture image={data?.user.image} />
+                        </div>
+                    </LeftSideBarMobile>
                 </div>
-            )}
+                <BsTwitterX size="55" className="p-2.5" />
+                <div className="w-2/3 flex justify-end">
+                    <Button
+                        variant="outline"
+                        textColor="black"
+                        styles="px-4 text-sm p-2!"
+                        hoverColor="gray"
+                    >
+                        Get Premium
+                    </Button>
+                </div>
+            </div>
         </>
     );
 }

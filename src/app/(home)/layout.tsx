@@ -1,19 +1,22 @@
-import { ReactNode } from "react";
-import LeftSideBar from "./LeftSideBar/LeftSideBar";
-import SearchBar from "../Shared/SearchBar";
-import Widget from "../Shared/Widget";
 import { auth } from "@/auth";
+import Button from "@/components/Button/Button";
+import FloatingPostButton from "@/components/Button/FloatingPostButton/FloatingPostButton";
+import LeftSideBar from "@/components/Layout/LeftSideBar/LeftSideBar";
+import SearchBar from "@/components/Shared/SearchBar";
+import UserSuggestion from "@/components/Shared/UserSuggestion";
+import Widget from "@/components/Shared/Widget";
+import TrendingWidget from "@/components/Trending/TrendingWidget";
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
 import { headers } from "next/headers";
-import UserSuggestion from "../Shared/UserSuggestion";
-import TrendingWidget from "../Trending/TrendingWidget";
-import Button from "../Button/Button";
-import FloatingPostButton from "../Button/FloatingPostButton/FloatingPostButton";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
-const Layout = async ({ children }: { children: ReactNode }) => {
+export default async function HomeLayout({ children }: { children: React.ReactNode }) {
+    
     const session = await auth();
     const headersList = headers();
+
+    if (!session?.user) return redirect("/");
 
     const pathname = (await headersList).get("x-url")?.split("//") || "";
     const endpoint = pathname[1].slice(pathname[1].split("/")[0].length);
@@ -66,7 +69,6 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             following: true,
         }
     });
-
     return (
         <>
             {!isViewingASpecificTweet && (
@@ -129,7 +131,5 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                 </div>
             </div>
         </>
-    );
+    )
 }
-
-export default Layout;

@@ -31,7 +31,7 @@ export async function PUT(req: Request) {
                 }
             });
 
-            return NextResponse.json({ message: "Tweet unbookmarked successfully. "}, { status: 200 });
+            return NextResponse.json({ message: "Post unbookmarked successfully. "}, { status: 200 });
         } else {
             await prisma.bookmarks.create({
                 data: {
@@ -40,7 +40,7 @@ export async function PUT(req: Request) {
                 }
             });
 
-            return NextResponse.json({ message: "Tweet bookmarked successfully. "}, { status: 200 });
+            return NextResponse.json({ message: "Post bookmarked successfully. "}, { status: 200 });
         }
     } catch (error) {
         return NextResponse.json({ message: "Internal Server Error.", error: error }, { status: 500 });

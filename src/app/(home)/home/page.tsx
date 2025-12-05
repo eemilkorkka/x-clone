@@ -1,7 +1,5 @@
 import { auth } from "@/auth";
 import HomeWrapper from "@/components/home/HomeWrapper"
-import Layout from "@/components/Layout/Layout";
-import ProtectedRoute from "@/components/Shared/ProtectedRoute";
 import { prisma } from "@/lib/prisma";
 
 export default async function Page() {
@@ -30,10 +28,10 @@ export default async function Page() {
     }
 
     return (
-        <ProtectedRoute>
-            <Layout>
-                <HomeWrapper user={user!} />
-            </Layout>
-        </ProtectedRoute>
+        <>
+            {user && (
+                <HomeWrapper user={user} />
+            )}
+        </>
     );
 }

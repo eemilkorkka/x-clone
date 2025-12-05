@@ -1,6 +1,3 @@
-import Layout from "@/components/Layout/Layout";
-import ProtectedRoute from "@/components/Shared/ProtectedRoute";
-import Profile from "@/components/Profile/Profile";
 import { prisma } from "@/lib/prisma";
 import ProfileFeedWrapper from "@/components/Profile/ProfileFeedWrapper";
 import { auth } from "@/auth";
@@ -19,21 +16,9 @@ export default async function Page({ params }: { params: Promise<{ username: str
         }
     });
 
-    const likes = userId && await prisma.likes.count({
-        where: {
-            UserID: userId.UserID
-        }
-    });
-
     if (username !== session?.user.username) redirect(`/${username}`);
 
     return (
-        <ProtectedRoute>
-            <Layout>
-                <Profile username={username} likesCount={likes || 0}>
-                    <ProfileFeedWrapper type="like" username={username} displayName={session.user.name} userId={userId?.UserID} />
-                </Profile>
-            </Layout>
-        </ProtectedRoute>
+        <ProfileFeedWrapper type="like" username={username} displayName={session.user.name} userId={userId?.UserID} />
     );
 }

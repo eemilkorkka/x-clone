@@ -19,10 +19,12 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
     const queryClient = useQueryClient();
 
     const {
-        data
+        data,
+        refetch
     } = useQuery({
         queryKey: ["follows", username],
-        queryFn: () => fetchUserData(username)
+        queryFn: () => fetchUserData(username),
+        enabled: false
     });
 
     const isFollowing = data?.followers.some((follower: { followerId: number }) => follower.followerId === parseInt(session.data?.user.id ?? ""));
@@ -46,7 +48,7 @@ const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) => {
 
     return (
         <HoverCard.Root open={open} onOpenChange={setOpen}>
-            <HoverCard.Trigger asChild>
+            <HoverCard.Trigger asChild onMouseOver={() => refetch()}>
                 {children}
             </HoverCard.Trigger>
             <HoverCard.Portal>

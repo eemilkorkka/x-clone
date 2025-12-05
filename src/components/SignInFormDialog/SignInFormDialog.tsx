@@ -9,7 +9,7 @@ import Formdata from "@/types/Formdata";
 import Button from "../Button/Button";
 import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 import { signIn } from "next-auth/react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "../Shared/LoadingSpinner";
 
@@ -137,7 +137,6 @@ const SignInFormDialog = ({ children }: SignInFormDialogProps) => {
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog.Root>
-            <Toaster />
         </>
     );
 }

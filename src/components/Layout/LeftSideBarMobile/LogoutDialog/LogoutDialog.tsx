@@ -1,3 +1,4 @@
+"use client";
 import { Dialog, VisuallyHidden } from "radix-ui";
 import { ReactNode, useState } from "react";
 import Button from "@/components/Button/Button";

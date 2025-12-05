@@ -37,9 +37,9 @@ interface TweetStatProps {
 const TweetStat = ({
     type,
     tweetId,
-    hoverBgColor,
-    hoverTextColor,
-    clickedColor,
+    hoverBgColor = "hover:bg-xblue/10",
+    hoverTextColor = "group-hover:text-xblue",
+    clickedColor = "text-xblue",
     statValue,
     likes,
     retweets,
@@ -189,19 +189,18 @@ const TweetStat = ({
 
     const tweetStatElement = (
         <div
-            className={`flex items-center text-gray-600 ${clicked && type !== "reply" && (clickedColor ?? "text-xblue")
-                } hover:cursor-pointer`}
+            className={`flex items-center text-gray-600 ${clicked && type !== "reply" && clickedColor} hover:cursor-pointer`}
             onClick={(e) => {
                 e.stopPropagation();
                 statConfigs[type].action?.();
             }}
         >
             <div className="group flex items-center">
-                <div className={`rounded-full p-2 ${hoverBgColor ?? "hover:bg-xblue/10"} ${hoverTextColor ?? "hover:text-xblue"}`}>
+                <div className={`rounded-full p-2 ${hoverBgColor} ${hoverTextColor}`}>
                     {currentIcon}
                 </div>
                 {statValue > 0 && (
-                    <span className={`text-sm ${hoverTextColor ?? "group-hover:text-xblue"}`}>
+                    <span className={`text-sm ${hoverTextColor}`}>
                         {statValue}
                     </span>
                 )}

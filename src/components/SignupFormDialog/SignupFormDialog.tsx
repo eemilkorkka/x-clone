@@ -10,7 +10,7 @@ import Username from "./steps/Username";
 import Password from "./steps/Password";
 import MultiStepForm from "../Form/MultiStepForm";
 import { SignupFormContext } from "@/Context/SignupFormContext";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { DIALOG_EVENTS } from "@/utils/dialogEvents";
 
 interface SignupFormDialogProps {
@@ -113,7 +113,6 @@ const SignupFormDialog = ({ children }: SignupFormDialogProps) => {
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog.Root>
-            <Toaster />
         </>
     );
 }
