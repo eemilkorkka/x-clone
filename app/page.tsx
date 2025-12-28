@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { FaXTwitter } from "react-icons/fa6";
-import { FcGoogle } from "react-icons/fc";
 import { Separator } from "@/components/Separator";
-import Link from "next/link";
+import { Footer } from "@/components/Footer";
+import { GoogleSignup } from "@/components/GoogleSignup";
 
-export default function Page() {
+export default function IndexPage() {
     return (
-        <div className="flex p-8 flex-col sm:items-center md:flex-row min-h-screen bg-black">
-            <div className="flex flex-col md:flex-row md:w-full">
+        <div className="flex flex-col p-8 sm:items-center min-h-screen bg-black">
+            <div className="md:mt-auto flex flex-col md:flex-row md:w-full">
                 <div className="flex w-full h-fit md:m-auto p-4 md:p-8 md:max-w-1/2 md:pr-8">
                     <FaXTwitter className="w-full h-full max-h-15 max-w-15 md:max-h-90 md:max-w-full " fill="white" />
                 </div>
@@ -17,12 +17,7 @@ export default function Page() {
                         <h3 className="text-3xl font-extrabold text-white">Join today.</h3>
                     </div>
                     <div className="mt-8 space-y-4 max-w-xs">
-                        <Button size="lg" variant="secondary" className="rounded-full w-full py-5.5 hover:cursor-pointer">
-                            <div className="flex items-center gap-3">
-                                <FcGoogle className="" size={25} />
-                                <span>Sign up with Google</span>
-                            </div>
-                        </Button>
+                        <GoogleSignup />
                         <Separator text="OR" />
                         <Button size="lg" variant="secondary" className="rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
                             Create account
@@ -55,6 +50,7 @@ export default function Page() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

@@ -14,7 +14,7 @@ export const HomeFeed = () => {
             <FeedHeader>
                 <Tabs tabs={[{ label: "For you" }, { label: "Following" }]} activeTab={activeTab} setActiveTab={setActiveTab} />
             </FeedHeader>
-            <TweetForm />   
+            <TweetForm type="tweet" /> 
         </>
     )
 }
