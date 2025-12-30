@@ -1,5 +1,4 @@
-import { MutateFunction, UseMutationResult } from "@tanstack/react-query";
-import { useActionState } from "react";
+import {  UseMutationResult } from "@tanstack/react-query";
 import { twMerge } from "tailwind-merge";
 
 type MutationResponse =
@@ -17,6 +16,7 @@ interface TweetActionProps {
     hoverBgColor?: string;
     activeColor?: string;
     mutation?: UseMutationResult<MutationResponse, Error, FormData>;
+    onClick?: () => void;
 }
 
 export const TweetAction = ({
@@ -29,7 +29,8 @@ export const TweetAction = ({
     hoverTextColor = "group-hover:text-sky-500",
     hoverBgColor = "group-hover:bg-sky-500/20",
     activeColor = "text-sky-500",
-    mutation
+    mutation,
+    onClick
 
 }: TweetActionProps) => {
 
@@ -39,6 +40,7 @@ export const TweetAction = ({
             <button
                 type="submit"
                 className={twMerge(`flex items-center gap-1 text-zinc-500 ${hoverTextColor} hover:cursor-pointer`, styles)}
+                onClick={onClick}
                 formAction={async formData => {
                     mutation?.mutate(formData);
                 }}

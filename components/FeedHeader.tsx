@@ -8,7 +8,7 @@ interface FeedHeaderProps {
 
 export const FeedHeader = ({ children, styles }: FeedHeaderProps) => {
     return (
-        <div className={twMerge("flex sticky top-0 h-13 border-b border-gray-200", styles)}>
+        <div className={twMerge("flex sticky top-0 h-13 border-b border-gray-200 bg-white z-20", styles)}>
             {children}
         </div>
     )

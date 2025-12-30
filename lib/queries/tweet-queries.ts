@@ -36,7 +36,12 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
                     files: true,
                     likes: true,
                     bookmarks: true,
-                    retweets: true
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
                 }
             }
         },
@@ -84,6 +89,27 @@ export const getTweetById = async (id: number) => {
                 }
             },
             retweets: true,
+            parentTweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
+                }
+            },
             originalTweet: {
                 include: {
                     user: {
@@ -97,7 +123,12 @@ export const getTweetById = async (id: number) => {
                     files: true,
                     likes: true,
                     bookmarks: true,
-                    retweets: true
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
                 }
             }
         }

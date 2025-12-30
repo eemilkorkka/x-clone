@@ -24,11 +24,12 @@ type File = {
 interface TweetFormProps {
     type: "tweet" | "reply";
     parentTweetId?: number;
+    isComposeModal: boolean;
 }
 
 const MAX_LENGTH = 280;
 
-export const TweetForm = ({ type, parentTweetId }: TweetFormProps) => {
+export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProps) => {
 
     const { data } = authClient.useSession();
     const [tweetContent, setTweetContent] = useState("");
@@ -54,7 +55,7 @@ export const TweetForm = ({ type, parentTweetId }: TweetFormProps) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const formData = new FormData();
+        const formData = new FormData(e.currentTarget);
 
         if (pickedFiles.length > 0) {
             pickedFiles.forEach((pickedFile) => {
@@ -62,20 +63,19 @@ export const TweetForm = ({ type, parentTweetId }: TweetFormProps) => {
             });
         }
 
-        formData.append("tweetContent", tweetContent);
-
         startTransition(async () => {
             await action(formData);
         });
     }
 
     return (
-        <div className="p-4 pb-0 flex items-start border-b border-gray-200 max-w-full">
+        <div className={`p-4 pb-0 flex items-start ${!isComposeModal && "border-b border-gray-200"} max-w-full`}>
             <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" />
             <form onSubmit={handleSubmit} className="flex flex-col w-full w-full mt-2">
                 <TextareaAutosize
                     placeholder={type === "tweet" ? "What's happening?" : "Post your reply"}
-                    name="tweetContent" value={tweetContent}
+                    name="tweetContent" 
+                    value={tweetContent}
                     className="border-0 focus:outline-none resize-none text-lg placeholder-gray-500 pb-4 text-wrap"
                     minRows={2}
                     maxLength={MAX_LENGTH}
@@ -83,7 +83,7 @@ export const TweetForm = ({ type, parentTweetId }: TweetFormProps) => {
                     onChange={(e) => setTweetContent(e.currentTarget.value)}
                     onFocus={() => setTextAreaFocused(true)}
                 />
-                <div className={`${type === "reply" ? (textAreaFocused ? "flex" : "hidden") : "flex"} items-center ${textAreaFocused && "border-t-1 border-gray-200"} justify-between`}>
+                <div className={`${type === "reply" && !isComposeModal ? (textAreaFocused ? "flex" : "hidden") : "flex"} items-center ${textAreaFocused && !isComposeModal && "border-t-1 border-gray-200"} justify-between`}>
                     <div className='flex'>
                         <Icon onClick={() => filePickerRef.current?.click()}>
                             <SlPicture size={18} />
@@ -114,7 +114,6 @@ export const TweetForm = ({ type, parentTweetId }: TweetFormProps) => {
                             <SlLocationPin size={18} />
                         </Icon>
                     </div>
-
                     <div className='flex gap-1 items-center'>
                         <CircularProgress
                             value={Math.round(tweetContent.length / MAX_LENGTH * 100)}
@@ -129,6 +128,7 @@ export const TweetForm = ({ type, parentTweetId }: TweetFormProps) => {
                         <Button type="submit" disabled={tweetContent.trim() === ""} className="ml-2 rounded-full px-4 font-bold hover:cursor-pointer">Post</Button>
                     </div>
                 </div>
+                <input className='hidden' name="parentTweetId" defaultValue={parentTweetId} />
             </form>
         </div>
     )

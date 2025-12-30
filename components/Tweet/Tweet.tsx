@@ -11,9 +11,11 @@ interface TweetProps {
     type: "tweet" | "status";
     tweet: TweetType;
     useLink?: boolean;
+    isComposeModal?: boolean;
+    isParentTweet: boolean;
 }
 
-export const Tweet = ({ type, tweet, useLink = true }: TweetProps) => {
+export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isParentTweet }: TweetProps) => {
 
     const { data } = authClient.useSession();
     const router = useRouter();
@@ -21,45 +23,47 @@ export const Tweet = ({ type, tweet, useLink = true }: TweetProps) => {
 
     const onClick = () => {
         if (useLink) {
-            router.push(`/${tweet.user.username}/status/${tweetId}`);
+            router.push(`/${tweet.user?.username}/status/${tweetId}`);
         }
     }
 
     const avatar = (
-        <CustomAvatar
-            src={tweet.user.image ?? ""}
-            size="md"
-            username={tweet.user.username ?? ""}
-            alt={`@${tweet.user.username}`}
-            styles="mr-2.5"
-        />
+        <div className="flex flex-col items-center">
+            <CustomAvatar
+                src={tweet.user?.image ?? ""}
+                size="md"
+                username={tweet.user?.username ?? ""}
+                alt={`@${tweet.user?.username}`}
+            />
+            {isParentTweet && <hr style={{ width: "2px" }} className="h-full mt-2 mx-auto bg-zinc-300"></hr>}
+        </div>
     )
 
     return (
-        <div className={`p-4 ${type !== "status" && "last:border-b"} first:border-0 border-t border-gray-200 ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
+        <div className={`p-4 ${type !== "status" && !isComposeModal && "last:border-b"} ${!isComposeModal && "border-t border-gray-200"} first:border-0 ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
             {tweet.isRetweet && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-700 pb-2">
-                    <AiOutlineRetweet className="text-zinc-700" size={16} /> {tweet.user.username === data?.user.username ? "You" : tweet.user.username} reposted
+                    <AiOutlineRetweet className="text-zinc-700" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
                 </p>
             )}
             <div className="flex" onClick={onClick}>
                 {type === "tweet" && (
                     avatar
                 )}
-                <div className="flex flex-col w-full">
-                    <div className="flex gap-1">
+                <div className="flex flex-col w-full min-w-0">
+                    <div className="flex gap-1 min-w-0">
                         {type === "status" && (
                             avatar
                         )}
                         {type === "tweet" ? (
                             <>
-                                <Displayname username={tweet.user.username ?? ""} displayName={tweet.user.displayUsername ?? ""} />
-                                <Username username={tweet.user.username ?? ""} />
+                                <Displayname username={tweet.user?.username ?? ""} displayName={tweet.user?.displayUsername ?? ""} styles="ml-2" />
+                                <Username username={tweet.user?.username ?? ""} />
                             </>
                         ) : (
                             <div className="flex flex-col mb-2.5">
-                                <Displayname username={tweet.user.username ?? ""} displayName={tweet.user.displayUsername ?? ""} />
-                                <Username username={tweet.user.username ?? ""} />
+                                <Displayname username={tweet.user?.username ?? ""} displayName={tweet.user?.displayUsername ?? ""} styles="ml-2" />
+                                <Username username={tweet.user?.username ?? ""} styles="ml-2" />
                             </div>
                         )}
                         {type === "tweet" && (
@@ -71,7 +75,7 @@ export const Tweet = ({ type, tweet, useLink = true }: TweetProps) => {
                             </>
                         )}
                     </div>
-                    <p className="text-[15px]">{tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent}</p>
+                    <p className="text-[15px] ml-2 whitespace-pre-line break-all">{tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent}</p>
                     {type === "status" && (
                         <div className="pt-2 flex items-center text-zinc-500 text-[15px]">
                             <span>{new Date(tweet.createdAt).toLocaleTimeString('en-US', {
@@ -86,7 +90,7 @@ export const Tweet = ({ type, tweet, useLink = true }: TweetProps) => {
                             })}</span>
                         </div>
                     )}
-                    {type === "tweet" && <TweetActions type="tweet" tweet={tweet} />}
+                    {type === "tweet" && !isComposeModal && <TweetActions type="tweet" tweet={tweet} />}
                 </div>
             </div>
         </div>

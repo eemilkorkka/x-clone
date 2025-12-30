@@ -25,7 +25,7 @@ export const Leftsidebar = async () => {
 
     return (
         <nav className="w-full flex flex-col justify-between items-center xl:items-start mobile:pt-2 mobile:pb-4 px-2 mobile:h-screen fixed bottom-0 mobile:sticky mobile:top-0 border-t-1 border-gray-200 bg-white z-20">
-            
+
             <div className="w-full">
                 <div className="hidden mobile:block p-2.5 mx-1 hover:bg-ring/20 rounded-full w-fit">
                     <Link href="/home">
@@ -72,7 +72,9 @@ export const Leftsidebar = async () => {
                         label="Profile"
                     />
 
-                    <Button className="hidden mobile:inline w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">Post</Button>
+                    <Link href="/compose/post">
+                        <Button className="hidden mobile:inline w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">Post</Button>
+                    </Link>
                 </div>
             </div>
 

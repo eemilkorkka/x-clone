@@ -6,11 +6,11 @@ import z from "zod";
 
 const tweetFormSchema = z.object({
     tweetContent: z.string().max(280).optional(),
-    files: z.array(z.instanceof(File)).optional()
+    files: z.array(z.instanceof(File)).max(4).optional()
 }).refine(
     (data) => {
         const hasContent = data.tweetContent && data.tweetContent.trim().length > 0;
-        const hasFiles = data.files && data.files.length > 0 && data.files.length > 5;
+        const hasFiles = data.files && data.files.length > 0
         return hasContent || hasFiles;
     },
     {
@@ -24,9 +24,12 @@ export async function createTweet(previousState: any, formData: FormData) {
 
     if (!session) return { error: "Not authenticated." }
 
+    const parentTweetId = formData.get("parentTweetId") as string;
     const tweetContent = formData.get("tweetContent") as string;
     const files = formData.getAll("file") as File[];
+
     const actualFiles = files.filter((file) => file.size > 0);
+    const parentId = parentTweetId ? parseInt(parentTweetId) : null;
 
     const parsedData = tweetFormSchema.safeParse({
         tweetContent,
@@ -42,7 +45,8 @@ export async function createTweet(previousState: any, formData: FormData) {
             const tweet = await tx.tweet.create({
                 data: {
                     userId: session.user.id,
-                    tweetContent: tweetContent
+                    tweetContent: tweetContent,
+                    parentTweetId: parentId
                 }
             });
 

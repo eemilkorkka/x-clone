@@ -9,6 +9,8 @@ import { retweet } from "@/app/actions/retweet";
 import { useMutation } from "@tanstack/react-query";
 import { bookmarkTweet } from "@/app/actions/bookmarkTweet";
 import { twMerge } from "tailwind-merge";
+import {  useComposeModal } from "../ComposeModalContext";
+import { useRouter } from "next/navigation";
 
 interface TweetActionsProps {
     type: "status" | "tweet";
@@ -19,6 +21,7 @@ interface TweetActionsProps {
 export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
 
     const { data } = authClient.useSession();
+    const router = useRouter();
 
     const likeMutation = useMutation({
         mutationFn: likeTweet
@@ -32,12 +35,20 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
         mutationFn: bookmarkTweet
     });
 
+    const { setTweetToReplyTo } = useComposeModal();
+
+    const handleReplyActionClick = () => {
+        tweet.isRetweet ? setTweetToReplyTo(tweet.originalTweet) : setTweetToReplyTo(tweet);
+        router.push("/compose/post");
+    }
+
     return (
         <div className={twMerge("flex justify-between -ml-2", styles)}>
             <TweetAction
                 tweetId={tweet.id}
-                statCount={tweet._count.replies}
+                statCount={tweet.isRetweet ? tweet.originalTweet._count?.replies : tweet._count?.replies}
                 icon={<FaRegComment />}
+                onClick={handleReplyActionClick}
             />
             <TweetAction
                 tweetId={tweet.id}

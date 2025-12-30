@@ -52,12 +52,12 @@ export const HomeFeed = () => {
             <FeedHeader>
                 <Tabs tabs={tabs} activeTab={activeTab} changeTab={setActiveTab} />
             </FeedHeader>
-            <TweetForm type="tweet" />
+            <TweetForm type="tweet" isComposeModal={false} />
             <div>
                 {data && data?.pages.map((group, i) => (
                     <React.Fragment key={i}>
                         {group.items?.map((tweet: RegularTweet | Retweet) => (
-                            <Tweet type="tweet" key={tweet.id} tweet={tweet} />
+                            <Tweet type="tweet" key={tweet.id} tweet={tweet} isParentTweet={false} />
                         ))}
                     </React.Fragment>
                 ))}

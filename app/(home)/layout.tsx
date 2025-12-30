@@ -1,11 +1,14 @@
 import { Leftsidebar } from "@/components/Leftsidebar";
 import { PremiumCard } from "@/components/PremiumCard";
 import { Searchbar } from "@/components/Searchbar";
+import React from "react";
 
 export default function HomeLayout({
   children,
+  modal
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <main className="flex flex-col-reverse mobile:flex-row w-full max-w-fit mx-auto overflow-y-auto">
@@ -16,6 +19,7 @@ export default function HomeLayout({
       <section className="flex w-full min-w-0 gap-8">
         <div className="w-3xl md:w-[598px] h-full border-r border-l border-gray-200 overflow-y-scroll no-scrollbar">
           {children}
+          {modal}
         </div>
         <aside className="hidden lg:flex flex-col gap-4 flex-shrink-0 py-2 w-85">
           <Searchbar />

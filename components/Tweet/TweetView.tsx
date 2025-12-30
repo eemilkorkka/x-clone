@@ -29,9 +29,9 @@ export const TweetView = ({ id }: { id: number }) => {
                 <p>loading...</p>
             ) : (
                 <>
-                    <Tweet type="status" tweet={data} useLink={false} />
+                    <Tweet type="status" tweet={data} useLink={false} isParentTweet={false} />
                     <TweetActions type="status" tweet={data} styles="ml-0 border-y-1 border-gray-200 p-2 mx-4" />
-                    <TweetForm type="reply" parentTweetId={data.id} />
+                    <TweetForm type="reply" parentTweetId={data.id} isComposeModal={false} />
                 </>
             )}
         </div>

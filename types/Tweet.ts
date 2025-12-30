@@ -6,13 +6,13 @@ export type TweetBase = {
     id: number;
     createdAt: Date;
     userId: string;
-    user: UserBase;
+    user?: UserBase | undefined;
     likes: Like[];
     retweets: Retweet[];
     bookmarks: Bookmark[];
-    _count: {
+    _count?: {
         replies: number;
-    }
+    } | undefined;
 }
 
 export interface RegularTweet extends TweetBase {
