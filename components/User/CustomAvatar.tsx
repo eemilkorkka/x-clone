@@ -41,7 +41,7 @@ export const CustomAvatar = ({ src, alt, size, username, useLink = true, useHove
     )
 
     return useLink ? (
-        <Link href={`/${username}`}>
+        <Link href={`/${username}`} onClick={(e) => e.stopPropagation()}>
             {avatarElement}
         </Link>
     ) : (

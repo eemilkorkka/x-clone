@@ -10,7 +10,7 @@ const tweetFormSchema = z.object({
 }).refine(
     (data) => {
         const hasContent = data.tweetContent && data.tweetContent.trim().length > 0;
-        const hasFiles = data.files && data.files.length > 0;
+        const hasFiles = data.files && data.files.length > 0 && data.files.length > 5;
         return hasContent || hasFiles;
     },
     {
@@ -32,6 +32,10 @@ export async function createTweet(previousState: any, formData: FormData) {
         tweetContent,
         actualFiles
     });
+
+    if (!parsedData.success) {
+        return { error: "Invalid form data." };
+    }
 
     try {
         const result = await prisma.$transaction(async (tx) => {

@@ -7,7 +7,7 @@ import { IoBookmark, IoBookmarkOutline, IoPerson, IoPersonOutline, IoSearchOutli
 import { Navitem } from "./Navitem";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { User } from "./User";
+import { User } from "./User/User";
 import { getSession } from "@/lib/session";
 import { PiDotsThreeBold } from "react-icons/pi";
 
@@ -24,10 +24,10 @@ export const Leftsidebar = async () => {
     const session = await getSession();
 
     return (
-        <nav className="w-full flex flex-col justify-between items-center xl:items-start pt-2 pb-4 px-2 mobile:h-screen fixed bottom-0 mobile:sticky mobile:top-0 border-t-1 border-gray-200">
+        <nav className="w-full flex flex-col justify-between items-center xl:items-start mobile:pt-2 mobile:pb-4 px-2 mobile:h-screen fixed bottom-0 mobile:sticky mobile:top-0 border-t-1 border-gray-200 bg-white z-20">
             
             <div className="w-full">
-                <div className="hidden mobile:block p-2.5 mx-1 hover:bg-ring/20 rounded-full">
+                <div className="hidden mobile:block p-2.5 mx-1 hover:bg-ring/20 rounded-full w-fit">
                     <Link href="/home">
                         <FaXTwitter size={30} />
                     </Link>

@@ -28,6 +28,8 @@ model User {
   sessions        Session[]
   accounts        Account[]
   tweets          Tweet[]
+  likes           Like[]
+  bookmarks       Bookmark[]
 
   @@unique([email])
   @@unique([username])
@@ -39,10 +41,46 @@ model Tweet {
   userId       String
   tweetContent String?  @db.VarChar(255)
   createdAt    DateTime @default(now())
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  files         File[]
+
+  // Retweets
+  isRetweet       Boolean @default(false)
+  originalTweetId Int?
+  originalTweet   Tweet?  @relation("Retweets", fields: [originalTweetId], references: [id], onDelete: Cascade)
+  retweets        Tweet[] @relation("Retweets")
+
+  // Comments
+  parentTweetId Int?
+  parentTweet   Tweet?  @relation("Replies", fields: [parentTweetId], references: [id], onDelete: Cascade)
+  replies       Tweet[] @relation("Replies")
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  files File[]
+  likes Like[]
+  bookmarks Bookmark[]
 
   @@unique([createdAt, id], name: "createdAt_id")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  tweetId   Int
+  createdAt DateTime @default(now())
+  tweet     Tweet    @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tweetId])
+}
+
+model Bookmark {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  tweetId   Int
+  createdAt DateTime @default(now())
+  tweet     Tweet    @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tweetId])
 }
 
 model File {
