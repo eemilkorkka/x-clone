@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { TweetActions } from "./TweetActions";
 import { authClient } from "@/lib/auth-client";
 import { AiOutlineRetweet } from "react-icons/ai";
+import { Text } from "../Text";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -37,10 +38,10 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
             />
             {isParentTweet && <hr style={{ width: "2px" }} className="h-full mt-2 mx-auto bg-zinc-300"></hr>}
         </div>
-    )
+    );
 
     return (
-        <div className={`p-4 ${type !== "status" && !isComposeModal && "last:border-b"} ${!isComposeModal && "border-t border-gray-200"} first:border-0 ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
+        <div className={`p-4 ${type !== "status" && !isComposeModal && "border-b"} ${!isComposeModal && "first:border-t border-gray-200"} first:border-0 ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
             {tweet.isRetweet && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-700 pb-2">
                     <AiOutlineRetweet className="text-zinc-700" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
@@ -75,7 +76,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             </>
                         )}
                     </div>
-                    <p className="text-[15px] ml-2 whitespace-pre-line break-all">{tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent}</p>
+                    <Text text={tweet.isRetweet ? tweet.originalTweet.tweetContent ?? "" : tweet.tweetContent ?? ""} />
                     {type === "status" && (
                         <div className="pt-2 flex items-center text-zinc-500 text-[15px]">
                             <span>{new Date(tweet.createdAt).toLocaleTimeString('en-US', {

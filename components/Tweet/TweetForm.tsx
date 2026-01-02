@@ -13,8 +13,9 @@ import { authClient } from '@/lib/auth-client';
 import { CustomAvatar } from '../User/CustomAvatar';
 import { useFilePicker } from '@/hooks/useFilePicker';
 import { createTweet } from '@/app/actions/createTweet';
-import toast from 'react-hot-toast';
 import { getQueryClient } from '@/lib/getQueryClient';
+import { toastMessage } from '@/lib/toast';
+import { useComposeModal } from '../ComposeModalContext';
 
 type File = {
     url: string;
@@ -41,12 +42,19 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
 
     useEffect(() => {
         if (state?.error) {
-            toast.error(state?.error);
+            toastMessage(state.error, state.success);
         }
 
         if (state?.success) {
-            queryClient.invalidateQueries({ queryKey: ["tweets"] });
-            toast.success("Post created successfully!");
+            toastMessage(state.message ?? "Post created successfully.", state.success);
+
+            if (parentTweetId) {
+                queryClient.invalidateQueries({ queryKey: ["tweet", parentTweetId] });
+                queryClient.invalidateQueries({ queryKey: ["replies", parentTweetId ]});
+            } else {
+                queryClient.invalidateQueries({ queryKey: ["tweets"] });
+            }
+
             setPickedFiles([]);
             setTweetContent("");
         }
@@ -74,7 +82,7 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
             <form onSubmit={handleSubmit} className="flex flex-col w-full w-full mt-2">
                 <TextareaAutosize
                     placeholder={type === "tweet" ? "What's happening?" : "Post your reply"}
-                    name="tweetContent" 
+                    name="tweetContent"
                     value={tweetContent}
                     className="border-0 focus:outline-none resize-none text-lg placeholder-gray-500 pb-4 text-wrap"
                     minRows={2}

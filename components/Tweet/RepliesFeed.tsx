@@ -1,27 +1,16 @@
-"use client";
-
-import { useState } from "react";
-import { FeedHeader } from "./FeedHeader"
-import { Tabs } from "./Tabs"
-import { TweetForm } from "./Tweet/TweetForm";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteScrollContainer } from "../InfiniteScrollContainer"
 import React from "react";
-import { Tweet } from "./Tweet/Tweet";
-import { RegularTweet, Retweet } from "@/types/Tweet";
-import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
-import { Spinner } from "./ui/spinner";
+import { Tweet } from "./Tweet";
+import { ReplyTweet } from "@/types/Tweet";
+import { Spinner } from "../ui/spinner";
 
-const tabs = [
-    { label: "For you" },
-    { label: "Following" }
-];
-
-const fetchTweets = async ({ pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
+const fetchReplies = async (id: number, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
         ? `cursorCreatedAt=${encodeURIComponent(pageParam.createdAt)}&cursorId=${pageParam.id}`
         : "";
 
-    const response = await fetch(`/api/posts?${query}`);
+    const response = await fetch(`/api/posts/${id}/replies?${query}`);
 
     if (response.ok) {
         return await response.json();
@@ -30,9 +19,7 @@ const fetchTweets = async ({ pageParam }: { pageParam?: { createdAt: string; id:
     }
 }
 
-export const HomeFeed = () => {
-
-    const [activeTab, setActiveTab] = useState(tabs[0].label);
+export const RepliesFeed = ({ parentTweetId }: { parentTweetId: number }) => {
 
     const {
         data,
@@ -44,25 +31,21 @@ export const HomeFeed = () => {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryFn: ({ pageParam }) => fetchTweets({ pageParam }),
-        queryKey: ["tweets"],
+        queryFn: ({ pageParam }) => fetchReplies(parentTweetId, { pageParam }),
+        queryKey: ["replies", parentTweetId],
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
     });
 
     return (
         <>
-            <FeedHeader>
-                <Tabs tabs={tabs} activeTab={activeTab} changeTab={setActiveTab} />
-            </FeedHeader>
-            <TweetForm type="tweet" isComposeModal={false} />
             {isLoading ? (
-                <Spinner className="flex w-full text-sky-500 h-8" />
+                isFetchingNextPage && <Spinner className="flex w-full text-sky-500 h-8" />
             ) : (
                 <InfiniteScrollContainer onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}>
                     {data && data?.pages.map((group, i) => (
                         <React.Fragment key={i}>
-                            {group.items?.map((tweet: RegularTweet | Retweet) => (
+                            {group.items?.map((tweet: ReplyTweet) => (
                                 <Tweet type="tweet" key={tweet.id} tweet={tweet} isParentTweet={false} />
                             ))}
                         </React.Fragment>

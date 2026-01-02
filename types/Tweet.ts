@@ -42,4 +42,9 @@ export interface Retweet extends TweetBase {
     parentTweet: null;
 }
 
+export type TweetsPage = {
+    items: Tweet[];
+    nextCursor: { createdAt: string; id: number } | null;
+}
+
 export type Tweet = RegularTweet | ReplyTweet | Retweet;

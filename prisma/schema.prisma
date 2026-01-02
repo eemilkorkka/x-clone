@@ -39,7 +39,7 @@ model User {
 model Tweet {
   id           Int      @id @default(autoincrement())
   userId       String
-  tweetContent String?  @db.VarChar(255)
+  tweetContent String?  @db.VarChar(280)
   createdAt    DateTime @default(now())
 
   // Retweets

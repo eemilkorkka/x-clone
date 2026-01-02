@@ -4,13 +4,14 @@ import { FiUpload } from "react-icons/fi";
 import { TweetAction } from "./TweetAction";
 import { Tweet } from "@/types/Tweet";
 import { authClient } from "@/lib/auth-client";
-import { likeTweet } from "@/app/actions/likeTweet";
 import { retweet } from "@/app/actions/retweet";
 import { useMutation } from "@tanstack/react-query";
-import { bookmarkTweet } from "@/app/actions/bookmarkTweet";
 import { twMerge } from "tailwind-merge";
-import {  useComposeModal } from "../ComposeModalContext";
+import { useComposeModal } from "../ComposeModalContext";
 import { useRouter } from "next/navigation";
+import { useLikeMutation } from "@/hooks/useLikeMutation";
+import { useBookmarkMutation } from "@/hooks/useBookmarkMutation";
+import { useRetweetMutation } from "@/hooks/useRetweetMutation";
 
 interface TweetActionsProps {
     type: "status" | "tweet";
@@ -22,18 +23,9 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
 
     const { data } = authClient.useSession();
     const router = useRouter();
-
-    const likeMutation = useMutation({
-        mutationFn: likeTweet
-    });
-
-    const retweetMutation = useMutation({
-        mutationFn: retweet
-    });
-
-    const bookmarkMutation = useMutation({
-        mutationFn: bookmarkTweet
-    });
+    const { likeMutation } = useLikeMutation(tweet);
+    const { bookmarkMutation } = useBookmarkMutation(tweet);
+    const { retweetMutation } = useRetweetMutation(tweet);
 
     const { setTweetToReplyTo } = useComposeModal();
 
@@ -52,13 +44,13 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
             />
             <TweetAction
                 tweetId={tweet.id}
-                statCount={tweet.isRetweet ? tweet.originalTweet.likes.length : tweet.likes.length}
+                statCount={tweet.isRetweet ? tweet.originalTweet.likes.length : tweet.likes?.length}
                 icon={<FaRegHeart />}
                 activeIcon={<FaHeart className="text-rose-500" />}
                 hoverBgColor="group-hover:bg-rose-500/20"
                 hoverTextColor="group-hover:text-rose-500"
                 activeColor="text-rose-500"
-                isActive={tweet.isRetweet ? tweet.originalTweet.likes.some((like) => like.userId === data?.user.id) : tweet.likes.some((like) => like.userId === data?.user.id)}
+                isActive={tweet.isRetweet ? tweet.originalTweet.likes?.some((like) => like.userId === data?.user.id) : tweet.likes.some((like) => like.userId === data?.user.id)}
                 mutation={likeMutation}
             />
             <TweetAction

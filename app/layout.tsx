@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { Toaster } from 'react-hot-toast';
 import "./globals.css";
 import Providers from "@/components/Providers";
+import React from "react";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -23,8 +24,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode
 }>) {
   return (
     <html lang="en" className={inter.variable}>
@@ -34,6 +37,7 @@ export default function RootLayout({
         <Toaster />
         <Providers>
           {children}
+          {modal}
         </Providers>
       </body>
     </html>

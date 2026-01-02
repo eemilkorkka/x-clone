@@ -1,7 +1,7 @@
 "use client";
 
 import { FcGoogle } from "react-icons/fc"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import { authClient } from "@/lib/auth-client";
 
 export const GoogleSignup = () => {

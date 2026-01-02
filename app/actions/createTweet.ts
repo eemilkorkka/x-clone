@@ -5,7 +5,7 @@ import { getSession } from "@/lib/session";
 import z from "zod";
 
 const tweetFormSchema = z.object({
-    tweetContent: z.string().max(280).optional(),
+    tweetContent: z.string().max(280, "Tweet cannot exceed 280 characters.").optional(),
     files: z.array(z.instanceof(File)).max(4).optional()
 }).refine(
     (data) => {
@@ -37,7 +37,7 @@ export async function createTweet(previousState: any, formData: FormData) {
     });
 
     if (!parsedData.success) {
-        return { error: "Invalid form data." };
+        return { error: "Invalid form data.", success: false };
     }
 
     try {
@@ -53,7 +53,7 @@ export async function createTweet(previousState: any, formData: FormData) {
             return tweet;
         });
 
-        return { success: true };
+        return { success: true, message: "Post created successfully" };
     } catch (error) {
         return { error: "Post creation failed. Try again later." };
     }

@@ -8,10 +8,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         const tweet = await getTweetById(parseInt(id));
 
         if (!tweet) {
-            return NextResponse.json({ message: "Couldm't find tweet." }, { status: 404 });
+            return NextResponse.json({ message: "Couldn't find tweet." }, { status: 404 });
         }
 
-        return NextResponse.json({ tweet }, { status: 200 });
+        return NextResponse.json(tweet , { status: 200 });
     } catch (error) {
         return NextResponse.json({ message: "Internal Server Error." }, { status: 500 });
     }
