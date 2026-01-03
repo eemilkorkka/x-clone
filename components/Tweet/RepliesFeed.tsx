@@ -3,7 +3,7 @@ import { InfiniteScrollContainer } from "../InfiniteScrollContainer"
 import React from "react";
 import { Tweet } from "./Tweet";
 import { ReplyTweet } from "@/types/Tweet";
-import { Spinner } from "../ui/spinner";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 const fetchReplies = async (id: number, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
@@ -40,7 +40,7 @@ export const RepliesFeed = ({ parentTweetId }: { parentTweetId: number }) => {
     return (
         <>
             {isLoading ? (
-                isFetchingNextPage && <Spinner className="flex w-full text-sky-500 h-8" />
+                isFetchingNextPage && <LoadingSpinner />
             ) : (
                 <InfiniteScrollContainer onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}>
                     {data && data?.pages.map((group, i) => (
@@ -50,7 +50,7 @@ export const RepliesFeed = ({ parentTweetId }: { parentTweetId: number }) => {
                             ))}
                         </React.Fragment>
                     ))}
-                    {isFetchingNextPage && <Spinner className="flex w-full text-sky-500 h-8" />}
+                    {isFetchingNextPage && <LoadingSpinner />}
                 </InfiniteScrollContainer>
             )}
         </>

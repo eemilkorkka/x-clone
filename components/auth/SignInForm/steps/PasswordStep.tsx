@@ -1,12 +1,12 @@
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { GoogleSignup } from "../../GoogleSignup";
-import { Separator } from "../../../Separator";
 import { Field, FieldError, FieldGroup } from "../../../ui/field";
-import { CustomInput } from "../../../CustomInput";
+import { CustomInput } from "../../../customized/CustomInput";
 import { Button } from "../../../ui/button";
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useState } from "react";
+import { authClient } from "@/lib/auth-client";
+import { toastMessage } from "@/lib/toast";
 
 const passwordStepSchema = z.object({
     password: z.string().min(1, "Password is required."),
@@ -22,6 +22,7 @@ interface PasswordStepProps {
 
 export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepProps) => {
 
+    const [loginError, setLoginError] = useState("");
     const form = useForm<z.infer<typeof passwordStepSchema>>({
         resolver: zodResolver(passwordStepSchema),
         defaultValues: {
@@ -33,8 +34,34 @@ export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepP
     const username_or_email = form.watch("username_or_email");
     const password = form.watch("password");
 
-    const onSubmit = (data: z.infer<typeof passwordStepSchema>) => {
-
+    const onSubmit = async (data: z.infer<typeof passwordStepSchema>) => {
+        if (username_or_email.includes("@")) {
+            await authClient.signIn.email({
+                email: username_or_email,
+                password: password,
+                callbackURL: "/home"
+            }, {
+                onSuccess: () => {
+                    toastMessage("Sign in successful.");
+                },
+                onError: (context) => {
+                    setLoginError(context.error.message)
+                }
+            });
+        } else {
+            await authClient.signIn.username({
+                username: username_or_email,
+                password: password,
+                callbackURL: "/home"
+            }, {
+                onSuccess: () => {
+                    toastMessage("Sign in successful.", true);
+                },
+                onError: (context) => {
+                    setLoginError(context.error.message)
+                }
+            });
+        }
     }
 
     return (
@@ -67,14 +94,16 @@ export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepP
                                 label="Password"
                                 value={password}
                                 fieldState={fieldState}
+                                isPasswordInput={true}
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+                            {loginError !== "" && <FieldError>{loginError}</FieldError>}
                         </Field>
                     )}
                 />
             </FieldGroup>
             <div className="space-y-4 mt-50 mb-4">
-                <Button disabled={!password} size="lg" variant="secondary" className="w-full rounded-full py-6 hover:cursor-pointer">Log in</Button>
+                <Button type="submit" disabled={!password} size="lg" variant="secondary" className="w-full font-bold rounded-full py-6 hover:cursor-pointer">Log in</Button>
                 <p className="text-zinc-500">Don't have an account? <span className="text-sky-500 hover:underline hover:cursor-pointer">Sign up</span></p>
             </div>
         </form>

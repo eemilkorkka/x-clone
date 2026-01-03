@@ -41,7 +41,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     );
 
     return (
-        <div className={`p-4 ${type !== "status" && !isComposeModal && "border-b"} ${!isComposeModal && "first:border-t border-gray-200"} first:border-0 ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
+        <div className={`p-4 ${type !== "status" && !isComposeModal && "border-b"} ${isComposeModal && "first:border-b border-gray-200"} ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
             {tweet.isRetweet && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-700 pb-2">
                     <AiOutlineRetweet className="text-zinc-700" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted

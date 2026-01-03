@@ -15,7 +15,8 @@ import { useFilePicker } from '@/hooks/useFilePicker';
 import { createTweet } from '@/app/actions/createTweet';
 import { getQueryClient } from '@/lib/getQueryClient';
 import { toastMessage } from '@/lib/toast';
-import { useComposeModal } from '../ComposeModalContext';
+import { useComposeModal } from '../../context/ComposeModalContext';
+import { useRouter } from 'next/navigation';
 
 type File = {
     url: string;
@@ -39,6 +40,7 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
     const [state, action] = useActionState(createTweet, null);
     const [textAreaFocused, setTextAreaFocused] = useState(false);
     const queryClient = getQueryClient();
+    const router = useRouter();
 
     useEffect(() => {
         if (state?.error) {
@@ -47,7 +49,8 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
 
         if (state?.success) {
             toastMessage(state.message ?? "Post created successfully.", state.success);
-
+            isComposeModal && router.back();
+            
             if (parentTweetId) {
                 queryClient.invalidateQueries({ queryKey: ["tweet", parentTweetId] });
                 queryClient.invalidateQueries({ queryKey: ["replies", parentTweetId ]});

@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { GoogleSignup } from "../../GoogleSignup";
 import { Separator } from "../../../Separator";
 import { Field, FieldError } from "../../../ui/field";
-import { CustomInput } from "../../../CustomInput";
+import { CustomInput } from "../../../customized/CustomInput";
 import { Button } from "../../../ui/button";
 import React, { SetStateAction } from "react";
 import Link from "next/link";
@@ -34,14 +34,15 @@ interface UserStepProps {
         password: string;
     }>>;
     setOpen: React.Dispatch<SetStateAction<boolean>>;
+    formData: { username_or_email: string; password: string };
 }
 
-export const UserStep = ({ setStep, setFormData, setOpen }: UserStepProps) => {
+export const UserStep = ({ setStep, setFormData, setOpen, formData }: UserStepProps) => {
 
     const form = useForm<z.infer<typeof userStepSchema>>({
         resolver: zodResolver(userStepSchema),
         defaultValues: {
-            username_or_email: ""
+            username_or_email: formData.username_or_email ?? ""
         }
     });
 

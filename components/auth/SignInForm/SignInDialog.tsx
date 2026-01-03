@@ -1,8 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { useState } from "react"
-import { FaXTwitter, FaArrowLeft} from "react-icons/fa6";
+
+import { 
+    Dialog, 
+    DialogContent, 
+    DialogHeader, 
+    DialogTitle, 
+    DialogTrigger 
+} from "@/components/ui/dialog";
+
+import { useState } from "react";
+import { FaXTwitter, FaArrowLeft, FaPrescription} from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { UserStep } from "./steps/UserStep";
 import { PasswordStep } from "./steps/PasswordStep";
@@ -19,7 +27,7 @@ export const SignInDialog = () => {
     });
 
     const steps = [
-        <UserStep setStep={setStep} setFormData={setFormData} setOpen={setOpen} />,
+        <UserStep setStep={setStep} setFormData={setFormData} setOpen={setOpen} formData={formData} />,
         <PasswordStep formData={formData} step={step} setStep={setStep} setOpen={setOpen} />
     ];
 

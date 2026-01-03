@@ -9,7 +9,7 @@ import React from "react";
 import { Tweet } from "./Tweet/Tweet";
 import { RegularTweet, Retweet } from "@/types/Tweet";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
-import { Spinner } from "./ui/spinner";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 const tabs = [
     { label: "For you" },
@@ -57,7 +57,7 @@ export const HomeFeed = () => {
             </FeedHeader>
             <TweetForm type="tweet" isComposeModal={false} />
             {isLoading ? (
-                <Spinner className="flex w-full text-sky-500 h-8" />
+                <LoadingSpinner />
             ) : (
                 <InfiniteScrollContainer onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}>
                     {data && data?.pages.map((group, i) => (
@@ -67,7 +67,7 @@ export const HomeFeed = () => {
                             ))}
                         </React.Fragment>
                     ))}
-                    {isFetchingNextPage && <Spinner className="flex w-full text-sky-500 h-8" />}
+                    {isFetchingNextPage && <LoadingSpinner />}
                 </InfiniteScrollContainer>
             )}
         </>

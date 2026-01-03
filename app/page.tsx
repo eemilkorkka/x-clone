@@ -4,6 +4,7 @@ import { Separator } from "@/components/Separator";
 import { Footer } from "@/components/Footer";
 import { GoogleSignup } from "@/components/auth/GoogleSignup";
 import { SignInDialog } from "@/components/auth/SignInForm/SignInDialog";
+import Link from "next/link";
 
 export default function IndexPage() {
     return (
@@ -20,9 +21,11 @@ export default function IndexPage() {
                     <div className="mt-8 space-y-4 max-w-xs">
                         <GoogleSignup />
                         <Separator text="OR" />
-                        <Button size="lg" variant="secondary" className="rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
-                            Create account
-                        </Button>
+                        <Link href="/signup">
+                            <Button size="lg" variant="secondary" className="rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
+                                Create account
+                            </Button>
+                        </Link>
                         <p className="text-xs text-zinc-500 mt-2">By signing up you agree to the
                             <span className="text-sky-500 hover:underline">
                                 {' '}

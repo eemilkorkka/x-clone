@@ -33,10 +33,33 @@ export const auth = betterAuth({
                 required: false,
                 defaultValue: null,
                 input: true
+            },
+            birthDateMonth: {
+                type: "string",
+                required: false,
+                defaultValue: null,
+                input: true
+            },
+            birthDateDay: {
+                type: "number",
+                required: false,
+                defaultValue: null,
+                input: true
+            },
+            birthDateYear: {
+                type: "number",
+                required: false,
+                defaultValue: null,
+                input: true
             }
         },
     },
+    emailAndPassword: {
+        enabled: true,
+    },
     plugins: [
-        username()
+        username({
+            maxUsernameLength: 15
+        }),
     ]
 });
