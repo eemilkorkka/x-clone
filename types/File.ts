@@ -1,9 +1,9 @@
-export type FileType = "IMAGE" | "VIDEO";
+import { FileType } from "@/generated/prisma/enums";
 
 export type File = {
     id: number;
     tweetId: number;
     url: string;
-    fileType: FileType;
+    type: FileType;
     createdAt: Date;
 }

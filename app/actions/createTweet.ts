@@ -1,7 +1,9 @@
 "use server";
 
+import { FileType } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
+import { uploadFile } from "@/lib/utils/uploadFile";
 import z from "zod";
 
 const tweetFormSchema = z.object({
@@ -52,6 +54,31 @@ export async function createTweet(previousState: any, formData: FormData) {
 
             return tweet;
         });
+
+        for (const file of actualFiles) {
+            if (!(file instanceof File)) return;
+
+            try {
+                const fileUrl = await uploadFile(file);
+                const fileType = file.type.includes("video") ? FileType.VIDEO : FileType.IMAGE;
+
+                await prisma.file.create({
+                    data: {
+                        tweetId: result.id,
+                        url: fileUrl,
+                        type: fileType
+                    }
+                });
+            } catch (error) {
+                await prisma.tweet.delete({
+                    where: {
+                        id: result.id
+                    }
+                });
+
+                return { success: false, error: "Failed to upload tweet attachment(s)" };
+            }
+        }
 
         return { success: true, message: "Post created successfully" };
     } catch (error) {

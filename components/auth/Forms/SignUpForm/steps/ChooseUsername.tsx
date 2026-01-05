@@ -20,16 +20,17 @@ const usernameSchema = z.object({
         ctx.addIssue({
             code: "custom",
             message: "Username cannot contain any special characters except underscores.",
-            input: username
+            path: ["username"]
         });
     }
 
-    const response = await fetch(`/api/users/${username}`);
+    const response = await fetch(`/api/users/${username.username}`);
+    
     if (response.status !== 404) {
         ctx.addIssue({
             code: "custom",
             message: "This username is taken.",
-            input: username
+            path: ["username"]
         });
     }
 });
@@ -59,22 +60,27 @@ export const ChooseUsername = ({ formData, setFormData, setStep }: ChooseUsernam
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 flex flex-col justify-between">
-            <Controller 
+            <Controller
                 name="username"
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field>
-                        <CustomInput
-                            {...field}
-                            type="text"
-                            label="Username"
-                            value={username}
-                            maxLength={15}
-                            fieldState={fieldState}
-                        />
-                        {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-                    </Field>
-                )}
+                render={({ field, fieldState }) => {
+                    
+                    console.log(fieldState);
+                    
+                    return (
+                        <Field>
+                            <CustomInput
+                                {...field}
+                                type="text"
+                                label="Username"
+                                value={username}
+                                maxLength={15}
+                                fieldState={fieldState}
+                            />
+                            {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+                        </Field>
+                    )
+                }}
             />
             <FormButton />
         </form>

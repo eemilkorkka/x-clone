@@ -4,16 +4,14 @@ import { Button } from "@/components/ui/button";
 import { 
     Dialog, 
     DialogContent, 
-    DialogHeader, 
     DialogTitle, 
     DialogTrigger 
 } from "@/components/ui/dialog";
 
 import { useState } from "react";
-import { FaXTwitter, FaArrowLeft, FaPrescription} from "react-icons/fa6";
-import { IoMdClose } from "react-icons/io";
 import { UserStep } from "./steps/UserStep";
 import { PasswordStep } from "./steps/PasswordStep";
+import { DialogHeader } from "../DialogHeader";
 
 const stepTitles: string[] = ["Sign in to X", "Enter your password"];
 
@@ -28,7 +26,7 @@ export const SignInDialog = () => {
 
     const steps = [
         <UserStep setStep={setStep} setFormData={setFormData} setOpen={setOpen} formData={formData} />,
-        <PasswordStep formData={formData} step={step} setStep={setStep} setOpen={setOpen} />
+        <PasswordStep formData={formData} step={step} />
     ];
 
     return (
@@ -39,18 +37,11 @@ export const SignInDialog = () => {
                 </Button>
             }>
             </DialogTrigger>
-            <DialogContent className="!max-w-[600px] h-full rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5" showCloseButton={false}>
-                <DialogHeader className="relative flex flex-row justify-center items-center">
-                    {step > 0 ? (
-                        <FaArrowLeft size={23} className="absolute left-0 hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
-                    ) : (
-                        <IoMdClose size={23} className="absolute left-0 hover:cursor-pointer" onClick={() => setOpen(false)} />
-                    )}
-                    <FaXTwitter size={35} />
-                </DialogHeader>
-                <div className={`mx-auto ${step === 0 ? "max-w-xs" : "max-w-md"} w-full mt-2`}>
+            <DialogContent className="flex flex-col !max-w-[600px] h-full min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5" showCloseButton={false}>
+                <DialogHeader step={step} setStep={setStep} handleDialogClose={() => setOpen(false)} />
+                <div className={`flex flex-1 flex-col mx-auto ${step === 0 ? "max-w-xs" : "max-w-md"} w-full mt-2`}>
                     <DialogTitle className="text-3xl font-bold">{stepTitles[step]}</DialogTitle>
-                    <div className="space-y-4 mt-8">
+                    <div className="flex-1 flex flex-col space-y-4 mt-8">
                         {steps[step]}
                     </div>
                 </div>

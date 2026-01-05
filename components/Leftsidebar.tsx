@@ -9,7 +9,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { User } from "./User/User";
 import { getSession } from "@/lib/session";
-import { PiDotsThreeBold } from "react-icons/pi";
+import { BsThreeDots } from "react-icons/bs";
 
 export interface Option {
     text: string;
@@ -66,20 +66,20 @@ export const Leftsidebar = async () => {
                         styles="hidden mobile:flex"
                     />
                     <Navitem
-                        href="/profile"
+                        href={`/${session?.user.username}`}
                         icon={<IoPersonOutline size={30} />}
                         activeIcon={<IoPerson size={30} />}
                         label="Profile"
                     />
 
-                    <Link href="/compose/post">
-                        <Button className="hidden mobile:inline w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">Post</Button>
+                    <Link href="/compose/post" className="hidden mobile:inline">
+                        <Button className="w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">Post</Button>
                     </Link>
                 </div>
             </div>
 
-            <User user={session?.user} useLink={false} styles="hidden mobile:flex rounded-full" contentStyles="hidden xl:flex">
-                <PiDotsThreeBold size={20} className="hidden xl:inline" />
+            <User user={session?.user} useLink={false} styles="hidden mobile:flex rounded-full p-2.5" contentStyles="hidden xl:flex">
+                <BsThreeDots className="hidden xl:inline" />
             </User>
         </nav>
     )

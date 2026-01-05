@@ -27,7 +27,7 @@ export const User = ({ useLink = true, user, children, styles, contentStyles }: 
                 styles="mr-4" 
                 useLink={useLink} 
             />
-            <div className="flex-1 flex justify-between">
+            <div className="flex-1 flex items-center justify-between">
                 <div className={twMerge("flex flex-col -space-y-1", contentStyles)}>
                     <Displayname username={user.username ?? ""} displayName={user.displayUsername ?? ""} useLink={useLink} />
                     <Username username={user.username ?? ""} useLink={useLink} />

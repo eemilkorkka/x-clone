@@ -1,12 +1,13 @@
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Field, FieldError, FieldGroup } from "../../../ui/field";
-import { CustomInput } from "../../../customized/CustomInput";
-import { Button } from "../../../ui/button";
+import { Field, FieldError, FieldGroup } from "../../../../ui/field";
+import { CustomInput } from "../../../../customized/CustomInput";
+import { Button } from "../../../../ui/button";
 import React, { SetStateAction, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toastMessage } from "@/lib/toast";
+import { useRouter } from "next/navigation";
 
 const passwordStepSchema = z.object({
     password: z.string().min(1, "Password is required."),
@@ -16,12 +17,11 @@ const passwordStepSchema = z.object({
 interface PasswordStepProps {
     formData: { username_or_email: string; password: string };
     step: number;
-    setStep: React.Dispatch<SetStateAction<number>>;
-    setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepProps) => {
+export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
 
+    const router = useRouter();
     const [loginError, setLoginError] = useState("");
     const form = useForm<z.infer<typeof passwordStepSchema>>({
         resolver: zodResolver(passwordStepSchema),
@@ -42,7 +42,7 @@ export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepP
                 callbackURL: "/home"
             }, {
                 onSuccess: () => {
-                    toastMessage("Sign in successful.");
+                    toastMessage("Sign in successful.", true);
                 },
                 onError: (context) => {
                     setLoginError(context.error.message)
@@ -52,10 +52,10 @@ export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepP
             await authClient.signIn.username({
                 username: username_or_email,
                 password: password,
-                callbackURL: "/home"
             }, {
                 onSuccess: () => {
                     toastMessage("Sign in successful.", true);
+                    router.push("/home");
                 },
                 onError: (context) => {
                     setLoginError(context.error.message)
@@ -65,7 +65,7 @@ export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepP
     }
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 flex flex-col justify-between">
             <FieldGroup>
                 <Controller
                     name="username_or_email"
@@ -97,12 +97,12 @@ export const PasswordStep = ({ formData, step, setStep, setOpen }: PasswordStepP
                                 isPasswordInput={true}
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-                            {loginError !== "" && <FieldError>{loginError}</FieldError>}
+                            {loginError !== "" && password !== "" && <FieldError>{loginError}</FieldError>}
                         </Field>
                     )}
                 />
             </FieldGroup>
-            <div className="space-y-4 mt-50 mb-4">
+            <div className="space-y-4 mb-4">
                 <Button type="submit" disabled={!password} size="lg" variant="secondary" className="w-full font-bold rounded-full py-6 hover:cursor-pointer">Log in</Button>
                 <p className="text-zinc-500">Don't have an account? <span className="text-sky-500 hover:underline hover:cursor-pointer">Sign up</span></p>
             </div>

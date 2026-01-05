@@ -1,13 +1,14 @@
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Field, FieldError, FieldGroup } from "../../../ui/field";
-import { CustomInput } from "../../../customized/CustomInput";
+import { Field, FieldError, FieldGroup } from "../../../../ui/field";
+import { CustomInput } from "../../../../customized/CustomInput";
 import { CustomSelect } from "@/components/customized/CustomSelect";
 import { SignupFormData } from "@/app/@modal/(.)signup/page";
 import React, { SetStateAction } from "react";
 import { toastMessage } from "@/lib/toast";
 import { FormButton } from "../FormButton";
+import { useMutation } from "@tanstack/react-query";
 
 const monthsArray = [
     "January",
@@ -51,6 +52,22 @@ interface PersonalInfoProps {
     setStep: React.Dispatch<SetStateAction<number>>;
 }
 
+const verificationCodeRequest = async (email: string) => {
+    const response = await fetch("/api/signup/verify/send", {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ email: email })
+    });
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error("Failed to continue with the signup process, try again later.");
+    }
+}
+
 export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoProps) => {
 
     const form = useForm<z.input<typeof personalInfoSchema>>({
@@ -70,6 +87,16 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
     const day = form.watch("day");
     const year = form.watch("year");
 
+    const { isPending, mutateAsync } = useMutation({
+        mutationFn: verificationCodeRequest,
+        onSuccess: () => {
+            setStep(prev => prev + 1);
+        },
+        onError: (ctx) => {
+            toastMessage(ctx.message ?? "Something went wrong.", false);
+        }
+    });
+
     const onSubmit = async (data: z.input<typeof personalInfoSchema>) => {
         const validatedData = personalInfoSchema.parse(data);
 
@@ -80,25 +107,11 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                 email: validatedData.email,
                 month: validatedData.month,
                 day: validatedData.day.toString(),
-                year: validatedData.year.toString() 
+                year: validatedData.year.toString()
             }
         ));
 
-        const response = await fetch("/api/signup/verify/send", {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({ email: data.email })
-        });
-
-        const json = await response.json();
-
-        if (json.success) {
-            setStep(prev => prev + 1);
-        } else {
-            toastMessage(json.message ?? "Something went wrong.", false);
-        }
+        mutateAsync(data.email);
     }
 
     return (
@@ -203,7 +216,7 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                     />
                 </FieldGroup>
             </FieldGroup>
-            <FormButton disabled={!name || !email || !month || !day || !year} />
+            <FormButton disabled={!name || !email || !month || !day || !year || isPending} />
         </form>
     )
 }

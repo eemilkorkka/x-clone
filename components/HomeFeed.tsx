@@ -52,7 +52,7 @@ export const HomeFeed = () => {
 
     return (
         <>
-            <FeedHeader>
+            <FeedHeader styles="backdrop-blur-lg bg-white/80">
                 <Tabs tabs={tabs} activeTab={activeTab} changeTab={setActiveTab} />
             </FeedHeader>
             <TweetForm type="tweet" isComposeModal={false} />

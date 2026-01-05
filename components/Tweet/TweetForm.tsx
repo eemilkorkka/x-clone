@@ -15,13 +15,11 @@ import { useFilePicker } from '@/hooks/useFilePicker';
 import { createTweet } from '@/app/actions/createTweet';
 import { getQueryClient } from '@/lib/getQueryClient';
 import { toastMessage } from '@/lib/toast';
-import { useComposeModal } from '../../context/ComposeModalContext';
 import { useRouter } from 'next/navigation';
-
-type File = {
-    url: string;
-    type: string;
-}
+import AttachmentsGrid from './AttachmentsGrid';
+import { Media } from './Media';
+import { IoClose } from 'react-icons/io5';
+import { FileType } from '@/generated/prisma/enums';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -36,7 +34,7 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
     const { data } = authClient.useSession();
     const [tweetContent, setTweetContent] = useState("");
     const filePickerRef = useRef<HTMLInputElement | null>(null);
-    const { pickedFiles, setPickedFiles, handleFileAdd } = useFilePicker();
+    const { pickedFiles, setPickedFiles, handleFileAdd, handleFileRemove } = useFilePicker();
     const [state, action] = useActionState(createTweet, null);
     const [textAreaFocused, setTextAreaFocused] = useState(false);
     const queryClient = getQueryClient();
@@ -50,10 +48,10 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
         if (state?.success) {
             toastMessage(state.message ?? "Post created successfully.", state.success);
             isComposeModal && router.back();
-            
+
             if (parentTweetId) {
                 queryClient.invalidateQueries({ queryKey: ["tweet", parentTweetId] });
-                queryClient.invalidateQueries({ queryKey: ["replies", parentTweetId ]});
+                queryClient.invalidateQueries({ queryKey: ["replies", parentTweetId] });
             } else {
                 queryClient.invalidateQueries({ queryKey: ["tweets"] });
             }
@@ -80,7 +78,7 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
     }
 
     return (
-        <div className={`p-4 pb-0 flex items-start ${!isComposeModal && "border-b border-gray-200"} max-w-full`}>
+        <div className={`p-4 pb-0 flex items-start ${!isComposeModal && "border-b border-gray-200"} ${isComposeModal && "pt-0"} max-w-full`}>
             <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" />
             <form onSubmit={handleSubmit} className="flex flex-col w-full w-full mt-2">
                 <TextareaAutosize
@@ -88,12 +86,25 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
                     name="tweetContent"
                     value={tweetContent}
                     className="border-0 focus:outline-none resize-none text-lg placeholder-gray-500 pb-4 text-wrap"
-                    minRows={2}
+                    minRows={pickedFiles.length === 0 ? 2 : 0}
                     maxLength={MAX_LENGTH}
                     maxRows={50}
                     onChange={(e) => setTweetContent(e.currentTarget.value)}
                     onFocus={() => setTextAreaFocused(true)}
                 />
+                <AttachmentsGrid>
+                    {pickedFiles.map((file, index) => (
+                        <Media key={index} type={file.file.type.includes("image") ? FileType.IMAGE : FileType.VIDEO} url={file.url}>
+                            <Button
+                                size="icon-sm"
+                                className="absolute top-2 right-2 bg-black/70 rounded-full hover:cursor-pointer"
+                                onClick={(e) => { handleFileRemove(index); e.stopPropagation(); }}
+                            >
+                                <IoClose fill="white" />
+                            </Button>
+                        </Media>
+                    ))}
+                </AttachmentsGrid>
                 <div className={`${type === "reply" && !isComposeModal ? (textAreaFocused ? "flex" : "hidden") : "flex"} items-center ${textAreaFocused && !isComposeModal && "border-t-1 border-gray-200"} justify-between`}>
                     <div className='flex'>
                         <Icon onClick={() => filePickerRef.current?.click()}>

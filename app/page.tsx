@@ -3,7 +3,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { Separator } from "@/components/Separator";
 import { Footer } from "@/components/Footer";
 import { GoogleSignup } from "@/components/auth/GoogleSignup";
-import { SignInDialog } from "@/components/auth/SignInForm/SignInDialog";
+import { SignInDialog } from "@/components/auth/Forms/SignInForm/SignInDialog";
 import Link from "next/link";
 
 export default function IndexPage() {

@@ -9,7 +9,7 @@ export const ReturnBack = () => {
     const router = useRouter();
 
     return (
-        <Button size="icon-lg" variant="ghost" className="rounded-full hover:cursor-pointer" onClick={() => router.back()}>
+        <Button size="icon-lg" variant="ghost" className="rounded-full hover:cursor-pointer hover:bg-black/10" onClick={() => router.back()}>
             <FaArrowLeft />
         </Button>
     )

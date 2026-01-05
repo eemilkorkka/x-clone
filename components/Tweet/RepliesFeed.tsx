@@ -40,7 +40,7 @@ export const RepliesFeed = ({ parentTweetId }: { parentTweetId: number }) => {
     return (
         <>
             {isLoading ? (
-                isFetchingNextPage && <LoadingSpinner />
+                <LoadingSpinner />
             ) : (
                 <InfiniteScrollContainer onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}>
                     {data && data?.pages.map((group, i) => (

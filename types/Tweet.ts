@@ -1,4 +1,5 @@
 import { Bookmark } from "./Bookmark";
+import { File } from "./File";
 import { Like } from "./Like";
 import { UserBase } from "./User";
 
@@ -10,6 +11,7 @@ export type TweetBase = {
     likes: Like[];
     retweets: Retweet[];
     bookmarks: Bookmark[];
+    files: File[];
     _count?: {
         replies: number;
     } | undefined;

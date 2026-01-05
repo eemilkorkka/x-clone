@@ -7,6 +7,10 @@ import { TweetActions } from "./TweetActions";
 import { authClient } from "@/lib/auth-client";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { Text } from "../Text";
+import { Media } from "./Media";
+import AttachmentsGrid from "./AttachmentsGrid";
+import { Icon } from "../Icon";
+import { BsThreeDots } from "react-icons/bs";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -36,12 +40,12 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                 username={tweet.user?.username ?? ""}
                 alt={`@${tweet.user?.username}`}
             />
-            {isParentTweet && <hr style={{ width: "2px" }} className="h-full mt-2 mx-auto bg-zinc-300"></hr>}
+            {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-zinc-300"></hr>}
         </div>
     );
 
     return (
-        <div className={`p-4 ${type !== "status" && !isComposeModal && "border-b"} ${isComposeModal && "first:border-b border-gray-200"} ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
+        <div className={`p-4 ${type !== "status" && !isParentTweet && !isComposeModal && "border-b"} ${isComposeModal && "first:border-b border-gray-200"} ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
             {tweet.isRetweet && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-700 pb-2">
                     <AiOutlineRetweet className="text-zinc-700" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
@@ -75,8 +79,18 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                                 </time>
                             </>
                         )}
+                        <Icon styles="ml-auto text-zinc-500 hover:text-sky-500" onClick={(e) => e.stopPropagation()}>
+                            <BsThreeDots />
+                        </Icon>
                     </div>
                     <Text text={tweet.isRetweet ? tweet.originalTweet.tweetContent ?? "" : tweet.tweetContent ?? ""} />
+                    {tweet.files.length > 0 && (
+                        <AttachmentsGrid>
+                            {tweet.files.map((file, index) => (
+                                <Media key={file.id} type={file.type} url={file.url} />
+                            ))}
+                        </AttachmentsGrid>
+                    )}
                     {type === "status" && (
                         <div className="pt-2 flex items-center text-zinc-500 text-[15px]">
                             <span>{new Date(tweet.createdAt).toLocaleTimeString('en-US', {

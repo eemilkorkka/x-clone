@@ -8,7 +8,7 @@ import defaultPfp from "@/public/defaultPfp.jpg";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
-export type size = "sm" | "md";
+export type size = "sm" | "md" | "lg" | "xl";
 
 interface CustomAvatarProps {
     src: string;
@@ -28,6 +28,10 @@ export const CustomAvatar = ({ src, alt, size, username, useLink = true, useHove
                 return "w-8 h-8";
             case "md":
                 return "w-10 h-10";
+            case "lg":
+                return "w-20 h-20";
+            case "xl":
+                return "w-30 h-30";
             default:
                 return "w-10 h-10";
         }
