@@ -5,7 +5,7 @@ const toastStyles = {
     color: "#FFFF"
 }
 
-export const toastMessage = ( message: string, success?: boolean | undefined) => {
+export const toastMessage = ( message: string, success: boolean) => {
     success ? toast.success(message, { style: toastStyles }) : 
     toast.error(message, { style: toastStyles });
 }

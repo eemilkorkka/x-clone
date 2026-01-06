@@ -15,7 +15,7 @@ export async function likeTweet(formData: FormData) {
         }
     });
 
-    if (!tweet) return { error: "Tweet not found." };
+    if (!tweet) return { success: false, error: "Tweet not found." };
 
     const tweetIdToLike = tweet.isRetweet ? tweet.originalTweetId! : tweet.id;
 
@@ -36,7 +36,7 @@ export async function likeTweet(formData: FormData) {
                     tweetId: tweetIdToLike,
                 }
             });
-            return { message: "Tweet liked successfully." };
+            return { success: true, message: "Tweet liked successfully." };
         } else {
             await prisma.like.delete({
                 where: {
@@ -46,9 +46,9 @@ export async function likeTweet(formData: FormData) {
                     }
                 }
             });
-            return { message: "Tweet unliked successfully." };
+            return { success: true, message: "Tweet unliked successfully." };
         }
     } catch (error) {
-        return { error: hasLiked ? "Failed to unlike tweet." : "Failed to like tweet." };
+        return { success: false, error: hasLiked ? "Failed to unlike tweet." : "Failed to like tweet." };
     }
 }

@@ -7,10 +7,24 @@ export const Text = ({ text, styles }: { text: string, styles?: string }) => {
     const words = text.split(" ");
 
     return (
-        <span className={twMerge("text-[15px] text-white ml-2 text-black", styles)} style={{ wordBreak: "break-word" }}>
-            {words.map((word, index) => (
-                word.includes("@") || word.match(urlPattern) ? <Link key={index} className="text-purple" href={`${word.replace("@", "")}`} target="_blank" rel="noopener noreferrer">{`${word} `}</Link> : word + " "
-            ))}
+        <span className={twMerge("text-[15px] text-black", styles)} style={{ wordBreak: "break-word" }}>
+            {words.map((word, index) => {
+                const isUsername = word.includes("@");
+
+                return (
+                    isUsername || word.match(urlPattern) ?
+                        <Link
+                            key={index}
+                            className="text-sky-500"
+                            href={`${isUsername ? "/" + word.replace("@", "") : word.replace("@", "")}`}
+                            target={isUsername ? "_self" : "_blank"}
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}>
+                            {`${word} `}
+                        </Link>
+                        : word + " "
+                )
+            })}
         </span>
     )
 }

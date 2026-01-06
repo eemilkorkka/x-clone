@@ -1,15 +1,15 @@
-import { BsPeople } from "react-icons/bs";
-import { FaXTwitter } from "react-icons/fa6";
+import { BsBell, BsPeople } from "react-icons/bs";
+import { FaXTwitter, FaFeatherPointed } from "react-icons/fa6";
 import { GoHome, GoHomeFill } from "react-icons/go";
-import { HiOutlineBell } from "react-icons/hi";
 import { HiOutlineEnvelope } from "react-icons/hi2";
 import { IoBookmark, IoBookmarkOutline, IoPerson, IoPersonOutline, IoSearchOutline } from "react-icons/io5";
-import { Navitem } from "./Navitem";
-import { Button } from "./ui/button";
 import Link from "next/link";
-import { User } from "./User/User";
+import { Navitem } from "@/components/Navitem";
+import { User } from "@/components/User/User";
+import { Button } from "@/components/ui/button";
 import { getSession } from "@/lib/session";
 import { BsThreeDots } from "react-icons/bs";
+import { LogoutPopover } from "./LogoutPopover";
 
 export interface Option {
     text: string;
@@ -45,7 +45,7 @@ export const Leftsidebar = async () => {
                         label="Explore"
                     />
                     <Navitem
-                        icon={<HiOutlineBell size={30} />}
+                        icon={<BsBell size={30} />}
                         label="Notifications"
                         styles="hidden mobile:flex"
                     />
@@ -73,14 +73,23 @@ export const Leftsidebar = async () => {
                     />
 
                     <Link href="/compose/post" className="hidden mobile:inline">
-                        <Button className="w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">Post</Button>
+                        <Button className="w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">
+                            <div className="hidden xl:inline">Post</div>
+                            <div className="inline xl:hidden">
+                                <FaFeatherPointed className="size-6" />
+                            </div>
+                        </Button>
                     </Link>
                 </div>
             </div>
 
-            <User user={session?.user} useLink={false} styles="hidden mobile:flex rounded-full p-2.5" contentStyles="hidden xl:flex">
-                <BsThreeDots className="hidden xl:inline" />
-            </User>
+            {session && (
+                <LogoutPopover user={session.user}>
+                    <User user={session.user} useLink={false} styles="hidden mobile:flex rounded-full p-2.5" contentStyles="hidden xl:flex">
+                        <BsThreeDots className="hidden xl:inline" />
+                    </User>
+                </LogoutPopover>
+            )}
         </nav>
     )
 }

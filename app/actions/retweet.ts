@@ -16,7 +16,7 @@ export async function retweet(formData: FormData) {
         }
     });
 
-    if (!tweetToRetweet) return { error: "Tweet not found." };
+    if (!tweetToRetweet) return { success: false, error: "Tweet not found." };
 
     const originalTweetId = tweetToRetweet.isRetweet
         ? tweetToRetweet.originalTweetId
@@ -40,15 +40,15 @@ export async function retweet(formData: FormData) {
                 }
             });
 
-            return { message: "Tweet retweeted successfully." };
+            return { success: true, message: "Tweet retweeted successfully." };
         } else {
             await prisma.tweet.delete({
                 where: { id: hasRetweeted.id }
             });
 
-            return { message: "Retweet removed successfully." };
+            return { success: true, message: "Retweet removed successfully." };
         }
     } catch (error) {
-        return { error: hasRetweeted ? "Failed to unretweet." : "Failed to retweet." };
+        return { success: false, error: hasRetweeted ? "Failed to unretweet." : "Failed to retweet." };
     }
 }

@@ -18,7 +18,7 @@ export const Displayname = ({ displayName, username, styles, useHoverCard = fals
             <span className={className}>{displayName}</span>
         </Link>
     ) : (
-        <div className="min-w-0">
+        <div className={className}>
             <span className={className}>{displayName}</span>
         </div>
     );

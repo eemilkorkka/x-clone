@@ -4,14 +4,16 @@ import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { twMerge } from "tailwind-merge";
 
 interface TabsProps {
     tabs: { href?: string; label: string }[];
     activeTab?: string;
     changeTab?: (tab: string) => void;
+    styles?: string;
 }
 
-export const Tabs = ({ tabs, activeTab, changeTab }: TabsProps) => {
+export const Tabs = ({ tabs, activeTab, changeTab, styles }: TabsProps) => {
     const pathname = usePathname();
 
     const renderTabElement = (index: number) => {
@@ -21,7 +23,7 @@ export const Tabs = ({ tabs, activeTab, changeTab }: TabsProps) => {
         return (
             <Button
                 variant="ghost"
-                className="flex-1 w-full h-full hover:cursor-pointer"
+                className="flex-1 w-full h-full hover:cursor-pointer rounded-none"
                 onClick={() => changeTab?.(tabs[index].label)}
             >
                 <div className="relative">
@@ -37,7 +39,7 @@ export const Tabs = ({ tabs, activeTab, changeTab }: TabsProps) => {
     }
 
     return (
-        <div className="flex w-full h-13">
+        <div className={twMerge("flex w-full h-13", styles)}>
             {tabs.map((tab, index) => (
                 <React.Fragment key={tab.label}>
                     {tab.href ? (

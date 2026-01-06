@@ -45,6 +45,7 @@ export const useRetweetMutation = (tweet: Tweet) => {
                                 likes: [],
                                 retweets: [],
                                 bookmarks: [],
+                                files: [],
                                 _count: {
                                     replies: 0,
                                 },

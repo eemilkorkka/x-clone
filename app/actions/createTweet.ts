@@ -82,6 +82,6 @@ export async function createTweet(previousState: any, formData: FormData) {
 
         return { success: true, message: "Post created successfully" };
     } catch (error) {
-        return { error: "Post creation failed. Try again later." };
+        return { success: false, error: "Post creation failed. Try again later." };
     }
 }

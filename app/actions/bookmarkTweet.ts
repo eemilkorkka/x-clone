@@ -36,7 +36,7 @@ export async function bookmarkTweet(formData: FormData) {
                     tweetId: tweetIdToLike,
                 }
             });
-            return { message: "Tweet bookmarked successfully." };
+            return { success: true, message: "Tweet bookmarked successfully." };
         } else {
             await prisma.bookmark.delete({
                 where: {
@@ -46,9 +46,9 @@ export async function bookmarkTweet(formData: FormData) {
                     }
                 }
             });
-            return { message: "Tweet unbookmarked successfully." };
+            return { success: true, message: "Tweet unbookmarked successfully." };
         }
     } catch (error) {
-        return { error: hasBookmarked ? "Failed to unbookmark tweet." : "Failed to bookmark tweet." };
+        return { success: false, error: hasBookmarked ? "Failed to unbookmark tweet." : "Failed to bookmark tweet." };
     }
 }

@@ -8,7 +8,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         const tweet = await getTweetById(parseInt(id));
 
         if (!tweet) {
-            return NextResponse.json({ message: "Couldn't find tweet." }, { status: 404 });
+            return NextResponse.json({ message: "Tweet not found." }, { status: 404 });
         }
 
         return NextResponse.json(tweet , { status: 200 });

@@ -1,4 +1,4 @@
-import { Leftsidebar } from "@/components/Leftsidebar";
+import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
 import { PremiumCard } from "@/components/PremiumCard";
 import { Searchbar } from "@/components/Searchbar";
 import React from "react";

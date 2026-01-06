@@ -5,6 +5,7 @@ import { Tweet } from "./Tweet";
 import { TweetActions } from "./TweetActions";
 import { TweetForm } from "./TweetForm";
 import { RepliesFeed } from "./RepliesFeed";
+import { notFound } from "next/navigation";
 
 const fetchTweetById = async (id: number) => {
     const response = await fetch(`/api/posts/${id}`);
@@ -22,6 +23,10 @@ export const TweetView = ({ id }: { id: number }) => {
         queryFn: () => fetchTweetById(id),
         queryKey: ["tweet", id],
     });
+
+    if (!data) {
+        notFound();
+    }
 
     return (
         <div>

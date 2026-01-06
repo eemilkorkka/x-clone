@@ -11,6 +11,7 @@ import { Media } from "./Media";
 import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
 import { BsThreeDots } from "react-icons/bs";
+import { TweetPopover } from "./TweetPopover/TweetPopover";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -79,11 +80,13 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                                 </time>
                             </>
                         )}
-                        <Icon styles="ml-auto text-zinc-500 hover:text-sky-500" onClick={(e) => e.stopPropagation()}>
-                            <BsThreeDots />
-                        </Icon>
+                        <TweetPopover tweetId={tweet.id} user={tweet.user} session={data?.session}>
+                            <Icon styles="text-zinc-500 hover:text-sky-500">
+                                <BsThreeDots />
+                            </Icon>
+                        </TweetPopover>
                     </div>
-                    <Text text={tweet.isRetweet ? tweet.originalTweet.tweetContent ?? "" : tweet.tweetContent ?? ""} />
+                    <Text text={tweet.isRetweet ? tweet.originalTweet.tweetContent ?? "" : tweet.tweetContent ?? ""} styles="-mt-2 ml-2" />
                     {tweet.files.length > 0 && (
                         <AttachmentsGrid>
                             {tweet.files.map((file, index) => (

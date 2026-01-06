@@ -20,6 +20,7 @@ import AttachmentsGrid from './AttachmentsGrid';
 import { Media } from './Media';
 import { IoClose } from 'react-icons/io5';
 import { FileType } from '@/generated/prisma/enums';
+import { twMerge } from 'tailwind-merge';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -42,11 +43,11 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
 
     useEffect(() => {
         if (state?.error) {
-            toastMessage(state.error, state.success);
+            toastMessage(state.error, false);
         }
 
-        if (state?.success) {
-            toastMessage(state.message ?? "Post created successfully.", state.success);
+        if (state?.success && state?.success === true) {
+            toastMessage(state.message ?? "Post created successfully.", true);
             isComposeModal && router.back();
 
             if (parentTweetId) {
@@ -77,18 +78,26 @@ export const TweetForm = ({ type, parentTweetId, isComposeModal }: TweetFormProp
         });
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) 
+        {
+            e.currentTarget.form?.requestSubmit()
+        }
+    }
+
     return (
         <div className={`p-4 pb-0 flex items-start ${!isComposeModal && "border-b border-gray-200"} ${isComposeModal && "pt-0"} max-w-full`}>
             <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" />
-            <form onSubmit={handleSubmit} className="flex flex-col w-full w-full mt-2">
+            <form onSubmit={handleSubmit} className="flex flex-col w-full mt-2">
                 <TextareaAutosize
                     placeholder={type === "tweet" ? "What's happening?" : "Post your reply"}
                     name="tweetContent"
                     value={tweetContent}
                     className="border-0 focus:outline-none resize-none text-lg placeholder-gray-500 pb-4 text-wrap"
-                    minRows={pickedFiles.length === 0 ? 2 : 0}
                     maxLength={MAX_LENGTH}
+                    minRows={isComposeModal ? (parentTweetId ? 2 : 5) : 0}
                     maxRows={50}
+                    onKeyDown={handleKeyDown}
                     onChange={(e) => setTweetContent(e.currentTarget.value)}
                     onFocus={() => setTextAreaFocused(true)}
                 />
