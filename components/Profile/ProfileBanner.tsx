@@ -8,7 +8,7 @@ interface ProfileBannerProps {
 
 export const ProfileBanner = ({ children, src }: ProfileBannerProps) => {
     return (
-        <div className={`relative w-full aspect-[3/1] h-50 max-h-50 ${!src && "bg-gray-300"}`}>
+        <div className={`relative w-full aspect-[3/1] max-h-50 ${!src && "bg-gray-300"}`}>
             {src && (
                 <Image
                     src={src}

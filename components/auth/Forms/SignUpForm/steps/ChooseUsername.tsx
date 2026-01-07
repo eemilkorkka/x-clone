@@ -25,7 +25,7 @@ const usernameSchema = z.object({
     }
 
     const response = await fetch(`/api/users/${username.username}`);
-    
+
     if (response.status !== 404) {
         ctx.addIssue({
             code: "custom",
@@ -63,24 +63,19 @@ export const ChooseUsername = ({ formData, setFormData, setStep }: ChooseUsernam
             <Controller
                 name="username"
                 control={form.control}
-                render={({ field, fieldState }) => {
-                    
-                    console.log(fieldState);
-                    
-                    return (
-                        <Field>
-                            <CustomInput
-                                {...field}
-                                type="text"
-                                label="Username"
-                                value={username}
-                                maxLength={15}
-                                fieldState={fieldState}
-                            />
-                            {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-                        </Field>
-                    )
-                }}
+                render={({ field, fieldState }) => (
+                    <Field>
+                        <CustomInput
+                            {...field}
+                            type="text"
+                            label="Username"
+                            value={username}
+                            maxLength={15}
+                            fieldState={fieldState}
+                        />
+                        {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+                    </Field>
+                )}
             />
             <FormButton />
         </form>

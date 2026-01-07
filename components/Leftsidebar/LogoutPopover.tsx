@@ -42,7 +42,7 @@ export const LogoutPopover = ({ children, user }: LogoutPopoverProps) => {
 
             </PopoverTrigger>
             <PopoverContent className="hidden mobile:flex rounded-lg p-0 overflow-hidden pt-4 ring-0 border-none drop-shadow-md">
-                <User user={user} useLink={false} styles="hidden mobile:flex p-2.5 hover:bg-inherit pb-2" contentStyles="hidden xl:flex">
+                <User user={user} useLink={false} styles="hidden mobile:flex p-2.5 hover:bg-inherit pb-2" contentStyles="flex">
                     <IoIosCheckmarkCircle size={18} className="text-emerald-500" />
                 </User>
                 <div className="w-full h-1 border-t border-gray-200"></div>

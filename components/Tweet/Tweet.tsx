@@ -10,8 +10,14 @@ import { Text } from "../Text";
 import { Media } from "./Media";
 import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
-import { BsThreeDots } from "react-icons/bs";
+import { BsThreeDots, BsPin } from "react-icons/bs";
+import { IoTrashOutline, IoPersonAdd } from "react-icons/io5";
 import { TweetPopover } from "./TweetPopover/TweetPopover";
+import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
+import { toastMessage } from "@/lib/toast";
+import TimeAgo from 'react-timeago';
+import { makeIntlFormatter } from 'react-timeago/defaultFormatter';
+import { shortFormatter } from "@/lib/formatter";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -26,6 +32,9 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const { data } = authClient.useSession();
     const router = useRouter();
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
+    const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
+    const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
+    const { deleteTweetMutation } = useDeleteTweetMutation(tweetId);
 
     const onClick = () => {
         if (useLink) {
@@ -44,6 +53,28 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
             {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-zinc-300"></hr>}
         </div>
     );
+
+    const ownTweetOptions = [
+        {
+            label: "Delete",
+            icon: <IoTrashOutline />,
+            variant: "destructive",
+            onClick: () => deleteTweetMutation.mutate(tweetId)
+        },
+        {
+            label: "Pin to your profile",
+            icon: <BsPin />,
+            onClick: () => toastMessage("This feature hasn't been implemented yet!", false)
+        }
+    ];
+
+    const generalTweetOptions = [
+        {
+            label: `Follow @${tweet.user?.username}`,
+            icon: <IoPersonAdd />,
+            onClick: () => toastMessage("This feature hasn't been implemented yet!", false)
+        }
+    ];
 
     return (
         <div className={`p-4 ${type !== "status" && !isParentTweet && !isComposeModal && "border-b"} ${isComposeModal && "first:border-b border-gray-200"} ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
@@ -67,32 +98,37 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                                 <Username username={tweet.user?.username ?? ""} />
                             </>
                         ) : (
-                            <div className="flex flex-col mb-2.5">
+                            <div className="mb-4">
                                 <Displayname username={tweet.user?.username ?? ""} displayName={tweet.user?.displayUsername ?? ""} styles="ml-2" />
-                                <Username username={tweet.user?.username ?? ""} styles="ml-2" />
+                                <Username username={tweet.user?.username ?? ""} styles="ml-2 -mt-1" />
                             </div>
                         )}
                         {type === "tweet" && (
                             <>
                                 <span className="text-zinc-500">·</span>
-                                <time className="text-zinc-500 text-sm" dateTime={tweet.createdAt.toString()}>
-                                    {new Date(tweet.createdAt).toLocaleDateString()}
+                                <time className="text-sm text-zinc-500" dateTime={tweet.createdAt.toString()}>
+                                    <TimeAgo date={new Date(tweet.createdAt)} formatter={shortFormatter} />
                                 </time>
                             </>
                         )}
-                        <TweetPopover tweetId={tweet.id} user={tweet.user} session={data?.session}>
+                        <TweetPopover options={tweet.user?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
                             <Icon styles="text-zinc-500 hover:text-sky-500">
                                 <BsThreeDots />
                             </Icon>
                         </TweetPopover>
                     </div>
-                    <Text text={tweet.isRetweet ? tweet.originalTweet.tweetContent ?? "" : tweet.tweetContent ?? ""} styles="-mt-2 ml-2" />
-                    {tweet.files.length > 0 && (
+                    <Text text={tweetContent ?? ""} styles={`${type === "status" ? "text-lg" : "-mt-2 ml-2"}`} />
+                    {tweetFiles.length > 0 && (
                         <AttachmentsGrid>
-                            {tweet.files.map((file, index) => (
+                            {tweetFiles.map((file, index) => (
                                 <Media key={file.id} type={file.type} url={file.url} />
                             ))}
                         </AttachmentsGrid>
+                    )}
+                    {isComposeModal && isParentTweet && (
+                        <span
+                            className="text-zinc-500 ml-2">Replying to <span className="text-sky-500">@{tweet.user?.username}</span>
+                        </span>
                     )}
                     {type === "status" && (
                         <div className="pt-2 flex items-center text-zinc-500 text-[15px]">

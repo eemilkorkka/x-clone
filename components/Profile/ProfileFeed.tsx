@@ -1,0 +1,71 @@
+"use client";
+
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { LoadingSpinner } from "../LoadingSpinner";
+import { InfiniteScrollContainer } from "../InfiniteScrollContainer";
+import React from "react";
+import { RegularTweet, Retweet } from "@/types/Tweet";
+import { Tweet } from "../Tweet/Tweet";
+import { useParams } from "next/navigation";
+
+export type Feed = "posts" | "replies" | "media" | "likes";
+
+interface ProfileFeedProps {
+    type: Feed;
+}
+
+const fetchTweets = async (username: string, type: Feed, includeReplies: boolean | undefined, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
+    const query = pageParam
+        ? `cursorCreatedAt=${encodeURIComponent(pageParam.createdAt)}&cursorId=${pageParam.id}&includeReplies=${includeReplies}`
+        : "";
+
+    const response = await fetch(`/api/posts/user/${username}/${type}?${query}`);
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error("Failed to fetch tweets.");
+    }
+}
+
+export const ProfileFeed = ({ type }: ProfileFeedProps) => {
+
+    const params = useParams();
+    const username = params.username as string;
+    const includeReplies = type === "replies" ? true : false;
+
+    const {
+        data,
+        error,
+        fetchNextPage,
+        isLoading,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        status,
+    } = useInfiniteQuery({
+        queryFn: ({ pageParam }) => fetchTweets(username, type, includeReplies, { pageParam }),
+        queryKey: ["profilefeed", type, username, includeReplies],
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
+    });
+
+    return (
+        <>
+            {isLoading ? (
+                <LoadingSpinner />
+            ) : (
+                <InfiniteScrollContainer onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}>
+                    {data && data?.pages.map((group, i) => (
+                        <React.Fragment key={i}>
+                            {group.items?.map((tweet: RegularTweet | Retweet) => (
+                                <Tweet type="tweet" key={tweet.id} tweet={tweet} isParentTweet={false} />
+                            ))}
+                        </React.Fragment>
+                    ))}
+                    {isFetchingNextPage && <LoadingSpinner />}
+                </InfiniteScrollContainer>
+            )}
+        </>
+    )
+}

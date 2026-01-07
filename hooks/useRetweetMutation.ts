@@ -1,18 +1,20 @@
 import { retweet } from "@/app/actions/retweet";
 import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { Retweet, Tweet, TweetsPage } from "@/types/Tweet";
+import { Tweet, TweetsPage } from "@/types/Tweet";
 import { UserBase } from "@/types/User";
 import { InfiniteData, useMutation } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 
 export const useRetweetMutation = (tweet: Tweet) => {
     const { data } = authClient.useSession();
     const queryClient = getQueryClient();
+    const searchParams = useSearchParams();
 
     const retweetMutation = useMutation({
         mutationFn: retweet,
         onMutate: async () => {
-            const tweetsQueryKey = ["tweets"];
+            const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
             const tweetQueryKey = ["tweet", tweet.id];
 
             await queryClient.cancelQueries({ queryKey: tweetsQueryKey });

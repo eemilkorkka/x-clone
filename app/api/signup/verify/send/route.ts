@@ -1,4 +1,3 @@
-
 const crypto = require("crypto");
 import { transporter } from "@/lib/nodemailer";
 import { prisma } from "@/lib/prisma";

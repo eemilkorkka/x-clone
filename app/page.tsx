@@ -5,8 +5,17 @@ import { Footer } from "@/components/Footer";
 import { GoogleSignup } from "@/components/auth/GoogleSignup";
 import { SignInDialog } from "@/components/auth/Forms/SignInForm/SignInDialog";
 import Link from "next/link";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
-export default function IndexPage() {
+export default async function IndexPage() {
+
+    const session = await getSession();
+
+    if (session) {
+        redirect("/home");
+    }
+
     return (
         <div className="flex flex-col p-8 sm:items-center min-h-screen bg-black">
             <div className="lg:mt-auto flex flex-col lg:flex-row lg:w-full">

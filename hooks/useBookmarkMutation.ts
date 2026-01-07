@@ -3,15 +3,17 @@ import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { Tweet, TweetsPage } from "@/types/Tweet";
 import { InfiniteData, useMutation } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 
 export const useBookmarkMutation = (tweet: Tweet) => {
     const { data } = authClient.useSession();
     const queryClient = getQueryClient();
+    const searchParams = useSearchParams();
 
     const bookmarkMutation = useMutation({
         mutationFn: bookmarkTweet,
         onMutate: async () => {
-            const tweetsQueryKey = ["tweets"];
+            const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
             const tweetQueryKey = ["tweet", tweet.id];
 
             await queryClient.cancelQueries({ queryKey: tweetsQueryKey });

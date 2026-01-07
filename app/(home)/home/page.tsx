@@ -1,11 +1,15 @@
 import { HomeFeed } from "@/components/HomeFeed";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { getTweets } from "@/lib/queries/tweet-queries";
+import { getTweets, getTweetsFromFollowing } from "@/lib/queries/tweet-queries";
 import { getSession } from "@/lib/session";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 
-export default async function HomePage() {
+export default async function HomePage({ 
+    searchParams
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
 
     const session = await getSession();
 
@@ -13,16 +17,18 @@ export default async function HomePage() {
         redirect("/");
     }
 
+    const feed = (await searchParams).variant ?? "foryou";
+
     const queryClient = getQueryClient();
 
     await queryClient.prefetchInfiniteQuery({
-        queryFn: () => getTweets(),
-        queryKey: ["tweets"],
+        queryFn: () => feed === "foryou" ? getTweets() : getTweetsFromFollowing(session.user.id),
+        queryKey: ["tweets", session.user.id, feed],
         initialPageParam: undefined,
     });
 
     return (
-        <div className="h-screen">
+        <div className="min-h-screen">
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <HomeFeed />
             </HydrationBoundary>

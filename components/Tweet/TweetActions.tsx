@@ -10,6 +10,11 @@ import { useRouter } from "next/navigation";
 import { useLikeMutation } from "@/hooks/useLikeMutation";
 import { useBookmarkMutation } from "@/hooks/useBookmarkMutation";
 import { useRetweetMutation } from "@/hooks/useRetweetMutation";
+import { AiOutlineLink } from "react-icons/ai";
+import { TweetPopover } from "./TweetPopover/TweetPopover";
+import { Icon } from "../Icon";
+import { toastMessage } from "@/lib/toast";
+import { Feed } from "../Profile/ProfileFeed";
 
 interface TweetActionsProps {
     type: "status" | "tweet";
@@ -24,7 +29,6 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
     const { likeMutation } = useLikeMutation(tweet);
     const { bookmarkMutation } = useBookmarkMutation(tweet);
     const { retweetMutation } = useRetweetMutation(tweet);
-
     const { setTweetToReplyTo } = useComposeModal();
 
     const handleReplyActionClick = () => {
@@ -33,6 +37,19 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
     }
 
     const tweetToCheck = tweet.isRetweet ? tweet.originalTweet : tweet;
+
+    const copyLinkToClipboard = () => {
+        navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/${tweet.user?.username}/status/${tweet.id}`);
+        toastMessage("Link copied to clipboard.", true);
+    }
+
+    const popoverOption = [
+        {
+            label: "Copy link",
+            icon: <AiOutlineLink />,
+            onClick: copyLinkToClipboard
+        }
+    ];
 
     return (
         <div className={twMerge("flex justify-between -ml-2", styles)}>
@@ -72,10 +89,11 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
                         isActive={tweetToCheck.bookmarks.some((bookmark) => bookmark.userId === data?.user.id)}
                         mutation={bookmarkMutation}
                     />
-                    <TweetAction
-                        tweetId={tweet.id}
-                        icon={<FiUpload />}
-                    />
+                    <TweetPopover options={popoverOption} styles="ml-0">
+                        <Icon styles="text-zinc-500 hover:text-sky-500">
+                            <FiUpload />
+                        </Icon>
+                    </TweetPopover>
                 </>
             ) : (
                 <div className="flex -space-x-1">
@@ -86,10 +104,11 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
                         isActive={tweetToCheck.bookmarks.some((bookmark) => bookmark.userId === data?.user.id)}
                         mutation={bookmarkMutation}
                     />
-                    <TweetAction
-                        tweetId={tweet.id}
-                        icon={<FiUpload />}
-                    />
+                    <TweetPopover options={popoverOption}>
+                        <Icon styles="text-zinc-500 hover:text-sky-500">
+                            <FiUpload />
+                        </Icon>
+                    </TweetPopover>
                 </div>
             )}
         </div>

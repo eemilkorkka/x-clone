@@ -1,3 +1,4 @@
+import { Follower } from "./Follower";
 
 export type UserBase = {
     id: string;
@@ -18,6 +19,8 @@ export interface User extends UserBase {
 }
 
 export interface UserProfile extends UserBase {
+    followers: Follower[];
+    following: Follower[];
     _count: {
         posts: number;
         likes: number;

@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 interface TabsProps {

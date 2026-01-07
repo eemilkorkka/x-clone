@@ -5,7 +5,7 @@ import { Displayname } from "@/components/User/Displayname";
 export default function NotFound() {
     return (
         <div>
-            <FeedHeader styles="items-center px-2 gap-6">
+            <FeedHeader styles="items-center px-2 gap-6 border-b-0">
                 <ReturnBack />
                 <Displayname
                     displayName={"Profile"}

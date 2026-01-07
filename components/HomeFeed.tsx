@@ -10,18 +10,20 @@ import { Tweet } from "./Tweet/Tweet";
 import { RegularTweet, Retweet } from "@/types/Tweet";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { useQueryState } from 'nuqs';
+import { authClient } from "@/lib/auth-client";
 
 const tabs = [
     { label: "For you" },
     { label: "Following" }
 ];
 
-const fetchTweets = async ({ pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
+const fetchTweets = async (feed: string | null, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
         ? `cursorCreatedAt=${encodeURIComponent(pageParam.createdAt)}&cursorId=${pageParam.id}`
         : "";
 
-    const response = await fetch(`/api/posts?${query}`);
+    const response = await fetch(feed === "foryou" ? `/api/posts?${query}` : `/api/posts/following?${query}`);
 
     if (response.ok) {
         return await response.json();
@@ -32,7 +34,11 @@ const fetchTweets = async ({ pageParam }: { pageParam?: { createdAt: string; id:
 
 export const HomeFeed = () => {
 
+    const { data: sessionData } = authClient.useSession();
     const [activeTab, setActiveTab] = useState(tabs[0].label);
+    const [feed, setFeed] = useQueryState("feed", {
+        defaultValue: "foryou"
+    });
 
     const {
         data,
@@ -44,16 +50,21 @@ export const HomeFeed = () => {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryFn: ({ pageParam }) => fetchTweets({ pageParam }),
-        queryKey: ["tweets"],
+        queryFn: ({ pageParam }) => fetchTweets(feed, { pageParam }),
+        queryKey: ["tweets", sessionData?.user.id, feed],
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
     });
 
+    const changeTab = (tab: string) => {
+        setActiveTab(tab);
+        setFeed(tab.replace(" ", "").toLowerCase());
+    }
+
     return (
         <>
             <FeedHeader styles="backdrop-blur-lg bg-white/80">
-                <Tabs tabs={tabs} activeTab={activeTab} changeTab={setActiveTab} />
+                <Tabs tabs={tabs} activeTab={activeTab} changeTab={changeTab} />
             </FeedHeader>
             <TweetForm type="tweet" isComposeModal={false} />
             {isLoading ? (

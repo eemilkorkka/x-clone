@@ -8,7 +8,6 @@ import z from "zod"
 import { FormButton } from "../FormButton";
 import { authClient } from "@/lib/auth-client";
 import { toastMessage } from "@/lib/toast";
-import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 
 const passwordSchema = z.object({

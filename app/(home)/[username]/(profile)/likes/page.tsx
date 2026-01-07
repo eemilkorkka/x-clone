@@ -1,11 +1,11 @@
 import { ProfileFeed } from "@/components/Profile/ProfileFeed";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { getTweetsByUser } from "@/lib/queries/tweet-queries";
+import { getLikesByUser } from "@/lib/queries/tweet-queries";
 import { getSession } from "@/lib/session";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 
-export default async function RepliesPage({ params }: { params: Promise<{ username_or_email: string }> }) {
+export default async function LikesPage({ params }: { params: Promise<{ username_or_email: string }> }) {
     const { username_or_email } = await params;
 
     const session = await getSession();
@@ -17,15 +17,15 @@ export default async function RepliesPage({ params }: { params: Promise<{ userna
     const queryClient = getQueryClient();
 
     await queryClient.prefetchInfiniteQuery({
-        queryFn: () => getTweetsByUser(username_or_email, true),
-        queryKey: ["profilefeed", "replies", username_or_email, true],
+        queryFn: () => getLikesByUser(username_or_email),
+        queryKey: ["profilefeed", "likes", username_or_email, false],
         initialPageParam: undefined,
     });
 
     return (
         <div className="min-h-screen">
             <HydrationBoundary state={dehydrate(queryClient)}>
-                <ProfileFeed type="replies" />
+                <ProfileFeed type="likes" />
             </HydrationBoundary>
         </div>
     )

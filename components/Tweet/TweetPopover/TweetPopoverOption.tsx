@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button"
 import React from "react"
-import { twMerge } from "tailwind-merge";
 import { DeleteTweetDialog } from "./DeleteTweetDialog";
+import { PopoverOptionVariant } from "./TweetPopover";
 
 interface TweetPopoverOptionProps {
     children: React.ReactNode;
-    variant?: "default" | "destructive";
+    variant?: PopoverOptionVariant;
     onClick: () => void;
 }
 

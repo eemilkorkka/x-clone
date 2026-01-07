@@ -1,6 +1,5 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
 import { FeedHeader } from "../FeedHeader";
 import { ReturnBack } from "../ReturnBack";
 import { usePathname } from "next/navigation";
@@ -15,9 +14,10 @@ interface ProfileFeedHeaderProps {
 export const ProfileFeedHeader = ({ username, displayName, postsCount }: ProfileFeedHeaderProps) => {
 
     const pathname = usePathname();
+    const pathnameParts = pathname.split("/");
 
     return (
-        <FeedHeader styles="items-center px-2 gap-6">
+        <FeedHeader styles="items-center px-2 gap-6 sticky top-0 z-55 backdrop-blur-lg bg-white/80">
             <ReturnBack />
             <div className="flex flex-col">
                 <Displayname
@@ -26,7 +26,7 @@ export const ProfileFeedHeader = ({ username, displayName, postsCount }: Profile
                     useLink={false}
                     styles="text-lg"
                 />
-                {<p className="text-sm text-zinc-500">{postsCount} posts</p>}
+                {<p className="text-sm text-zinc-500">{postsCount} {pathnameParts[pathnameParts.length - 1] === "likes" ? "likes" : "posts"}</p>}
             </div>
         </FeedHeader>
     )

@@ -66,6 +66,223 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
     };
 }
 
+export const getTweetsFromFollowing = async (userId: string, cursor?: { createdAt: Date; id: number }) => {
+    const follows = await prisma.follow.findMany({
+        where: { followerId: userId },
+        select: { followingId: true }
+    });
+
+    const followIds = follows.map(follower => follower.followingId);
+
+    const tweets = await prisma.tweet.findMany({
+        where: {
+            parentTweetId: null,
+            user: {
+                id: { in: followIds }
+            }
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    displayUsername: true,
+                    image: true,
+                },
+            },
+            files: true,
+            likes: true,
+            bookmarks: true,
+            _count: {
+                select: {
+                    replies: true
+                }
+            },
+            retweets: true,
+            originalTweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: [
+            { createdAt: 'desc' },
+            { id: 'desc' },
+        ],
+        take: 20,
+        ...(cursor && {
+            skip: 1,
+            cursor: {
+                id: cursor.id,
+            },
+        }),
+    });
+
+    const last = tweets[tweets.length - 1];
+
+    return {
+        items: tweets,
+        nextCursor: last ? { createdAt: last.createdAt, id: last.id } : null,
+    };
+}
+
+export const getTweetsByUser = async (username: string, includeReplies: boolean, cursor?: { createdAt: Date; id: number }) => {
+    const tweets = await prisma.tweet.findMany({
+        where: {
+            parentTweetId: includeReplies ? undefined : null,
+            user: {
+                username: username
+            }
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    displayUsername: true,
+                    image: true,
+                },
+            },
+            files: true,
+            likes: true,
+            bookmarks: true,
+            _count: {
+                select: {
+                    replies: true
+                }
+            },
+            retweets: true,
+            originalTweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: [
+            { createdAt: 'desc' },
+            { id: 'desc' },
+        ],
+        take: 20,
+        ...(cursor && {
+            skip: 1,
+            cursor: {
+                id: cursor.id,
+            },
+        }),
+    });
+
+    const last = tweets[tweets.length - 1];
+
+    return {
+        items: tweets,
+        nextCursor: last ? { createdAt: last.createdAt, id: last.id } : null,
+    };
+}
+
+export const getLikesByUser = async (username: string, cursor?: { createdAt: Date; id: number }) => {
+    const likes = await prisma.like.findMany({
+        where: {
+            user: {
+                username: username
+            }
+        },
+        include: {
+            tweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    },
+                    retweets: true,
+                    originalTweet: {
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    displayUsername: true,
+                                    image: true,
+                                },
+                            },
+                            files: true,
+                            likes: true,
+                            bookmarks: true,
+                            retweets: true,
+                            _count: {
+                                select: {
+                                    replies: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: [
+            { createdAt: 'desc' },
+            { id: 'desc' },
+        ],
+        take: 20,
+        ...(cursor && {
+            skip: 1,
+            cursor: {
+                id: cursor.id,
+            },
+        }),
+    });
+
+    const last = likes[likes.length - 1];
+
+    return {
+        items: likes.map(like => like.tweet),
+        nextCursor: last ? { createdAt: last.createdAt, id: last.id } : null,
+    };
+}
+
 export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date; id: number }) => {
     const tweets = await prisma.tweet.findMany({
         where: {

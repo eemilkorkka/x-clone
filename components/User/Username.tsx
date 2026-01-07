@@ -9,7 +9,7 @@ interface UsernameProps {
 
 export const Username = ({ username, styles, useLink = true }: UsernameProps) => {
 
-    const className = twMerge("block truncate overflow-hidden whitespace-nowrap text-black text-zinc-500 text-[15px]", styles);
+    const className = twMerge("block truncate overflow-hidden whitespace-nowrap h-fit text-black text-zinc-500 text-[15px]", styles);
 
     return useLink ? (
         <Link href={`/${username}`} onClick={(e) => e.stopPropagation()} className="min-w-0">

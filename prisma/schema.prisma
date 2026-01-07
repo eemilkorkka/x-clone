@@ -33,6 +33,8 @@ model User {
   tweets          Tweet[]
   likes           Like[]
   bookmarks       Bookmark[]
+  followers         Follow[]  @relation("Following")
+  following       Follow[]    @relation("Follower")
 
   @@unique([email])
   @@unique([username])
@@ -93,6 +95,17 @@ model File {
   type      FileType
   createdAt DateTime @default(now())
   tweet     Tweet    @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
 }
 
 model Session {
