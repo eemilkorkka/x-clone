@@ -60,6 +60,14 @@ export default async function ProfileLayout({
         }
     });
 
+    const likesCount = await prisma.like.count({
+        where: {
+            user: {
+                username: username
+            }
+        }
+    });
+
     await queryClient.prefetchQuery({
         queryFn: () => getUserByUsernameOrEmail(username),
         queryKey: ["user", username]
@@ -71,6 +79,7 @@ export default async function ProfileLayout({
                 username={username}
                 displayName={user?.displayUsername ?? ""}
                 postsCount={postsCount}
+                likesCount={likesCount}
             />
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <ProfileInfo username={username} />

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from 'next/image';
 import { FileType } from "@/generated/prisma/enums";
+import { MediaDialog } from "./MediaDialog";
 
 interface MediaProps {
     type: FileType;
@@ -12,14 +13,16 @@ export const Media = ({ type, url, children }: MediaProps) => {
     const imageElement = (
         <div className="relative w-full h-full">
             {type === FileType.IMAGE ? (
-                <Image
-                    className="w-full h-full cursor-pointer object-cover"
-                    src={url}
-                    alt="Uploaded media"
-                    unoptimized
-                    width={0}
-                    height={0}
-                />
+                <MediaDialog src={url}>
+                    <Image
+                        className="w-full h-full cursor-pointer object-cover"
+                        src={url}
+                        alt="Media"
+                        unoptimized
+                        width={0}
+                        height={0}
+                    />
+                </MediaDialog>
             ) : (
                 <video
                     className="w-full h-full cursor-pointer object-cover"

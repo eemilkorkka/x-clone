@@ -1,8 +1,9 @@
-import { getTweets } from "@/lib/queries/tweet-queries";
+import { getTweetsByUser } from "@/lib/queries/tweet-queries";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ username: string }> }) {
 
+    const { username } = await params;
     const searchParams = request.nextUrl.searchParams;
 
     const cursorCreatedAt = searchParams.get("cursorCreatedAt");
@@ -11,7 +12,7 @@ export async function GET(request: NextRequest) {
     const cursor = cursorCreatedAt && cursorId ? { createdAt: new Date(cursorCreatedAt), id: Number(cursorId) } : undefined;
 
     try {
-        const result = await getTweets(cursor);
+        const result = await getTweetsByUser(username, false, cursor);
 
         if (!result) {
             return NextResponse.json({ message: "Couldn't find tweets." }, { status: 404 });

@@ -168,6 +168,119 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                 }
             },
             retweets: true,
+            parentTweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
+                }
+            },
+            originalTweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: [
+            { createdAt: 'desc' },
+            { id: 'desc' },
+        ],
+        take: 20,
+        ...(cursor && {
+            skip: 1,
+            cursor: {
+                id: cursor.id,
+            },
+        }),
+    });
+
+    const last = tweets[tweets.length - 1];
+
+    return {
+        items: tweets,
+        nextCursor: last ? { createdAt: last.createdAt, id: last.id } : null,
+    };
+}
+
+export const getTweetsByUserWithMedia = async (username: string, cursor?: { createdAt: Date; id: number }) => {
+    const tweets = await prisma.tweet.findMany({
+        where: {
+            user: {
+                username: username
+            },
+            files: {
+                some: {}
+            }
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    displayUsername: true,
+                    image: true,
+                },
+            },
+            files: true,
+            likes: true,
+            bookmarks: true,
+            _count: {
+                select: {
+                    replies: true
+                }
+            },
+            retweets: true,
+            parentTweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    retweets: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    }
+                }
+            },
             originalTweet: {
                 include: {
                     user: {

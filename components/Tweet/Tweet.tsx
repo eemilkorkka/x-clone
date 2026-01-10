@@ -7,7 +7,7 @@ import { TweetActions } from "./TweetActions";
 import { authClient } from "@/lib/auth-client";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { Text } from "../Text";
-import { Media } from "./Media";
+import { Media } from "../Media/Media";
 import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
 import { BsThreeDots, BsPin } from "react-icons/bs";

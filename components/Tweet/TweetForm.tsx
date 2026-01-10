@@ -15,9 +15,9 @@ import { useFilePicker } from '@/hooks/useFilePicker';
 import { createTweet } from '@/app/actions/createTweet';
 import { getQueryClient } from '@/lib/getQueryClient';
 import { toastMessage } from '@/lib/toast';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AttachmentsGrid from './AttachmentsGrid';
-import { Media } from './Media';
+import { Media } from '../Media/Media';
 import { IoClose } from 'react-icons/io5';
 import { FileType } from '@/generated/prisma/enums';
 import { twMerge } from 'tailwind-merge';
@@ -41,6 +41,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
     const [textAreaFocused, setTextAreaFocused] = useState(false);
     const queryClient = getQueryClient();
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         if (state?.error) {
@@ -55,7 +56,8 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                 queryClient.invalidateQueries({ queryKey: ["tweet", parentTweetId] });
                 queryClient.invalidateQueries({ queryKey: ["replies", parentTweetId] });
             } else {
-                queryClient.invalidateQueries({ queryKey: ["tweets"] });
+                console.log(searchParams.get("feed"))
+                queryClient.invalidateQueries({ queryKey: ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"] });
             }
 
             setPickedFiles([]);
@@ -87,7 +89,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
 
     return (
         <>
-            {textAreaFocused && parentTweetId && type === "reply" && (
+            {textAreaFocused && parentTweetId && !isComposeModal && type === "reply" && (
                 <span
                     className="text-zinc-500 text-sm ml-16 pt-2">Replying to <span className="text-sky-500">@{parentTweetAuthor}</span>
                 </span>
@@ -162,7 +164,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                                 progressClassName={tweetContent.length >= 260 ? "stroke-yellow-500" : "stroke-sky-500"}
                             />
                             <hr className='h-8.5 w-[1px] bg-zinc-300'></hr>
-                            <Button type="submit" disabled={tweetContent.trim() === ""} className="ml-2 rounded-full px-4 font-bold hover:cursor-pointer">Post</Button>
+                            <Button type="submit" disabled={tweetContent.trim() === "" && pickedFiles.length === 0} className="ml-2 rounded-full px-4 font-bold hover:cursor-pointer">Post</Button>
                         </div>
                     </div>
                     <input className='hidden' name="parentTweetId" defaultValue={parentTweetId} />

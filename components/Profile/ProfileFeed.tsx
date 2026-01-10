@@ -58,8 +58,11 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
                 <InfiniteScrollContainer onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}>
                     {data && data?.pages.map((group, i) => (
                         <React.Fragment key={i}>
-                            {group.items?.map((tweet: RegularTweet | Retweet) => (
-                                <Tweet type="tweet" key={tweet.id} tweet={tweet} isParentTweet={false} />
+                            {group.items?.map((tweet: RegularTweet | Retweet,) => (
+                                <React.Fragment key={tweet.id}>
+                                    {tweet.parentTweet && <Tweet type="tweet" tweet={tweet.parentTweet} isParentTweet={true} />}
+                                    <Tweet type="tweet" tweet={tweet} isParentTweet={false} />
+                                </React.Fragment>
                             ))}
                         </React.Fragment>
                     ))}

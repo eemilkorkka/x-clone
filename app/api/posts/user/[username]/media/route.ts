@@ -1,4 +1,4 @@
-import { getTweets, getTweetsByUser } from "@/lib/queries/tweet-queries";
+import { getTweetsByUserWithMedia } from "@/lib/queries/tweet-queries";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ username: string }> }) {
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const cursor = cursorCreatedAt && cursorId ? { createdAt: new Date(cursorCreatedAt), id: Number(cursorId) } : undefined;
 
     try {
-        const result = await getTweetsByUser(username, false, cursor);
+        const result = await getTweetsByUserWithMedia(username, cursor);
 
         if (!result) {
             return NextResponse.json({ message: "Couldn't find tweets." }, { status: 404 });

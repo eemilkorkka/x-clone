@@ -5,8 +5,8 @@ import { getSession } from "@/lib/session";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 
-export default async function RepliesPage({ params }: { params: Promise<{ username_or_email: string }> }) {
-    const { username_or_email } = await params;
+export default async function RepliesPage({ params }: { params: Promise<{ username: string }> }) {
+    const { username } = await params;
 
     const session = await getSession();
 
@@ -17,8 +17,8 @@ export default async function RepliesPage({ params }: { params: Promise<{ userna
     const queryClient = getQueryClient();
 
     await queryClient.prefetchInfiniteQuery({
-        queryFn: () => getTweetsByUser(username_or_email, true),
-        queryKey: ["profilefeed", "replies", username_or_email, true],
+        queryFn: () => getTweetsByUser(username, true),
+        queryKey: ["profilefeed", "replies", username, true],
         initialPageParam: undefined,
     });
 

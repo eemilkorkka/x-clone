@@ -35,7 +35,7 @@ export async function createTweet(previousState: any, formData: FormData) {
 
     const parsedData = tweetFormSchema.safeParse({
         tweetContent,
-        actualFiles
+        files: actualFiles
     });
 
     if (!parsedData.success) {

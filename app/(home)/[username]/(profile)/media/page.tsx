@@ -1,33 +1,31 @@
 import { ProfileFeed } from "@/components/Profile/ProfileFeed";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { getLikesByUser } from "@/lib/queries/tweet-queries";
-import { getSession } from "@/lib/session";
+import { getTweetsByUserWithMedia } from "@/lib/queries/tweet-queries";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getSession } from "better-auth/api";
 import { redirect } from "next/navigation";
 
-export default async function LikesPage({ params }: { params: Promise<{ username: string }> }) {
+export default async function MediaPage({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
 
     const session = await getSession();
 
     if (!session) {
         redirect("/");
-    } else if (session && username !== session.user.username) {
-        redirect(`/${username}`);
     }
 
     const queryClient = getQueryClient();
 
     await queryClient.prefetchInfiniteQuery({
-        queryFn: () => getLikesByUser(username),
-        queryKey: ["profilefeed", "likes", username, false],
-        initialPageParam: undefined,
+        queryFn: () => getTweetsByUserWithMedia(username),
+        queryKey: ["profilefeed", "media", username, false],
+        initialPageParam: undefined
     });
 
     return (
         <div className="min-h-screen">
             <HydrationBoundary state={dehydrate(queryClient)}>
-                <ProfileFeed type="likes" />
+                <ProfileFeed type="media" />
             </HydrationBoundary>
         </div>
     )
