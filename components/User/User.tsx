@@ -3,7 +3,7 @@ import { CustomAvatar } from "./CustomAvatar";
 import { Username } from "./Username";
 import { Displayname } from "./Displayname";
 import React from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 interface UserProps {
@@ -28,7 +28,7 @@ export const User = ({ useLink = true, user, children, styles, contentStyles }: 
                 useLink={useLink} 
             />
             <div className="flex-1 flex items-center justify-between">
-                <div className={twMerge("flex w-full items-start flex-col -space-y-1", contentStyles)}>
+                <div className={cn("flex w-full items-start flex-col -space-y-1", contentStyles)}>
                     <Displayname username={user.username ?? ""} displayName={user.displayUsername ?? ""} useLink={useLink} />
                     <Username username={user.username ?? ""} useLink={useLink} />
                 </div>
@@ -39,7 +39,7 @@ export const User = ({ useLink = true, user, children, styles, contentStyles }: 
         </>
     );
 
-    const className = twMerge("flex items-center hover:bg-ring/20 w-full p-2 hover:cursor-pointer", styles);
+    const className = cn("flex items-center hover:bg-ring/20 w-full p-2 hover:cursor-pointer", styles);
 
     return useLink ? (
         <Link href={`/${user.username}`} className={className}>

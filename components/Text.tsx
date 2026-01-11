@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 const urlPattern = /\b((https?:\/\/|www\.)[^\s/$.?#].[^\s]*)/gi;
 
@@ -7,7 +7,7 @@ export const Text = ({ text, styles }: { text: string, styles?: string }) => {
     const words = text.split(" ");
 
     return (
-        <span className={twMerge("text-[15px] text-black", styles)} style={{ wordBreak: "break-word" }}>
+        <span className={cn("text-[15px] text-black", styles)} style={{ wordBreak: "break-word" }}>
             {words.map((word, index) => {
                 const isUsername = word.includes("@");
 

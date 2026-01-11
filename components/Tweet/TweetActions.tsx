@@ -4,7 +4,7 @@ import { FiUpload } from "react-icons/fi";
 import { TweetAction } from "./TweetAction";
 import { Tweet } from "@/types/Tweet";
 import { authClient } from "@/lib/auth-client";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 import { useComposeModal } from "../../context/ComposeModalContext";
 import { useRouter } from "next/navigation";
 import { useLikeMutation } from "@/hooks/useLikeMutation";
@@ -52,7 +52,7 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
     ];
 
     return (
-        <div className={twMerge("flex justify-between -ml-2", styles)}>
+        <div className={cn("flex justify-between -ml-2", styles)}>
             <TweetAction
                 tweetId={tweet.id}
                 statCount={tweetToCheck._count?.replies}
