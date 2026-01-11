@@ -6,7 +6,7 @@ import {
 
 import React from "react";
 import { TweetPopoverOption } from "./TweetPopoverOption";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 export type PopoverOptionVariant = "destructive" | "default";
 
@@ -26,7 +26,7 @@ interface TweetPopoverProps {
 export const TweetPopover = ({ children, options, styles }: TweetPopoverProps) => {
     return (
         <Popover>
-            <PopoverTrigger className={twMerge("ml-auto", styles)} render={
+            <PopoverTrigger className={cn("ml-auto", styles)} render={
                 <button onClick={(e) => e.stopPropagation()}>
                     {children}
                 </button>

@@ -1,5 +1,5 @@
 import React from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 interface IconsProps {
     children: React.ReactNode;
@@ -9,7 +9,7 @@ interface IconsProps {
 
 export const Icon = ({ children, onClick, styles }: IconsProps) => {
     return (
-        <div className={twMerge("rounded-full w-fit h-fit text-sky-500 hover:bg-sky-500/20 hover:cursor-pointer p-2", styles)} onClick={onClick}>
+        <div className={cn("rounded-full w-fit h-fit text-sky-500 hover:bg-sky-500/20 hover:cursor-pointer p-2", styles)} onClick={onClick}>
             {children}
         </div>
     )

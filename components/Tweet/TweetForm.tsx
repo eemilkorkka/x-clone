@@ -20,7 +20,7 @@ import AttachmentsGrid from './AttachmentsGrid';
 import { Media } from '../Media/Media';
 import { IoClose } from 'react-icons/io5';
 import { FileType } from '@/generated/prisma/enums';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '@/lib/utils';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -94,7 +94,12 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                     className="text-zinc-500 text-sm ml-16 pt-2">Replying to <span className="text-sky-500">@{parentTweetAuthor}</span>
                 </span>
             )}
-            <div className={`p-4 ${parentTweetId && textAreaFocused && "pt-0"} pb-0 flex items-start ${!isComposeModal && "border-b border-gray-200"} ${isComposeModal && "pt-0"} max-w-full`}>
+            <div className={cn(
+                "p-4 pb-0 flex items-start max-w-full",
+                parentTweetId && textAreaFocused && "pt-0",
+                !isComposeModal && "border-b border-gray-200",
+                isComposeModal && "pt-0"
+            )}>
                 <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" />
                 <form onSubmit={handleSubmit} className="flex flex-col w-full mt-2">
                     <TextareaAutosize
@@ -122,7 +127,11 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                             </Media>
                         ))}
                     </AttachmentsGrid>
-                    <div className={`${type === "reply" && !isComposeModal ? (textAreaFocused ? "flex" : "hidden") : "flex"} items-center ${textAreaFocused && !isComposeModal && "border-t-1 border-gray-200"} justify-between`}>
+                    <div className={cn(
+                        "items-center justify-between",
+                        type === "reply" && !isComposeModal ? (textAreaFocused ? "flex" : "hidden") : "flex",
+                        textAreaFocused && !isComposeModal && "border-t-1 border-gray-200"
+                    )}>
                         <div className='flex'>
                             <Icon onClick={() => filePickerRef.current?.click()}>
                                 <SlPicture size={18} />
