@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {  UseMutationResult } from "@tanstack/react-query";
 import { twMerge } from "tailwind-merge";
 
@@ -48,7 +49,7 @@ export const TweetAction = ({
                 <span className={`${hoverBgColor} ${isActive ? activeColor : ""} p-2 rounded-full`}>
                     {isActive && activeIcon ? activeIcon : icon}
                 </span>
-                {statCount !== undefined && statCount > 0 && <span className={`text-sm ${isActive && activeColor}`}>{statCount}</span>}
+                {statCount !== undefined && statCount > 0 && <span className={cn("text-sm", isActive && activeColor)}>{statCount}</span>}
             </button>
         </form>
     )
