@@ -27,7 +27,12 @@ export const Navitem = ({ href, icon, activeIcon, label, styles }: NavitemProps)
         return pathname === href;
     }
 
-    const className = cn(`w-fit hover:bg-ring/20 px-4 py-3 gap-4 rounded-full flex items-center text-lg ${!href && "hover:cursor-not-allowed"} ${isActive() && "font-bold"}`, styles);
+    const className = cn(
+        "w-fit hover:bg-ring/20 px-4 py-3 gap-4 rounded-full flex items-center text-lg",
+        !href && "hover:cursor-not-allowed",
+        isActive() && "font-bold",
+        styles
+    );
 
     return href ? (
         <Link href={href} className={className}>
