@@ -18,6 +18,7 @@ import { toastMessage } from "@/lib/toast";
 import TimeAgo from 'react-timeago';
 import { makeIntlFormatter } from 'react-timeago/defaultFormatter';
 import { shortFormatter } from "@/lib/formatter";
+import { cn } from "@/lib/utils";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -77,7 +78,12 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     ];
 
     return (
-        <div className={`p-4 ${type !== "status" && !isParentTweet && !isComposeModal && "border-b"} ${isComposeModal && "first:border-b border-gray-200"} ${useLink && "hover:cursor-pointer hover:bg-ring/10"}`}>
+        <div className={cn(
+            "p-4",
+            type !== "status" && !isParentTweet && !isComposeModal && "border-b",
+            isComposeModal && "first:border-b border-gray-200",
+            useLink && "hover:cursor-pointer hover:bg-ring/10"
+        )}>
             {tweet.isRetweet && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-700 pb-2">
                     <AiOutlineRetweet className="text-zinc-700" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
@@ -117,7 +123,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             </Icon>
                         </TweetPopover>
                     </div>
-                    <Text text={tweetContent ?? ""} styles={`${type === "status" ? "text-lg" : "-mt-2 ml-2"}`} />
+                    <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "-mt-2 ml-2")} />
                     {tweetFiles.length > 0 && (
                         <AttachmentsGrid>
                             {tweetFiles.map((file, index) => (

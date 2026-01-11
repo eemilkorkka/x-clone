@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import {  UseMutationResult } from "@tanstack/react-query";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 type MutationResponse =
     | { error: string; message?: undefined }
@@ -40,13 +40,13 @@ export const TweetAction = ({
             <input type="hidden" name="postId" defaultValue={tweetId} />
             <button
                 type="submit"
-                className={twMerge(`flex items-center gap-1 text-zinc-500 ${hoverTextColor} hover:cursor-pointer`, styles)}
+                className={cn("flex items-center gap-1 text-zinc-500 hover:cursor-pointer", hoverTextColor, styles)}
                 onClick={onClick}
                 formAction={async formData => {
                     mutation?.mutate(formData);
                 }}
             >
-                <span className={`${hoverBgColor} ${isActive ? activeColor : ""} p-2 rounded-full`}>
+                <span className={cn(hoverBgColor, "p-2 rounded-full", isActive && activeColor)}>
                     {isActive && activeIcon ? activeIcon : icon}
                 </span>
                 {statCount !== undefined && statCount > 0 && <span className={cn("text-sm", isActive && activeColor)}>{statCount}</span>}

@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 interface TabsProps {
     tabs: { href?: string; label: string }[];
@@ -27,7 +27,7 @@ export const Tabs = ({ tabs, activeTab, changeTab, styles }: TabsProps) => {
                 onClick={() => changeTab?.(tabs[index].label)}
             >
                 <div className="relative">
-                    <p className={`text-[15px] ${isActive ? "font-bold" : "text-gray-500"}`}>
+                    <p className={cn("text-[15px]", isActive ? "font-bold" : "text-gray-500")}>
                         {tabs[index].label}
                     </p>
                     {isActive && (
@@ -39,7 +39,7 @@ export const Tabs = ({ tabs, activeTab, changeTab, styles }: TabsProps) => {
     }
 
     return (
-        <div className={twMerge("flex w-full h-13", styles)}>
+        <div className={cn("flex w-full h-13", styles)}>
             {tabs.map((tab, index) => (
                 <React.Fragment key={tab.label}>
                     {tab.href ? (

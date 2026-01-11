@@ -3,7 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 interface NavitemProps {
     href?: string;
@@ -27,7 +27,12 @@ export const Navitem = ({ href, icon, activeIcon, label, styles }: NavitemProps)
         return pathname === href;
     }
 
-    const className = twMerge(`w-fit hover:bg-ring/20 px-4 py-3 gap-4 rounded-full flex items-center text-lg ${!href && "hover:cursor-not-allowed"} ${isActive() && "font-bold"}`, styles);
+    const className = cn(
+        "w-fit hover:bg-ring/20 px-4 py-3 gap-4 rounded-full flex items-center text-lg",
+        !href && "hover:cursor-not-allowed",
+        isActive() && "font-bold",
+        styles
+    );
 
     return href ? (
         <Link href={href} className={className}>

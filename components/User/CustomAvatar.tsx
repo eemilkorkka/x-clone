@@ -6,7 +6,7 @@ import {
 
 import defaultPfp from "@/public/defaultPfp.jpg";
 import Link from "next/link";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 export type size = "sm" | "md" | "lg" | "xl";
 
@@ -38,7 +38,7 @@ export const CustomAvatar = ({ src, alt, size, username, useLink = true, useHove
     }
 
     const avatarElement = (
-        <Avatar className={twMerge(`${getSize(size)} hover:cursor-pointer`, styles)}>
+        <Avatar className={cn(getSize(size), "hover:cursor-pointer", styles)}>
             <AvatarImage src={src || defaultPfp.src} alt={alt} className="rounded-full" />
             <AvatarFallback>CN</AvatarFallback>
         </Avatar>
