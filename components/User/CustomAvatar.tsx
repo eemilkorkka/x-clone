@@ -38,7 +38,7 @@ export const CustomAvatar = ({ src, alt, size, username, useLink = true, useHove
     }
 
     const avatarElement = (
-        <Avatar className={cn(`${getSize(size)} hover:cursor-pointer`, styles)}>
+        <Avatar className={cn(getSize(size), "hover:cursor-pointer", styles)}>
             <AvatarImage src={src || defaultPfp.src} alt={alt} className="rounded-full" />
             <AvatarFallback>CN</AvatarFallback>
         </Avatar>

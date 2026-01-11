@@ -39,7 +39,7 @@ export const TweetAction = ({
             <input type="hidden" name="postId" defaultValue={tweetId} />
             <button
                 type="submit"
-                className={cn(`flex items-center gap-1 text-zinc-500 ${hoverTextColor} hover:cursor-pointer`, styles)}
+                className={cn("flex items-center gap-1 text-zinc-500 hover:cursor-pointer", hoverTextColor, styles)}
                 onClick={onClick}
                 formAction={async formData => {
                     mutation?.mutate(formData);
