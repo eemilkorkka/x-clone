@@ -1,19 +1,39 @@
 export function shortFormatter(value: number, unit: string, suffix: string) {
-
-    const showYear = new Date(value).getFullYear() > new Date().getFullYear();
-
     const getDate = () => {
+        const date = new Date();
+        
+        let daysAgo = 0;
+        
+        switch (unit) {
+            case "day":
+                daysAgo = value;
+                break;
+            case "week":
+                daysAgo = value * 7;
+                break;
+            case "month":
+                daysAgo = value * 30;
+                break;
+            case "year":
+                daysAgo = value * 365;
+                break;
+        }
+        
+        date.setDate(date.getDate() - daysAgo);
+        
+        const showYear = date.getFullYear() < new Date().getFullYear();
+        
         if (showYear) {
-            return `${new Date(value).toLocaleDateString('en-US', {
+            return date.toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric'
-            })}`;
+            });
         } else {
-            return `${new Date(value).toLocaleDateString('en-US', {
+            return date.toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
-            })}`;
+            });
         }
     }
 
@@ -25,7 +45,8 @@ export function shortFormatter(value: number, unit: string, suffix: string) {
         case "hour":
             return `${value}h`;
         case "day":
-            return getDate();
+        case "week":
+        case "month":
         case "year":
             return getDate();
     }

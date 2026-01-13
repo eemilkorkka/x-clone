@@ -35,7 +35,9 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
     const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
     const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
-    const { deleteTweetMutation } = useDeleteTweetMutation(tweetId);
+    const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
+    const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
+    const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
 
     const onClick = () => {
         if (useLink) {
@@ -100,20 +102,20 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         )}
                         {type === "tweet" ? (
                             <>
-                                <Displayname username={tweet.user?.username ?? ""} displayName={tweet.user?.displayUsername ?? ""} styles="ml-2" />
-                                <Username username={tweet.user?.username ?? ""} />
+                                <Displayname username={tweetAuthor?.username ?? ""} displayName={tweetAuthor?.displayUsername ?? ""} styles="ml-2" />
+                                <Username username={tweetAuthor?.username ?? ""} />
                             </>
                         ) : (
                             <div className="mb-4">
-                                <Displayname username={tweet.user?.username ?? ""} displayName={tweet.user?.displayUsername ?? ""} styles="ml-2" />
-                                <Username username={tweet.user?.username ?? ""} styles="ml-2 -mt-1" />
+                                <Displayname username={tweetAuthor?.username ?? ""} displayName={tweetAuthor?.displayUsername ?? ""} styles="ml-2" />
+                                <Username username={tweetAuthor?.username ?? ""} styles="ml-2 -mt-1" />
                             </div>
                         )}
                         {type === "tweet" && (
                             <>
                                 <span className="text-zinc-500">·</span>
-                                <time className="text-sm text-zinc-500" dateTime={tweet.createdAt.toString()}>
-                                    <TimeAgo date={new Date(tweet.createdAt)} formatter={shortFormatter} />
+                                <time className="text-sm text-zinc-500" dateTime={tweetCreatedAt.toString()}>
+                                    <TimeAgo date={new Date(tweetCreatedAt)} formatter={shortFormatter} />
                                 </time>
                             </>
                         )}

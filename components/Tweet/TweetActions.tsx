@@ -14,7 +14,6 @@ import { AiOutlineLink } from "react-icons/ai";
 import { TweetPopover } from "./TweetPopover/TweetPopover";
 import { Icon } from "../Icon";
 import { toastMessage } from "@/lib/toast";
-import { Feed } from "../Profile/ProfileFeed";
 
 interface TweetActionsProps {
     type: "status" | "tweet";

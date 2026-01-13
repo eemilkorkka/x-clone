@@ -4,6 +4,9 @@ import { cn } from "@/lib/utils";
 const urlPattern = /\b((https?:\/\/|www\.)[^\s/$.?#].[^\s]*)/gi;
 
 export const Text = ({ text, styles }: { text: string, styles?: string }) => {
+    
+    if (!text) return null;
+    
     const words = text.split(" ");
 
     return (

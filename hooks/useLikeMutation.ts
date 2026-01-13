@@ -91,6 +91,8 @@ export const useLikeMutation = (tweet: Tweet) => {
                 });
             }
 
+            console.log(previousReplies);
+
             if (previousReplies) {
                 queryClient.setQueryData<InfiniteData<TweetsPage>>(repliesQueryKey, {
                     ...previousReplies,

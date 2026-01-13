@@ -64,7 +64,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                         styles="w-fit"
                     />
                 </div>
-                <Text text="Lorem ipsum dolor sit amet" />
+                <Text text={userData.bio} />
                 <div className="flex">
                     <div className="text-sm flex items-center gap-1.5 text-zinc-500">
                         <IoCalendarOutline size={17} />

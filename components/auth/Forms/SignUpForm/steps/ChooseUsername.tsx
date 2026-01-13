@@ -35,10 +35,12 @@ const usernameSchema = z.object({
     }
 });
 
+type FormData = SignupFormData | { username: string };
+
 interface ChooseUsernameProps {
-    formData: SignupFormData;
-    setFormData: React.Dispatch<SetStateAction<SignupFormData>>;
-    setStep: React.Dispatch<SetStateAction<number>>;
+    formData: FormData;
+    setFormData: React.Dispatch<SetStateAction<FormData>>;
+    setStep?: React.Dispatch<SetStateAction<number>>;
 }
 
 export const ChooseUsername = ({ formData, setFormData, setStep }: ChooseUsernameProps) => {
@@ -55,7 +57,7 @@ export const ChooseUsername = ({ formData, setFormData, setStep }: ChooseUsernam
 
     const onSubmit = (data: z.infer<typeof usernameSchema>) => {
         setFormData(prev => ({ ...prev, username: data.username }));
-        setStep(prev => prev + 1);
+        setStep && setStep( (prev) => prev + 1);
     }
 
     return (
@@ -77,7 +79,7 @@ export const ChooseUsername = ({ formData, setFormData, setStep }: ChooseUsernam
                     </Field>
                 )}
             />
-            <FormButton />
+            <FormButton disabled={!username || !!form.formState.errors.username} />
         </form>
     )
 }

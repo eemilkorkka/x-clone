@@ -1,6 +1,8 @@
 import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
 import { PremiumCard } from "@/components/PremiumCard";
 import { Searchbar } from "@/components/Searchbar";
+import { TrendingCard } from "@/components/Trending/TrendingCard";
+import { SuggestedUsersCard } from "@/components/User/SuggestedUsersCard";
 import React from "react";
 
 export default function HomeLayout({
@@ -24,6 +26,8 @@ export default function HomeLayout({
         <aside className="hidden lg:flex flex-col gap-4 flex-shrink-0 py-2 w-85">
           <Searchbar />
           <PremiumCard />
+          <SuggestedUsersCard />
+          <TrendingCard />
         </aside>
       </section>
     </main>

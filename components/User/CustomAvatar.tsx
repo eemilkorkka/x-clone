@@ -42,7 +42,7 @@ export const CustomAvatar = ({ src, alt, size, username, useLink = true, useHove
             <AvatarImage src={src || defaultPfp.src} alt={alt} className="rounded-full" />
             <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-    )
+    );
 
     return useLink ? (
         <Link href={`/${username}`} onClick={(e) => e.stopPropagation()}>

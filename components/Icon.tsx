@@ -9,7 +9,7 @@ interface IconsProps {
 
 export const Icon = ({ children, onClick, styles }: IconsProps) => {
     return (
-        <div className={cn("rounded-full w-fit h-fit text-sky-500 hover:bg-sky-500/20 hover:cursor-pointer p-2", styles)} onClick={onClick}>
+        <div className={cn("group rounded-full w-fit h-fit text-sky-500 hover:bg-sky-500/20 hover:cursor-pointer hover:[&_svg]:text-sky-500 p-2", styles)} onClick={onClick}>
             {children}
         </div>
     )

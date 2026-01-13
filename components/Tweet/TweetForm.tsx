@@ -21,6 +21,8 @@ import { Media } from '../Media/Media';
 import { IoClose } from 'react-icons/io5';
 import { FileType } from '@/generated/prisma/enums';
 import { cn } from '@/lib/utils';
+import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
+import { profile } from 'console';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -42,6 +44,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
     const queryClient = getQueryClient();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     useEffect(() => {
         if (state?.error) {
@@ -55,10 +58,10 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
             if (parentTweetId) {
                 queryClient.invalidateQueries({ queryKey: ["tweet", parentTweetId] });
                 queryClient.invalidateQueries({ queryKey: ["replies", parentTweetId] });
-            } else {
-                console.log(searchParams.get("feed"))
-                queryClient.invalidateQueries({ queryKey: ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"] });
             }
+
+            queryClient.invalidateQueries({ queryKey: ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"] });
+            queryClient.invalidateQueries({ queryKey: profileFeedQueryKey });
 
             setPickedFiles([]);
             setTweetContent("");
@@ -106,9 +109,9 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                         placeholder={type === "tweet" ? "What's happening?" : "Post your reply"}
                         name="tweetContent"
                         value={tweetContent}
-                        className="border-0 focus:outline-none resize-none text-lg placeholder-gray-500 pb-4 text-wrap"
+                        className="border-0 focus:outline-none resize-none text-lg placeholder-gray-500 text-wrap"
                         maxLength={MAX_LENGTH}
-                        minRows={isComposeModal ? (parentTweetId ? 2 : 5) : parentTweetId && 2}
+                        minRows={isComposeModal ? (parentTweetId ? 2 : 5) : 2}
                         maxRows={50}
                         onKeyDown={handleKeyDown}
                         onChange={(e) => setTweetContent(e.currentTarget.value)}
@@ -162,17 +165,22 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                                 <SlLocationPin size={18} />
                             </Icon>
                         </div>
-                        <div className='flex gap-1 items-center'>
-                            <CircularProgress
-                                value={Math.round(tweetContent.length / MAX_LENGTH * 100)}
-                                renderLabel={() => MAX_LENGTH - tweetContent.length}
-                                size={tweetContent.length >= 260 ? 55 : 45}
-                                strokeWidth={3}
-                                showLabel={tweetContent.length >= 260}
-                                labelClassName='text-xs text-zinc-500'
-                                progressClassName={tweetContent.length >= 260 ? "stroke-yellow-500" : "stroke-sky-500"}
-                            />
-                            <hr className='h-8.5 w-[1px] bg-zinc-300'></hr>
+                        <div className={cn("flex gap-1 items-center mb-2", textAreaFocused && "mt-2")}>
+                            {tweetContent.trim().length > 0 && (
+                                <>
+                                    <CircularProgress
+                                        value={Math.round(tweetContent.length / MAX_LENGTH * 100)}
+                                        renderLabel={() => MAX_LENGTH - tweetContent.length}
+                                        size={tweetContent.length >= 260 ? 55 : 45}
+                                        strokeWidth={3}
+                                        showLabel={tweetContent.length >= 260}
+                                        labelClassName='text-xs text-zinc-500'
+                                        progressClassName={tweetContent.length >= 260 ? "stroke-yellow-500" : "stroke-sky-500"}
+                                        className="hidden sm:inline"
+                                    />
+                                    <hr className='hidden sm:inline h-8.5 w-[1px] bg-zinc-300'></hr>
+                                </>
+                            )}
                             <Button type="submit" disabled={tweetContent.trim() === "" && pickedFiles.length === 0} className="ml-2 rounded-full px-4 font-bold hover:cursor-pointer">Post</Button>
                         </div>
                     </div>

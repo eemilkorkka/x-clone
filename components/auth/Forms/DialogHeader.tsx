@@ -4,16 +4,16 @@ import { FaArrowLeft, FaXTwitter } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 
 interface DialogHeaderProps {
-    step: number;
-    setStep: React.Dispatch<SetStateAction<number>>;
+    step?: number;
+    setStep?: React.Dispatch<SetStateAction<number>>;
     handleDialogClose: () => void;
 }
 
-export const DialogHeader = ({ step, setStep, handleDialogClose }: DialogHeaderProps) => {
+export const DialogHeader = ({ step = 0, setStep, handleDialogClose }: DialogHeaderProps) => {
     return (
         <ShadcnDialogHeader className="relative flex flex-row justify-center items-center">
             {step > 0 ? (
-                <FaArrowLeft size={23} className="absolute left-0 hover:cursor-pointer" onClick={() => setStep(prev => prev - 1)} />
+                <FaArrowLeft size={23} className="absolute left-0 hover:cursor-pointer" onClick={() => setStep && setStep(prev => prev - 1)} />
             ) : (
                 <IoMdClose size={23} className="absolute left-0 hover:cursor-pointer" onClick={handleDialogClose} />
             )}

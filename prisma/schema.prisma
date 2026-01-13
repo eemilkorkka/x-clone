@@ -21,7 +21,7 @@ model User {
   image           String?
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
-  username        String?
+  username        String?   
   displayUsername String?
   bio             String?
   website         String?
@@ -106,7 +106,7 @@ model Follow {
   following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
-}
+ }
 
 model Session {
   id        String   @id
