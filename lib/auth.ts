@@ -22,6 +22,12 @@ export const auth = betterAuth({
     },
     user: {
         additionalFields: {
+            profileBannerImage: {
+                type: "string",
+                required: false,
+                defaultValue: null,
+                input: true
+            },
             bio: {
                 type: "string",
                 required: false,
@@ -29,6 +35,12 @@ export const auth = betterAuth({
                 input: true
             },
             website: {
+                type: "string",
+                required: false,
+                defaultValue: null,
+                input: true
+            },
+            location: {
                 type: "string",
                 required: false,
                 defaultValue: null,

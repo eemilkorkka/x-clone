@@ -1,9 +1,8 @@
 import { useState, ChangeEvent } from "react"
 
-export const MAX_FILES = 4;
 const ALLOWED_TYPES: string[] = ["image/jpeg", "image/png", "image/gif", "image/svg", "image/jfif", "video/mp4"];
 
-export const useFilePicker = () => {
+export const useFilePicker = (maxFiles: number = 4) => {
     const [pickedFiles, setPickedFiles] = useState<{ url: string; file: File }[]>([]);
 
     const handleFileAdd = (e: ChangeEvent<HTMLInputElement>) => {
@@ -13,7 +12,7 @@ export const useFilePicker = () => {
         const newFiles = [...pickedFiles];
 
         for (let i = 0; i < files.length; i++) {
-            if (newFiles.length >= MAX_FILES) break;
+            if (newFiles.length >= maxFiles) break;
 
             const file = files[i];
 

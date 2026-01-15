@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 
 const footerLinks = [
@@ -22,9 +23,9 @@ const footerLinks = [
     "© 2025 X Corp."
 ];
 
-export const Footer = () => {
+export const Footer = ({ styles }: { styles: string }) => {
     return (
-        <footer className="p-4 mt-auto flex flex-wrap justify-center">
+        <footer className={cn("p-4 mt-auto flex flex-wrap justify-center", styles)}>
             {footerLinks.map((link, index) => (
                 <div className="flex" key={index}>
                     <p key={index} className="text-xs text-zinc-500 mx-2 hover:underline cursor-pointer">

@@ -7,6 +7,7 @@ import {
 import defaultPfp from "@/public/defaultPfp.jpg";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 export type size = "sm" | "md" | "lg" | "xl";
 
@@ -14,13 +15,14 @@ interface CustomAvatarProps {
     src: string;
     alt: string;
     size: size;
+    children?: React.ReactNode;
     username?: string;
     useLink?: boolean;
     useHoverCard?: boolean;
     styles?: string;
 }
 
-export const CustomAvatar = ({ src, alt, size, username, useLink = true, useHoverCard = false, styles }: CustomAvatarProps) => {
+export const CustomAvatar = ({ src, alt, size, children, username, useLink = true, useHoverCard = false, styles }: CustomAvatarProps) => {
 
     const getSize = (size: size) => {
         switch (size) {
@@ -41,6 +43,7 @@ export const CustomAvatar = ({ src, alt, size, username, useLink = true, useHove
         <Avatar className={cn(getSize(size), "hover:cursor-pointer", styles)}>
             <AvatarImage src={src || defaultPfp.src} alt={alt} className="rounded-full" />
             <AvatarFallback>CN</AvatarFallback>
+            {children}
         </Avatar>
     );
 

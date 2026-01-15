@@ -30,6 +30,7 @@ export const Media = ({ type, url, children }: MediaProps) => {
                     controls
                     autoPlay
                     playsInline
+                    loop
                     muted
                     onClick={(e) => e.stopPropagation()}
                     preload="metadata"

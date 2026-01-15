@@ -10,6 +10,9 @@ import { Username } from "../User/Username";
 import { Text } from "../Text";
 import { notFound } from "next/navigation";
 import { IoCalendarOutline } from "react-icons/io5";
+import { RiLinkM } from "react-icons/ri";
+import { GrLocation } from "react-icons/gr";
+import Link from "next/link";
 
 interface ProfileInfoProps {
     username: string;
@@ -40,13 +43,15 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
 
     return (
         <div className="flex flex-col mb-4">
-            <ProfileBanner src="">
+            <ProfileBanner src={userData.profileBannerImage ?? ""} >
                 <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
-                    <CustomAvatar src={""} alt={``} size="xl" />
+                    <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" />
                 </div>
             </ProfileBanner>
             {data?.user.username === username ? (
-                <Button variant="outline" className="rounded-full font-bold w-fit px-4 ml-auto mr-4 mt-2.5 shadow-none hover:cursor-pointer">Edit profile</Button>
+                <Link href="/settings/profile" className="ml-auto">
+                    <Button variant="outline" className="rounded-full font-bold w-fit px-4 mr-4 mt-2.5 shadow-none hover:cursor-pointer">Edit profile</Button>
+                </Link>
             ) : (
                 <Button className="rounded-full font-bold w-fit px-4 ml-auto mr-4 mt-2.5 hover:cursor-pointer">Follow</Button>
             )}
@@ -64,8 +69,22 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                         styles="w-fit"
                     />
                 </div>
-                <Text text={userData.bio} />
-                <div className="flex">
+                <Text text={userData.bio ?? "Lorem ipsum dolor sit amet"} />
+                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                    {userData.location && (
+                        <div className="text-sm flex items-center gap-1.5 text-zinc-500">
+                            <GrLocation size={17} />
+                            <span>{userData.location}</span>
+                        </div>
+                    )}
+                    {userData.website && (
+                        <div className="text-sm flex items-center gap-1.5 text-zinc-500">
+                            <RiLinkM size={17} />
+                            <Link href={userData.website} className="text-sky-500 hover:underline" rel="noopener noreferrer" target="_blank">
+                                {userData.website}
+                            </Link>
+                        </div>
+                    )}
                     <div className="text-sm flex items-center gap-1.5 text-zinc-500">
                         <IoCalendarOutline size={17} />
                         <span>

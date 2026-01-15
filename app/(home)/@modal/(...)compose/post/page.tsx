@@ -13,7 +13,6 @@ import { IoMdClose } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { Tweet } from "@/components/Tweet/Tweet";
 import { TweetForm } from "@/components/Tweet/TweetForm";
-import { useState } from "react";
 
 export default function ComposeModal() {
     const router = useRouter();

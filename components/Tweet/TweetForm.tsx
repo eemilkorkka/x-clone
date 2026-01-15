@@ -22,7 +22,6 @@ import { IoClose } from 'react-icons/io5';
 import { FileType } from '@/generated/prisma/enums';
 import { cn } from '@/lib/utils';
 import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
-import { profile } from 'console';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -111,7 +110,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                         value={tweetContent}
                         className="border-0 focus:outline-none resize-none text-lg placeholder-gray-500 text-wrap"
                         maxLength={MAX_LENGTH}
-                        minRows={isComposeModal ? (parentTweetId ? 2 : 5) : 2}
+                        minRows={pickedFiles.length > 0 ? 0 : isComposeModal ? (parentTweetId ? 2 : 5) : 2}
                         maxRows={50}
                         onKeyDown={handleKeyDown}
                         onChange={(e) => setTweetContent(e.currentTarget.value)}

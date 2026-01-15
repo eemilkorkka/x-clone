@@ -16,7 +16,6 @@ import { TweetPopover } from "./TweetPopover/TweetPopover";
 import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
 import { toastMessage } from "@/lib/toast";
 import TimeAgo from 'react-timeago';
-import { makeIntlFormatter } from 'react-timeago/defaultFormatter';
 import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 
@@ -48,10 +47,10 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const avatar = (
         <div className="flex flex-col items-center">
             <CustomAvatar
-                src={tweet.user?.image ?? ""}
+                src={tweetAuthor?.image ?? ""}
                 size="md"
-                username={tweet.user?.username ?? ""}
-                alt={`@${tweet.user?.username}`}
+                username={tweetAuthor?.username ?? ""}
+                alt={`@${tweetAuthor?.username}`}
             />
             {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-zinc-300"></hr>}
         </div>

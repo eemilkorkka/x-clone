@@ -1,3 +1,4 @@
+import { Footer } from "@/components/Footer";
 import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
 import { PremiumCard } from "@/components/PremiumCard";
 import { Searchbar } from "@/components/Searchbar";
@@ -28,6 +29,7 @@ export default function HomeLayout({
           <PremiumCard />
           <SuggestedUsersCard />
           <TrendingCard />
+          <Footer styles="mt-0" />
         </aside>
       </section>
     </main>

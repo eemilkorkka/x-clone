@@ -396,6 +396,77 @@ export const getLikesByUser = async (username: string, cursor?: { createdAt: Dat
     };
 }
 
+export const getBookmarksByUser = async (username: string, cursor?: { createdAt: Date; id: number }) => {
+    const bookmarks = await prisma.bookmark.findMany({
+        where: {
+            user: {
+                username: username
+            }
+        },
+        include: {
+            tweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            displayUsername: true,
+                            image: true,
+                        },
+                    },
+                    files: true,
+                    likes: true,
+                    bookmarks: true,
+                    _count: {
+                        select: {
+                            replies: true
+                        }
+                    },
+                    retweets: true,
+                    originalTweet: {
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    displayUsername: true,
+                                    image: true,
+                                },
+                            },
+                            files: true,
+                            likes: true,
+                            bookmarks: true,
+                            retweets: true,
+                            _count: {
+                                select: {
+                                    replies: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: [
+            { createdAt: 'desc' },
+            { id: 'desc' },
+        ],
+        take: 20,
+        ...(cursor && {
+            skip: 1,
+            cursor: {
+                id: cursor.id,
+            },
+        }),
+    });
+
+    const last = bookmarks[bookmarks.length - 1];
+    return {
+        items: bookmarks.map(bookmark => bookmark.tweet),
+        nextCursor: last ? { createdAt: last.createdAt, id: last.id } : null,
+    };
+}
+
 export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date; id: number }) => {
     const tweets = await prisma.tweet.findMany({
         where: {

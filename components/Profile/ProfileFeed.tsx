@@ -66,8 +66,8 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
                                         <Image
                                             alt="Tweet media"
                                             src={tweet.files[0].url}
-                                            height={194}
-                                            width={194}
+                                            height={196}
+                                            width={196}
                                             className="aspect-square"
                                         />
                                     ) : (

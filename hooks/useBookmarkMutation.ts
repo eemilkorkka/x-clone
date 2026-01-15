@@ -149,6 +149,9 @@ export const useBookmarkMutation = (tweet: Tweet) => {
                 profileFeedQueryKey
             };
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["bookmarks", data?.user.username] });
+        },
         onError: (err, variables, context) => {
             if (context?.previousTweets) {
                 queryClient.setQueryData(context.tweetsQueryKey, context.previousTweets);

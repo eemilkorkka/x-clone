@@ -9,6 +9,7 @@ interface CustomInputProps {
     label: string;
     maxLength?: number;
     value: string;
+    styles?: string;
     fieldState?: ControllerFieldState;
     disabled?: boolean;
     isPasswordInput?: boolean;
@@ -20,6 +21,7 @@ export const CustomInput = (
         label,
         maxLength,
         value,
+        styles,
         fieldState,
         disabled,
         isPasswordInput = false,
@@ -39,7 +41,8 @@ export const CustomInput = (
                 className={cn(
                     "peer py-6.5 text-white px-4 focus-visible:ring-0 rounded-sm",
                     disabled && "bg-zinc-800",
-                    fieldState?.error ? "border-destructive focus-visible:border-destructive" : "border-zinc-800 focus-visible:border-sky-500"
+                    fieldState?.error ? "border-destructive focus-visible:border-destructive" : "border-zinc-800 focus-visible:border-sky-500",
+                    styles
                 )}
             />
             <label className={cn(
@@ -49,7 +52,7 @@ export const CustomInput = (
             )}>
                 {label}
             </label>
-            {maxLength && <span className="absolute text-sm top-2 right-4 text-gray-500">{`${value?.length ?? 0} / ${maxLength}`}</span>}
+            {maxLength && <span className="hidden peer-focus-within:inline absolute text-sm top-2 right-4 text-gray-500">{`${value?.length ?? 0} / ${maxLength}`}</span>}
             {isPasswordInput &&
                 <div className="absolute top-1/2 -translate-y-1/2 right-4">
                     {showPassword ? (

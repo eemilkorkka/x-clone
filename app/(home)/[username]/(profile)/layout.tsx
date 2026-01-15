@@ -39,34 +39,41 @@ export default async function ProfileLayout({
         label: "Likes",
         href: `/${username}/likes`
     }];
-    
 
-
-    const user = await prisma.user.findUnique({
-        where: {
-            username: username
-        },
-        select: {
-            displayUsername: true,
-            id: true,
-        }
-    });
-
-    const postsCount = await prisma.tweet.count({
-        where: {
-            user: {
+    const [user, postsCount, likesCount, mediaCount] = await Promise.all([
+        prisma.user.findUnique({
+            where: {
                 username: username
+            },
+            select: {
+                displayUsername: true,
+                id: true,
             }
-        }
-    });
-
-    const likesCount = await prisma.like.count({
-        where: {
-            user: {
-                username: username
+        }),
+        prisma.tweet.count({
+            where: {
+                user: {
+                    username: username
+                }
             }
-        }
-    });
+        }),
+        prisma.like.count({
+            where: {
+                user: {
+                    username: username
+                }
+            }
+        }),
+        prisma.file.count({
+            where: {
+                tweet: {
+                    user: {
+                        username: username
+                    }
+                }
+            }
+        })
+    ]);
 
     await queryClient.prefetchQuery({
         queryFn: () => getUserByUsernameOrEmail(username),
@@ -80,6 +87,7 @@ export default async function ProfileLayout({
                 displayName={user?.displayUsername ?? ""}
                 postsCount={postsCount}
                 likesCount={likesCount}
+                mediaCount={mediaCount}
             />
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <ProfileInfo username={username} />
