@@ -18,6 +18,11 @@ export interface User extends UserBase {
     twoFactorEnabled: boolean | null;
 }
 
+export interface TweetUser extends UserBase {
+    followers: Follower[];
+    following: Follower[];
+}
+
 export interface UserProfile extends UserBase {
     followers: Follower[];
     following: Follower[];

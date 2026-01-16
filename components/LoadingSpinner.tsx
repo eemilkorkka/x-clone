@@ -1,7 +1,13 @@
+"use client";
+
+import { useColor } from "@/context/ColorContext";
 import { Spinner } from "./ui/spinner"
 
 export const LoadingSpinner = () => {
+
+    const { colors } = useColor();
+
     return (
-        <Spinner className="flex w-full text-sky-500 h-8 mt-4" />
+        <Spinner className={`flex w-full ${colors.textColor} h-8 mt-4`} />
     )
 }
