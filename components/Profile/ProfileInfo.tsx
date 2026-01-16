@@ -59,7 +59,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
             </ProfileBanner>
             {data?.user.username === username ? (
                 <Link href="/settings/profile" className="ml-auto">
-                    <Button variant="outline" className="rounded-full font-bold w-fit px-4 mr-4 mt-2.5 shadow-none hover:cursor-pointer">Edit profile</Button>
+                    <Button variant="outline" className="rounded-full font-bold w-fit px-4 mr-4 mt-4 shadow-none hover:cursor-pointer">Edit profile</Button>
                 </Link>
             ) : (
                 <FollowButton
@@ -110,16 +110,20 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                     </div>
                 </div>
                 <div className="flex gap-8 text-sm">
-                    <span className="font-semibold text-black">
-                        {userData.following.length}
-                        {' '}
-                        <span className="text-zinc-500 font-normal">Following</span>
-                    </span>
-                    <span className="font-semibold text-black">
-                        {userData.followers.length}
-                        {' '}
-                        <span className="text-zinc-500 font-normal">{userData.followers.length === 1 ? "Follower" : "Followers"}</span>
-                    </span>
+                    <Link href={`/${userData.username}/following`} className="hover:underline">
+                        <span className="font-semibold text-black">
+                            {userData.following.length}
+                            {' '}
+                            <span className="text-zinc-500 font-normal">Following</span>
+                        </span>
+                    </Link>
+                    <Link href={`/${userData.username}/followers`} className="hover:underline">
+                        <span className="font-semibold text-black">
+                            {userData.followers.length}
+                            {' '}
+                            <span className="text-zinc-500 font-normal">{userData.followers.length === 1 ? "Follower" : "Followers"}</span>
+                        </span>
+                    </Link>
                 </div>
             </div>
         </div>

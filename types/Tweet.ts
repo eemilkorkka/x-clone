@@ -1,13 +1,13 @@
 import { Bookmark } from "./Bookmark";
 import { File } from "./File";
 import { Like } from "./Like";
-import { UserBase } from "./User";
+import { TweetUser } from "./User";
 
 export type TweetBase = {
     id: number;
     createdAt: Date;
     userId: string;
-    user?: UserBase | undefined;
+    user?: TweetUser | undefined;
     likes: Like[];
     retweets: Retweet[];
     bookmarks: Bookmark[];

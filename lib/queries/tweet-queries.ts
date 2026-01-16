@@ -12,6 +12,16 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
                     username: true,
                     displayUsername: true,
                     image: true,
+                    followers: {
+                        select: {
+                            followerId: true
+                        }
+                    },
+                    following: {
+                        select: {
+                            followingId: true
+                        }
+                    },
                 },
             },
             files: true,
@@ -31,6 +41,16 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -88,6 +108,16 @@ export const getTweetsFromFollowing = async (userId: string, cursor?: { createdA
                     username: true,
                     displayUsername: true,
                     image: true,
+                    followers: {
+                        select: {
+                            followerId: true
+                        }
+                    },
+                    following: {
+                        select: {
+                            followingId: true
+                        }
+                    },
                 },
             },
             files: true,
@@ -107,6 +137,16 @@ export const getTweetsFromFollowing = async (userId: string, cursor?: { createdA
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -157,6 +197,16 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                     username: true,
                     displayUsername: true,
                     image: true,
+                    followers: {
+                        select: {
+                            followerId: true
+                        }
+                    },
+                    following: {
+                        select: {
+                            followingId: true
+                        }
+                    },
                 },
             },
             files: true,
@@ -176,6 +226,16 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -197,6 +257,16 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -249,6 +319,16 @@ export const getTweetsByUserWithMedia = async (username: string, cursor?: { crea
                     username: true,
                     displayUsername: true,
                     image: true,
+                    followers: {
+                        select: {
+                            followerId: true
+                        }
+                    },
+                    following: {
+                        select: {
+                            followingId: true
+                        }
+                    },
                 },
             },
             files: true,
@@ -268,6 +348,16 @@ export const getTweetsByUserWithMedia = async (username: string, cursor?: { crea
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -289,6 +379,16 @@ export const getTweetsByUserWithMedia = async (username: string, cursor?: { crea
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -340,6 +440,16 @@ export const getLikesByUser = async (username: string, cursor?: { createdAt: Dat
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -359,6 +469,16 @@ export const getLikesByUser = async (username: string, cursor?: { createdAt: Dat
                                     username: true,
                                     displayUsername: true,
                                     image: true,
+                                    followers: {
+                                        select: {
+                                            followerId: true
+                                        }
+                                    },
+                                    following: {
+                                        select: {
+                                            followingId: true
+                                        }
+                                    },
                                 },
                             },
                             files: true,
@@ -412,6 +532,16 @@ export const getBookmarksByUser = async (username: string, cursor?: { createdAt:
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -431,6 +561,16 @@ export const getBookmarksByUser = async (username: string, cursor?: { createdAt:
                                     username: true,
                                     displayUsername: true,
                                     image: true,
+                                    followers: {
+                                        select: {
+                                            followerId: true
+                                        }
+                                    },
+                                    following: {
+                                        select: {
+                                            followingId: true
+                                        }
+                                    },
                                 },
                             },
                             files: true,
@@ -479,6 +619,16 @@ export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date
                     username: true,
                     displayUsername: true,
                     image: true,
+                    followers: {
+                        select: {
+                            followerId: true
+                        }
+                    },
+                    following: {
+                        select: {
+                            followingId: true
+                        }
+                    },
                 },
             },
             files: true,
@@ -498,6 +648,16 @@ export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -545,6 +705,16 @@ export const getTweetById = async (id: number) => {
                     username: true,
                     displayUsername: true,
                     image: true,
+                    followers: {
+                        select: {
+                            followerId: true
+                        }
+                    },
+                    following: {
+                        select: {
+                            followingId: true
+                        }
+                    },
                 },
             },
             files: true,
@@ -564,6 +734,16 @@ export const getTweetById = async (id: number) => {
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
@@ -585,6 +765,16 @@ export const getTweetById = async (id: number) => {
                             username: true,
                             displayUsername: true,
                             image: true,
+                            followers: {
+                                select: {
+                                    followerId: true
+                                }
+                            },
+                            following: {
+                                select: {
+                                    followingId: true
+                                }
+                            },
                         },
                     },
                     files: true,
