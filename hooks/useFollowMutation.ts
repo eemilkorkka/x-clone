@@ -3,11 +3,13 @@ import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { UserProfile } from "@/types/User";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export const useFollowMutation = (username: string, isFollowing: boolean) => {
     const queryClient = getQueryClient();
     const session = authClient.useSession();
+    const router = useRouter();
 
     const followMutation = useMutation({
         mutationFn: follow,
@@ -39,6 +41,7 @@ export const useFollowMutation = (username: string, isFollowing: boolean) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["user", username] });
             queryClient.invalidateQueries({ queryKey: ["user", session.data?.user.username] });
+            router.refresh();
         },
         onError: (error) => {
             toast.error(error.message);

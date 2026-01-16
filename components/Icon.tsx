@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import { cn } from "@/lib/utils";
+import { useColor } from "@/context/ColorContext";
 
 interface IconsProps {
     children: React.ReactNode;
@@ -8,8 +11,11 @@ interface IconsProps {
 }
 
 export const Icon = ({ children, onClick, styles }: IconsProps) => {
+
+    const { colors } = useColor();
+
     return (
-        <div className={cn("group rounded-full w-fit h-fit text-sky-500 hover:bg-sky-500/20 hover:cursor-pointer hover:[&_svg]:text-sky-500 p-2", styles)} onClick={onClick}>
+        <div className={cn(`group rounded-full w-fit h-fit ${colors.textColor} ${colors.secondHoverColor} hover:cursor-pointer hover:[&_svg]:${colors.textColor} p-2`, styles)} onClick={onClick}>
             {children}
         </div>
     )

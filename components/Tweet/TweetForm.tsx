@@ -22,6 +22,7 @@ import { IoClose } from 'react-icons/io5';
 import { FileType } from '@/generated/prisma/enums';
 import { cn } from '@/lib/utils';
 import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
+import { useColor } from '@/context/ColorContext';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -43,6 +44,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
     const queryClient = getQueryClient();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { colors } = useColor();
     const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     useEffect(() => {
@@ -93,7 +95,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
         <>
             {textAreaFocused && parentTweetId && !isComposeModal && type === "reply" && (
                 <span
-                    className="text-zinc-500 text-sm ml-16 pt-2">Replying to <span className="text-sky-500">@{parentTweetAuthor}</span>
+                    className="text-zinc-500 text-sm ml-16 pt-2">Replying to <span className={colors.textColor}>@{parentTweetAuthor}</span>
                 </span>
             )}
             <div className={cn(
@@ -118,7 +120,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                     />
                     <AttachmentsGrid>
                         {pickedFiles.map((file, index) => (
-                            <Media key={index} type={file.file.type.includes("image") ? FileType.IMAGE : FileType.VIDEO} url={file.url}>
+                            <Media key={index} type={file.file.type.includes("image") ? FileType.IMAGE : FileType.VIDEO} url={file.url} useDialog={false}>
                                 <Button
                                     size="icon-sm"
                                     className="absolute top-2 right-2 bg-black/70 rounded-full hover:cursor-pointer"

@@ -18,6 +18,7 @@ import { toastMessage } from "@/lib/toast";
 import TimeAgo from 'react-timeago';
 import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
+import { useColor } from "@/context/ColorContext";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -37,6 +38,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
     const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
     const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
+    const { colors } = useColor();
 
     const onClick = () => {
         if (useLink) {
@@ -134,7 +136,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                     )}
                     {isComposeModal && isParentTweet && (
                         <span
-                            className="text-zinc-500 ml-2">Replying to <span className="text-sky-500">@{tweet.user?.username}</span>
+                            className="text-zinc-500 ml-2">Replying to <span className={colors.textColor}>@{tweet.user?.username}</span>
                         </span>
                     )}
                     {type === "status" && (

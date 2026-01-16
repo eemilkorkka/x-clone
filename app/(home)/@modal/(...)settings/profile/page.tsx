@@ -29,6 +29,7 @@ import { TbCameraPlus } from "react-icons/tb";
 import { IoIosArrowForward } from "react-icons/io";
 import z from "zod";
 import { BirthdateDropdowns, monthStringSchema } from "@/components/auth/Forms/SignUpForm/BirthdateDropdowns";
+import { useColor } from "@/context/ColorContext";
 
 const formSchema = z.object({
     displayName: z.string().max(50).min(0).optional(),
@@ -59,6 +60,7 @@ export default function EditProfileModal() {
     const profileBannerRef = useRef<HTMLInputElement | null>(null);
     const profilePicturePicker = useFilePicker(1);
     const profileBannerPicker = useFilePicker(1);
+    const { colors } = useColor();
     const [removeBanner, setRemoveBanner] = useState(false);
     const [isEditingBirthday, setIsEditingBirthday] = useState(false);
 
@@ -254,14 +256,14 @@ export default function EditProfileModal() {
                                     <div className="flex items-center gap-2 mb-1">
                                         <p className="font-bold">Birth date</p>
                                         <span className="text-zinc-500">·</span>
-                                        <span className="text-sky-500 hover:underline hover:cursor-pointer" onClick={() => setIsEditingBirthday(false)}>Cancel</span>
+                                        <span className={`hover:underline hover:cursor-pointer ${colors.textColor}`} onClick={() => setIsEditingBirthday(false)}>Cancel</span>
                                     </div>
                                     <div className="space-y-2 text-zinc-500">
                                         <p>
                                             This should be the date of birth of the person using the account. Even if you’re making an account for your business, event, or cat.
                                         </p>
                                         <p>
-                                            X uses your age to customize your experience, including ads, as explained in our <span className="text-sky-500 hover:text-underline hover:cursor-pointer">Privacy Policy</span>
+                                            X uses your age to customize your experience, including ads, as explained in our <span className={`hover:underline hover:cursor-pointer ${colors.textColor}`}>Privacy Policy</span>
                                         </p>
                                     </div>
                                     <BirthdateDropdowns

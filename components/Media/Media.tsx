@@ -7,22 +7,32 @@ interface MediaProps {
     type: FileType;
     url: string;
     children?: React.ReactNode;
+    useDialog?: boolean;
 }
 
-export const Media = ({ type, url, children }: MediaProps) => {
+export const Media = ({ type, url, children, useDialog = true }: MediaProps) => {
+
+    const image = (
+        <Image
+            className="w-full h-full cursor-pointer object-cover"
+            src={url}
+            alt="Media"
+            unoptimized
+            width={0}
+            height={0}
+        />
+    );
+
     const imageElement = (
         <div className="relative w-full h-full">
             {type === FileType.IMAGE ? (
-                <MediaDialog src={url}>
-                    <Image
-                        className="w-full h-full cursor-pointer object-cover"
-                        src={url}
-                        alt="Media"
-                        unoptimized
-                        width={0}
-                        height={0}
-                    />
-                </MediaDialog>
+                useDialog ? (
+                    <MediaDialog src={url}>
+                        {image}
+                    </MediaDialog>
+                ) : (
+                    image
+                )
             ) : (
                 <video
                     className="w-full h-full cursor-pointer object-cover"

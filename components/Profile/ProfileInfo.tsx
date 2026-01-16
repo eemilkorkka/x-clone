@@ -14,6 +14,9 @@ import { RiLinkM } from "react-icons/ri";
 import { GrLocation } from "react-icons/gr";
 import Link from "next/link";
 import { MediaDialog } from "../Media/MediaDialog";
+import { FollowButton } from "../User/FollowButton";
+import { Follower } from "@/types/Follower";
+import { useColor } from "@/context/ColorContext";
 
 interface ProfileInfoProps {
     username: string;
@@ -42,6 +45,9 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
         notFound();
     }
 
+    const { colors } = useColor();
+    const isFollowing = userData.followers.some((follower: Follower) => follower.followerId === data?.user.id);
+
     return (
         <div className="flex flex-col mb-4">
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
@@ -56,7 +62,12 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                     <Button variant="outline" className="rounded-full font-bold w-fit px-4 mr-4 mt-2.5 shadow-none hover:cursor-pointer">Edit profile</Button>
                 </Link>
             ) : (
-                <Button className="rounded-full font-bold w-fit px-4 ml-auto mr-4 mt-2.5 hover:cursor-pointer">Follow</Button>
+                <FollowButton
+                    userId={userData.id}
+                    username={userData.username ?? ""}
+                    isFollowing={isFollowing}
+                    styles="ml-auto mt-4 mr-4"
+                />
             )}
             <div className="px-4 mt-8 flex flex-col gap-2">
                 <div>
@@ -83,7 +94,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                     {userData.website && (
                         <div className="text-sm flex items-center gap-1.5 text-zinc-500">
                             <RiLinkM size={17} />
-                            <Link href={userData.website} className="text-sky-500 hover:underline" rel="noopener noreferrer" target="_blank">
+                            <Link href={userData.website} className={`${colors.textColor} hover:underline`} rel="noopener noreferrer" target="_blank">
                                 {userData.website}
                             </Link>
                         </div>
@@ -107,7 +118,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                     <span className="font-semibold text-black">
                         {userData.followers.length}
                         {' '}
-                        <span className="text-zinc-500 font-normal">Followers</span>
+                        <span className="text-zinc-500 font-normal">{userData.followers.length === 1 ? "Follower" : "Followers"}</span>
                     </span>
                 </div>
             </div>

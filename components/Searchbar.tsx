@@ -4,10 +4,12 @@ import { IoSearch } from "react-icons/io5";
 import { Input } from "./ui/input";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
+import { useColor } from "@/context/ColorContext";
 
 export const Searchbar = () => {
 
     const [searchText, setSearchText] = useState("");
+    const { colors } = useColor();
 
     return (
         <div className="sticky top-0 py-1 bg-white">
@@ -15,7 +17,7 @@ export const Searchbar = () => {
                 <Input
                     type="text"
                     placeholder="Search"
-                    className="rounded-full focus-visible:border-2 focus-visible:border-sky-500 focus-visible:ring-0 p-5.5 px-8.5"
+                    className={`rounded-full focus-visible:border-2 ${colors.focusVisibleBorderColor} focus-visible:ring-0 p-5.5 px-8.5`}
                     value={searchText}
                     onChange={(e) => setSearchText(e.currentTarget.value)}
                 />

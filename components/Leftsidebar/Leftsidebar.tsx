@@ -2,6 +2,7 @@ import { BsBell, BsPeople } from "react-icons/bs";
 import { FaXTwitter, FaFeatherPointed } from "react-icons/fa6";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import { HiOutlineEnvelope } from "react-icons/hi2";
+import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 import { IoBookmark, IoBookmarkOutline, IoPerson, IoPersonOutline, IoSearchOutline } from "react-icons/io5";
 import Link from "next/link";
 import { Navitem } from "@/components/Navitem";
@@ -70,6 +71,14 @@ export const Leftsidebar = async () => {
                         icon={<IoPersonOutline size={30} />}
                         activeIcon={<IoPerson size={30} />}
                         label="Profile"
+                    />
+
+                    <Navitem
+                        href={`/settings/account`}
+                        icon={<IoSettingsOutline size={30} />}
+                        activeIcon={<IoSettings size={30} />}
+                        label="Settings and privacy"
+                        styles="hidden mobile:flex"
                     />
 
                     <Link href="/compose/post" className="hidden mobile:inline">

@@ -25,7 +25,16 @@ const AttachmentsGrid = ({ children }: AttachmentsGridProps) => {
                 itemCount > 2 ? "grid-cols-2 h-75 grid-rows-2" : "grid-cols-2"
             )}
         >
-            {children}
+            {Children.map(children, (child, index) => (
+                <div
+                    key={index}
+                    className={cn(
+                        itemCount === 3 && index === 1 && "row-span-2"
+                    )}
+                >
+                    {child}
+                </div>
+            ))}
         </div>
     );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Card,
     CardContent,
@@ -6,6 +8,7 @@ import {
     CardTitle
 } from "@/components/ui/card";
 import { TrendingTopic } from "./TrendingTopic";
+import { useColor } from "@/context/ColorContext";
 
 const trendingTopics = [
     {
@@ -31,6 +34,9 @@ const trendingTopics = [
 ]
 
 export const TrendingCard = () => {
+    
+    const { colors } = useColor();
+    
     return (
         <Card className="py-4 shadow-none border-1 border-foreground/10 ring-0 gap-2 pb-0">
             <CardHeader className="px-4">
@@ -47,7 +53,7 @@ export const TrendingCard = () => {
                 ))}
             </CardContent>
             <CardFooter className="p-4 hover:bg-gray-100 hover:cursor-pointer">
-                <p className="text-sky-500">Show more</p>
+                <p className={colors.textColor}>Show more</p>
             </CardFooter>
         </Card>
     )

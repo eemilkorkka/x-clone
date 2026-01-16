@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useColor } from "@/context/ColorContext";
 
 interface TabsProps {
     tabs: { href?: string; label: string }[];
@@ -15,6 +16,7 @@ interface TabsProps {
 
 export const Tabs = ({ tabs, activeTab, changeTab, styles }: TabsProps) => {
     const pathname = usePathname();
+    const { colors } = useColor();
 
     const renderTabElement = (index: number) => {
         const isActive = activeTab ? activeTab === tabs[index].label 
@@ -31,7 +33,7 @@ export const Tabs = ({ tabs, activeTab, changeTab, styles }: TabsProps) => {
                         {tabs[index].label}
                     </p>
                     {isActive && (
-                        <div className="absolute w-full top-8 left-0 right-0 h-1 bg-sky-500 rounded-full" />
+                        <div className={cn("absolute w-full top-8 left-0 right-0 h-1", colors.color, "rounded-full")} />
                     )}
                 </div>
             </Button>

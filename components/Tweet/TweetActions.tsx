@@ -89,7 +89,7 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
                         mutation={bookmarkMutation}
                     />
                     <TweetPopover options={popoverOption} styles="ml-0">
-                        <Icon styles="text-zinc-500 hover:text-sky-500">
+                        <Icon styles="text-zinc-500 hover:text-sky-500 hover:bg-sky-500/20">
                             <FiUpload />
                         </Icon>
                     </TweetPopover>
@@ -104,7 +104,7 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
                         mutation={bookmarkMutation}
                     />
                     <TweetPopover options={popoverOption}>
-                        <Icon styles="text-zinc-500 hover:text-sky-500">
+                        <Icon styles="text-zinc-500 hover:text-sky-500 hover:bg-sky-500/20">
                             <FiUpload />
                         </Icon>
                     </TweetPopover>

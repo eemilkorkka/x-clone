@@ -3,6 +3,9 @@ import { Input } from "../ui/input"
 import { ControllerFieldState } from "react-hook-form";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { colorsArray } from "@/lib/colors";
+import { useColor } from "@/context/ColorContext";
 
 interface CustomInputProps {
     type: React.InputHTMLAttributes<HTMLInputElement>["type"];
@@ -29,6 +32,12 @@ export const CustomInput = (
     }: CustomInputProps) => {
 
     const [showPassword, setShowPassword] = useState(false);
+    const pathname = usePathname();
+    const { colors } = useColor();
+    
+    const useChosenColor = pathname !== "/" && pathname !== "/signup";
+    const borderFocusColor = useChosenColor ? colors.focusVisibleBorderColor : colorsArray[0].focusVisibleBorderColor;
+    const textFocusColor = useChosenColor ? colors.peerFocusTextColor : colorsArray[0].peerFocusTextColor;
 
     return (
         <div className="relative">
@@ -41,14 +50,14 @@ export const CustomInput = (
                 className={cn(
                     "peer py-6.5 text-white px-4 focus-visible:ring-0 rounded-sm",
                     disabled && "bg-zinc-800",
-                    fieldState?.error ? "border-destructive focus-visible:border-destructive" : "border-zinc-800 focus-visible:border-sky-500",
+                    fieldState?.error ? "border-destructive focus-visible:border-destructive" : `border-zinc-800 ${borderFocusColor}`,
                     styles
                 )}
             />
             <label className={cn(
                 "text-gray-500 absolute peer-focus-within:top-3 peer-focus-within:text-xs -translate-y-1/2 left-4 pointer-events-none transition-top duration-200 ease-in-out",
                 value.length === 0 ? "top-1/2" : "top-3",
-                fieldState?.error ? "!text-destructive" : "peer-focus-within:text-sky-500"
+                fieldState?.error ? "!text-destructive" : textFocusColor
             )}>
                 {label}
             </label>

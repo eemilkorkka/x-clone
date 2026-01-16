@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useColor } from "@/context/ColorContext";
 
 const urlPattern = /\b((https?:\/\/|www\.)[^\s/$.?#].[^\s]*)/gi;
 
@@ -7,6 +10,7 @@ export const Text = ({ text, styles }: { text: string, styles?: string }) => {
     
     if (!text) return null;
     
+    const { colors } = useColor();
     const words = text.split(" ");
 
     return (
@@ -18,7 +22,7 @@ export const Text = ({ text, styles }: { text: string, styles?: string }) => {
                     isUsername || word.match(urlPattern) ?
                         <Link
                             key={index}
-                            className="text-sky-500"
+                            className={colors.textColor}
                             href={`${isUsername ? "/" + word.replace("@", "") : word.replace("@", "")}`}
                             target={isUsername ? "_self" : "_blank"}
                             rel="noopener noreferrer"
