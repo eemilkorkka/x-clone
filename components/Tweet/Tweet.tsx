@@ -19,6 +19,7 @@ import TimeAgo from 'react-timeago';
 import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
+import { useFollowMutation } from "@/hooks/useFollowMutation";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -38,6 +39,10 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
     const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
     const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
+    const { followMutation } = useFollowMutation(
+        tweetAuthor?.username ?? "",
+        tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false
+    );
     const { colors } = useColor();
 
     const onClick = () => {
@@ -72,13 +77,20 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
         }
     ];
 
-    const generalTweetOptions = [
-        {
-            label: `Follow @${tweet.user?.username}`,
-            icon: <IoPersonAdd />,
-            onClick: () => toastMessage("This feature hasn't been implemented yet!", false)
-        }
-    ];
+    const getGeneralTweetOptions = () => {
+        const formData = new FormData();
+        formData.append("userId", tweetAuthor?.id ?? "");
+
+        const generalTweetOptions = [
+            {
+                label: `Follow @${tweet.user?.username}`,
+                icon: <IoPersonAdd />,
+                onClick: () => followMutation.mutate(formData)
+            }
+        ];
+
+        return generalTweetOptions;
+    }
 
     return (
         <div className={cn(
@@ -120,13 +132,15 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                                 </time>
                             </>
                         )}
-                        <TweetPopover options={tweet.user?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
-                            <Icon styles="text-zinc-500 hover:text-sky-500">
-                                <BsThreeDots />
-                            </Icon>
-                        </TweetPopover>
+                        {!isComposeModal && (
+                            <TweetPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : getGeneralTweetOptions()}>
+                                <Icon styles="text-zinc-500 hover:text-sky-500">
+                                    <BsThreeDots />
+                                </Icon>
+                            </TweetPopover>
+                        )}
                     </div>
-                    <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "-mt-2 ml-2")} />
+                    <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "-mt-2 ml-2", isComposeModal && "mt-0")} />
                     {tweetFiles.length > 0 && (
                         <AttachmentsGrid>
                             {tweetFiles.map((file, index) => (
