@@ -59,7 +59,11 @@ export const useRetweetMutation = (tweet: Tweet) => {
                                 id: -1,
                                 createdAt: new Date(),
                                 userId: data.user.id,
-                                user: data.user as unknown as TweetUser,
+                                user: {
+                                    ...data.user,
+                                    followers: [],
+                                    following: [],
+                                } as TweetUser,
                                 likes: [],
                                 retweets: [],
                                 bookmarks: [],
