@@ -2,6 +2,7 @@ import { Footer } from "@/components/Footer";
 import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
 import { PremiumCard } from "@/components/PremiumCard";
 import { Searchbar } from "@/components/Searchbar";
+import { SplashScreen } from "@/components/SplashScreen";
 import { TrendingCard } from "@/components/Trending/TrendingCard";
 import { SuggestedUsersCard } from "@/components/User/SuggestedUsersCard";
 import React from "react";
@@ -15,6 +16,8 @@ export default function HomeLayout({
 }>) {
   return (
     <main className="flex flex-col-reverse mobile:flex-row w-full max-w-fit mx-auto">
+      <SplashScreen />
+
       <div className="shrink-0 flex w-18 xl:w-69">
         <Leftsidebar />
       </div>
@@ -29,7 +32,7 @@ export default function HomeLayout({
           <PremiumCard />
           <SuggestedUsersCard />
           <TrendingCard />
-          <Footer styles="mt-0" />
+          <Footer styles="mt-0" isRightSideBar={true} />
         </aside>
       </section>
     </main>

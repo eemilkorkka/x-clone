@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
+import React from "react";
 
 const footerLinks = [
     "About",
@@ -23,17 +24,42 @@ const footerLinks = [
     "© 2025 X Corp."
 ];
 
-export const Footer = ({ styles }: { styles: string }) => {
+const rightSideBarLinks = [
+    "Terms of Service",
+    "Privacy Policy",
+    "Cookie Policy",
+    "Ads info",
+    "© 2025 X Corp."
+];
+
+export const Footer = ({ isRightSideBar, styles }: { isRightSideBar?: boolean, styles?: string }) => {
+
+    const displayFooterItems = (link: string) => {
+        return (
+            <div className="flex">
+                <p className="text-xs text-zinc-500 mx-2 hover:underline cursor-pointer">
+                    {link}
+                </p>
+                <Separator orientation="vertical" className="bg-zinc-500" />
+            </div>
+        )
+    }
+
     return (
         <footer className={cn("p-4 mt-auto flex flex-wrap justify-center", styles)}>
-            {footerLinks.map((link, index) => (
-                <div className="flex" key={index}>
-                    <p key={index} className="text-xs text-zinc-500 mx-2 hover:underline cursor-pointer">
-                        {link}
-                    </p>
-                    <Separator orientation="vertical" className="bg-zinc-500" />
-                </div>
-            ))}
+            {!isRightSideBar ? (
+                footerLinks.map((link, index) => (
+                    <React.Fragment key={index}>
+                        {displayFooterItems(link)}
+                    </React.Fragment>
+                ))
+            ) : (
+                rightSideBarLinks.map((link, index) => (
+                    <React.Fragment key={index}>
+                        {displayFooterItems(link)}
+                    </React.Fragment>
+                ))
+            )}
         </footer>
     )
 }

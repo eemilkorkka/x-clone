@@ -113,7 +113,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         {type === "tweet" && (
                             <>
                                 <span className="text-zinc-500">·</span>
-                                <time className="text-sm text-zinc-500" dateTime={tweetCreatedAt.toString()}>
+                                <time className="text-sm text-zinc-500 hover:underline" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
                                     <TimeAgo date={new Date(tweetCreatedAt)} formatter={shortFormatter} />
                                 </time>
                             </>
@@ -138,7 +138,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         </span>
                     )}
                     {type === "status" && (
-                        <div className="pt-2 flex items-center text-zinc-500 text-[15px]">
+                        <time className="pt-2 flex items-center text-zinc-500 text-[15px] hover:underline" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
                             <span>{new Date(tweet.createdAt).toLocaleTimeString('en-US', {
                                 hour: 'numeric',
                                 minute: '2-digit'
@@ -149,7 +149,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                                 day: 'numeric',
                                 year: 'numeric'
                             })}</span>
-                        </div>
+                        </time>
                     )}
                     {type === "tweet" && !isComposeModal && <TweetActions type="tweet" tweet={tweet} />}
                 </div>

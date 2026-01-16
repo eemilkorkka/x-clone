@@ -33,7 +33,7 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
             case "lg":
                 return "w-20 h-20";
             case "xl":
-                return "w-30 h-30";
+                return "w-33 h-33";
             default:
                 return "w-10 h-10";
         }

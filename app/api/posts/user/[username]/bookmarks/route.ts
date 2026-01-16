@@ -2,7 +2,7 @@ import { getBookmarksByUser } from "@/lib/queries/tweet-queries";
 import { getSession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: { username: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ username: string }> }) {
 
     const { username } = await params;
 

@@ -9,23 +9,7 @@ import React, { SetStateAction } from "react";
 import { toastMessage } from "@/lib/toast";
 import { FormButton } from "../FormButton";
 import { useMutation } from "@tanstack/react-query";
-
-const monthsArray = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-];
-
-const monthStringSchema = z.enum(monthsArray);
+import { BirthdateDropdowns, monthStringSchema } from "../BirthdateDropdowns";
 
 const personalInfoSchema = z.object({
     name: z.string().min(1, "Name cannot be empty.").max(50),
@@ -154,67 +138,7 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                     <p className="font-bold">Date of birth</p>
                     <p className="text-zinc-500">This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
                 </div>
-                <FieldGroup className="flex flex-row">
-                    <Controller
-                        name="month"
-                        control={form.control}
-                        render={({ field, fieldState }) => (
-                            <Field className="w-3xl">
-                                <CustomSelect
-                                    {...field}
-                                    label="Month"
-                                    value={month}
-                                    fieldState={fieldState}
-                                    options={monthsArray}
-                                />
-                            </Field>
-                        )}
-                    />
-                    <Controller
-                        name="day"
-                        control={form.control}
-                        render={({ field, fieldState }) => {
-                            const monthIndex = month ? monthsArray.indexOf(month) + 1 : null;
-
-                            const daysInMonth = monthIndex && year
-                                ? new Date(Number(year), monthIndex, 0).getDate()
-                                : 31;
-
-                            return (
-                                <Field>
-                                    <CustomSelect
-                                        {...field}
-                                        label="Day"
-                                        value={day?.toString()}
-                                        fieldState={fieldState}
-                                        options={Array.from(
-                                            { length: daysInMonth },
-                                            (_, i) => (i + 1).toString()
-                                        )}
-                                    />
-                                </Field>
-                            );
-                        }}
-                    />
-                    <Controller
-                        name="year"
-                        control={form.control}
-                        render={({ field, fieldState }) => (
-                            <Field>
-                                <CustomSelect
-                                    {...field}
-                                    label="Year"
-                                    value={year?.toString()}
-                                    fieldState={fieldState}
-                                    options={Array.from(
-                                        { length: new Date().getFullYear() - 1906 + 1 },
-                                        (_, i) => (new Date().getFullYear() - i).toString()
-                                    )}
-                                />
-                            </Field>
-                        )}
-                    />
-                </FieldGroup>
+                <BirthdateDropdowns form={form} month={month} day={day} year={year} />
             </FieldGroup>
             <FormButton disabled={!name || !email || !month || !day || !year || isPending} />
         </form>

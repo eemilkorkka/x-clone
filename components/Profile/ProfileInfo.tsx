@@ -13,6 +13,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { RiLinkM } from "react-icons/ri";
 import { GrLocation } from "react-icons/gr";
 import Link from "next/link";
+import { MediaDialog } from "../Media/MediaDialog";
 
 interface ProfileInfoProps {
     username: string;
@@ -44,9 +45,11 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
     return (
         <div className="flex flex-col mb-4">
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
-                <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
-                    <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" />
-                </div>
+                <MediaDialog src={userData.image ?? ""}>
+                    <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
+                        <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" useLink={false} />
+                    </div>
+                </MediaDialog>
             </ProfileBanner>
             {data?.user.username === username ? (
                 <Link href="/settings/profile" className="ml-auto">

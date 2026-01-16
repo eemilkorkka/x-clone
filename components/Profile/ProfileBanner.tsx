@@ -1,23 +1,38 @@
 import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { MediaDialog } from "../Media/MediaDialog";
 
 interface ProfileBannerProps {
     children?: React.ReactNode;
     src: string;
+    isPreview?: boolean;
     styles?: string;
 }
 
-export const ProfileBanner = ({ children, src, styles }: ProfileBannerProps) => {
+export const ProfileBanner = ({ children, src, isPreview = false, styles }: ProfileBannerProps) => {
+
+    const ImageElement = (
+        <Image
+            src={src}
+            alt="profile banner"
+            className={cn("hover:cursor-pointer", styles)}
+            fill
+        />
+    );
+
     return (
         <div className={cn("relative w-full aspect-[3/1] max-h-50", !src && "bg-gray-300")}>
             {src && (
-                <Image
-                    src={src}
-                    alt="profile banner"
-                    className={styles}
-                    fill
-                />
+                <>
+                    {!isPreview ? (
+                        <MediaDialog src={src}>
+                            {ImageElement}
+                        </MediaDialog>
+                    ) : (
+                        ImageElement
+                    )}
+                </>
             )}
             {children}
         </div>
