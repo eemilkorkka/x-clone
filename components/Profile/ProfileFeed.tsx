@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { LoadingSpinner } from "../LoadingSpinner";
-import { InfiniteScrollContainer } from "../InfiniteScrollContainer";
+import { InfiniteScrollContainer } from "../Feed/InfiniteScrollContainer";
 import React from "react";
 import { RegularTweet, Retweet } from "@/types/Tweet";
 import { Tweet } from "../Tweet/Tweet";

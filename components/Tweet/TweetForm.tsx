@@ -23,6 +23,7 @@ import { FileType } from '@/generated/prisma/enums';
 import { cn } from '@/lib/utils';
 import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
 import { useColor } from '@/context/ColorContext';
+import { IntermediateLoading } from '../IntermediateLoading';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -39,7 +40,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
     const [tweetContent, setTweetContent] = useState("");
     const filePickerRef = useRef<HTMLInputElement | null>(null);
     const { pickedFiles, setPickedFiles, handleFileAdd, handleFileRemove } = useFilePicker();
-    const [state, action] = useActionState(createTweet, null);
+    const [state, action, isPending] = useActionState(createTweet, null);
     const [textAreaFocused, setTextAreaFocused] = useState(false);
     const queryClient = getQueryClient();
     const router = useRouter();
@@ -92,7 +93,8 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
     }
 
     return (
-        <>
+        <div>
+            {isPending && <IntermediateLoading styles={`${isComposeModal && "mb-4"}`} />}
             {textAreaFocused && parentTweetId && !isComposeModal && type === "reply" && (
                 <span
                     className="text-zinc-500 text-sm ml-16 pt-2">Replying to <span className={colors.textColor}>@{parentTweetAuthor}</span>
@@ -188,6 +190,6 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                     <input className='hidden' name="parentTweetId" defaultValue={parentTweetId} />
                 </form>
             </div>
-        </>
+        </div>
     )
 }

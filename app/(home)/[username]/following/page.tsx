@@ -1,4 +1,4 @@
-import { FeedHeader } from "@/components/FeedHeader";
+import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { ReturnBack } from "@/components/ReturnBack";
 import { Tabs } from "@/components/Tabs";
 import { Displayname } from "@/components/User/Displayname";

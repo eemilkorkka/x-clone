@@ -1,4 +1,4 @@
-import { FeedHeader } from "@/components/FeedHeader";
+import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { ReturnBack } from "@/components/ReturnBack";
 import { TweetView } from "@/components/Tweet/TweetView";
 import { getQueryClient } from "@/lib/getQueryClient";

@@ -10,6 +10,7 @@ export type ColorsType = {
     textColor: string;
     focusVisibleBorderColor: string;
     peerFocusTextColor: string;
+    svgHoverColor: string;
 };
 
 type ColorContextType = {

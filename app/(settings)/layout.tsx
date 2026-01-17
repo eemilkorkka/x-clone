@@ -16,7 +16,7 @@ export default function SettingsLayout({
             </div>
 
             <section className="flex w-full min-w-0">
-                <div className="hidden lg:block lg:w-[318px] xl:w-[448px] h-full border-r border-l border-gray-200">
+                <div className="hidden lg:block lg:w-[350px] xl:w-[448px] h-full border-r border-l border-gray-200">
                     <h2 className="text-xl font-bold p-4">Settings</h2>
                     <SettingsItem
                         href="/settings/account"

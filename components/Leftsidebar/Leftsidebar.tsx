@@ -2,15 +2,15 @@ import { BsBell, BsPeople } from "react-icons/bs";
 import { FaXTwitter, FaFeatherPointed } from "react-icons/fa6";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import { HiOutlineEnvelope } from "react-icons/hi2";
-import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 import { IoBookmark, IoBookmarkOutline, IoPerson, IoPersonOutline, IoSearchOutline } from "react-icons/io5";
 import Link from "next/link";
-import { Navitem } from "@/components/Navitem";
+import { Navitem } from "@/components/Leftsidebar/Navitem";
 import { User } from "@/components/User/User";
 import { Button } from "@/components/ui/button";
 import { getSession } from "@/lib/session";
 import { BsThreeDots } from "react-icons/bs";
 import { LogoutPopover } from "./LogoutPopover";
+import { SettingsNavItem } from "./SettingsNavItem";
 
 export interface Option {
     text: string;
@@ -34,7 +34,7 @@ export const Leftsidebar = async () => {
                     </Link>
                 </div>
 
-                <div className="flex flex-row mobile:flex-col justify-between items-center xl:items-start space-y-2">
+                <div className="flex flex-row p-2 mobile:p-0 mobile:flex-col justify-between items-center xl:items-start mobile:space-y-2">
                     <Navitem
                         href="/home"
                         icon={<GoHome size={30} />}
@@ -73,13 +73,7 @@ export const Leftsidebar = async () => {
                         label="Profile"
                     />
 
-                    <Navitem
-                        href={`/settings/account`}
-                        icon={<IoSettingsOutline size={30} />}
-                        activeIcon={<IoSettings size={30} />}
-                        label="Settings and privacy"
-                        styles="hidden mobile:flex"
-                    />
+                    <SettingsNavItem />
 
                     <Link href="/compose/post" className="hidden mobile:inline">
                         <Button className="w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">

@@ -31,7 +31,7 @@ export const FollowButton = ({ username, userId, isFollowing, styles }: FollowBu
             <input type="hidden" name="userId" defaultValue={userId} />
             <Button type="submit" className={cn("rounded-full font-bold px-4 hover:cursor-pointer", 
                 isFollowing ? "bg-inherit border border-border text-black hover:bg-destructive/10 hover:border-destructive/20 hover:text-destructive" : "bg-black"
-            )}>{isFollowing ? "Unfollow" : "Follow"}</Button>
+            )} onMouseDown={(e) => e.stopPropagation()}>{isFollowing ? "Unfollow" : "Follow"}</Button>
         </form>
     )
 }

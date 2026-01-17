@@ -11,7 +11,7 @@ import { Media } from "../Media/Media";
 import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
 import { BsThreeDots, BsPin } from "react-icons/bs";
-import { IoTrashOutline, IoPersonAdd } from "react-icons/io5";
+import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import { TweetPopover } from "./TweetPopover/TweetPopover";
 import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
 import { toastMessage } from "@/lib/toast";
@@ -44,6 +44,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
         tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false
     );
     const { colors } = useColor();
+    const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
     const onClick = () => {
         if (useLink) {
@@ -83,8 +84,8 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
         const generalTweetOptions = [
             {
-                label: `Follow @${tweet.user?.username}`,
-                icon: <IoPersonAdd />,
+                label: `${isFollowing ? "Unfollow" : "Follow"} @${tweet.user?.username}`,
+                icon: isFollowing ? <IoPersonRemove /> :<IoPersonAdd />,
                 onClick: () => followMutation.mutate(formData)
             }
         ];

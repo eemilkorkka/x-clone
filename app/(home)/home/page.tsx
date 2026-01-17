@@ -1,4 +1,4 @@
-import { HomeFeed } from "@/components/HomeFeed";
+import { HomeFeed } from "@/components/Feed/HomeFeed";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getTweets, getTweetsFromFollowing } from "@/lib/queries/tweet-queries";
 import { getSession } from "@/lib/session";

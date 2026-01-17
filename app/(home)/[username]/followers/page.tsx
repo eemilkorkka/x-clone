@@ -1,9 +1,13 @@
-import { FeedHeader } from "@/components/FeedHeader";
+import { FeedHeader } from "@/components/Feed/FeedHeader";
+import { FollowersFeed } from "@/components/Feed/FollowersFeed";
 import { ReturnBack } from "@/components/ReturnBack";
 import { Tabs } from "@/components/Tabs";
 import { Displayname } from "@/components/User/Displayname";
 import { Username } from "@/components/User/Username";
+import { getQueryClient } from "@/lib/getQueryClient";
 import { prisma } from "@/lib/prisma";
+import { getFollowersByUsername } from "@/lib/queries/user-queries";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function FollowersPage({ params }: { params: Promise<{ username: string }> }) {
 
@@ -29,6 +33,14 @@ export default async function FollowersPage({ params }: { params: Promise<{ user
         }
     ];
 
+    const queryClient = getQueryClient();
+
+    await queryClient.prefetchInfiniteQuery({
+        queryFn: () => getFollowersByUsername(username),
+        queryKey: ["followers", username],
+        initialPageParam: undefined
+    });
+
     return (
         <div className="min-h-screen">
             <FeedHeader styles="flex flex-col">
@@ -50,6 +62,9 @@ export default async function FollowersPage({ params }: { params: Promise<{ user
                 </div>
                 <Tabs tabs={tabs} styles="mt-2" />
             </FeedHeader>
+            <HydrationBoundary state={dehydrate(queryClient)}>
+                <FollowersFeed username={username} />
+            </HydrationBoundary>
         </div>
     )
 }
