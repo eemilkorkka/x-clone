@@ -4,7 +4,6 @@ import { Button } from "../ui/button"
 import { useFollowMutation } from "@/hooks/useFollowMutation";
 import { cn } from "@/lib/utils";
 import { UnfollowDialog } from "./UnfollowDialog";
-import { follow } from "@/app/actions/follow";
 
 interface FollowButtonProps {
     username: string;

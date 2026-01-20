@@ -2,7 +2,7 @@ import { retweet } from "@/app/actions/retweet";
 import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { Tweet, TweetsPage } from "@/types/Tweet";
-import { TweetUser, UserBase } from "@/types/User";
+import { UserWithFollowData } from "@/types/User";
 import { InfiniteData, useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useGetProfileFeedQueryKey } from "./useGetProfileFeedQueryKey";
@@ -63,7 +63,7 @@ export const useRetweetMutation = (tweet: Tweet) => {
                                     ...data.user,
                                     followers: [],
                                     following: [],
-                                } as TweetUser,
+                                } as UserWithFollowData,
                                 likes: [],
                                 retweets: [],
                                 bookmarks: [],
