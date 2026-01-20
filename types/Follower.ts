@@ -8,8 +8,3 @@ export type Follower = {
     follower?: UserProfile;
     following?: UserProfile;
 }
-
-export interface UserWithFollowers extends UserBase {
-    followers: Follower[];
-    following: Follower[];
-}

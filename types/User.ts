@@ -18,7 +18,7 @@ export interface User extends UserBase {
     twoFactorEnabled: boolean | null;
 }
 
-export interface TweetUser extends UserBase {
+export interface UserWithFollowData extends UserBase {
     followers: Follower[];
     following: Follower[];
 }
@@ -30,4 +30,9 @@ export interface UserProfile extends UserBase {
         posts: number;
         likes: number;
     }
+}
+
+export type UsersPage = {
+    items: UserWithFollowData[];
+    nextCursor: { createdAt: string; id: number } | null;
 }

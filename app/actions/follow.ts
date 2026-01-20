@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
-export async function follow(formData: FormData) {
+export async function follow(userId: string) {
 
     const session = await getSession();
 
@@ -11,9 +11,7 @@ export async function follow(formData: FormData) {
         return { error: "Not authenticated." };
     }
 
-    const userIdToFollow = formData.get("userId") as string;
-
-    if (userIdToFollow == session.user.id) {
+    if (userId == session.user.id) {
         return { error: "Cannot follow yourself." }
     }
 
@@ -22,7 +20,7 @@ export async function follow(formData: FormData) {
             where: {
                 followerId_followingId: {
                     followerId: session.user.id,
-                    followingId: userIdToFollow
+                    followingId: userId
                 }
             }
         });
@@ -32,7 +30,7 @@ export async function follow(formData: FormData) {
                 where: {
                     followerId_followingId: {
                         followerId: session.user.id,
-                        followingId: userIdToFollow
+                        followingId: userId
                     }
                 }
             });
@@ -42,7 +40,7 @@ export async function follow(formData: FormData) {
             await prisma.follow.create({
                 data: {
                     followerId: session.user.id,
-                    followingId: userIdToFollow
+                    followingId: userId
                 }
             });
 

@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldGroup } from "../../../../ui/field";
 import { CustomInput } from "../../../../customized/CustomInput";
-import { CustomSelect } from "@/components/customized/CustomSelect";
 import { SignupFormData } from "@/app/@modal/(.)signup/page";
 import React, { SetStateAction } from "react";
 import { toastMessage } from "@/lib/toast";

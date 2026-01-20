@@ -7,16 +7,14 @@ import React from "react";
 import { User } from "../User/User";
 import { FollowButton } from "../User/FollowButton";
 import { authClient } from "@/lib/auth-client";
-import { Icon } from "../Icon";
-import { BsThreeDots } from "react-icons/bs";
 import { UserWithFollowData } from "@/types/User";
 
-const fetchFollowers = async (username: string, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
+const fetchFollowing = async (username: string, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
         ? `cursorCreatedAt=${encodeURIComponent(pageParam.createdAt)}&cursorId=${pageParam.id}`
         : "";
 
-    const response = await fetch(`/api/users/${username}/followers?${query}`);
+    const response = await fetch(`/api/users/${username}/following?${query}`);
 
     if (response.ok) {
         return await response.json();
@@ -25,7 +23,7 @@ const fetchFollowers = async (username: string, { pageParam }: { pageParam?: { c
     }
 }
 
-export const FollowersFeed = ({ username }: { username: string }) => {
+export const FollowingFeed = ({ username }: { username: string }) => {
 
     const { data: sessionData } = authClient.useSession();
 
@@ -39,8 +37,8 @@ export const FollowersFeed = ({ username }: { username: string }) => {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryFn: ({ pageParam }) => fetchFollowers(username, { pageParam }),
-        queryKey: ["followers", username],
+        queryFn: ({ pageParam }) => fetchFollowing(username, { pageParam }),
+        queryKey: ["following", username],
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
     });
@@ -60,17 +58,12 @@ export const FollowersFeed = ({ username }: { username: string }) => {
                                 return (
                                     <User key={user.id} user={user} showBio={true} showFollowBadge={true}>
                                         <div className="flex gap-1">
-                                            {user.id !== sessionData?.user.id && (
+                                            {sessionData?.user.username !== user.username && (
                                                 <FollowButton
                                                     username={user.username ?? ""}
                                                     userId={user.id}
                                                     isFollowing={isFollowing}
                                                 />
-                                            )}
-                                            {username === sessionData?.user.username && (
-                                                <Icon styles="text-zinc-500">
-                                                    <BsThreeDots />
-                                                </Icon>
                                             )}
                                         </div>
                                     </User>

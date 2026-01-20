@@ -12,7 +12,7 @@ import {
     DialogTitle
 } from "@/components/ui/dialog";
 
-import { Field, FieldGroup } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { CustomAvatar } from "@/components/User/CustomAvatar";
 import { useFilePicker } from "@/hooks/useFilePicker";
 import { authClient } from "@/lib/auth-client";
@@ -32,14 +32,27 @@ import { BirthdateDropdowns, monthStringSchema } from "@/components/auth/Forms/S
 import { useColor } from "@/context/ColorContext";
 
 const formSchema = z.object({
-    displayName: z.string().max(50).min(0).optional(),
+    displayName: z.string().max(50).min(1, "Name cannot be empty!"),
     bio: z.string().max(160).min(0).optional(),
     location: z.string().max(30).min(0).optional(),
     website: z.string().max(100).min(0).optional(),
-    month: monthStringSchema,
-    day: z.coerce.number().int().min(1).max(31),
-    year: z.coerce.number().int().min(1906).max(new Date().getFullYear())
+    month: monthStringSchema.optional().or(z.literal("")),
+    day: z.union([
+        z.coerce.number().int().min(1).max(31),
+        z.literal(""),
+        z.undefined()
+    ]).optional(),
+    year: z.union([
+        z.coerce.number().int().min(1906).max(new Date().getFullYear()),
+        z.literal(""),
+        z.undefined()
+    ]).optional()
 }).refine((data) => {
+    if (!data.month || !data.day || !data.year ||
+        data.month === "" || typeof data.day !== "number" || typeof data.year !== "number") {
+        return true;
+    }
+
     const monthIndex = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -73,9 +86,9 @@ export default function EditProfileModal() {
             bio: sessionData?.user.bio ?? "",
             location: sessionData?.user.location ?? "",
             website: sessionData?.user.website ?? "",
-            month: sessionData?.user.birthDateMonth ?? "",
-            day: sessionData?.user.birthDateDay ?? "",
-            year: sessionData?.user.birthDateYear ?? ""
+            month: sessionData?.user.birthDateMonth ?? undefined,
+            day: sessionData?.user.birthDateDay ?? undefined,
+            year: sessionData?.user.birthDateYear ?? undefined
         }
     });
 
@@ -102,9 +115,9 @@ export default function EditProfileModal() {
                 bio: validatedData.bio,
                 location: validatedData.location,
                 website: validatedData.website,
-                birthDateMonth: validatedData.month,
-                birthDateDay: validatedData.day,
-                birthDateYear: validatedData.year
+                birthDateMonth: validatedData.month || null,
+                birthDateDay: validatedData.day === "" || !validatedData.day ? null : validatedData.day,
+                birthDateYear: validatedData.year === "" || !validatedData.year ? null : validatedData.year
             });
 
             if (!result.error) {
@@ -186,6 +199,7 @@ export default function EditProfileModal() {
                                             fieldState={fieldState}
                                             styles="text-black border-gray-300 shadow-none"
                                         />
+                                        {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                                     </Field>
                                 )}
                             />
@@ -245,9 +259,13 @@ export default function EditProfileModal() {
                                 <Button variant="ghost" className="-m-4 mt-1 flex h-fit justify-between p-4 px-5 rounded-none hover:cursor-pointer" onClick={() => setIsEditingBirthday(true)}>
                                     <div className="text-left font-normal">
                                         <p>Birth date</p>
-                                        <p>
-                                            {sessionData?.user.birthDateMonth} {sessionData?.user.birthDateDay}, {sessionData?.user.birthDateYear}
-                                        </p>
+                                        {sessionData?.user.birthDateMonth && sessionData?.user.birthDateDay && sessionData?.user.birthDateYear ? (
+                                            <p>
+                                                {`${sessionData.user.birthDateMonth} ${sessionData.user.birthDateDay}, ${sessionData.user.birthDateYear}`}
+                                            </p>
+                                        ) : (
+                                            <p className="text-zinc-500">Add your birth date</p>
+                                        )}
                                     </div>
                                     <IoIosArrowForward className="text-zinc-500 size-5" />
                                 </Button>
@@ -268,7 +286,7 @@ export default function EditProfileModal() {
                                     </div>
                                     <BirthdateDropdowns
                                         form={form}
-                                        month={month}
+                                        month={month ?? ""}
                                         day={day}
                                         year={year}
                                         styles="border-gray-300"

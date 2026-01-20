@@ -69,7 +69,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                     styles="ml-auto mt-4 mr-4"
                 />
             )}
-            <div className="px-4 mt-8 flex flex-col gap-2">
+            <div className="px-4 mt-6 flex flex-col gap-2">
                 <div>
                     <Displayname
                         displayName={userData.displayUsername}
@@ -83,7 +83,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                         styles="w-fit"
                     />
                 </div>
-                <Text text={userData.bio ?? "Lorem ipsum dolor sit amet"} />
+                <Text text={userData.bio} />
                 <div className="flex flex-wrap gap-x-4 gap-y-2">
                     {userData.location && (
                         <div className="text-sm flex items-center gap-1.5 text-zinc-500">

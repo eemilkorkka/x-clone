@@ -78,20 +78,13 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
         }
     ];
 
-    const getGeneralTweetOptions = () => {
-        const formData = new FormData();
-        formData.append("userId", tweetAuthor?.id ?? "");
-
-        const generalTweetOptions = [
-            {
-                label: `${isFollowing ? "Unfollow" : "Follow"} @${tweet.user?.username}`,
-                icon: isFollowing ? <IoPersonRemove /> :<IoPersonAdd />,
-                onClick: () => followMutation.mutate(formData)
-            }
-        ];
-
-        return generalTweetOptions;
-    }
+    const generalTweetOptions = [
+        {
+            label: `${isFollowing ? "Unfollow" : "Follow"} @${tweet.user?.username}`,
+            icon: isFollowing ? <IoPersonRemove /> : <IoPersonAdd />,
+            onClick: () => followMutation.mutate(tweetAuthor?.id ?? "")
+        }
+    ];
 
     return (
         <div className={cn(
@@ -134,7 +127,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             </>
                         )}
                         {!isComposeModal && (
-                            <TweetPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : getGeneralTweetOptions()}>
+                            <TweetPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
                                 <Icon styles="text-zinc-500 hover:text-sky-500">
                                     <BsThreeDots />
                                 </Icon>

@@ -7,14 +7,13 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Text } from "../Text";
-import { UserWithFollowers } from "@/types/Follower";
 import { authClient } from "@/lib/auth-client";
-import { UserBase } from "@/types/User";
+import { UserBase, UserWithFollowData } from "@/types/User";
 import { Badge } from "../ui/badge";
 
 interface UserProps {
     useLink?: boolean;
-    user?: UserWithFollowers | UserBase | null;
+    user?: UserWithFollowData | UserBase | null;
     children?: React.ReactNode;
     styles?: string;
     contentStyles?: string;
@@ -59,7 +58,7 @@ export const User = (
                             {showFollowBadge && isFollowing && <Badge variant="secondary" className="text-gray-500">Follows you</Badge>}
                         </div>
                     </div>
-                    <div className="flex flex-col justify-center items-center">
+                    <div className="flex flex-col justify-center items-center" onClick={(e) => e.stopPropagation()}>
                         {children}
                     </div>
                 </div>
@@ -71,10 +70,8 @@ export const User = (
     const className = cn("flex hover:bg-ring/20 w-full p-2 hover:cursor-pointer", styles);
 
     return (
-        <div className={className} onMouseDown={(e) => {
-            if (e.button === 0 && useLink) {
-                router.push(`/${user.username}`);
-            }
+        <div className={className} onClick={(e) => {
+            router.push(`/${user.username}`);
         }}>
             {userElement}
         </div>

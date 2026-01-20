@@ -106,7 +106,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                 !isComposeModal && "border-b border-gray-200",
                 isComposeModal && "pt-0"
             )}>
-                <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" />
+                <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" useLink={false} />
                 <form onSubmit={handleSubmit} className="flex flex-col w-full mt-2">
                     <TextareaAutosize
                         placeholder={type === "tweet" ? "What's happening?" : "Post your reply"}

@@ -38,7 +38,7 @@ export const SuggestedUsersCard = async () => {
             username: true,
             displayUsername: true,
             website: true,
-            bio: true,            
+            bio: true,
             image: true,
             followers: {
                 select: {
@@ -62,7 +62,11 @@ export const SuggestedUsersCard = async () => {
 
                     return (
                         <User key={user.id} user={user} useLink={true}>
-                            <FollowButton userId={user.id} username={user.username ?? ""} isFollowing={isFollowing} />
+                            <FollowButton
+                                userId={user.id}
+                                username={user.username ?? ""}
+                                isFollowing={isFollowing}
+                            />
                         </User>
                     )
                 })}
