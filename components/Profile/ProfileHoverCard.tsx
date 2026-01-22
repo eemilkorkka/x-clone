@@ -1,8 +1,11 @@
+"use client";
+
 import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
+
 import { CustomAvatar } from "../User/CustomAvatar";
 import { useGetUserData } from "@/hooks/useGetUserData";
 import { FollowButton } from "../User/FollowButton";
