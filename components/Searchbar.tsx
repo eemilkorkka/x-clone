@@ -51,7 +51,7 @@ export const Searchbar = () => {
                     <MdCancel className="absolute top-1/2 -translate-y-1/2 right-2.5 hover:cursor-pointer" size={20} onMouseDown={() => setSearchText("")} />
                 )}
             </div>
-            <div className={`overflow-y-auto w-full bg-white rounded-md drop-shadow-lg z-50 p-0 ${searchInputFocused ? "block" : "hidden"}`}>
+            <div className={`overflow-y-auto w-full bg-white rounded-md drop-shadow-lg z-50 p-0 ${searchInputFocused ? "block" : "hidden"}`} onMouseDown={(e) => e.preventDefault()}>
                 {isLoading ? (
                     Array.from({ length: 3 }).map((_, index) => (
                         <UserSkeleton key={index} />

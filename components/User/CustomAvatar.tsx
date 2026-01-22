@@ -7,7 +7,8 @@ import {
 import defaultPfp from "@/public/defaultPfp.jpg";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import React from "react";
+import React, { use } from "react";
+import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
 
 export type size = "sm" | "md" | "lg" | "xl";
 
@@ -22,7 +23,7 @@ interface CustomAvatarProps {
     styles?: string;
 }
 
-export const CustomAvatar = ({ src, alt, size, children, username, useLink = true, useHoverCard = false, styles }: CustomAvatarProps) => {
+export const CustomAvatar = ({ src, alt, size, children, username, useLink = true, useHoverCard = true, styles }: CustomAvatarProps) => {
 
     const getSize = (size: size) => {
         switch (size) {
@@ -31,7 +32,7 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
             case "md":
                 return "w-10 h-10";
             case "lg":
-                return "w-20 h-20";
+                return "w-18 h-18";
             case "xl":
                 return "w-33 h-33";
             default:
@@ -47,11 +48,21 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
         </Avatar>
     );
 
+    const customAvatar = (
+        useHoverCard ? (
+            <ProfileHoverCard username={username ?? ""}>
+                {avatarElement}
+            </ProfileHoverCard>
+        ) : (
+            avatarElement
+        )
+    );
+
     return useLink ? (
         <Link href={`/${username}`} onClick={(e) => e.stopPropagation()}>
-            {avatarElement}
+            {customAvatar}
         </Link>
     ) : (
-        avatarElement
+        customAvatar
     )
 }

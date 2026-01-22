@@ -22,10 +22,10 @@ export const FollowButton = ({ username, userId, isFollowing, styles }: FollowBu
     );
 
     return !isFollowing ? (
-        <Button className={buttonStyles} onMouseDown={(e) => e.stopPropagation()} onClick={() => followMutation.mutate(userId)}>Follow</Button>
+        <Button className={buttonStyles} onClick={(e) => { e.stopPropagation(); followMutation.mutate(userId); }}>Follow</Button>
     ) : (
         <UnfollowDialog username={username} onConfirmClick={() => followMutation.mutate(userId)} styles={styles}>
-            <Button className={cn(buttonStyles, "m-0")} onMouseDown={(e) => e.stopPropagation()}>Unfollow</Button>
+            <Button className={cn(buttonStyles, "m-0")}>Unfollow</Button>
         </UnfollowDialog>
     )
 }

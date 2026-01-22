@@ -31,7 +31,7 @@ export const UnfollowDialog = ({ children, username, onConfirmClick, styles }: U
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogTrigger nativeButton={false} render={
+            <AlertDialogTrigger nativeButton={false} onClick={(e) => e.stopPropagation()} render={
                 <div className={styles}>
                     {children}
                 </div>

@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { CustomAvatar } from "../User/CustomAvatar"
 import { ProfileBanner } from "./ProfileBanner"
 import { Displayname } from "../User/Displayname";
-import { useQuery } from "@tanstack/react-query";
 import { Username } from "../User/Username";
 import { Text } from "../Text";
 import { notFound } from "next/navigation";
@@ -17,35 +16,26 @@ import { MediaDialog } from "../Media/MediaDialog";
 import { FollowButton } from "../User/FollowButton";
 import { Follower } from "@/types/Follower";
 import { useColor } from "@/context/ColorContext";
+import { useGetUserData } from "@/hooks/useGetUserData";
 
 interface ProfileInfoProps {
     username: string;
 }
 
-const getUserInfo = async (username: string) => {
-    const response = await fetch(`/api/users/${username}`);
-
-    if (response.ok) {
-        return await response.json();
-    } else {
-        throw new Error("Failed to get user's info.");
-    }
-}
-
 export const ProfileInfo = ({ username }: ProfileInfoProps) => {
 
     const { data } = authClient.useSession();
+    const { data: userData, isLoading } = useGetUserData(username, true);
+    const { colors } = useColor();
 
-    const { data: userData } = useQuery({
-        queryFn: () => getUserInfo(username),
-        queryKey: ["user", username]
-    });
+    if (isLoading) {
+        return null;
+    }
 
     if (!userData) {
         notFound();
     }
 
-    const { colors } = useColor();
     const isFollowing = userData.followers.some((follower: Follower) => follower.followerId === data?.user.id);
 
     return (
@@ -53,7 +43,12 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
                 <MediaDialog src={userData.image ?? ""}>
                     <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
-                        <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" useLink={false} />
+                        <CustomAvatar
+                            src={userData.image ?? ""}
+                            alt={``} size="xl"
+                            useLink={false}
+                            useHoverCard={false}
+                        />
                     </div>
                 </MediaDialog>
             </ProfileBanner>
