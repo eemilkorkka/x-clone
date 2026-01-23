@@ -4,13 +4,21 @@ import { ReturnBack } from "@/components/ReturnBack";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
 import { Username } from "@/components/User/Username";
 import { getSession } from "@/lib/session";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+    title: "Settings",
+}
 
 export default async function SettingsPage() {
 
     const session = await getSession();
 
-    if (!session?.user?.username) {
-        return null;
+    if (!session) {
+        redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
     }
 
     return (

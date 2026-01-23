@@ -9,8 +9,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
     const session = await getSession();
 
-    if (!session?.user) {
+    if (!session) {
         redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
     }
 
     const { username } = await params;

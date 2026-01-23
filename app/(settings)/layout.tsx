@@ -1,8 +1,14 @@
 import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { IoIosArrowForward } from "react-icons/io";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: {
+        default: "Your Account / X Clone",
+        template: "%s / X Clone",
+    },
+    description: "Settings and account management on X Clone.",
+}
 
 export default function SettingsLayout({
     children,

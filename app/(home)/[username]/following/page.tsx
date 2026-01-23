@@ -7,7 +7,38 @@ import { Username } from "@/components/User/Username";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { prisma } from "@/lib/prisma";
 import { getFollowingByUsername } from "@/lib/queries/user-queries";
+import { getSession } from "@/lib/session";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
+
+export async function generateMetadata({ params }: { params: Promise<{ username: string }> }) {
+    const { username } = await params;
+    const session = await getSession();
+
+    if (!session) {
+        redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
+    }
+
+    const user = await prisma.user.findUnique({
+        where: {
+            username: username
+        },
+        select: {
+            displayUsername: true,
+        }
+    });
+
+    if (!user) {
+        return { title: "Profile / X Clone", description: "User not found" };
+    }
+
+    return {
+        title: `People followed by ${user.displayUsername} (@${username}) / X Clone`,
+        description: `List of people followed by @${username}`,
+    }
+}
 
 export default async function FollowingPage({ params }: { params: Promise<{ username: string }> }) {
 

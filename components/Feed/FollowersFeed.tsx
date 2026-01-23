@@ -15,7 +15,7 @@ import { OptionsPopover } from "../Tweet/TweetPopover/OptionsPopover";
 import { RemoveFollowerDialog } from "../User/RemoveFollowerDialog";
 import { removeFollower } from "@/app/actions/removeFollower";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { toastMessage } from "@/lib/toast";
+import { UseToastMessage } from "@/hooks/useToastMessage";
 
 const fetchFollowers = async (username: string, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
@@ -35,7 +35,8 @@ export const FollowersFeed = ({ username }: { username: string }) => {
 
     const { data: sessionData } = authClient.useSession();
     const queryClient = getQueryClient();
-
+    const { toastMessage } = UseToastMessage();
+    
     const {
         data,
         error,
@@ -56,7 +57,7 @@ export const FollowersFeed = ({ username }: { username: string }) => {
         mutationFn: (followerId: string) => removeFollower(followerId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['followers', sessionData?.user.username] });
-            queryClient.invalidateQueries({ queryKey: ["user", sessionData?.user.username]})
+            queryClient.invalidateQueries({ queryKey: ["user", sessionData?.user.username] })
         },
         onError: (ctx) => {
             toastMessage(ctx.message ?? "Failed to remove follower.", false);
@@ -91,6 +92,7 @@ export const FollowersFeed = ({ username }: { username: string }) => {
                                                         label: "Remove this follower",
                                                         icon: <IoPersonRemove />,
                                                         popoverOption: <RemoveFollowerDialog
+                                                            key={user.id}
                                                             username={user.username ?? ""}
                                                             onConfirmClick={() => removeFollowerMutation.mutate(user.id)}
                                                         />

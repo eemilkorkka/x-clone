@@ -17,7 +17,6 @@ import { CustomAvatar } from "@/components/User/CustomAvatar";
 import { useFilePicker } from "@/hooks/useFilePicker";
 import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { toastMessage } from "@/lib/toast";
 import { uploadFile } from "@/lib/utils/uploadFile";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -30,6 +29,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import z from "zod";
 import { BirthdateDropdowns, monthStringSchema } from "@/components/auth/Forms/SignUpForm/BirthdateDropdowns";
 import { useColor } from "@/context/ColorContext";
+import { UseToastMessage } from "@/hooks/useToastMessage";
 
 const formSchema = z.object({
     displayName: z.string().max(50).min(1, "Name cannot be empty!"),
@@ -68,6 +68,7 @@ const formSchema = z.object({
 export default function EditProfileModal() {
     const router = useRouter();
     const { data: sessionData } = authClient.useSession();
+    const { toastMessage } = UseToastMessage();
 
     const profilePictureRef = useRef<HTMLInputElement | null>(null);
     const profileBannerRef = useRef<HTMLInputElement | null>(null);
@@ -147,7 +148,7 @@ export default function EditProfileModal() {
 
     return (
         <Dialog open={true} onOpenChange={handleOpenChange}>
-            <DialogContent className="!max-w-[600px] p-0 !rounded-2xl h-full sm:max-h-[650px] flex flex-col sm:rounded-xl ring-0 gap-0 overflow-hidden" showCloseButton={false}>
+            <DialogContent className="!max-w-[600px] p-0 rounded-none sm:!rounded-2xl h-full sm:max-h-[650px] flex flex-col sm:rounded-xl ring-0 gap-0 overflow-hidden" showCloseButton={false}>
                 <div className="overflow-y-auto">
                     <DialogHeader className="flex flex-row justify-between p-2">
                         <div className="flex gap-6 items-center">

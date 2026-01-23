@@ -6,8 +6,8 @@ import { CustomInput } from "../../../../customized/CustomInput";
 import { Button } from "../../../../ui/button";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { toastMessage } from "@/lib/toast";
 import { useRouter } from "next/navigation";
+import { UseToastMessage } from "@/hooks/useToastMessage";
 
 const passwordStepSchema = z.object({
     password: z.string().min(1, "Password is required."),
@@ -22,6 +22,7 @@ interface PasswordStepProps {
 export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
 
     const router = useRouter();
+    const { toastMessage } = UseToastMessage();
     const [loginError, setLoginError] = useState("");
     const form = useForm<z.infer<typeof passwordStepSchema>>({
         resolver: zodResolver(passwordStepSchema),

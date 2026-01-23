@@ -3,6 +3,7 @@ import { ReturnBack } from "@/components/ReturnBack";
 import { Displayname } from "@/components/User/Displayname";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+
 export default async function NotFound() {
     
     const session = await getSession();

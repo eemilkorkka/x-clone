@@ -25,11 +25,12 @@ export const RemoveFollowerDialog = ({ username, onConfirmClick }: RemoveFollowe
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger render={
                 <Button variant="ghost" className={"w-full rounded-none justify-start font-bold py-5.5 hover:cursor-pointer"}>
                     <IoPersonRemove />
                     Remove this follower
                 </Button>
+            }>
             </AlertDialogTrigger>
             <AlertDialogContent className="!max-w-xs ring-0">
                 <AlertDialogHeader>

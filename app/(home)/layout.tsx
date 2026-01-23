@@ -5,7 +5,16 @@ import { Searchbar } from "@/components/Searchbar";
 import { SplashScreen } from "@/components/SplashScreen";
 import { TrendingCard } from "@/components/Trending/TrendingCard";
 import { SuggestedUsersCard } from "@/components/User/SuggestedUsersCard";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Home / X Clone",
+    template: "%s / X Clone",
+  },
+  description: "Welcome to X Clone, a social media platform.",
+}
 
 export default function HomeLayout({
   children,

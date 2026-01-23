@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils';
 import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
 import { useColor } from '@/context/ColorContext';
 import { IntermediateLoading } from '../IntermediateLoading';
+import { EmojiPickerPopover } from '../EmojiPickerPopover';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -37,11 +38,14 @@ const MAX_LENGTH = 280;
 export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeModal }: TweetFormProps) => {
 
     const { data } = authClient.useSession();
-    const [tweetContent, setTweetContent] = useState("");
+    const [tweetContent, setTweetContent] = useState("");    
+    const [textAreaFocused, setTextAreaFocused] = useState(false);
+    const [caretPos, setCaretPos] = useState(0);
+
     const filePickerRef = useRef<HTMLInputElement | null>(null);
     const { pickedFiles, setPickedFiles, handleFileAdd, handleFileRemove } = useFilePicker();
     const [state, action, isPending] = useActionState(createTweet, null);
-    const [textAreaFocused, setTextAreaFocused] = useState(false);
+
     const queryClient = getQueryClient();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -116,6 +120,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                         maxLength={MAX_LENGTH}
                         minRows={pickedFiles.length > 0 ? 0 : isComposeModal ? (parentTweetId ? 2 : 5) : 2}
                         maxRows={50}
+                        onSelect={(e) => setCaretPos(e.currentTarget.selectionStart)}
                         onKeyDown={handleKeyDown}
                         onChange={(e) => setTweetContent(e.currentTarget.value)}
                         onFocus={() => setTextAreaFocused(true)}
@@ -156,9 +161,11 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                                 <HiOutlineGif size={18} />
                             </Icon>
 
-                            <Icon>
-                                <HiOutlineEmojiHappy size={18} />
-                            </Icon>
+                            <EmojiPickerPopover onEmojiSelect={(emoji) => setTweetContent([tweetContent.slice(0, caretPos), emoji, tweetContent.slice(caretPos)].join(""))}>
+                                <Icon>
+                                    <HiOutlineEmojiHappy size={18} />
+                                </Icon>
+                            </EmojiPickerPopover>
 
                             <Icon>
                                 <RxCalendar size={18} />

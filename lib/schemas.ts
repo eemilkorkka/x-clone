@@ -66,7 +66,7 @@ const createUsernameSchema = (checkAvailability: (username: string) => Promise<b
     });
 };
 
-export const usernameSchemaFrontend = createUsernameSchema(async (username) => {
+export const usernameSchema = createUsernameSchema(async (username) => {
     const response = await fetch(`/api/users/${username}`);
     return response.status === 404;
 });
@@ -77,3 +77,15 @@ export const createUsernameSchemaBackend = (db: PrismaClient) => {
         return user === null;
     });
 };
+
+export const emailSchema = z.email().superRefine(async (data, ctx) => {
+    const response = await fetch(`/api/users/${data}`);
+    const isAvailable = response.status === 404;
+
+    if (!isAvailable) {
+        ctx.addIssue({
+            code: "custom",
+            message: "This email is taken.",
+        });
+    }
+});

@@ -1,7 +1,12 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { ReturnBack } from "@/components/ReturnBack";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
+import { Metadata } from "next";
 import { HiOutlinePaintBrush } from "react-icons/hi2";
+
+export const metadata: Metadata = {
+    title: "Accessibility, display, and languages",
+}
 
 export default function AccessabilityPage() {
     return (

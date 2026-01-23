@@ -14,12 +14,12 @@ import { BsThreeDots, BsPin } from "react-icons/bs";
 import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import { OptionsPopover } from "./TweetPopover/OptionsPopover";
 import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
-import { toastMessage } from "@/lib/toast";
 import TimeAgo from 'react-timeago';
 import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
+import { UseToastMessage } from "@/hooks/useToastMessage";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -33,11 +33,14 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
     const { data } = authClient.useSession();
     const router = useRouter();
+    const { toastMessage } = UseToastMessage();
+
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
     const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
     const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
     const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
     const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
+    
     const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
     const { followMutation } = useFollowMutation(
         tweetAuthor?.username ?? "",
@@ -46,9 +49,10 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const { colors } = useColor();
     const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
+    
     const onClick = () => {
         if (useLink) {
-            router.push(`/${tweet.user?.username}/status/${tweetId}`);
+            router.push(`/${tweetAuthor?.username}/status/${tweetId}`);
         }
     }
 
@@ -59,6 +63,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                 size="md"
                 username={tweetAuthor?.username ?? ""}
                 alt={`@${tweetAuthor?.username}`}
+                useHoverCard={!isComposeModal}
             />
             {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-zinc-300"></hr>}
         </div>
@@ -113,9 +118,9 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                                     username={tweetAuthor?.username ?? ""}
                                     displayName={tweetAuthor?.displayUsername ?? ""}
                                     styles="ml-2"
-                                    useHoverCard={true}
+                                    useHoverCard={!isComposeModal}
                                 />
-                                <Username username={tweetAuthor?.username ?? ""} useHoverCard={true} />
+                                <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
                             </>
                         ) : (
                             <div className="mb-4">
@@ -123,12 +128,12 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                                     username={tweetAuthor?.username ?? ""}
                                     displayName={tweetAuthor?.displayUsername ?? ""}
                                     styles="ml-2"
-                                    useHoverCard={true}
+                                    useHoverCard={!isComposeModal}
                                 />
                                 <Username
                                     username={tweetAuthor?.username ?? ""}
                                     styles="ml-2 -mt-1"
-                                    useHoverCard={true}
+                                    useHoverCard={!isComposeModal}
                                 />
                             </div>
                         )}

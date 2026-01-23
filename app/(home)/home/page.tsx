@@ -15,6 +15,8 @@ export default async function HomePage({
 
     if (!session) {
         redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
     }
 
     const feed = (await searchParams).variant ?? "foryou";

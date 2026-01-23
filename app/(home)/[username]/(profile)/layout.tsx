@@ -8,6 +8,27 @@ import { getSession } from "@/lib/session";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import React from "react"
 
+export async function generateMetadata({ params }: { params: Promise<{ username: string }> }) {
+    const { username } = await params;
+    const user = await prisma.user.findUnique({
+        where: {
+            username: username
+        },
+        select: {
+            displayUsername: true,
+        }
+    });
+    
+    if (!user) {
+        return { title: "Profile", description: "User not found" };
+    }
+
+    return {
+        title: `${user.displayUsername} (@${username})`,
+        description: `Profile page of @${username}`,
+    }
+}
+
 export default async function ProfileLayout({
     children,
     params
