@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer"
 import { LoadingSpinner } from "../LoadingSpinner";
 import React from "react";
@@ -10,6 +10,12 @@ import { authClient } from "@/lib/auth-client";
 import { Icon } from "../Icon";
 import { BsThreeDots } from "react-icons/bs";
 import { UserWithFollowData } from "@/types/User";
+import { IoPersonRemove } from "react-icons/io5";
+import { OptionsPopover } from "../Tweet/TweetPopover/OptionsPopover";
+import { RemoveFollowerDialog } from "../User/RemoveFollowerDialog";
+import { removeFollower } from "@/app/actions/removeFollower";
+import { getQueryClient } from "@/lib/getQueryClient";
+import { toastMessage } from "@/lib/toast";
 
 const fetchFollowers = async (username: string, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
@@ -28,6 +34,7 @@ const fetchFollowers = async (username: string, { pageParam }: { pageParam?: { c
 export const FollowersFeed = ({ username }: { username: string }) => {
 
     const { data: sessionData } = authClient.useSession();
+    const queryClient = getQueryClient();
 
     const {
         data,
@@ -43,6 +50,17 @@ export const FollowersFeed = ({ username }: { username: string }) => {
         queryKey: ["followers", username],
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
+    });
+
+    const removeFollowerMutation = useMutation({
+        mutationFn: (followerId: string) => removeFollower(followerId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['followers', sessionData?.user.username] });
+            queryClient.invalidateQueries({ queryKey: ["user", sessionData?.user.username]})
+        },
+        onError: (ctx) => {
+            toastMessage(ctx.message ?? "Failed to remove follower.", false);
+        }
     });
 
     return (
@@ -68,9 +86,20 @@ export const FollowersFeed = ({ username }: { username: string }) => {
                                                 />
                                             )}
                                             {username === sessionData?.user.username && (
-                                                <Icon styles="text-zinc-500">
-                                                    <BsThreeDots />
-                                                </Icon>
+                                                <OptionsPopover options={[
+                                                    {
+                                                        label: "Remove this follower",
+                                                        icon: <IoPersonRemove />,
+                                                        popoverOption: <RemoveFollowerDialog
+                                                            username={user.username ?? ""}
+                                                            onConfirmClick={() => removeFollowerMutation.mutate(user.id)}
+                                                        />
+                                                    }
+                                                ]}>
+                                                    <Icon styles="text-zinc-500">
+                                                        <BsThreeDots />
+                                                    </Icon>
+                                                </OptionsPopover>
                                             )}
                                         </div>
                                     </User>

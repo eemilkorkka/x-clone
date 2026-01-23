@@ -49,7 +49,7 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
     );
 
     const customAvatar = (
-        useHoverCard ? (
+        useHoverCard && useLink ? (
             <ProfileHoverCard username={username ?? ""}>
                 {avatarElement}
             </ProfileHoverCard>

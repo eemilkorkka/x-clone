@@ -10,7 +10,7 @@ export const SettingsNavItem = () => {
 
     return (
         <Navitem
-            href={width < 1024 ? "/settings" : "/settings/account"}
+            href={width && width < 1024 ? "/settings" : "/settings/account"}
             icon={<IoSettingsOutline size={30} />}
             activeIcon={<IoSettings size={30} />}
             label="Settings and privacy"

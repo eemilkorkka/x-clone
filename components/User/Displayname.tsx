@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
 
 interface DisplaynameProps {
     displayName: string;
@@ -17,13 +18,21 @@ export const Displayname = ({ displayName, username, styles, useHoverCard = fals
         styles
     );
 
+    const displayNameElement = useHoverCard && useLink ? (
+        <ProfileHoverCard username={username}>
+            <span className={className}>{displayName}</span>
+        </ProfileHoverCard>
+    ) : (
+        <span className={className}>{displayName}</span>
+    );
+
     return useLink ? (
         <Link href={`/${username}`} onClick={(e) => e.stopPropagation()} className="min-w-0">
-            <span className={className}>{displayName}</span>
+            {displayNameElement}
         </Link>
     ) : (
         <div>
-            <span className={className}>{displayName}</span>
+            {displayNameElement}
         </div>
     );
 }

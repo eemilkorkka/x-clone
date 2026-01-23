@@ -15,12 +15,12 @@ export const MobileOnlyPageWrapper = ({ children, redirectUrl }: MobileOnlyPageW
     const router = useRouter();
 
     useEffect(() => {
-        if (width >= 1024) {
+        if (width && width >= 1024) {
             router.push(redirectUrl);
         }
     }, [width, router, redirectUrl]);
 
-    if (width >= 1024) {
+    if (width && width >= 1024) {
         return null;
     }
 

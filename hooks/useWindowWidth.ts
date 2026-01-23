@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-const useWindowWidth = (): number => {
-    const [width, setWidth] = useState<number>(window.innerWidth);
+const useWindowWidth = (): number | undefined => {
+    const [width, setWidth] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         const handleResize = () => {

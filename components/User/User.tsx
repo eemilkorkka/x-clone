@@ -48,13 +48,19 @@ export const User = (
                 alt={`@${user.username}`}
                 username={user.username}
                 styles="mr-4"
+                useLink={useLink}
             />
             <div className="flex-1 flex flex-col">
                 <div className="flex items-center justify-between">
                     <div className={cn("flex w-full items-start flex-col", contentStyles)}>
-                        <Displayname username={user.username ?? ""} displayName={user.displayUsername ?? ""} useLink={useLink} />
+                        <Displayname
+                            username={user.username ?? ""}
+                            displayName={user.displayUsername ?? ""}
+                            useLink={useLink}
+                            useHoverCard={true}
+                        />
                         <div className="flex items-center gap-2">
-                            <Username username={user.username ?? ""} useLink={useLink} />
+                            <Username username={user.username ?? ""} useLink={useLink} useHoverCard={true} />
                             {showFollowBadge && isFollowing && <Badge variant="secondary" className="text-gray-500">Follows you</Badge>}
                         </div>
                     </div>
@@ -70,9 +76,9 @@ export const User = (
     const className = cn("flex hover:bg-ring/20 w-full p-2 hover:cursor-pointer", styles);
 
     return (
-        <div className={className} onClick={(e) => {
+        <div className={className} onClick={useLink ? (e) => {
             router.push(`/${user.username}`);
-        }}>
+        } : undefined}>
             {userElement}
         </div>
     )

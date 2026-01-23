@@ -12,7 +12,7 @@ import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
 import { BsThreeDots, BsPin } from "react-icons/bs";
 import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
-import { TweetPopover } from "./TweetPopover/TweetPopover";
+import { OptionsPopover } from "./TweetPopover/OptionsPopover";
 import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
 import { toastMessage } from "@/lib/toast";
 import TimeAgo from 'react-timeago';
@@ -109,13 +109,27 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         )}
                         {type === "tweet" ? (
                             <>
-                                <Displayname username={tweetAuthor?.username ?? ""} displayName={tweetAuthor?.displayUsername ?? ""} styles="ml-2" />
-                                <Username username={tweetAuthor?.username ?? ""} />
+                                <Displayname
+                                    username={tweetAuthor?.username ?? ""}
+                                    displayName={tweetAuthor?.displayUsername ?? ""}
+                                    styles="ml-2"
+                                    useHoverCard={true}
+                                />
+                                <Username username={tweetAuthor?.username ?? ""} useHoverCard={true} />
                             </>
                         ) : (
                             <div className="mb-4">
-                                <Displayname username={tweetAuthor?.username ?? ""} displayName={tweetAuthor?.displayUsername ?? ""} styles="ml-2" />
-                                <Username username={tweetAuthor?.username ?? ""} styles="ml-2 -mt-1" />
+                                <Displayname
+                                    username={tweetAuthor?.username ?? ""}
+                                    displayName={tweetAuthor?.displayUsername ?? ""}
+                                    styles="ml-2"
+                                    useHoverCard={true}
+                                />
+                                <Username
+                                    username={tweetAuthor?.username ?? ""}
+                                    styles="ml-2 -mt-1"
+                                    useHoverCard={true}
+                                />
                             </div>
                         )}
                         {type === "tweet" && (
@@ -127,11 +141,11 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             </>
                         )}
                         {!isComposeModal && (
-                            <TweetPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
+                            <OptionsPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
                                 <Icon styles="text-zinc-500 hover:text-sky-500">
                                     <BsThreeDots />
                                 </Icon>
-                            </TweetPopover>
+                            </OptionsPopover>
                         )}
                     </div>
                     <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "-mt-2 ml-2", isComposeModal && "mt-0")} />

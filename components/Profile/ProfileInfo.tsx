@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { CustomAvatar } from "../User/CustomAvatar"
 import { ProfileBanner } from "./ProfileBanner"
 import { Displayname } from "../User/Displayname";
+import { useQuery } from "@tanstack/react-query";
 import { Username } from "../User/Username";
 import { Text } from "../Text";
 import { notFound } from "next/navigation";
@@ -25,7 +26,7 @@ interface ProfileInfoProps {
 export const ProfileInfo = ({ username }: ProfileInfoProps) => {
 
     const { data } = authClient.useSession();
-    const { data: userData, isLoading } = useGetUserData(username, true);
+    const { data: userData, isLoading } = useGetUserData(username);
     const { colors } = useColor();
 
     if (isLoading) {
@@ -43,12 +44,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
                 <MediaDialog src={userData.image ?? ""}>
                     <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
-                        <CustomAvatar
-                            src={userData.image ?? ""}
-                            alt={``} size="xl"
-                            useLink={false}
-                            useHoverCard={false}
-                        />
+                        <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" useLink={false} />
                     </div>
                 </MediaDialog>
             </ProfileBanner>

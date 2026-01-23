@@ -5,25 +5,26 @@ import {
 } from "@/components/ui/popover";
 
 import React from "react";
-import { TweetPopoverOption } from "./TweetPopoverOption";
 import { cn } from "@/lib/utils";
+import { PopoverOption } from "./PopoverOption";
 
 export type PopoverOptionVariant = "destructive" | "default";
 
-type Option = { 
-    label: string; 
-    icon: React.ReactNode; 
-    variant?: PopoverOptionVariant; 
-    onClick: () => void; 
+type Option = {
+    label: string;
+    icon: React.ReactNode;
+    variant?: PopoverOptionVariant;
+    popoverOption?: React.ReactNode;
+    onClick?: () => void;
 }
 
-interface TweetPopoverProps {
+interface OptionsPopoverProps {
     children: React.ReactNode;
     options: Option[];
     styles?: string;
 }
 
-export const TweetPopover = ({ children, options, styles }: TweetPopoverProps) => {
+export const OptionsPopover = ({ children, options, styles }: OptionsPopoverProps) => {
     return (
         <Popover>
             <PopoverTrigger className={cn("ml-auto", styles)} render={
@@ -34,10 +35,14 @@ export const TweetPopover = ({ children, options, styles }: TweetPopoverProps) =
             </PopoverTrigger>
             <PopoverContent className="p-0 drop-shadow-md max-w-50 gap-0 ring-0 overflow-hidden">
                 {options.map((option, index) => (
-                    <TweetPopoverOption key={index} variant={option.variant} onClick={option.onClick}>
-                        {option.icon}
-                        {option.label}
-                    </TweetPopoverOption>
+                    option.popoverOption ? (
+                        option.popoverOption
+                    ) : (
+                        <PopoverOption key={index} variant={option.variant} onClick={option.onClick ?? (() => {})}>
+                            {option.icon}
+                            {option.label}
+                        </PopoverOption>
+                    )
                 ))}
             </PopoverContent>
         </Popover>
