@@ -98,8 +98,8 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
             useLink && "hover:cursor-pointer hover:bg-ring/10 dark:hover:bg-inherit"
         )}>
             {tweet.isRetweet && (
-                <p className="flex gap-1 items-center text-[13px] font-semibold text-ring pb-2">
-                    <AiOutlineRetweet className="text-ring" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
+                <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
+                    <AiOutlineRetweet className="text-zinc-600" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
                 </p>
             )}
             <div className="flex" onClick={onClick}>

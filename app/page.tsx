@@ -31,7 +31,7 @@ export default async function IndexPage() {
                         <GoogleSignup />
                         <Separator text="OR" />
                         <Link href="/signup">
-                            <Button size="lg" variant="secondary" className="rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
+                            <Button size="lg" className="bg-white text-black hover:bg-zinc-200 rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
                                 Create account
                             </Button>
                         </Link>
