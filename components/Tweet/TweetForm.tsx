@@ -14,7 +14,6 @@ import { CustomAvatar } from '../User/CustomAvatar';
 import { useFilePicker } from '@/hooks/useFilePicker';
 import { createTweet } from '@/app/actions/createTweet';
 import { getQueryClient } from '@/lib/getQueryClient';
-import { toastMessage } from '@/lib/toast';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AttachmentsGrid from './AttachmentsGrid';
 import { Media } from '../Media/Media';
@@ -25,6 +24,7 @@ import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
 import { useColor } from '@/context/ColorContext';
 import { IntermediateLoading } from '../IntermediateLoading';
 import { EmojiPickerPopover } from '../EmojiPickerPopover';
+import { useToastMessage } from '@/hooks/useToastMessage';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -50,6 +50,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
     const router = useRouter();
     const searchParams = useSearchParams();
     const { colors } = useColor();
+    const { toastMessage } = useToastMessage();
     const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     useEffect(() => {

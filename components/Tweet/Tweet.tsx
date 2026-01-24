@@ -19,7 +19,7 @@ import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
-import { UseToastMessage } from "@/hooks/useToastMessage";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -33,7 +33,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
     const { data } = authClient.useSession();
     const router = useRouter();
-    const { toastMessage } = UseToastMessage();
+    const { toastMessage } = useToastMessage();
 
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
     const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;

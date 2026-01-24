@@ -15,7 +15,7 @@ import { OptionsPopover } from "../Tweet/TweetPopover/OptionsPopover";
 import { RemoveFollowerDialog } from "../User/RemoveFollowerDialog";
 import { removeFollower } from "@/app/actions/removeFollower";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { UseToastMessage } from "@/hooks/useToastMessage";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 const fetchFollowers = async (username: string, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
@@ -35,7 +35,7 @@ export const FollowersFeed = ({ username }: { username: string }) => {
 
     const { data: sessionData } = authClient.useSession();
     const queryClient = getQueryClient();
-    const { toastMessage } = UseToastMessage();
+    const { toastMessage } = useToastMessage();
     
     const {
         data,

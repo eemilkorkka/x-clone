@@ -6,7 +6,7 @@ import { ReturnBack } from "@/components/ReturnBack";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { useColor } from "@/context/ColorContext";
-import { UseToastMessage } from "@/hooks/useToastMessage";
+import { useToastMessage } from "@/hooks/useToastMessage";
 import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { usernameSchema } from "@/lib/schemas";
@@ -20,9 +20,9 @@ export default function UsernameSettingsPage() {
 
     const { data: sessionData } = authClient.useSession();
     const { colors } = useColor();
-    const queryClient = getQueryClient();   
+    const queryClient = getQueryClient();
     const router = useRouter();
-    const { toastMessage } = UseToastMessage();
+    const { toastMessage } = useToastMessage();
 
     const form = useForm<z.infer<typeof usernameSchema>>({
         resolver: zodResolver(usernameSchema),
@@ -33,7 +33,8 @@ export default function UsernameSettingsPage() {
 
     const onSubmit = async (data: z.infer<typeof usernameSchema>) => {
         const result = await authClient.updateUser({
-            username: data.username
+            username: data.username,
+            displayUsername: sessionData?.user.displayUsername || ""
         });
 
         if (!result.error) {

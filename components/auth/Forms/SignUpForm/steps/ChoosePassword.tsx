@@ -8,7 +8,7 @@ import z from "zod"
 import { FormButton } from "../FormButton";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { UseToastMessage } from "@/hooks/useToastMessage";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 const passwordSchema = z.object({
     password: z.string().min(8, "Password should at least be 8 characters long."),
@@ -25,7 +25,7 @@ interface ChoosePasswordProps {
 
 export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) => {
     const router = useRouter();
-    const { toastMessage } = UseToastMessage();
+    const { toastMessage } = useToastMessage();
 
     const form = useForm<z.infer<typeof passwordSchema>>({
         resolver: zodResolver(passwordSchema),

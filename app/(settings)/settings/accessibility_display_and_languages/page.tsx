@@ -23,7 +23,7 @@ export default function AccessabilityPage() {
                 title="Display"
                 description="Manage aspects of your X experience such as limiting color contrast and motion."
                 icon={<HiOutlinePaintBrush className="size-6 text-zinc-500" />}
-                styles="mt-3 pl-8 py-2"
+                styles="mt-3 pl-8"
             />
         </div>
     )

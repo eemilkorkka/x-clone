@@ -13,7 +13,7 @@ import { useRetweetMutation } from "@/hooks/useRetweetMutation";
 import { AiOutlineLink } from "react-icons/ai";
 import { OptionsPopover } from "./TweetPopover/OptionsPopover";
 import { Icon } from "../Icon";
-import { UseToastMessage } from "@/hooks/useToastMessage";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 interface TweetActionsProps {
     type: "status" | "tweet";
@@ -29,7 +29,7 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
     const { bookmarkMutation } = useBookmarkMutation(tweet);
     const { retweetMutation } = useRetweetMutation(tweet);
     const { setTweetToReplyTo } = useComposeModal();
-    const { toastMessage } = UseToastMessage();
+    const { toastMessage } = useToastMessage();
 
     const handleReplyActionClick = () => {
         tweet.isRetweet ? setTweetToReplyTo(tweet.originalTweet) : setTweetToReplyTo(tweet);
