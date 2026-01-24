@@ -29,14 +29,14 @@ export const Text = ({ text, styles }: { text: string, styles?: string }) => {
     }
 
     return (
-        <span className={cn("text-[15px] text-black", styles)} style={{ wordBreak: "break-word" }}>
+        <span className={cn("text-[15px]", styles)} style={{ wordBreak: "break-word" }}>
             {words.map((word, index) => {
                 const isUsername = word.includes("@");
 
                 return (
                     isUsername || word.match(urlPattern) ?
                         isUsername ? (
-                            <ProfileHoverCard username={word.replace("@", "")}>
+                            <ProfileHoverCard key={index} username={word.replace("@", "")}>
                                 {renderLink(index, word, true)}
                             </ProfileHoverCard>
                         ) : (

@@ -12,6 +12,8 @@ export type ColorsType = {
     peerFocusTextColor: string;
     svgHoverColor: string;
     hexColor: string;
+    checkedColor: string;
+    checkedBorderColor: string;
 };
 
 type ColorContextType = {

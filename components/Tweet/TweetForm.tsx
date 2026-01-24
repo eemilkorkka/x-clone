@@ -108,7 +108,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
             <div className={cn(
                 "p-4 pb-0 flex items-start max-w-full",
                 parentTweetId && textAreaFocused && "pt-0",
-                !isComposeModal && "border-b border-gray-200",
+                !isComposeModal && "border-b border-border",
                 isComposeModal && "pt-0"
             )}>
                 <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" useLink={false} />
@@ -142,7 +142,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                     <div className={cn(
                         "items-center justify-between",
                         type === "reply" && !isComposeModal ? (textAreaFocused ? "flex" : "hidden") : "flex",
-                        textAreaFocused && !isComposeModal && "border-t-1 border-gray-200"
+                        textAreaFocused && !isComposeModal && "border-t-1 border-border"
                     )}>
                         <div className='flex'>
                             <Icon onClick={() => filePickerRef.current?.click()}>

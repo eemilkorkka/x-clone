@@ -9,7 +9,7 @@ interface TrendingTopicProps {
 
 export const TrendingTopic = ({ category, title, postsCount }: TrendingTopicProps) => {
     return (
-        <div className="px-4 py-2 hover:bg-gray-100 hover:cursor-pointer">
+        <div className="px-4 py-2 hover:bg-ring/20 hover:cursor-pointer">
             <div className="flex items-center">
                 <span className="flex-1 text-sm text-zinc-500">
                     {category}

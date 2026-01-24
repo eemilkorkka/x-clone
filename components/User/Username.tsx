@@ -11,7 +11,7 @@ interface UsernameProps {
 
 export const Username = ({ username, styles, useLink = true, useHoverCard = true }: UsernameProps) => {
 
-    const className = cn("block truncate overflow-hidden whitespace-nowrap h-fit text-black text-zinc-500 text-[15px]", styles);
+    const className = cn("block truncate overflow-hidden whitespace-nowrap h-fit text-zinc-500 text-[15px]", styles);
 
     const usernameElement = useLink && useHoverCard ? (
         <ProfileHoverCard username={username}>

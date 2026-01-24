@@ -35,7 +35,7 @@ export const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) 
                 {children}
             </HoverCardTrigger>
             {data && (
-                <HoverCardContent className="flex flex-col gap-2 min-w-[300px] max-w-[300px] w-full">
+                <HoverCardContent className="flex bg-background flex-col gap-2 min-w-[300px] max-w-[300px] w-full">
                     <div className="flex justify-between">
                         <CustomAvatar
                             src={data.image ?? ""}
@@ -59,14 +59,14 @@ export const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) 
                     <Text text={data.bio} />
                     <div className="flex gap-8 text-sm">
                         <Link href={`/${data.username}/following`} className="hover:underline">
-                            <span className="font-semibold text-black">
+                            <span className="font-semibold">
                                 {data.following.length}
                                 {' '}
                                 <span className="text-zinc-500 font-normal">Following</span>
                             </span>
                         </Link>
                         <Link href={`/${data.username}/followers`} className="hover:underline">
-                            <span className="font-semibold text-black">
+                            <span className="font-semibold">
                                 {data.followers.length}
                                 {' '}
                                 <span className="text-zinc-500 font-normal">{data.followers.length === 1 ? "Follower" : "Followers"}</span>

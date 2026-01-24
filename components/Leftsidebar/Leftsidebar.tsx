@@ -25,7 +25,7 @@ export const Leftsidebar = async () => {
     const session = await getSession();
 
     return (
-        <nav className="w-full flex flex-col justify-between items-center xl:items-start mobile:pt-2 mobile:pb-4 px-2 mobile:h-screen fixed bottom-0 mobile:sticky mobile:top-0 border-t-1 border-gray-200 bg-white z-20">
+        <nav className="w-full flex flex-col justify-between items-center xl:items-start mobile:pt-2 mobile:pb-4 px-2 mobile:h-screen fixed bottom-0 mobile:sticky mobile:top-0 bg-background z-20">
 
             <div className="w-full">
                 <div className="hidden mobile:block p-2.5 mx-1 hover:bg-ring/20 rounded-full w-fit">

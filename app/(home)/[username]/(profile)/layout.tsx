@@ -113,7 +113,7 @@ export default async function ProfileLayout({
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <ProfileInfo username={username} />
             </HydrationBoundary>
-            <Tabs tabs={username === session?.user.username ? ownTabs : generalTabs} styles="border-b border-gray-200" />
+            <Tabs tabs={username === session?.user.username ? ownTabs : generalTabs} styles="border-b border-border" />
             {children}
         </div>
     )

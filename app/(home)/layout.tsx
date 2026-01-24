@@ -32,7 +32,7 @@ export default function HomeLayout({
       </div>
 
       <section className="flex w-full min-w-0 gap-8">
-        <div className="w-3xl md:w-[598px] h-full border-r border-l border-gray-200 pb-19 mobile:pb-0">
+        <div className="w-3xl md:w-[598px] h-full border-r border-l border-border pb-19 mobile:pb-0">
           {children}
           {modal}
         </div>

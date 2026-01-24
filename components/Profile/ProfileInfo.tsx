@@ -43,7 +43,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
         <div className="flex flex-col mb-4">
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
                 <MediaDialog src={userData.image ?? ""}>
-                    <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
+                    <div className="absolute -bottom-15 z-50 left-4 rounded-full border-background border-4">
                         <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" useLink={false} />
                     </div>
                 </MediaDialog>
@@ -102,14 +102,14 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                 </div>
                 <div className="flex gap-8 text-sm">
                     <Link href={`/${userData.username}/following`} className="hover:underline">
-                        <span className="font-semibold text-black">
+                        <span className="font-semibold">
                             {userData.following.length}
                             {' '}
                             <span className="text-zinc-500 font-normal">Following</span>
                         </span>
                     </Link>
                     <Link href={`/${userData.username}/followers`} className="hover:underline">
-                        <span className="font-semibold text-black">
+                        <span className="font-semibold">
                             {userData.followers.length}
                             {' '}
                             <span className="text-zinc-500 font-normal">{userData.followers.length === 1 ? "Follower" : "Followers"}</span>

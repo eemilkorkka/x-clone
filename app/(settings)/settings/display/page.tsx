@@ -8,6 +8,7 @@ import { Username } from "@/components/User/Username";
 import { Text } from "@/components/Text";
 import { ColorSelection } from "@/components/Settings/ColorSelection";
 import { Metadata } from "next";
+import { ThemeSelection } from "@/components/Settings/ThemeSelection";
 
 export const metadata: Metadata = {
     title: "Display",
@@ -41,6 +42,7 @@ export default function DisplayPage() {
                     </div>
                 </div>
                 <ColorSelection />
+                <ThemeSelection />
             </div>
         </div>
     )

@@ -35,12 +35,12 @@ export const Searchbar = () => {
     });
 
     return (
-        <div className="relative sticky top-0 py-1 bg-white z-50">
+        <div className="relative sticky top-0 py-1 bg-background z-50">
             <div className="relative">
                 <Input
                     type="text"
                     placeholder="Search"
-                    className={`rounded-full focus-visible:border-2 ${colors.focusVisibleBorderColor} focus-visible:ring-0 p-5.5 px-8.5`}
+                    className={`!bg-background rounded-full focus-visible:border-2 ${colors.focusVisibleBorderColor} focus-visible:ring-0 p-5.5 px-8.5`}
                     value={searchText}
                     onChange={(e) => setSearchText(e.currentTarget.value)}
                     onFocus={() => setSearchInputFocused(true)}
@@ -51,7 +51,7 @@ export const Searchbar = () => {
                     <MdCancel className="absolute top-1/2 -translate-y-1/2 right-2.5 hover:cursor-pointer" size={20} onMouseDown={() => setSearchText("")} />
                 )}
             </div>
-            <div className={`overflow-y-auto w-full bg-white rounded-md drop-shadow-lg z-50 p-0 ${searchInputFocused ? "block" : "hidden"}`} onMouseDown={(e) => e.preventDefault()}>
+            <div className={`overflow-y-auto w-full bg-background rounded-md shadow-white drop-shadow-lg z-50 p-0 ${searchInputFocused ? "block" : "hidden"}`} onMouseDown={(e) => e.preventDefault()}>
                 {isLoading ? (
                     Array.from({ length: 3 }).map((_, index) => (
                         <UserSkeleton key={index} />

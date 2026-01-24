@@ -18,7 +18,7 @@ export const FollowButton = ({ username, userId, isFollowing, styles }: FollowBu
 
     const buttonStyles = cn("rounded-full font-bold px-4 hover:cursor-pointer",
         styles,
-        isFollowing ? "bg-inherit border border-border text-black hover:bg-destructive/10 hover:border-destructive/20 hover:text-destructive" : "bg-black"
+        isFollowing ? "bg-inherit border border-border text-black hover:bg-destructive/10 hover:border-destructive/20 hover:text-destructive" : "bg-foreground"
     );
 
     return !isFollowing ? (

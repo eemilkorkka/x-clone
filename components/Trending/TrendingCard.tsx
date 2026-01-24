@@ -38,7 +38,7 @@ export const TrendingCard = () => {
     const { colors } = useColor();
     
     return (
-        <Card className="py-4 shadow-none border-1 border-foreground/10 ring-0 gap-2 pb-0">
+        <Card className="py-4 shadow-none bg-background border-1 border-foreground/10 ring-0 gap-2 pb-0">
             <CardHeader className="px-4">
                 <CardTitle className="font-bold text-xl">What's happening</CardTitle>
             </CardHeader>
@@ -52,7 +52,7 @@ export const TrendingCard = () => {
                     />
                 ))}
             </CardContent>
-            <CardFooter className="p-4 hover:bg-gray-100 hover:cursor-pointer">
+            <CardFooter className="p-4 hover:bg-ring/20 hover:cursor-pointer">
                 <p className={colors.textColor}>Show more</p>
             </CardFooter>
         </Card>
