@@ -160,7 +160,7 @@ export default function EditProfileModal() {
                         <Button className="rounded-full font-bold px-4 hover:cursor-pointer" onClick={() => form.handleSubmit(onSubmit)()}>Save</Button>
                     </DialogHeader>
                     <ProfileBanner isPreview={true} src={removeBanner ? "" : (profileBannerPicker.pickedFiles.length > 0 ? profileBannerPicker.pickedFiles[0].url : (sessionData?.user.profileBannerImage ?? ""))} styles="brightness-90">
-                        <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
+                        <div className="absolute -bottom-15 z-50 left-4 rounded-full border-background border-4">
                             <CustomAvatar src={profilePicturePicker.pickedFiles.length > 0 ? profilePicturePicker.pickedFiles[0].url : (sessionData?.user.image ?? "")} alt={``} size="xl" styles="brightness-90" useLink={false}>
                                 <Button size="icon-lg" className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 rounded-full hover:cursor-pointer bg-black/10 hover:bg-white/10" onClick={() => profilePictureRef.current?.click()}>
                                     <TbCameraPlus className="size-5" />
@@ -190,7 +190,7 @@ export default function EditProfileModal() {
                                 name="displayName"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -198,7 +198,7 @@ export default function EditProfileModal() {
                                             value={displayName ?? ""}
                                             maxLength={50}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none"
+                                            styles="text-foreground border-border shadow-none"
                                         />
                                         {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                                     </Field>
@@ -208,14 +208,14 @@ export default function EditProfileModal() {
                                 name="bio"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomTextarea
                                             {...field}
                                             label="Bio"
                                             value={bio ?? ""}
                                             maxLength={160}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none resize-none"
+                                            styles="text-foreground border-border shadow-none resize-none"
                                         />
                                     </Field>
                                 )}
@@ -224,7 +224,7 @@ export default function EditProfileModal() {
                                 name="location"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -232,7 +232,7 @@ export default function EditProfileModal() {
                                             value={location ?? ""}
                                             maxLength={30}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none"
+                                            styles="text-foreground border-border shadow-none"
                                         />
                                     </Field>
                                 )}
@@ -241,7 +241,7 @@ export default function EditProfileModal() {
                                 name="website"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -249,7 +249,7 @@ export default function EditProfileModal() {
                                             value={website ?? ""}
                                             maxLength={30}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none"
+                                            styles="text-foreground border-border shadow-none"
                                         />
                                     </Field>
                                 )}
@@ -290,7 +290,7 @@ export default function EditProfileModal() {
                                         month={month ?? ""}
                                         day={day}
                                         year={year}
-                                        styles="border-gray-300"
+                                        styles="text-foreground border-border"
                                     />
                                 </div>
                             )}
