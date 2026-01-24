@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { InfiniteScrollContainer } from "../InfiniteScrollContainer"
+import { InfiniteScrollContainer } from "../Feed/InfiniteScrollContainer"
 import React from "react";
 import { Tweet } from "./Tweet";
 import { ReplyTweet } from "@/types/Tweet";

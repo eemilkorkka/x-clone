@@ -5,8 +5,8 @@ import { Field, FieldError } from "../../../../ui/field";
 import { CustomInput } from "../../../../customized/CustomInput";
 import { SignupFormData } from "@/app/@modal/(.)signup/page";
 import React, { SetStateAction } from "react";
-import { toastMessage } from "@/lib/toast";
 import { FormButton } from "../FormButton";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 const verificationCodeSchema = z.object({
     verificationCode: z.string().min(6, "Verification code should be 6 digits long.").max(6, "Verification code should be 6 digits long.")
@@ -20,6 +20,7 @@ interface VerificationCodeProps {
 
 export const VerificationCode = ({ formData, setFormData, setStep }: VerificationCodeProps) => {
 
+    const { toastMessage } = useToastMessage();
     const form = useForm<z.infer<typeof verificationCodeSchema>>({
         resolver: zodResolver(verificationCodeSchema),
         defaultValues: {

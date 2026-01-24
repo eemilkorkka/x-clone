@@ -7,13 +7,15 @@ import { redirect } from "next/navigation";
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
 
-    const { username } = await params;
-
     const session = await getSession();
 
     if (!session) {
         redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
     }
+
+    const { username } = await params;
 
     const queryClient = getQueryClient();
 

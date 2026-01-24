@@ -6,8 +6,8 @@ import { CustomInput } from "../../../../customized/CustomInput";
 import { Button } from "../../../../ui/button";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { toastMessage } from "@/lib/toast";
 import { useRouter } from "next/navigation";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 const passwordStepSchema = z.object({
     password: z.string().min(1, "Password is required."),
@@ -22,7 +22,9 @@ interface PasswordStepProps {
 export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
 
     const router = useRouter();
+    const { toastMessage } = useToastMessage();
     const [loginError, setLoginError] = useState("");
+    
     const form = useForm<z.infer<typeof passwordStepSchema>>({
         resolver: zodResolver(passwordStepSchema),
         defaultValues: {
@@ -103,7 +105,7 @@ export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
                 />
             </FieldGroup>
             <div className="space-y-4 mb-4">
-                <Button type="submit" disabled={!password} size="lg" variant="secondary" className="w-full font-bold rounded-full py-6 hover:cursor-pointer">Log in</Button>
+                <Button type="submit" disabled={!password} size="lg" className="bg-white text-black hover:bg-zinc-200 w-full font-bold rounded-full py-6 hover:cursor-pointer">Log in</Button>
                 <p className="text-zinc-500">Don't have an account? <span className="text-sky-500 hover:underline hover:cursor-pointer">Sign up</span></p>
             </div>
         </form>

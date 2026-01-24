@@ -33,7 +33,7 @@ export const SignInDialog = () => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger className="w-full" render={
-                <Button size="lg" className="bg-transparent border-1 border-zinc-500 rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
+                <Button size="lg" className="bg-transparent border-1 text-white hover:bg-ring/20 border-zinc-500 rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
                     Sign in
                 </Button>
             }>

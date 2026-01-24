@@ -17,42 +17,33 @@ import { MediaDialog } from "../Media/MediaDialog";
 import { FollowButton } from "../User/FollowButton";
 import { Follower } from "@/types/Follower";
 import { useColor } from "@/context/ColorContext";
+import { useGetUserData } from "@/hooks/useGetUserData";
 
 interface ProfileInfoProps {
     username: string;
 }
 
-const getUserInfo = async (username: string) => {
-    const response = await fetch(`/api/users/${username}`);
-
-    if (response.ok) {
-        return await response.json();
-    } else {
-        throw new Error("Failed to get user's info.");
-    }
-}
-
 export const ProfileInfo = ({ username }: ProfileInfoProps) => {
 
     const { data } = authClient.useSession();
+    const { data: userData, isLoading } = useGetUserData(username);
+    const { colors } = useColor();
 
-    const { data: userData } = useQuery({
-        queryFn: () => getUserInfo(username),
-        queryKey: ["user", username]
-    });
+    if (isLoading) {
+        return null;
+    }
 
     if (!userData) {
         notFound();
     }
 
-    const { colors } = useColor();
     const isFollowing = userData.followers.some((follower: Follower) => follower.followerId === data?.user.id);
 
     return (
         <div className="flex flex-col mb-4">
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
                 <MediaDialog src={userData.image ?? ""}>
-                    <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
+                    <div className="absolute -bottom-15 z-50 left-4 rounded-full border-background border-4">
                         <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" useLink={false} />
                     </div>
                 </MediaDialog>
@@ -69,7 +60,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                     styles="ml-auto mt-4 mr-4"
                 />
             )}
-            <div className="px-4 mt-8 flex flex-col gap-2">
+            <div className="px-4 mt-6 flex flex-col gap-2">
                 <div>
                     <Displayname
                         displayName={userData.displayUsername}
@@ -83,7 +74,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                         styles="w-fit"
                     />
                 </div>
-                <Text text={userData.bio ?? "Lorem ipsum dolor sit amet"} />
+                <Text text={userData.bio} />
                 <div className="flex flex-wrap gap-x-4 gap-y-2">
                     {userData.location && (
                         <div className="text-sm flex items-center gap-1.5 text-zinc-500">
@@ -111,14 +102,14 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                 </div>
                 <div className="flex gap-8 text-sm">
                     <Link href={`/${userData.username}/following`} className="hover:underline">
-                        <span className="font-semibold text-black">
+                        <span className="font-semibold">
                             {userData.following.length}
                             {' '}
                             <span className="text-zinc-500 font-normal">Following</span>
                         </span>
                     </Link>
                     <Link href={`/${userData.username}/followers`} className="hover:underline">
-                        <span className="font-semibold text-black">
+                        <span className="font-semibold">
                             {userData.followers.length}
                             {' '}
                             <span className="text-zinc-500 font-normal">{userData.followers.length === 1 ? "Follower" : "Followers"}</span>

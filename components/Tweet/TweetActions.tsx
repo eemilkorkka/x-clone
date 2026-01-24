@@ -11,9 +11,9 @@ import { useLikeMutation } from "@/hooks/useLikeMutation";
 import { useBookmarkMutation } from "@/hooks/useBookmarkMutation";
 import { useRetweetMutation } from "@/hooks/useRetweetMutation";
 import { AiOutlineLink } from "react-icons/ai";
-import { TweetPopover } from "./TweetPopover/TweetPopover";
+import { OptionsPopover } from "./TweetPopover/OptionsPopover";
 import { Icon } from "../Icon";
-import { toastMessage } from "@/lib/toast";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 interface TweetActionsProps {
     type: "status" | "tweet";
@@ -29,6 +29,7 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
     const { bookmarkMutation } = useBookmarkMutation(tweet);
     const { retweetMutation } = useRetweetMutation(tweet);
     const { setTweetToReplyTo } = useComposeModal();
+    const { toastMessage } = useToastMessage();
 
     const handleReplyActionClick = () => {
         tweet.isRetweet ? setTweetToReplyTo(tweet.originalTweet) : setTweetToReplyTo(tweet);
@@ -88,11 +89,11 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
                         isActive={tweetToCheck.bookmarks.some((bookmark) => bookmark.userId === data?.user.id)}
                         mutation={bookmarkMutation}
                     />
-                    <TweetPopover options={popoverOption} styles="ml-0">
+                    <OptionsPopover options={popoverOption} styles="ml-0">
                         <Icon styles="text-zinc-500 hover:text-sky-500 hover:bg-sky-500/20">
                             <FiUpload />
                         </Icon>
-                    </TweetPopover>
+                    </OptionsPopover>
                 </>
             ) : (
                 <div className="flex -space-x-1">
@@ -103,11 +104,11 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
                         isActive={tweetToCheck.bookmarks.some((bookmark) => bookmark.userId === data?.user.id)}
                         mutation={bookmarkMutation}
                     />
-                    <TweetPopover options={popoverOption}>
+                    <OptionsPopover options={popoverOption}>
                         <Icon styles="text-zinc-500 hover:text-sky-500 hover:bg-sky-500/20">
                             <FiUpload />
                         </Icon>
-                    </TweetPopover>
+                    </OptionsPopover>
                 </div>
             )}
         </div>

@@ -5,7 +5,7 @@ export const useGetProfileFeedQueryKey = () => {
     const params = useParams();
 
     const segments = pathname.split('/').filter(Boolean);
-    const username = params.username as string;
+    const username = params.username;
     const pageType = pathname === "/compose/post" ? "posts" : segments[1];
 
     const profileFeedQueryKey = ["profilefeed", pageType ?? "posts", username, pageType === 'replies'];

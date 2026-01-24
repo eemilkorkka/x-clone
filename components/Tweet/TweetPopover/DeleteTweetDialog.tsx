@@ -1,6 +1,5 @@
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -9,6 +8,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 import { Button } from "@/components/ui/button";
 import React from "react";
 
@@ -26,7 +26,7 @@ export const DeleteTweetDialog = ({ children, onConfirmClick }: DeleteTweetDialo
                 </div>
             }>
             </AlertDialogTrigger>
-            <AlertDialogContent className="!max-w-xs">
+            <AlertDialogContent className="!max-w-xs ring-0">
                 <AlertDialogHeader>
                     <AlertDialogTitle className="font-bold">Delete post?</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -34,7 +34,7 @@ export const DeleteTweetDialog = ({ children, onConfirmClick }: DeleteTweetDialo
                         the timeline of any accounts that follow you, and from search results.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="flex !flex-col !justify-center">
+                <AlertDialogFooter className="flex !flex-col !justify-center space-y-1">
                     <Button className="bg-destructive rounded-full py-5 font-bold hover:cursor-pointer hover:bg-destructive hover:brightness-[95%]" onClick={(e) => { e.stopPropagation(); onConfirmClick(); }}>Delete</Button>
                     <AlertDialogCancel className="rounded-full py-5 font-bold hover:cursor-pointer" onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
                 </AlertDialogFooter>

@@ -1,8 +1,14 @@
 import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { IoIosArrowForward } from "react-icons/io";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: {
+        default: "Your Account / X Clone",
+        template: "%s / X Clone",
+    },
+    description: "Settings and account management on X Clone.",
+}
 
 export default function SettingsLayout({
     children,
@@ -16,7 +22,7 @@ export default function SettingsLayout({
             </div>
 
             <section className="flex w-full min-w-0">
-                <div className="hidden lg:block lg:w-[318px] xl:w-[448px] h-full border-r border-l border-gray-200">
+                <div className="hidden lg:block lg:w-[350px] xl:w-[448px] h-full border-r border-l border-border">
                     <h2 className="text-xl font-bold p-4">Settings</h2>
                     <SettingsItem
                         href="/settings/account"
@@ -27,7 +33,7 @@ export default function SettingsLayout({
                         title="Accessibility, display, and languages"
                     />
                 </div>
-                <aside className="w-3xl md:w-[599px] border-l lg:border-l-0 md:border-r border-gray-200 lg:flex flex-col gap-4 py-2">
+                <aside className="w-3xl md:w-[599px] border-l lg:border-l-0 md:border-r border-border lg:flex flex-col gap-4 py-2">
                     {children}
                 </aside>
             </section>

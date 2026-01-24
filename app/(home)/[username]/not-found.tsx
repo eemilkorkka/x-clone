@@ -1,8 +1,17 @@
-import { FeedHeader } from "@/components/FeedHeader";
+import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { ReturnBack } from "@/components/ReturnBack";
 import { Displayname } from "@/components/User/Displayname";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
-export default function NotFound() {
+export default async function NotFound() {
+    
+    const session = await getSession();
+
+    if (!session) {
+        redirect("/");
+    }
+    
     return (
         <div>
             <FeedHeader styles="items-center px-2 gap-6 border-b-0">

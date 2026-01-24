@@ -28,7 +28,7 @@ export const Navitem = ({ href, icon, activeIcon, label, styles }: NavitemProps)
     }
 
     const className = cn(
-        "w-fit hover:bg-ring/20 px-4 py-3 gap-4 rounded-full flex items-center text-lg",
+        "w-fit hover:bg-ring/20 px-4 gap-4 min-w-15 min-h-15 md:min-h-13 rounded-full flex items-center text-lg",
         !href && "hover:cursor-not-allowed",
         isActive() && "font-bold",
         styles

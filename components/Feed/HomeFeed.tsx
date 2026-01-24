@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { FeedHeader } from "./FeedHeader"
-import { Tabs } from "./Tabs"
-import { TweetForm } from "./Tweet/TweetForm";
+import { Tabs } from "../Tabs"
+import { TweetForm } from "../Tweet/TweetForm";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
-import { Tweet } from "./Tweet/Tweet";
+import { Tweet } from "../Tweet/Tweet";
 import { RegularTweet, Retweet } from "@/types/Tweet";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { LoadingSpinner } from "../LoadingSpinner";
 import { useQueryState } from 'nuqs';
 import { authClient } from "@/lib/auth-client";
 
@@ -63,7 +63,7 @@ export const HomeFeed = () => {
 
     return (
         <>
-            <FeedHeader styles="backdrop-blur-lg bg-white/80">
+            <FeedHeader styles="backdrop-blur-lg bg-background/80">
                 <Tabs tabs={tabs} activeTab={activeTab} changeTab={changeTab} />
             </FeedHeader>
             <TweetForm type="tweet" isComposeModal={false} />

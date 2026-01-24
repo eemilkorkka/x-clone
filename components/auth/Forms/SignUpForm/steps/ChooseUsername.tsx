@@ -6,34 +6,7 @@ import z from "zod"
 import { FormButton } from "../FormButton";
 import { SignupFormData } from "@/app/@modal/(.)signup/page";
 import React, { SetStateAction } from "react";
-
-const usernameSchema = z.object({
-    username: z.string()
-        .min(4, "Username must contain at least 4 characters")
-        .max(15, "Username cannot be longer than 15 characters.")
-}).superRefine(async (username, ctx) => {
-    const specialChars = '!"#$%&\'()*+,-./:;<=>?@[\\]^`{|}~'.split('');
-
-    const containsSpecialChar = specialChars.some((char) => username.username.includes(char));
-
-    if (containsSpecialChar) {
-        ctx.addIssue({
-            code: "custom",
-            message: "Username cannot contain any special characters except underscores.",
-            path: ["username"]
-        });
-    }
-
-    const response = await fetch(`/api/users/${username.username}`);
-
-    if (response.status !== 404) {
-        ctx.addIssue({
-            code: "custom",
-            message: "This username is taken.",
-            path: ["username"]
-        });
-    }
-});
+import { usernameSchema } from "@/lib/schemas";
 
 interface ChooseUsernameProps {
     formData: SignupFormData;

@@ -45,8 +45,8 @@ export const LogoutPopover = ({ children, user }: LogoutPopoverProps) => {
                 <User user={user} useLink={false} styles="hidden mobile:flex p-2.5 hover:bg-inherit pb-2" contentStyles="flex">
                     <IoIosCheckmarkCircle size={18} className="text-emerald-500" />
                 </User>
-                <div className="w-full h-1 border-t border-gray-200"></div>
-                <Button variant="ghost" className="text-base rounded-none font-bold justify-start py-6 hover:cursor-pointer" onClick={onLogOutClick}>Log out @{user.username ?? ""}</Button>
+                <div className="w-full h-1 border-t border-border"></div>
+                <Button variant="ghost" className="text-base rounded-none font-bold justify-start py-6 hover:cursor-pointer " onClick={onLogOutClick}>Log out @{user.username ?? ""}</Button>
             </PopoverContent>
         </Popover>
     )

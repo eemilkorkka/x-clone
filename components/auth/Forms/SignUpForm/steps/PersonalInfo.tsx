@@ -3,17 +3,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldGroup } from "../../../../ui/field";
 import { CustomInput } from "../../../../customized/CustomInput";
-import { CustomSelect } from "@/components/customized/CustomSelect";
 import { SignupFormData } from "@/app/@modal/(.)signup/page";
 import React, { SetStateAction } from "react";
-import { toastMessage } from "@/lib/toast";
 import { FormButton } from "../FormButton";
 import { useMutation } from "@tanstack/react-query";
 import { BirthdateDropdowns, monthStringSchema } from "../BirthdateDropdowns";
+import { emailSchema } from "@/lib/schemas";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 const personalInfoSchema = z.object({
     name: z.string().min(1, "Name cannot be empty.").max(50),
-    email: z.email(),
+    email: emailSchema,
     month: monthStringSchema,
     day: z.coerce.number().int().min(1).max(31),
     year: z.coerce.number().int().min(1906).max(new Date().getFullYear())
@@ -54,6 +54,8 @@ const verificationCodeRequest = async (email: string) => {
 
 export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoProps) => {
 
+    const { toastMessage } = useToastMessage();
+    
     const form = useForm<z.input<typeof personalInfoSchema>>({
         resolver: zodResolver(personalInfoSchema),
         defaultValues: {

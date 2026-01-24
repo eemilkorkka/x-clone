@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button"
 import React from "react"
 import { DeleteTweetDialog } from "./DeleteTweetDialog";
-import { PopoverOptionVariant } from "./TweetPopover";
+import { PopoverOptionVariant } from "./OptionsPopover";
 
-interface TweetPopoverOptionProps {
+interface PopoverOptionProps {
     children: React.ReactNode;
     variant?: PopoverOptionVariant;
     onClick: () => void;
@@ -16,7 +16,7 @@ const variants = {
     "default": baseClass
 }
 
-export const TweetPopoverOption = ({ children, variant = "default", onClick }: TweetPopoverOptionProps) => {
+export const PopoverOption = ({ children, variant = "default", onClick }: PopoverOptionProps) => {
 
     if (variant === "destructive") {
         return (

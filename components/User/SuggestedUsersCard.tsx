@@ -38,7 +38,7 @@ export const SuggestedUsersCard = async () => {
             username: true,
             displayUsername: true,
             website: true,
-            bio: true,            
+            bio: true,
             image: true,
             followers: {
                 select: {
@@ -52,7 +52,7 @@ export const SuggestedUsersCard = async () => {
     if (users.length < 1) return null;
 
     return (
-        <Card className="py-4 shadow-none border-1 border-foreground/10 ring-0 gap-2 pb-0">
+        <Card className="py-4 shadow-none bg-background border-1 border-foreground/10 ring-0 gap-2 pb-0">
             <CardHeader className="px-4">
                 <CardTitle className="font-bold text-xl">Who to follow</CardTitle>
             </CardHeader>
@@ -62,7 +62,11 @@ export const SuggestedUsersCard = async () => {
 
                     return (
                         <User key={user.id} user={user} useLink={true}>
-                            <FollowButton userId={user.id} username={user.username ?? ""} isFollowing={isFollowing} />
+                            <FollowButton
+                                userId={user.id}
+                                username={user.username ?? ""}
+                                isFollowing={isFollowing}
+                            />
                         </User>
                     )
                 })}

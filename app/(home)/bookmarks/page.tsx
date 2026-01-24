@@ -1,11 +1,16 @@
-import { BookmarksFeed } from "@/components/BookmarksFeed";
-import { FeedHeader } from "@/components/FeedHeader";
+import { BookmarksFeed } from "@/components/Feed/BookmarksFeed";
+import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { ReturnBack } from "@/components/ReturnBack";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getBookmarksByUser } from "@/lib/queries/tweet-queries";
 import { getSession } from "@/lib/session";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+    title: "Bookmarks"
+}
 
 export default async function BookmarksPage() {
 
@@ -13,6 +18,8 @@ export default async function BookmarksPage() {
 
     if (!session) {
         redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
     }
 
     const queryClient = getQueryClient();

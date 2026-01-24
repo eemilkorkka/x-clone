@@ -1,22 +1,8 @@
 import { CustomSelect } from "@/components/customized/CustomSelect";
 import { Field, FieldGroup } from "@/components/ui/field";
+import { monthsArray } from "@/lib/schemas";
 import { Controller, UseFormReturn } from "react-hook-form";
 import z from "zod";
-
-export const monthsArray = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-];
 
 export const monthStringSchema = z.enum(monthsArray);
 

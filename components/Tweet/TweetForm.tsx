@@ -14,7 +14,6 @@ import { CustomAvatar } from '../User/CustomAvatar';
 import { useFilePicker } from '@/hooks/useFilePicker';
 import { createTweet } from '@/app/actions/createTweet';
 import { getQueryClient } from '@/lib/getQueryClient';
-import { toastMessage } from '@/lib/toast';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AttachmentsGrid from './AttachmentsGrid';
 import { Media } from '../Media/Media';
@@ -23,6 +22,9 @@ import { FileType } from '@/generated/prisma/enums';
 import { cn } from '@/lib/utils';
 import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
 import { useColor } from '@/context/ColorContext';
+import { IntermediateLoading } from '../IntermediateLoading';
+import { EmojiPickerPopover } from '../EmojiPickerPopover';
+import { useToastMessage } from '@/hooks/useToastMessage';
 
 interface TweetFormProps {
     type: "tweet" | "reply";
@@ -36,15 +38,19 @@ const MAX_LENGTH = 280;
 export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeModal }: TweetFormProps) => {
 
     const { data } = authClient.useSession();
-    const [tweetContent, setTweetContent] = useState("");
+    const [tweetContent, setTweetContent] = useState("");    
+    const [textAreaFocused, setTextAreaFocused] = useState(false);
+    const [caretPos, setCaretPos] = useState(0);
+
     const filePickerRef = useRef<HTMLInputElement | null>(null);
     const { pickedFiles, setPickedFiles, handleFileAdd, handleFileRemove } = useFilePicker();
-    const [state, action] = useActionState(createTweet, null);
-    const [textAreaFocused, setTextAreaFocused] = useState(false);
+    const [state, action, isPending] = useActionState(createTweet, null);
+
     const queryClient = getQueryClient();
     const router = useRouter();
     const searchParams = useSearchParams();
     const { colors } = useColor();
+    const { toastMessage } = useToastMessage();
     const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     useEffect(() => {
@@ -92,7 +98,8 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
     }
 
     return (
-        <>
+        <div>
+            {isPending && <IntermediateLoading styles={`${isComposeModal && "mb-4"}`} />}
             {textAreaFocused && parentTweetId && !isComposeModal && type === "reply" && (
                 <span
                     className="text-zinc-500 text-sm ml-16 pt-2">Replying to <span className={colors.textColor}>@{parentTweetAuthor}</span>
@@ -101,10 +108,10 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
             <div className={cn(
                 "p-4 pb-0 flex items-start max-w-full",
                 parentTweetId && textAreaFocused && "pt-0",
-                !isComposeModal && "border-b border-gray-200",
+                !isComposeModal && "border-b border-border",
                 isComposeModal && "pt-0"
             )}>
-                <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" />
+                <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" useLink={false} />
                 <form onSubmit={handleSubmit} className="flex flex-col w-full mt-2">
                     <TextareaAutosize
                         placeholder={type === "tweet" ? "What's happening?" : "Post your reply"}
@@ -114,6 +121,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                         maxLength={MAX_LENGTH}
                         minRows={pickedFiles.length > 0 ? 0 : isComposeModal ? (parentTweetId ? 2 : 5) : 2}
                         maxRows={50}
+                        onSelect={(e) => setCaretPos(e.currentTarget.selectionStart)}
                         onKeyDown={handleKeyDown}
                         onChange={(e) => setTweetContent(e.currentTarget.value)}
                         onFocus={() => setTextAreaFocused(true)}
@@ -134,7 +142,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                     <div className={cn(
                         "items-center justify-between",
                         type === "reply" && !isComposeModal ? (textAreaFocused ? "flex" : "hidden") : "flex",
-                        textAreaFocused && !isComposeModal && "border-t-1 border-gray-200"
+                        textAreaFocused && !isComposeModal && "border-t-1 border-border"
                     )}>
                         <div className='flex'>
                             <Icon onClick={() => filePickerRef.current?.click()}>
@@ -154,9 +162,11 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                                 <HiOutlineGif size={18} />
                             </Icon>
 
-                            <Icon>
-                                <HiOutlineEmojiHappy size={18} />
-                            </Icon>
+                            <EmojiPickerPopover onEmojiSelect={(emoji) => setTweetContent([tweetContent.slice(0, caretPos), emoji, tweetContent.slice(caretPos)].join(""))}>
+                                <Icon>
+                                    <HiOutlineEmojiHappy size={18} />
+                                </Icon>
+                            </EmojiPickerPopover>
 
                             <Icon>
                                 <RxCalendar size={18} />
@@ -188,6 +198,6 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                     <input className='hidden' name="parentTweetId" defaultValue={parentTweetId} />
                 </form>
             </div>
-        </>
+        </div>
     )
 }

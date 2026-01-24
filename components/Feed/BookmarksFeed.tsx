@@ -2,11 +2,11 @@
 
 import { authClient } from "@/lib/auth-client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
+import { InfiniteScrollContainer } from "../Feed/InfiniteScrollContainer";
 import React from "react";
-import { Tweet } from "./Tweet/Tweet";
+import { Tweet } from "../Tweet/Tweet";
 import { Tweet as TweetType } from "@/types/Tweet";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 const fetchBookmarks = async (username: string, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam

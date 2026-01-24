@@ -16,7 +16,7 @@ export const SplashScreen = () => {
     }, []);
     
     return show ? (
-        <div className="fixed inset-0 flex items-center justify-center bg-white z-90">
+        <div className="fixed inset-0 flex items-center justify-center bg-background z-90">
             <FaXTwitter size={80} />
         </div>
     ) : null;

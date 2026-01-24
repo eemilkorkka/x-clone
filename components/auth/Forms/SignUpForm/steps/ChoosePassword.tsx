@@ -7,8 +7,8 @@ import { Controller, useForm } from "react-hook-form";
 import z from "zod"
 import { FormButton } from "../FormButton";
 import { authClient } from "@/lib/auth-client";
-import { toastMessage } from "@/lib/toast";
 import { useRouter } from "next/navigation";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 const passwordSchema = z.object({
     password: z.string().min(8, "Password should at least be 8 characters long."),
@@ -25,6 +25,7 @@ interface ChoosePasswordProps {
 
 export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) => {
     const router = useRouter();
+    const { toastMessage } = useToastMessage();
 
     const form = useForm<z.infer<typeof passwordSchema>>({
         resolver: zodResolver(passwordSchema),

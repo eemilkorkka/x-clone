@@ -12,12 +12,11 @@ import {
     DialogTitle
 } from "@/components/ui/dialog";
 
-import { Field, FieldGroup } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { CustomAvatar } from "@/components/User/CustomAvatar";
 import { useFilePicker } from "@/hooks/useFilePicker";
 import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { toastMessage } from "@/lib/toast";
 import { uploadFile } from "@/lib/utils/uploadFile";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -30,16 +29,30 @@ import { IoIosArrowForward } from "react-icons/io";
 import z from "zod";
 import { BirthdateDropdowns, monthStringSchema } from "@/components/auth/Forms/SignUpForm/BirthdateDropdowns";
 import { useColor } from "@/context/ColorContext";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 const formSchema = z.object({
-    displayName: z.string().max(50).min(0).optional(),
+    displayName: z.string().max(50).min(1, "Name cannot be empty!"),
     bio: z.string().max(160).min(0).optional(),
     location: z.string().max(30).min(0).optional(),
     website: z.string().max(100).min(0).optional(),
-    month: monthStringSchema,
-    day: z.coerce.number().int().min(1).max(31),
-    year: z.coerce.number().int().min(1906).max(new Date().getFullYear())
+    month: monthStringSchema.optional().or(z.literal("")),
+    day: z.union([
+        z.coerce.number().int().min(1).max(31),
+        z.literal(""),
+        z.undefined()
+    ]).optional(),
+    year: z.union([
+        z.coerce.number().int().min(1906).max(new Date().getFullYear()),
+        z.literal(""),
+        z.undefined()
+    ]).optional()
 }).refine((data) => {
+    if (!data.month || !data.day || !data.year ||
+        data.month === "" || typeof data.day !== "number" || typeof data.year !== "number") {
+        return true;
+    }
+
     const monthIndex = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -55,6 +68,7 @@ const formSchema = z.object({
 export default function EditProfileModal() {
     const router = useRouter();
     const { data: sessionData } = authClient.useSession();
+    const { toastMessage } = useToastMessage();
 
     const profilePictureRef = useRef<HTMLInputElement | null>(null);
     const profileBannerRef = useRef<HTMLInputElement | null>(null);
@@ -73,9 +87,9 @@ export default function EditProfileModal() {
             bio: sessionData?.user.bio ?? "",
             location: sessionData?.user.location ?? "",
             website: sessionData?.user.website ?? "",
-            month: sessionData?.user.birthDateMonth ?? "",
-            day: sessionData?.user.birthDateDay ?? "",
-            year: sessionData?.user.birthDateYear ?? ""
+            month: sessionData?.user.birthDateMonth ?? undefined,
+            day: sessionData?.user.birthDateDay ?? undefined,
+            year: sessionData?.user.birthDateYear ?? undefined
         }
     });
 
@@ -102,9 +116,9 @@ export default function EditProfileModal() {
                 bio: validatedData.bio,
                 location: validatedData.location,
                 website: validatedData.website,
-                birthDateMonth: validatedData.month,
-                birthDateDay: validatedData.day,
-                birthDateYear: validatedData.year
+                birthDateMonth: validatedData.month || null,
+                birthDateDay: validatedData.day === "" || !validatedData.day ? null : validatedData.day,
+                birthDateYear: validatedData.year === "" || !validatedData.year ? null : validatedData.year
             });
 
             if (!result.error) {
@@ -134,7 +148,7 @@ export default function EditProfileModal() {
 
     return (
         <Dialog open={true} onOpenChange={handleOpenChange}>
-            <DialogContent className="!max-w-[600px] p-0 !rounded-2xl h-full sm:max-h-[650px] flex flex-col sm:rounded-xl ring-0 gap-0 overflow-hidden" showCloseButton={false}>
+            <DialogContent className="!max-w-[600px] p-0 rounded-none sm:!rounded-2xl h-full sm:max-h-[650px] flex flex-col sm:rounded-xl ring-0 gap-0 overflow-hidden" showCloseButton={false}>
                 <div className="overflow-y-auto">
                     <DialogHeader className="flex flex-row justify-between p-2">
                         <div className="flex gap-6 items-center">
@@ -146,7 +160,7 @@ export default function EditProfileModal() {
                         <Button className="rounded-full font-bold px-4 hover:cursor-pointer" onClick={() => form.handleSubmit(onSubmit)()}>Save</Button>
                     </DialogHeader>
                     <ProfileBanner isPreview={true} src={removeBanner ? "" : (profileBannerPicker.pickedFiles.length > 0 ? profileBannerPicker.pickedFiles[0].url : (sessionData?.user.profileBannerImage ?? ""))} styles="brightness-90">
-                        <div className="absolute -bottom-15 z-50 left-4 rounded-full border-white border-4">
+                        <div className="absolute -bottom-15 z-50 left-4 rounded-full border-background border-4">
                             <CustomAvatar src={profilePicturePicker.pickedFiles.length > 0 ? profilePicturePicker.pickedFiles[0].url : (sessionData?.user.image ?? "")} alt={``} size="xl" styles="brightness-90" useLink={false}>
                                 <Button size="icon-lg" className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 rounded-full hover:cursor-pointer bg-black/10 hover:bg-white/10" onClick={() => profilePictureRef.current?.click()}>
                                     <TbCameraPlus className="size-5" />
@@ -176,7 +190,7 @@ export default function EditProfileModal() {
                                 name="displayName"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -184,8 +198,9 @@ export default function EditProfileModal() {
                                             value={displayName ?? ""}
                                             maxLength={50}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none"
+                                            styles="text-foreground border-border shadow-none"
                                         />
+                                        {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                                     </Field>
                                 )}
                             />
@@ -193,14 +208,14 @@ export default function EditProfileModal() {
                                 name="bio"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomTextarea
                                             {...field}
                                             label="Bio"
                                             value={bio ?? ""}
                                             maxLength={160}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none resize-none"
+                                            styles="text-foreground border-border shadow-none resize-none"
                                         />
                                     </Field>
                                 )}
@@ -209,7 +224,7 @@ export default function EditProfileModal() {
                                 name="location"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -217,7 +232,7 @@ export default function EditProfileModal() {
                                             value={location ?? ""}
                                             maxLength={30}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none"
+                                            styles="text-foreground border-border shadow-none"
                                         />
                                     </Field>
                                 )}
@@ -226,7 +241,7 @@ export default function EditProfileModal() {
                                 name="website"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field>
+                                    <Field className="dark:bg-black">
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -234,7 +249,7 @@ export default function EditProfileModal() {
                                             value={website ?? ""}
                                             maxLength={30}
                                             fieldState={fieldState}
-                                            styles="text-black border-gray-300 shadow-none"
+                                            styles="text-foreground border-border shadow-none"
                                         />
                                     </Field>
                                 )}
@@ -245,9 +260,13 @@ export default function EditProfileModal() {
                                 <Button variant="ghost" className="-m-4 mt-1 flex h-fit justify-between p-4 px-5 rounded-none hover:cursor-pointer" onClick={() => setIsEditingBirthday(true)}>
                                     <div className="text-left font-normal">
                                         <p>Birth date</p>
-                                        <p>
-                                            {sessionData?.user.birthDateMonth} {sessionData?.user.birthDateDay}, {sessionData?.user.birthDateYear}
-                                        </p>
+                                        {sessionData?.user.birthDateMonth && sessionData?.user.birthDateDay && sessionData?.user.birthDateYear ? (
+                                            <p>
+                                                {`${sessionData.user.birthDateMonth} ${sessionData.user.birthDateDay}, ${sessionData.user.birthDateYear}`}
+                                            </p>
+                                        ) : (
+                                            <p className="text-zinc-500">Add your birth date</p>
+                                        )}
                                     </div>
                                     <IoIosArrowForward className="text-zinc-500 size-5" />
                                 </Button>
@@ -268,10 +287,10 @@ export default function EditProfileModal() {
                                     </div>
                                     <BirthdateDropdowns
                                         form={form}
-                                        month={month}
+                                        month={month ?? ""}
                                         day={day}
                                         year={year}
-                                        styles="border-gray-300"
+                                        styles="text-foreground border-border"
                                     />
                                 </div>
                             )}

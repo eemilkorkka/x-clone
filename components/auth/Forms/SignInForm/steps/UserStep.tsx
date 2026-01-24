@@ -77,8 +77,8 @@ export const UserStep = ({ setStep, setFormData, setOpen, formData }: UserStepPr
                         </Field>
                     )}
                 />
-                <Button type="submit" size="lg" variant="secondary" className="font-bold rounded-full w-full mt-6 hover:cursor-pointer">Next</Button>
-                <Button size="lg" className="font-bold bg-transparent border-1 border-zinc-500 rounded-full w-full mt-6 hover:cursor-pointer">Forgot password?</Button>
+                <Button type="submit" size="lg" className="bg-white text-black hover:bg-zinc-200 font-bold rounded-full w-full mt-6 hover:cursor-pointer">Next</Button>
+                <Button size="lg" className="font-bold text-white hover:bg-ring/20 bg-transparent border-1 border-zinc-500 rounded-full w-full mt-6 hover:cursor-pointer">Forgot password?</Button>
             </form>
             <p className="mt-16 mb-20 text-zinc-500">Don't have an account?
                 {' '}

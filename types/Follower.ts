@@ -1,4 +1,4 @@
-import { UserProfile } from "./User";
+import { UserBase, UserProfile } from "./User";
 
 export type Follower = {
     id: number;

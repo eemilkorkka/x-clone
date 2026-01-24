@@ -1,3 +1,5 @@
+import { check } from "zod";
+
 export const colorsArray = [
     {
         color: "bg-sky-500",
@@ -5,7 +7,11 @@ export const colorsArray = [
         secondHoverColor: "hover:bg-sky-500/20",
         textColor: "text-sky-500",
         focusVisibleBorderColor: "focus-visible:border-sky-500",
-        peerFocusTextColor: "peer-focus-within:text-sky-500"
+        peerFocusTextColor: "peer-focus-within:text-sky-500",
+        svgHoverColor: "hover:[&_svg]:text-sky-500",
+        hexColor: "#0ea5e9",
+        checkedColor: "has-data-checked:!bg-sky-500",
+        checkedBorderColor: "has-data-checked:border-sky-500"
     },
     {
         color: "bg-yellow-500",
@@ -13,7 +19,11 @@ export const colorsArray = [
         secondHoverColor: "hover:bg-yellow-500/20",
         textColor: "text-yellow-500",
         focusVisibleBorderColor: "focus-visible:border-yellow-500",
-        peerFocusTextColor: "peer-focus-within:text-yellow-500"
+        peerFocusTextColor: "peer-focus-within:text-yellow-500",
+        svgHoverColor: "hover:[&_svg]:text-yellow-500",
+        hexColor: "#eab308",
+        checkedColor: "has-data-checked:!bg-yellow-500",
+        checkedBorderColor: "has-data-checked:border-yellow-500"
     },
     {
         color: "bg-pink-500",
@@ -21,7 +31,11 @@ export const colorsArray = [
         secondHoverColor: "hover:bg-pink-500/20",
         textColor: "text-pink-500",
         focusVisibleBorderColor: "focus-visible:border-pink-500",
-        peerFocusTextColor: "peer-focus-within:text-pink-500"
+        peerFocusTextColor: "peer-focus-within:text-pink-500",
+        svgHoverColor: "hover:[&_svg]:text-pink-500",
+        hexColor: "#ec4899",
+        checkedColor: "has-data-checked:!bg-pink-500",
+        checkedBorderColor: "has-data-checked:border-pink-500"
     },
     {
         color: "bg-purple-500",
@@ -29,7 +43,11 @@ export const colorsArray = [
         secondHoverColor: "hover:bg-purple-500/20",
         textColor: "text-purple-500",
         focusVisibleBorderColor: "focus-visible:border-purple-500",
-        peerFocusTextColor: "peer-focus-within:text-purple-500"
+        peerFocusTextColor: "peer-focus-within:text-purple-500",
+        svgHoverColor: "hover:[&_svg]:text-purple-500",
+        hexColor: "#a855f7",
+        checkedColor: "has-data-checked:!bg-purple-500",
+        checkedBorderColor: "has-data-checked:border-purple-500"
     },
     {
         color: "bg-orange-500",
@@ -37,7 +55,11 @@ export const colorsArray = [
         secondHoverColor: "hover:bg-orange-500/20",
         textColor: "text-orange-500",
         focusVisibleBorderColor: "focus-visible:border-orange-500",
-        peerFocusTextColor: "peer-focus-within:text-orange-500"
+        peerFocusTextColor: "peer-focus-within:text-orange-500",
+        svgHoverColor: "hover:[&_svg]:text-orange-500",
+        hexColor: "#f97316",
+        checkedColor: "has-data-checked:!bg-orange-500",
+        checkedBorderColor: "has-data-checked:border-orange-500"
     },
     {
         color: "bg-emerald-500",
@@ -45,6 +67,10 @@ export const colorsArray = [
         secondHoverColor: "hover:bg-emerald-500/20",
         textColor: "text-emerald-500",
         focusVisibleBorderColor: "focus-visible:border-emerald-500",
-        peerFocusTextColor: "peer-focus-within:text-emerald-500"
+        peerFocusTextColor: "peer-focus-within:text-emerald-500",
+        svgHoverColor: "hover:[&_svg]:text-emerald-500",
+        hexColor: "#10b981",
+        checkedColor: "has-data-checked:!bg-emerald-500",
+        checkedBorderColor: "has-data-checked:border-emerald-500"
     }
 ];

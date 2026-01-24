@@ -50,12 +50,12 @@ export const CustomInput = (
                 className={cn(
                     "peer py-6.5 text-white px-4 focus-visible:ring-0 rounded-sm",
                     disabled && "bg-zinc-800",
-                    fieldState?.error ? "border-destructive focus-visible:border-destructive" : `border-zinc-800 ${borderFocusColor}`,
+                    fieldState?.error ? "!border-destructive focus-visible:border-destructive" : `border-zinc-800 ${borderFocusColor}`,
                     styles
                 )}
             />
             <label className={cn(
-                "text-gray-500 absolute peer-focus-within:top-3 peer-focus-within:text-xs -translate-y-1/2 left-4 pointer-events-none transition-top duration-200 ease-in-out",
+                "text-gray-500 absolute peer-focus-within:top-3 text-sm peer-focus-within:text-xs -translate-y-1/2 left-4 pointer-events-none transition-top duration-200 ease-in-out",
                 value.length === 0 ? "top-1/2" : "top-3",
                 fieldState?.error ? "!text-destructive" : textFocusColor
             )}>

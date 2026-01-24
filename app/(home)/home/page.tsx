@@ -1,4 +1,4 @@
-import { HomeFeed } from "@/components/HomeFeed";
+import { HomeFeed } from "@/components/Feed/HomeFeed";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getTweets, getTweetsFromFollowing } from "@/lib/queries/tweet-queries";
 import { getSession } from "@/lib/session";
@@ -15,6 +15,8 @@ export default async function HomePage({
 
     if (!session) {
         redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
     }
 
     const feed = (await searchParams).variant ?? "foryou";

@@ -11,15 +11,15 @@ import { Media } from "../Media/Media";
 import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
 import { BsThreeDots, BsPin } from "react-icons/bs";
-import { IoTrashOutline, IoPersonAdd } from "react-icons/io5";
-import { TweetPopover } from "./TweetPopover/TweetPopover";
+import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
+import { OptionsPopover } from "./TweetPopover/OptionsPopover";
 import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
-import { toastMessage } from "@/lib/toast";
 import TimeAgo from 'react-timeago';
 import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
+import { useToastMessage } from "@/hooks/useToastMessage";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -33,21 +33,26 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
     const { data } = authClient.useSession();
     const router = useRouter();
+    const { toastMessage } = useToastMessage();
+
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
     const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
     const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
     const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
     const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
+    
     const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
     const { followMutation } = useFollowMutation(
         tweetAuthor?.username ?? "",
         tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false
     );
     const { colors } = useColor();
+    const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
+    
     const onClick = () => {
         if (useLink) {
-            router.push(`/${tweet.user?.username}/status/${tweetId}`);
+            router.push(`/${tweetAuthor?.username}/status/${tweetId}`);
         }
     }
 
@@ -58,6 +63,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                 size="md"
                 username={tweetAuthor?.username ?? ""}
                 alt={`@${tweetAuthor?.username}`}
+                useHoverCard={!isComposeModal}
             />
             {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-zinc-300"></hr>}
         </div>
@@ -77,31 +83,23 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
         }
     ];
 
-    const getGeneralTweetOptions = () => {
-        const formData = new FormData();
-        formData.append("userId", tweetAuthor?.id ?? "");
-
-        const generalTweetOptions = [
-            {
-                label: `Follow @${tweet.user?.username}`,
-                icon: <IoPersonAdd />,
-                onClick: () => followMutation.mutate(formData)
-            }
-        ];
-
-        return generalTweetOptions;
-    }
+    const generalTweetOptions = [
+        {
+            label: `${isFollowing ? "Unfollow" : "Follow"} @${tweet.user?.username}`,
+            icon: isFollowing ? <IoPersonRemove /> : <IoPersonAdd />,
+            onClick: () => followMutation.mutate(tweetAuthor?.id ?? "")
+        }
+    ];
 
     return (
         <div className={cn(
             "p-4",
             type !== "status" && !isParentTweet && !isComposeModal && "border-b",
-            isComposeModal && "first:border-b border-gray-200",
-            useLink && "hover:cursor-pointer hover:bg-ring/10"
+            useLink && "hover:cursor-pointer hover:bg-ring/10 dark:hover:bg-inherit"
         )}>
             {tweet.isRetweet && (
-                <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-700 pb-2">
-                    <AiOutlineRetweet className="text-zinc-700" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
+                <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
+                    <AiOutlineRetweet className="text-zinc-600" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
                 </p>
             )}
             <div className="flex" onClick={onClick}>
@@ -115,13 +113,27 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         )}
                         {type === "tweet" ? (
                             <>
-                                <Displayname username={tweetAuthor?.username ?? ""} displayName={tweetAuthor?.displayUsername ?? ""} styles="ml-2" />
-                                <Username username={tweetAuthor?.username ?? ""} />
+                                <Displayname
+                                    username={tweetAuthor?.username ?? ""}
+                                    displayName={tweetAuthor?.displayUsername ?? ""}
+                                    styles="ml-2"
+                                    useHoverCard={!isComposeModal}
+                                />
+                                <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
                             </>
                         ) : (
                             <div className="mb-4">
-                                <Displayname username={tweetAuthor?.username ?? ""} displayName={tweetAuthor?.displayUsername ?? ""} styles="ml-2" />
-                                <Username username={tweetAuthor?.username ?? ""} styles="ml-2 -mt-1" />
+                                <Displayname
+                                    username={tweetAuthor?.username ?? ""}
+                                    displayName={tweetAuthor?.displayUsername ?? ""}
+                                    styles="ml-2"
+                                    useHoverCard={!isComposeModal}
+                                />
+                                <Username
+                                    username={tweetAuthor?.username ?? ""}
+                                    styles="ml-2 -mt-1"
+                                    useHoverCard={!isComposeModal}
+                                />
                             </div>
                         )}
                         {type === "tweet" && (
@@ -133,11 +145,11 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             </>
                         )}
                         {!isComposeModal && (
-                            <TweetPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : getGeneralTweetOptions()}>
+                            <OptionsPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
                                 <Icon styles="text-zinc-500 hover:text-sky-500">
                                     <BsThreeDots />
                                 </Icon>
-                            </TweetPopover>
+                            </OptionsPopover>
                         )}
                     </div>
                     <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "-mt-2 ml-2", isComposeModal && "mt-0")} />

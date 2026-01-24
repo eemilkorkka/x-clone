@@ -5,7 +5,16 @@ import { Searchbar } from "@/components/Searchbar";
 import { SplashScreen } from "@/components/SplashScreen";
 import { TrendingCard } from "@/components/Trending/TrendingCard";
 import { SuggestedUsersCard } from "@/components/User/SuggestedUsersCard";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Home / X Clone",
+    template: "%s / X Clone",
+  },
+  description: "Welcome to X Clone, a social media platform.",
+}
 
 export default function HomeLayout({
   children,
@@ -23,7 +32,7 @@ export default function HomeLayout({
       </div>
 
       <section className="flex w-full min-w-0 gap-8">
-        <div className="w-3xl md:w-[598px] h-full border-r border-l border-gray-200">
+        <div className="w-3xl md:w-[598px] h-full border-r border-l border-border pb-19 mobile:pb-0">
           {children}
           {modal}
         </div>

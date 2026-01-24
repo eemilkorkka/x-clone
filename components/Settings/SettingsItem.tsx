@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 interface SettingsItemProps {
     title: string;
     href: string;
-    description?: string;
+    description?: string | React.ReactNode;
     icon?: React.ReactNode;
     styles?: string;
 }
@@ -20,7 +20,11 @@ export const SettingsItem = ({ title, href, description, icon, styles }: Setting
                     {icon}
                     <div className="text-left">
                         <p className="text-base">{title}</p>
-                        {description && <p className="text-zinc-500 text-sm text-wrap max-w-lg">{description}</p>}
+                        {description && typeof description === "string" ? (
+                            <p className="text-zinc-500 text-sm text-wrap max-w-lg">{description}</p>
+                        ) : (
+                            <div className="text-zinc-500 text-sm text-wrap max-w-lg">{description}</div>
+                        )}
                     </div>
                 </div>
                 <IoIosArrowForward className="text-zinc-500 size-5" />
