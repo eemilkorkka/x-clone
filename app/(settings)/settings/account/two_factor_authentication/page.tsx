@@ -36,7 +36,6 @@ export default function EnableTwoFactorAuthPage() {
         });
 
         if (error) {
-            console.log(error);
             form.setError("password", { message: error.message });
         } else {
             toastMessage("Two-factor authentication enabled successfully!", true);

@@ -27,7 +27,7 @@ export const SignInDialog = () => {
 
     const steps = [
         <UserStep setStep={setStep} setFormData={setFormData} setOpen={setOpen} formData={formData} />,
-        <PasswordStep formData={formData} step={step} />
+        <PasswordStep formData={formData} />
     ];
 
     return (
