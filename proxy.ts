@@ -13,7 +13,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL("/signup/setup", request.url));
     }
 
-    return NextResponse.next(); 
+    return NextResponse.next();
 }
 
 export const config = {

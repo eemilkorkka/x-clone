@@ -107,7 +107,7 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                     name="name"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field>
+                        <Field data-invalid={fieldState.invalid}>
                             <CustomInput
                                 {...field}
                                 type="text"
@@ -124,7 +124,7 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                     name="email"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field>
+                        <Field data-invalid={fieldState.invalid}>
                             <CustomInput
                                 {...field}
                                 type="email"

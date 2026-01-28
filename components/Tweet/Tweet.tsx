@@ -40,16 +40,16 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
     const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
     const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
-    
+
     const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
     const { followMutation } = useFollowMutation(
         tweetAuthor?.username ?? "",
         tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false
     );
+
     const { colors } = useColor();
     const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
-    
     const onClick = () => {
         if (useLink) {
             router.push(`/${tweetAuthor?.username}/status/${tweetId}`);
@@ -65,7 +65,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                 alt={`@${tweetAuthor?.username}`}
                 useHoverCard={!isComposeModal}
             />
-            {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-zinc-300"></hr>}
+            {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-border"></hr>}
         </div>
     );
 
@@ -91,6 +91,15 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
         }
     ];
 
+    const timeStamp = (
+        <>
+            <span className="text-zinc-500">·</span>
+            <time className="text-sm text-zinc-500 hover:underline whitespace-nowrap" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
+                <TimeAgo date={new Date(tweetCreatedAt)} formatter={shortFormatter} />
+            </time>
+        </>
+    );
+
     return (
         <div className={cn(
             "p-4",
@@ -106,44 +115,40 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                 {type === "tweet" && (
                     avatar
                 )}
-                <div className="flex flex-col w-full min-w-0">
-                    <div className="flex gap-1 min-w-0">
+                <div className="flex flex-col w-full">
+                    <div className="flex">
                         {type === "status" && (
                             avatar
                         )}
-                        {type === "tweet" ? (
-                            <>
-                                <Displayname
-                                    username={tweetAuthor?.username ?? ""}
-                                    displayName={tweetAuthor?.displayUsername ?? ""}
-                                    styles="ml-2"
-                                    useHoverCard={!isComposeModal}
-                                />
-                                <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
-                            </>
-                        ) : (
-                            <div className="mb-4">
-                                <Displayname
-                                    username={tweetAuthor?.username ?? ""}
-                                    displayName={tweetAuthor?.displayUsername ?? ""}
-                                    styles="ml-2"
-                                    useHoverCard={!isComposeModal}
-                                />
-                                <Username
-                                    username={tweetAuthor?.username ?? ""}
-                                    styles="ml-2 -mt-1"
-                                    useHoverCard={!isComposeModal}
-                                />
-                            </div>
-                        )}
-                        {type === "tweet" && (
-                            <>
-                                <span className="text-zinc-500">·</span>
-                                <time className="text-sm text-zinc-500 hover:underline" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
-                                    <TimeAgo date={new Date(tweetCreatedAt)} formatter={shortFormatter} />
-                                </time>
-                            </>
-                        )}
+                        <div className="xs:flex gap-1 min-w-0">
+                            {type === "tweet" ? (
+                                <>
+                                    <Displayname
+                                        username={tweetAuthor?.username ?? ""}
+                                        displayName={tweetAuthor?.displayUsername ?? ""}
+                                        styles="ml-2"
+                                    />
+                                    <div className="ml-1.5 mobile:ml-0 flex gap-1 min-w-0">
+                                        <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
+                                        {timeStamp}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="mb-4">
+                                    <Displayname
+                                        username={tweetAuthor?.username ?? ""}
+                                        displayName={tweetAuthor?.displayUsername ?? ""}
+                                        styles="ml-2"
+                                        useHoverCard={!isComposeModal}
+                                    />
+                                    <Username
+                                        username={tweetAuthor?.username ?? ""}
+                                        styles="ml-2 -mt-1"
+                                        useHoverCard={!isComposeModal}
+                                    />
+                                </div>
+                            )}
+                        </div>
                         {!isComposeModal && (
                             <OptionsPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
                                 <Icon styles="text-zinc-500 hover:text-sky-500">
@@ -152,7 +157,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             </OptionsPopover>
                         )}
                     </div>
-                    <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "-mt-2 ml-2", isComposeModal && "mt-0")} />
+                    <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "ml-2", isComposeModal && "mt-0")} />
                     {tweetFiles.length > 0 && (
                         <AttachmentsGrid>
                             {tweetFiles.map((file, index) => (
@@ -160,6 +165,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             ))}
                         </AttachmentsGrid>
                     )}
+
                     {isComposeModal && isParentTweet && (
                         <span
                             className="text-zinc-500 ml-2">Replying to <span className={colors.textColor}>@{tweet.user?.username}</span>

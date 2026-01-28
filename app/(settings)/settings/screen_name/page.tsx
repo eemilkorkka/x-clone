@@ -59,25 +59,25 @@ export default function UsernameSettingsPage() {
                 <ReturnBack />
                 <h1 className="text-xl font-bold">Change username</h1>
             </FeedHeader>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col mt-2 px-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col mt-4 px-8">
                 <Controller
                     name="username"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field>
+                        <Field data-invalid={fieldState.invalid}>
                             <CustomInput
                                 {...field}
                                 type="text"
                                 label="Username"
                                 value={username}
                                 fieldState={fieldState}
-                                styles="text-black border-gray-300 shadow-none"
+                                styles="text-foreground border-border shadow-none"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
                     )}
                 />
-                <Button type="submit" className={cn("max-w-fit self-end font-bold rounded-full px-4 mt-4 hover:cursor-pointer", colors.color, colors.hoverColor)}>Save</Button>
+                <Button type="submit" className={cn("max-w-fit text-white self-end font-bold rounded-full px-4 mt-4 hover:cursor-pointer", colors.color, colors.hoverColor)}>Save</Button>
             </form>
         </div>
     )

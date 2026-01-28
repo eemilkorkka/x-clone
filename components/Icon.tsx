@@ -15,7 +15,7 @@ export const Icon = ({ children, onClick, styles }: IconsProps) => {
     const { colors } = useColor();
 
     return (
-        <div className={cn(`group rounded-full w-fit h-fit ${colors.textColor} ${colors.secondHoverColor} hover:cursor-pointer ${colors.svgHoverColor} p-2`, styles)} onClick={onClick}>
+        <div className={cn(`group rounded-full w-7 h-7 flex items-center justify-center ${colors.textColor} ${colors.secondHoverColor} hover:cursor-pointer ${colors.svgHoverColor}`, styles)} onClick={onClick}>
             {children}
         </div>
     )

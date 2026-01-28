@@ -56,7 +56,7 @@ export const VerificationCode = ({ formData, setFormData, setStep }: Verificatio
                 name="verificationCode"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                    <Field>
+                    <Field data-invalid={fieldState.invalid}>
                         <CustomInput
                             {...field}
                             type="text"

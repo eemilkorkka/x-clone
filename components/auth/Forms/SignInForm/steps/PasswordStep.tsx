@@ -4,10 +4,10 @@ import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldGroup } from "../../../../ui/field";
 import { CustomInput } from "../../../../customized/CustomInput";
 import { Button } from "../../../../ui/button";
-import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToastMessage } from "@/hooks/useToastMessage";
+import { FormButton } from "../../SignUpForm/FormButton";
 
 const passwordStepSchema = z.object({
     password: z.string().min(1, "Password is required."),
@@ -16,14 +16,12 @@ const passwordStepSchema = z.object({
 
 interface PasswordStepProps {
     formData: { username_or_email: string; password: string };
-    step: number;
 }
 
-export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
+export const PasswordStep = ({ formData }: PasswordStepProps) => {
 
     const router = useRouter();
     const { toastMessage } = useToastMessage();
-    const [loginError, setLoginError] = useState("");
     
     const form = useForm<z.infer<typeof passwordStepSchema>>({
         resolver: zodResolver(passwordStepSchema),
@@ -47,7 +45,7 @@ export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
                     toastMessage("Sign in successful.", true);
                 },
                 onError: (context) => {
-                    setLoginError(context.error.message)
+                    form.setError("password", { message: context.error.message });
                 }
             });
         } else {
@@ -60,7 +58,7 @@ export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
                     router.push("/home");
                 },
                 onError: (context) => {
-                    setLoginError(context.error.message)
+                    form.setError("password", { message: context.error.message });
                 }
             });
         }
@@ -89,7 +87,7 @@ export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
                     name="password"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
+                        <Field data-invalid={fieldState.invalid || !!fieldState.error}>
                             <CustomInput
                                 {...field}
                                 type="password"
@@ -99,13 +97,12 @@ export const PasswordStep = ({ formData, step }: PasswordStepProps) => {
                                 isPasswordInput={true}
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-                            {loginError !== "" && password !== "" && <FieldError>{loginError}</FieldError>}
                         </Field>
                     )}
                 />
             </FieldGroup>
             <div className="space-y-4 mb-4">
-                <Button type="submit" disabled={!password} size="lg" className="bg-white text-black hover:bg-zinc-200 w-full font-bold rounded-full py-6 hover:cursor-pointer">Log in</Button>
+                <FormButton title="Log in" disabled={!password} />
                 <p className="text-zinc-500">Don't have an account? <span className="text-sky-500 hover:underline hover:cursor-pointer">Sign up</span></p>
             </div>
         </form>

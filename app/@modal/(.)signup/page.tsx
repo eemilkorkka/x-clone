@@ -12,7 +12,7 @@ import {
     DialogDescription
 } from "@/components/ui/dialog";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const stepTexts = [
@@ -43,7 +43,6 @@ export type SignupFormData = {
 
 export default function SignupModal() {
     const router = useRouter();
-    const pathname = usePathname();
     const [step, setStep] = useState(0);
 
     const [formData, setFormData] = useState({
@@ -63,7 +62,7 @@ export default function SignupModal() {
         <ChoosePassword formData={formData} setFormData={setFormData} />
     ];
 
-    return pathname === "/signup" && (
+    return (
         <Dialog open={true} onOpenChange={() => router.back()}>
             <DialogContent className="flex flex-col !max-w-[600px] h-full min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5" showCloseButton={false}>
                 <DialogHeader step={step} setStep={setStep} handleDialogClose={() => router.back()} />

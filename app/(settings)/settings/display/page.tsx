@@ -21,7 +21,7 @@ export default function DisplayPage() {
                 <ReturnBack />
                 <h1 className="text-xl font-bold">Display</h1>
             </FeedHeader>
-            <div className="px-4 space-y-4">
+            <div className="px-4 space-y-4 pb-20">
                 <p className="text-zinc-500 mt-4 text-sm">Manage your display color. These settings affect all the X accounts on this browser.</p>
                 <div className="flex">
                     <CustomAvatar

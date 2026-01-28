@@ -31,7 +31,7 @@ export const Displayname = ({ displayName, username, styles, useHoverCard = fals
             {displayNameElement}
         </Link>
     ) : (
-        <div>
+        <div className="min-w-0">
             {displayNameElement}
         </div>
     );

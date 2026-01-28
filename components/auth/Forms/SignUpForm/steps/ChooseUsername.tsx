@@ -37,7 +37,7 @@ export const ChooseUsername = ({ formData, setFormData, setStep }: ChooseUsernam
                 name="username"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                    <Field>
+                    <Field data-invalid={fieldState.invalid}>
                         <CustomInput
                             {...field}
                             type="text"

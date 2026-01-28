@@ -34,13 +34,13 @@ export const RemoveFollowerDialog = ({ username, onConfirmClick }: RemoveFollowe
             </AlertDialogTrigger>
             <AlertDialogContent className="!max-w-xs ring-0">
                 <AlertDialogHeader>
-                    <AlertDialogTitle className="font-bold">Remove this follower</AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogTitle className="font-bold mr-auto">Remove this follower</AlertDialogTitle>
+                    <AlertDialogDescription className="text-left">
                         @{username} will be removed from your followers and won’t be notified by X. They can follow you again in the future.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="flex !flex-col !justify-center space-y-1">
-                    <AlertDialogAction className="bg-destructive rounded-full py-5 font-bold hover:cursor-pointer hover:bg-destructive hover:brightness-[95%]" onClick={onConfirmClick}>Remove</AlertDialogAction>
+                    <AlertDialogAction className="bg-destructive text-white rounded-full py-5 font-bold hover:cursor-pointer hover:bg-destructive hover:brightness-[95%]" onClick={onConfirmClick}>Remove</AlertDialogAction>
                     <AlertDialogCancel className="rounded-full py-5 font-bold hover:cursor-pointer" onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
                 </AlertDialogFooter>
             </AlertDialogContent>
