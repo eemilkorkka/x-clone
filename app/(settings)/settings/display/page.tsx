@@ -9,12 +9,23 @@ import { Text } from "@/components/Text";
 import { ColorSelection } from "@/components/Settings/ColorSelection";
 import { Metadata } from "next";
 import { ThemeSelection } from "@/components/Settings/ThemeSelection";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Display",
 }
 
-export default function DisplayPage() {
+export default async function DisplayPage() {
+
+    const session = await getSession();
+
+    if (!session) {
+        redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
+    }
+
     return (
         <div>
             <FeedHeader styles="px-2 flex gap-6 items-center border-b-0">

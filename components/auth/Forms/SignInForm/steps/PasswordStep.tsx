@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldGroup } from "../../../../ui/field";
 import { CustomInput } from "../../../../customized/CustomInput";
-import { Button } from "../../../../ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToastMessage } from "@/hooks/useToastMessage";
@@ -22,7 +21,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
 
     const router = useRouter();
     const { toastMessage } = useToastMessage();
-    
+
     const form = useForm<z.infer<typeof passwordStepSchema>>({
         resolver: zodResolver(passwordStepSchema),
         defaultValues: {
@@ -39,10 +38,15 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
             await authClient.signIn.email({
                 email: username_or_email,
                 password: password,
-                callbackURL: "/home"
+                callbackURL: "/home",
             }, {
-                onSuccess: () => {
-                    toastMessage("Sign in successful.", true);
+                onSuccess: (context) => {
+                    if (context.data.twoFactorRedirect) {
+                        router.push("/two_factor_authentication");
+                    } else {
+                        toastMessage("Sign in successful.", true);
+                        router.push("/home");
+                    }
                 },
                 onError: (context) => {
                     form.setError("password", { message: context.error.message });
@@ -53,9 +57,13 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                 username: username_or_email,
                 password: password,
             }, {
-                onSuccess: () => {
-                    toastMessage("Sign in successful.", true);
-                    router.push("/home");
+                onSuccess: (context) => {
+                    if (context.data.twoFactorRedirect) {
+                        router.push("/two_factor_authentication");
+                    } else {
+                        toastMessage("Sign in successful.", true);
+                        router.push("/home");
+                    }
                 },
                 onError: (context) => {
                     form.setError("password", { message: context.error.message });

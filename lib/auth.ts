@@ -36,6 +36,18 @@ export const auth = betterAuth({
         }
     },
     user: {
+        changeEmail: {
+            enabled: true,
+            sendChangeEmailConfirmation: async ({ user, newEmail, url, token }, request) => {
+                waitUntil(
+                    transporter.sendMail({
+                        to: newEmail,
+                        subject: "Approve email change",
+                        text: `Proceed to this URL to confirm your new email: ${url}`
+                    })
+                );
+            }
+        },
         additionalFields: {
             profileBannerImage: {
                 type: "string",

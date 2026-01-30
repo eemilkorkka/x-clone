@@ -42,6 +42,7 @@ export type SignupFormData = {
 }
 
 export default function SignupModal() {
+    const [open, setOpen] = useState(true);
     const router = useRouter();
     const [step, setStep] = useState(0);
 
@@ -62,10 +63,15 @@ export default function SignupModal() {
         <ChoosePassword formData={formData} setFormData={setFormData} />
     ];
 
+    const handleOpenChange = () => {
+        router.back();
+        setOpen(false);
+    }
+
     return (
-        <Dialog open={true} onOpenChange={() => router.back()}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogContent className="flex flex-col !max-w-[600px] h-full min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5" showCloseButton={false}>
-                <DialogHeader step={step} setStep={setStep} handleDialogClose={() => router.back()} />
+                <DialogHeader step={step} setStep={setStep} handleDialogClose={handleOpenChange} />
                 <div className="flex flex-1 flex-col mx-auto max-w-md w-full mt-2">
                     <div className="space-y-2">
                         <DialogTitle className="text-3xl font-bold">{stepTexts[step].title}</DialogTitle>

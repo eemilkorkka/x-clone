@@ -95,13 +95,13 @@ export const passwordSchema = z.object({
 }).superRefine((data, ctx) => {
     const specialChars = '!"#$%&\'()*+,-./:;<=>?@[\\]^`{|}~'.split('');
     const digits = '0123456789'.split('');
-    const numberOfUppercase = (data.password.match(/[A-Z]/g) || []).length;
-    const numberOfLowercase = (data.password.match(/[a-z]/g) || []).length;
+    const numberOfUppercaseChars = (data.password.match(/[A-Z]/g) || []).length;
+    const numberOfLowercaseChars = (data.password.match(/[a-z]/g) || []).length;
 
     if (!specialChars.some((char) => data.password.includes(char))) {
         ctx.addIssue({
             code: "custom",
-            message: "Username should contain at least one special character.",
+            message: "Password should contain at least one special character.",
             path: ["password"]
         });
     }
@@ -109,17 +109,16 @@ export const passwordSchema = z.object({
     if (!digits.some((digit) => data.password.includes(digit))) {
         ctx.addIssue({
             code: "custom",
-            message: "Username should contain at least one digit.",
+            message: "Password should contain at least one digit.",
             path: ["password"]
         });
     }
 
-    if (numberOfUppercase < 1 || numberOfLowercase < 1) {
+    if (numberOfUppercaseChars < 1 || numberOfLowercaseChars < 1) {
         ctx.addIssue({
             code: "custom",
-            message: "Username should contain both uppercase and lowercase letters.",
+            message: "Password should contain both uppercase and lowercase letters.",
             path: ["password"]
-
         });
     }
 });

@@ -1,8 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { FeedHeader } from "./FeedHeader"
-import { Tabs } from "../Tabs"
 import { TweetForm } from "../Tweet/TweetForm";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
@@ -12,6 +9,7 @@ import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useQueryState } from 'nuqs';
 import { authClient } from "@/lib/auth-client";
+import { HomeHeader } from "../Home/HomeHeader";
 
 const tabs = [
     { label: "For you" },
@@ -35,7 +33,6 @@ const fetchTweets = async (feed: string | null, { pageParam }: { pageParam?: { c
 export const HomeFeed = () => {
 
     const { data: sessionData } = authClient.useSession();
-    const [activeTab, setActiveTab] = useState(tabs[0].label);
     const [feed, setFeed] = useQueryState("feed", {
         defaultValue: "foryou"
     });
@@ -56,16 +53,9 @@ export const HomeFeed = () => {
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
     });
 
-    const changeTab = (tab: string) => {
-        setActiveTab(tab);
-        setFeed(tab.replace(" ", "").toLowerCase());
-    }
-
     return (
         <>
-            <FeedHeader styles="backdrop-blur-lg bg-background/80">
-                <Tabs tabs={tabs} activeTab={activeTab} changeTab={changeTab} />
-            </FeedHeader>
+            <HomeHeader setFeed={setFeed} />
             <TweetForm type="tweet" isComposeModal={false} />
             {isLoading ? (
                 <LoadingSpinner />

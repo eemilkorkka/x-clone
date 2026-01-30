@@ -52,7 +52,7 @@ export const User = (
             />
             <div className="flex-1 flex flex-col">
                 <div className="flex items-center justify-between">
-                    <div className={cn("flex w-full items-start flex-col", contentStyles)}>
+                    <div className={cn("flex w-full items-start flex-col max-w-40", contentStyles)}>
                         <Displayname
                             username={user.username ?? ""}
                             displayName={user.displayUsername ?? ""}
