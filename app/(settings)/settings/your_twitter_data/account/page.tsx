@@ -2,7 +2,12 @@ import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { ReturnBack } from "@/components/ReturnBack";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
 import { getSession } from "@/lib/session";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+    title: "Account information",
+}
 
 export default async function YourTwitterDataAccountPage() {
 

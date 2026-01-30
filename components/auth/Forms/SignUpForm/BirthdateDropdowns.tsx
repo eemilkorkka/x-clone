@@ -21,7 +21,7 @@ export const BirthdateDropdowns = ({ form, month, day, year, styles }: Birthdate
                 name="month"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                    <Field className="w-3xl">
+                    <Field className="w-3xl" data-invalid={fieldState.invalid}>
                         <CustomSelect
                             {...field}
                             label="Month"
@@ -44,7 +44,7 @@ export const BirthdateDropdowns = ({ form, month, day, year, styles }: Birthdate
                         : 31;
 
                     return (
-                        <Field>
+                        <Field data-invalid={fieldState.invalid}>
                             <CustomSelect
                                 {...field}
                                 label="Day"
@@ -64,7 +64,7 @@ export const BirthdateDropdowns = ({ form, month, day, year, styles }: Birthdate
                 name="year"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                    <Field>
+                    <Field data-invalid={fieldState.invalid}>
                         <CustomSelect
                             {...field}
                             label="Year"

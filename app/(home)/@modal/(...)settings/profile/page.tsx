@@ -140,7 +140,7 @@ export default function EditProfileModal() {
 
     const displayName = form.watch("displayName");
     const bio = form.watch("bio");
-    const location = form.watch("location");
+    const location = form.watch("location");''
     const website = form.watch("website");
     const month = form.watch("month");
     const day = form.watch("day");
@@ -190,7 +190,7 @@ export default function EditProfileModal() {
                                 name="displayName"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field className="dark:bg-black">
+                                    <Field className="dark:bg-black" data-invalid={fieldState.invalid}>
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -208,7 +208,7 @@ export default function EditProfileModal() {
                                 name="bio"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field className="dark:bg-black">
+                                    <Field className="dark:bg-black" data-invalid={fieldState.invalid}>
                                         <CustomTextarea
                                             {...field}
                                             label="Bio"
@@ -224,7 +224,7 @@ export default function EditProfileModal() {
                                 name="location"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field className="dark:bg-black">
+                                    <Field className="dark:bg-black" data-invalid={fieldState.invalid}>
                                         <CustomInput
                                             {...field}
                                             type="text"
@@ -241,7 +241,7 @@ export default function EditProfileModal() {
                                 name="website"
                                 control={form.control}
                                 render={({ field, fieldState }) => (
-                                    <Field className="dark:bg-black">
+                                    <Field className="dark:bg-black" data-invalid={fieldState.invalid}>
                                         <CustomInput
                                             {...field}
                                             type="text"

@@ -13,7 +13,7 @@ interface DisplaynameProps {
 export const Displayname = ({ displayName, username, styles, useHoverCard = false, useLink = true }: DisplaynameProps) => {
 
     const className = cn(
-        "block truncate overflow-hidden whitespace-nowrap h-fit font-bold text-[15px]",
+        "block truncate overflow-hidden whitespace-nowrap text-left h-fit font-bold text-[15px]",
         useLink && "hover:underline",
         styles
     );
@@ -31,7 +31,7 @@ export const Displayname = ({ displayName, username, styles, useHoverCard = fals
             {displayNameElement}
         </Link>
     ) : (
-        <div>
+        <div className="min-w-0">
             {displayNameElement}
         </div>
     );

@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { username } from "better-auth/plugins";
+import { twoFactor, username } from "better-auth/plugins";
 import { prisma } from "@/lib/prisma";
+import { transporter } from "./nodemailer";
+import { waitUntil } from '@vercel/functions';
 
 export const auth = betterAuth({
     session: {
@@ -13,6 +15,19 @@ export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
+    emailVerification: {
+        sendOnSignUp: true,
+        sendOnSignIn: true,
+        sendVerificationEmail: async ({ user, url, token }, request) => {
+            waitUntil(
+                transporter.sendMail({
+                    to: user.email,
+                    subject: "Verify your email",
+                    text: `Proceed to this URL to verify your email: ${url}`
+                })
+            );
+        }
+    },
     socialProviders: {
         google: {
             prompt: "select_account",
@@ -21,6 +36,18 @@ export const auth = betterAuth({
         }
     },
     user: {
+        changeEmail: {
+            enabled: true,
+            sendChangeEmailConfirmation: async ({ user, newEmail, url, token }, request) => {
+                waitUntil(
+                    transporter.sendMail({
+                        to: newEmail,
+                        subject: "Approve email change",
+                        text: `Proceed to this URL to confirm your new email: ${url}`
+                    })
+                );
+            }
+        },
         additionalFields: {
             profileBannerImage: {
                 type: "string",
@@ -67,9 +94,12 @@ export const auth = betterAuth({
         },
     },
     emailAndPassword: {
+        requireEmailVerification: true,
         enabled: true,
     },
+    appName: "X Clone",
     plugins: [
+        twoFactor(),
         username({
             maxUsernameLength: 15,
         }),

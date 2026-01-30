@@ -9,19 +9,30 @@ import { Text } from "@/components/Text";
 import { ColorSelection } from "@/components/Settings/ColorSelection";
 import { Metadata } from "next";
 import { ThemeSelection } from "@/components/Settings/ThemeSelection";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Display",
 }
 
-export default function DisplayPage() {
+export default async function DisplayPage() {
+
+    const session = await getSession();
+
+    if (!session) {
+        redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
+    }
+
     return (
         <div>
             <FeedHeader styles="px-2 flex gap-6 items-center border-b-0">
                 <ReturnBack />
                 <h1 className="text-xl font-bold">Display</h1>
             </FeedHeader>
-            <div className="px-4 space-y-4">
+            <div className="px-4 space-y-4 pb-20">
                 <p className="text-zinc-500 mt-4 text-sm">Manage your display color. These settings affect all the X accounts on this browser.</p>
                 <div className="flex">
                     <CustomAvatar

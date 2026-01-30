@@ -6,6 +6,7 @@
 
 @theme {
   --breakpoint-mobile: 500px;
+  --breakpoint-xs: 360px;
   --animate-progress-slow: progress 1s infinite linear;
   --color-dim: oklch(0.2385 0.0264 248.99);
   --transform-origin-left-right: 0% 50%;

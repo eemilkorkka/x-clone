@@ -88,7 +88,7 @@ export const Leftsidebar = async () => {
 
             {session && (
                 <LogoutPopover user={session.user}>
-                    <User user={session.user} useLink={false} styles="hidden mobile:flex rounded-full p-2.5" contentStyles="hidden xl:flex">
+                    <User user={session.user} useLink={false} styles="hidden mobile:flex rounded-full p-2.5 w-15 h-15 xl:w-full" contentStyles="hidden xl:block">
                         <BsThreeDots className="hidden xl:inline" />
                     </User>
                 </LogoutPopover>

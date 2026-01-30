@@ -9,14 +9,7 @@ import { FormButton } from "../FormButton";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToastMessage } from "@/hooks/useToastMessage";
-
-const passwordSchema = z.object({
-    password: z.string().min(8, "Password should at least be 8 characters long."),
-    confirmPassword: z.string().min(8, "Password should at least be 8 characters long.")
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
-    path: ["confirmPassword"]
-});
+import { passwordSchemaWithConfirm } from "@/lib/schemas";
 
 interface ChoosePasswordProps {
     formData: SignupFormData;
@@ -27,8 +20,8 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
     const router = useRouter();
     const { toastMessage } = useToastMessage();
 
-    const form = useForm<z.infer<typeof passwordSchema>>({
-        resolver: zodResolver(passwordSchema),
+    const form = useForm<z.infer<typeof passwordSchemaWithConfirm>>({
+        resolver: zodResolver(passwordSchemaWithConfirm),
         defaultValues: {
             password: "",
             confirmPassword: ""
@@ -38,7 +31,7 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
     const password = form.watch("password");
     const confirmPassword = form.watch("confirmPassword");
 
-    const onSubmit = async (data: z.infer<typeof passwordSchema>) => {
+    const onSubmit = async (data: z.infer<typeof passwordSchemaWithConfirm>) => {
         const { data: signupData, error } = await authClient.signUp.email({
             email: formData.email,
             password: data.password,

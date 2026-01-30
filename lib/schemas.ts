@@ -51,7 +51,7 @@ const createUsernameSchema = (checkAvailability: (username: string) => Promise<b
             ctx.addIssue({
                 code: "custom",
                 message: "Username cannot contain any special characters except underscores.",
-                path: ["username"]
+
             });
         }
 
@@ -88,4 +88,44 @@ export const emailSchema = z.email().superRefine(async (data, ctx) => {
             message: "This email is taken.",
         });
     }
+});
+
+export const passwordSchema = z.object({
+    password: z.string().min(8, "Password should at least be 8 characters long."),
+}).superRefine((data, ctx) => {
+    const specialChars = '!"#$%&\'()*+,-./:;<=>?@[\\]^`{|}~'.split('');
+    const digits = '0123456789'.split('');
+    const numberOfUppercaseChars = (data.password.match(/[A-Z]/g) || []).length;
+    const numberOfLowercaseChars = (data.password.match(/[a-z]/g) || []).length;
+
+    if (!specialChars.some((char) => data.password.includes(char))) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Password should contain at least one special character.",
+            path: ["password"]
+        });
+    }
+
+    if (!digits.some((digit) => data.password.includes(digit))) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Password should contain at least one digit.",
+            path: ["password"]
+        });
+    }
+
+    if (numberOfUppercaseChars < 1 || numberOfLowercaseChars < 1) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Password should contain both uppercase and lowercase letters.",
+            path: ["password"]
+        });
+    }
+});
+
+export const passwordSchemaWithConfirm = passwordSchema.and(z.object({
+    confirmPassword: z.string().min(8, "Password should at least be 8 characters long.")
+})).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"]
 });

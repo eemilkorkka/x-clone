@@ -43,8 +43,8 @@ export type SignupFormData = {
 
 export default function SignupModal() {
     const router = useRouter();
-    const pathname = usePathname();
     const [step, setStep] = useState(0);
+    const pathname = usePathname();
 
     const [formData, setFormData] = useState({
         name: "",
