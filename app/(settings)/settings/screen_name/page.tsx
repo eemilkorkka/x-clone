@@ -1,4 +1,4 @@
-import { ChangeUsernamePage } from "@/components/Settings/ChangeUsernamePage";
+import { ChangeUsernamePage } from "@/components/Settings/Account/Account_Information/ChangeUsernamePage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

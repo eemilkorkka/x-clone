@@ -48,6 +48,18 @@ export const auth = betterAuth({
                 );
             }
         },
+        deleteUser: {
+            enabled: true,
+            sendDeleteAccountVerification: async ({ user, url, token }, request) => {
+                waitUntil(
+                    transporter.sendMail({
+                        to: user.email,
+                        subject: "Confirm account deletion",
+                        text: `Proceed to this URL to confirm your account deletion: ${url}`
+                    })
+                );
+            }
+        },
         additionalFields: {
             profileBannerImage: {
                 type: "string",

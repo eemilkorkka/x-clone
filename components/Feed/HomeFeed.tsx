@@ -10,6 +10,7 @@ import { LoadingSpinner } from "../LoadingSpinner";
 import { useQueryState } from 'nuqs';
 import { authClient } from "@/lib/auth-client";
 import { HomeHeader } from "../Home/HomeHeader";
+import { cn } from "@/lib/utils";
 
 const tabs = [
     { label: "For you" },

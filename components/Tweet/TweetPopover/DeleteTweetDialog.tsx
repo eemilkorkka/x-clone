@@ -26,7 +26,7 @@ export const DeleteTweetDialog = ({ children, onConfirmClick }: DeleteTweetDialo
                 </div>
             }>
             </AlertDialogTrigger>
-            <AlertDialogContent className="!max-w-xs ring-0">
+            <AlertDialogContent className="!max-w-xs ring-0 z-70">
                 <AlertDialogHeader>
                     <AlertDialogTitle className="font-bold mr-auto">Delete post?</AlertDialogTitle>
                     <AlertDialogDescription className="text-left">

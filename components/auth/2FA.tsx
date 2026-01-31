@@ -7,9 +7,9 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
-import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/ui/input-otp";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { cn } from "@/lib/utils";
+import { CustomInput } from "../customized/CustomInput";
 
 export const formSchema = z.object({
     verificationCode: z.string().min(6).max(6)
@@ -46,6 +46,8 @@ export const TwoFactorAuth = ({ children, styles }: TwoFactorAuthProps) => {
         }
     }
 
+    const verificationCode = form.watch("verificationCode");
+
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className={cn("flex-1 flex flex-col", styles)}>
             <FieldGroup>
@@ -53,20 +55,16 @@ export const TwoFactorAuth = ({ children, styles }: TwoFactorAuthProps) => {
                     name="verificationCode"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field className="w-fit mx-auto">
-                            <InputOTP maxLength={6} {...field}>
-                                <InputOTPGroup>
-                                    <InputOTPSlot index={0} />
-                                    <InputOTPSlot index={1} />
-                                    <InputOTPSlot index={2} />
-                                </InputOTPGroup>
-                                <InputOTPSeparator />
-                                <InputOTPGroup>
-                                    <InputOTPSlot index={3} />
-                                    <InputOTPSlot index={4} />
-                                    <InputOTPSlot index={5} />
-                                </InputOTPGroup>
-                            </InputOTP>
+                        <Field>
+                            <CustomInput
+                                {...field}
+                                type="text"
+                                maxLength={6}
+                                label="Verification code"
+                                value={verificationCode}
+                                fieldState={fieldState}
+                                styles="text-foreground border-border shadow-none"
+                            />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
                     )}

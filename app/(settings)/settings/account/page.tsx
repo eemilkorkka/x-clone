@@ -3,7 +3,6 @@ import { ReturnBack } from "@/components/ReturnBack"
 import { SettingsItem } from "@/components/Settings/SettingsItem";
 import { getSession } from "@/lib/session"
 import { redirect } from "next/navigation";
-import { GoShield } from "react-icons/go";
 import { IoPersonOutline } from "react-icons/io5";
 import { LuKeyRound } from "react-icons/lu";
 import { LiaHeartBrokenSolid } from "react-icons/lia";
