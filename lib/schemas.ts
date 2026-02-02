@@ -92,6 +92,7 @@ export const emailSchema = z.email().superRefine(async (data, ctx) => {
 
 export const passwordSchema = z.object({
     password: z.string().min(8, "Password should at least be 8 characters long."),
+    confirmPassword: z.string().min(8, "Password should at least be 8 characters long.")
 }).superRefine((data, ctx) => {
     const specialChars = '!"#$%&\'()*+,-./:;<=>?@[\\]^`{|}~'.split('');
     const digits = '0123456789'.split('');
@@ -121,11 +122,12 @@ export const passwordSchema = z.object({
             path: ["password"]
         });
     }
-});
 
-export const passwordSchemaWithConfirm = passwordSchema.and(z.object({
-    confirmPassword: z.string().min(8, "Password should at least be 8 characters long.")
-})).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
-    path: ["confirmPassword"]
+    if (data.password !== data.confirmPassword) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Passwords do not match.",
+            path: ["confirmPassword"]
+        });
+    }
 });

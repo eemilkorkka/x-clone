@@ -37,7 +37,7 @@ export default async function AccountPage() {
                 title={"Change your password"}
                 description={"Change your password at any time."}
                 icon={<LuKeyRound className="text-zinc-500 size-6" />}
-                href="/settings/account/change_password"
+                href="/settings/password"
                 styles="mt-3 pl-8"
             />
 

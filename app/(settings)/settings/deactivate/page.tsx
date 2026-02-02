@@ -3,7 +3,12 @@ import { ReturnBack } from "@/components/ReturnBack";
 import { DeactivateAccount } from "@/components/Settings/Account/DeactivateAccount";
 import { User } from "@/components/User/User";
 import { getSession } from "@/lib/session";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+    title: "Deactivate account",
+}
 
 export default async function DeactivateAccountPage() {
 
