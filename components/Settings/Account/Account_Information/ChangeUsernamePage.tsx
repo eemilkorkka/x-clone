@@ -67,7 +67,7 @@ export const ChangeUsernamePage = () => {
                                 label="Username"
                                 value={username}
                                 fieldState={fieldState}
-                                styles="text-foreground border-border shadow-none"
+                                styles="border-border"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

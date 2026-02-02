@@ -30,7 +30,7 @@ export default function SignupModal() {
                     <div className="space-y-2">
                         <DialogTitle className="text-3xl font-bold">Two-factor Authentication</DialogTitle>
                     </div>
-                    <TwoFactorAuth styles="justify-between mt-8">
+                    <TwoFactorAuth styles="justify-between mt-6">
                         <FormButton title="Continue" />
                     </TwoFactorAuth>
                 </div>

@@ -30,7 +30,7 @@ export const CustomTextarea = (
                 maxLength={maxLength}
                 value={value}
                 className={cn(
-                    "peer py-6.5 text-white px-4 focus-visible:ring-0 rounded-sm",
+                    "peer py-6.5 text-foreground px-4 focus-visible:ring-0 rounded-sm !bg-transparent",
                     fieldState?.error ? "border-destructive focus-visible:border-destructive" : `border-zinc-800 ${colors.focusVisibleBorderColor}`,
                     styles
                 )}

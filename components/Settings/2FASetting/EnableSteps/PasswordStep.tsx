@@ -79,7 +79,7 @@ export const PasswordStep = ({ setStep, setQrCode }: PasswordStepProps) => {
                             label="Password"
                             value={password}
                             fieldState={fieldState}
-                            styles="text-foreground border-border shadow-none"
+                            styles="border-border"
                         />
                         {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                     </Field>

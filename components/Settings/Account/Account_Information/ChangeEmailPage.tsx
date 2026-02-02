@@ -57,14 +57,14 @@ export const ChangeEmailPage = () => {
                     name="email"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field>
+                        <Field data-invalid={fieldState.invalid}>
                             <CustomInput
                                 {...field}
                                 label="Email"
                                 type="email"
                                 value={email}
                                 fieldState={fieldState}
-                                styles="text-foreground border-border shadow-none"
+                                styles="border-border"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

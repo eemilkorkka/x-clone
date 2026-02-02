@@ -55,7 +55,7 @@ export const TwoFactorAuth = ({ children, styles }: TwoFactorAuthProps) => {
                     name="verificationCode"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field>
+                        <Field data-invalid={fieldState.invalid}>
                             <CustomInput
                                 {...field}
                                 type="text"
@@ -63,7 +63,7 @@ export const TwoFactorAuth = ({ children, styles }: TwoFactorAuthProps) => {
                                 label="Verification code"
                                 value={verificationCode}
                                 fieldState={fieldState}
-                                styles="text-foreground border-border shadow-none"
+                                styles="text-white light:text-black border-border"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

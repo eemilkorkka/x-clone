@@ -5,7 +5,7 @@ import "./globals.css";
 import Providers from "@/components/Providers";
 import React from "react";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "X Clone",
   description: "A fullstack clone of X built with NextJS.",
-};
+}
 
 export default function RootLayout({
   children,

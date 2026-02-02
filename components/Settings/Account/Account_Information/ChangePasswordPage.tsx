@@ -61,14 +61,14 @@ export const ChangePasswordPage = () => {
                     name="currentPassword"
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <Field>
+                        <Field data-invalid={fieldState.invalid}>
                             <CustomInput
                                 {...field}
                                 type="password"
                                 label="Current password"
                                 value={currentPassword}
                                 fieldState={fieldState}
-                                styles="text-foreground border-border shadow-none"
+                                styles="border-border"
                             />
 
                             <Link href="/password-recovery" className={cn("text-xs ml-2 hover:underline", colors.textColor)}>Forgot password?</Link>
@@ -88,7 +88,7 @@ export const ChangePasswordPage = () => {
                                     label="Password"
                                     value={password}
                                     fieldState={fieldState}
-                                    styles="text-foreground border-border shadow-none"
+                                    styles="border-border"
                                 />
 
                                 {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
@@ -99,14 +99,14 @@ export const ChangePasswordPage = () => {
                         name="confirmPassword"
                         control={form.control}
                         render={({ field, fieldState }) => (
-                            <Field>
+                            <Field data-invalid={fieldState.invalid}>
                                 <CustomInput
                                     {...field}
                                     type="password"
                                     label="Confirm password"
                                     value={confirmPassword}
                                     fieldState={fieldState}
-                                    styles="text-foreground border-border shadow-none"
+                                    styles="border-border"
                                 />
 
                                 {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}

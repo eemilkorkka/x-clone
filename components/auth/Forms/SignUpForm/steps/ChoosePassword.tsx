@@ -66,7 +66,8 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
                                 type="password"
                                 value={password}
                                 fieldState={fieldState}
-                                isPasswordInput={true}
+                                toggleToSeePassword={true}
+                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
@@ -83,7 +84,7 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
                                 type="password"
                                 value={confirmPassword}
                                 fieldState={fieldState}
-                                isPasswordInput={true}
+                                toggleToSeePassword={true}
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

@@ -72,6 +72,7 @@ export const UserStep = ({ setStep, setFormData, setOpen, formData }: UserStepPr
                                 label="Username or email"
                                 value={username_or_email}
                                 fieldState={fieldState}
+                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
