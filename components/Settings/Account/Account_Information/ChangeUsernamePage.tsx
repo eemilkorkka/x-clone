@@ -26,6 +26,7 @@ export const ChangeUsernamePage = () => {
 
     const form = useForm<z.infer<typeof usernameSchema>>({
         resolver: zodResolver(usernameSchema),
+        mode: "onBlur",
         defaultValues: {
             username: sessionData?.user.username || ""
         }

@@ -14,7 +14,15 @@ export const useRetweetMutation = (tweet: Tweet) => {
     const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     const retweetMutation = useMutation({
-        mutationFn: retweet,
+        mutationFn: async (formData: FormData) => {
+            const result = await retweet(formData);
+
+            if (!result.success || result.error) {
+                throw new Error(result.error || "Failed to retweet");
+            }
+
+            return result;
+        },
         onMutate: async () => {
             const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
             const tweetQueryKey = ["tweet", tweet.id];

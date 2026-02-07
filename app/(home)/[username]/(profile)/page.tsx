@@ -1,7 +1,7 @@
 import { ProfileFeed } from "@/components/Profile/ProfileFeed";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getTweetsByUser } from "@/lib/queries/tweet-queries";
-import { getSession } from "@/lib/session"
+import { getSession } from "@/lib/session";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 

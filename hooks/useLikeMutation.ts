@@ -13,7 +13,15 @@ export const useLikeMutation = (tweet: Tweet) => {
     const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     const likeMutation = useMutation({
-        mutationFn: likeTweet,
+        mutationFn: async (formData: FormData) => {
+            const result = await likeTweet(formData);
+
+            if (!result.success || result.error) {
+                throw new Error(result.error || "Failed to like tweet");
+            }
+
+            return result;
+        },
         onMutate: async () => {
             const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
             const tweetQueryKey = ["tweet", tweet.id];

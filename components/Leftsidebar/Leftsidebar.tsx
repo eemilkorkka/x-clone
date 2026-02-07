@@ -41,31 +41,37 @@ export const Leftsidebar = async () => {
                         activeIcon={<GoHomeFill size={30} />}
                         label="Home"
                     />
+                    
                     <Navitem
                         icon={<IoSearchOutline size={30} />}
                         label="Explore"
                     />
+
                     <Navitem
                         icon={<BsBell size={30} />}
                         label="Notifications"
                         styles="hidden mobile:flex"
                     />
+
                     <Navitem
                         icon={<HiOutlineEnvelope size={30} />}
                         label="Messages"
                         styles="hidden mobile:flex"
                     />
+
                     <Navitem
                         href="/bookmarks"
                         icon={<IoBookmarkOutline size={30} />}
                         activeIcon={<IoBookmark size={30} />}
                         label="Bookmarks"
                     />
+
                     <Navitem
                         icon={<BsPeople size={30} />}
                         label="Lists"
                         styles="hidden mobile:flex"
                     />
+
                     <Navitem
                         href={`/${session?.user.username}`}
                         icon={<IoPersonOutline size={30} />}

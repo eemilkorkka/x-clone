@@ -13,7 +13,15 @@ export const useBookmarkMutation = (tweet: Tweet) => {
     const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     const bookmarkMutation = useMutation({
-        mutationFn: bookmarkTweet,
+        mutationFn: async (formData: FormData) => {
+            const result = await bookmarkTweet(formData);
+            
+            if (!result.success || result.error) {
+                throw new Error(result.error || "Failed to bookmark tweet");
+            }
+            
+            return result;
+        },
         onMutate: async () => {
             const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
             const tweetQueryKey = ["tweet", tweet.id];

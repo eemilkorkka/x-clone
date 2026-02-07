@@ -1,4 +1,4 @@
-import { ChangePasswordPage } from "@/components/Settings/Account/Account_Information/ChangePasswordPage";
+import { ChangePasswordPage } from "@/components/Settings/Account/ChangePasswordPage";
 import { getSession } from "@/lib/session";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";

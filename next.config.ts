@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
         hostname: "cloud.appwrite.io"
       }
     ]
-  }
+  },
 };
 
 export default nextConfig;

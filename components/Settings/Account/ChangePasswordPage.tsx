@@ -71,7 +71,7 @@ export const ChangePasswordPage = () => {
                                 styles="border-border"
                             />
 
-                            <Link href="/password-recovery" className={cn("text-xs ml-2 hover:underline", colors.textColor)}>Forgot password?</Link>
+                            <Link href="/password-recovery" className={cn("text-sm ml-2 hover:underline", colors.textColor)}>Forgot password?</Link>
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
                     )}

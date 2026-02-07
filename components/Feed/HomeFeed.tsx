@@ -10,12 +10,6 @@ import { LoadingSpinner } from "../LoadingSpinner";
 import { useQueryState } from 'nuqs';
 import { authClient } from "@/lib/auth-client";
 import { HomeHeader } from "../Home/HomeHeader";
-import { cn } from "@/lib/utils";
-
-const tabs = [
-    { label: "For you" },
-    { label: "Following" }
-];
 
 const fetchTweets = async (feed: string | null, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam
@@ -56,7 +50,7 @@ export const HomeFeed = () => {
 
     return (
         <>
-            <HomeHeader setFeed={setFeed} />
+            <HomeHeader setFeed={setFeed} feed={feed} />
             <TweetForm type="tweet" isComposeModal={false} />
             {isLoading ? (
                 <LoadingSpinner />

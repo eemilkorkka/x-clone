@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function SignupModal() {
     const router = useRouter(); 
