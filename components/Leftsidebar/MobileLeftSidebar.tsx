@@ -3,26 +3,23 @@
 import {
     Sheet,
     SheetContent,
-    SheetFooter,
     SheetHeader,
     SheetTrigger,
 } from "@/components/ui/sheet";
 
 import { CustomAvatar } from "../User/CustomAvatar";
 import { authClient } from "@/lib/auth-client";
-import { User } from "../User/User";
 import { useGetUserData } from "@/hooks/useGetUserData";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { IoBookmarkOutline, IoLogInOutline, IoPersonOutline, IoSettingsOutline } from "react-icons/io5";
 import { Username } from "../User/Username";
 import { Displayname } from "../User/Displayname";
+import { LogoutDialog } from "./LogoutDialog";
 
 export const MobileLeftSidebar = () => {
 
     const { data } = authClient.useSession();
     const { data: userData } = useGetUserData(data?.user.username ?? "");
-    const router = useRouter();
 
     return userData && (
         <Sheet>
@@ -74,18 +71,18 @@ export const MobileLeftSidebar = () => {
                     <IoPersonOutline size={25} />
                     <span className="text-xl font-bold">Profile</span>
                 </Link>
-                <Link href={`/bookmarks`} className="flex items-center gap-4 px-4 py-2">
+                <Link href="/bookmarks" className="flex items-center gap-4 px-4 py-2">
                     <IoBookmarkOutline size={25} />
                     <span className="text-xl font-bold">Bookmarks</span>
                 </Link>
-                <Link href={`/settings`} className="flex items-center gap-4 px-4 py-2">
+                <Link href="/settings" className="flex items-center gap-4 px-4 py-2">
                     <IoSettingsOutline size={25} />
                     <span className="text-xl font-bold">Settings and privacy</span>
                 </Link>
-                <div className="flex items-center gap-4 px-4 py-2">
+                <Link href="/logout" className="flex items-center gap-4 px-4 py-2">
                     <IoLogInOutline size={25} />
                     <span className="text-xl font-bold">Log out</span>
-                </div>
+                </Link>
             </SheetContent>
         </Sheet>
     )
