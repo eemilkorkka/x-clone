@@ -6,6 +6,7 @@ import { transporter } from "./nodemailer";
 import { waitUntil } from '@vercel/functions';
 
 export const auth = betterAuth({
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
     session: {
         cookieCache: {
             enabled: true,
@@ -108,6 +109,15 @@ export const auth = betterAuth({
     emailAndPassword: {
         requireEmailVerification: true,
         enabled: true,
+        sendResetPassword: async ({ user, url, token }, request) => {
+            waitUntil(
+                transporter.sendMail({
+                    to: user.email,
+                    subject: "Reset your password",
+                    text: `Click the link to reset your password: ${url}`,
+                })
+            )
+        }
     },
     appName: "X Clone",
     plugins: [

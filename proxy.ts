@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "./lib/session";
-
-const allowedPaths = ["/", "/signup", "/two_factor_authentication"];
+import { allowedPaths } from "@/lib/paths";
 
 export async function proxy(request: NextRequest) {
     const path = request.nextUrl.pathname;

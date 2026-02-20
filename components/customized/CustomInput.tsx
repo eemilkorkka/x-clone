@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { colorsArray } from "@/lib/colors";
 import { useColor } from "@/context/ColorContext";
+import { allowedPaths } from "@/lib/paths";
 
 interface CustomInputProps {
     type: React.InputHTMLAttributes<HTMLInputElement>["type"];
@@ -35,7 +36,7 @@ export const CustomInput = (
     const pathname = usePathname();
     const { colors } = useColor();
     
-    const useChosenColor = pathname !== "/" && pathname !== "/signup";
+    const useChosenColor = !allowedPaths.includes(pathname);
     const borderFocusColor = useChosenColor ? colors.focusVisibleBorderColor : colorsArray[0].focusVisibleBorderColor;
     const textFocusColor = useChosenColor ? colors.peerFocusTextColor : colorsArray[0].peerFocusTextColor;
 
@@ -65,9 +66,9 @@ export const CustomInput = (
             {toggleToSeePassword &&
                 <div className="absolute top-1/2 -translate-y-1/2 right-4 hover:cursor-pointer">
                     {showPassword ? (
-                        <FaRegEyeSlash fill="white" onClick={() => setShowPassword(false)} />
+                        <FaRegEyeSlash className={pathname === "/" ? "white" : "foreground"} onClick={() => setShowPassword(false)} />
                     ) : (
-                        <FaRegEye fill="white" onClick={() => setShowPassword(true)} />
+                        <FaRegEye className={pathname === "/" ? "white" : "foreground"} onClick={() => setShowPassword(true)} />
                     )}
                 </div>
             }

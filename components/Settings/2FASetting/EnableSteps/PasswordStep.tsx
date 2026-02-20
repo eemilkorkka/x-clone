@@ -80,6 +80,7 @@ export const PasswordStep = ({ setStep, setQrCode }: PasswordStepProps) => {
                             value={password}
                             fieldState={fieldState}
                             styles="border-border"
+                            toggleToSeePassword={true}
                         />
                         {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                     </Field>

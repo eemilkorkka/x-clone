@@ -11,7 +11,7 @@ interface DialogHeaderProps {
 
 export const DialogHeader = ({ step = 0, setStep, handleDialogClose }: DialogHeaderProps) => {
     return (
-        <ShadcnDialogHeader className="relative flex flex-row justify-center items-center">
+        <ShadcnDialogHeader className="relative flex flex-row justify-center items-center h-fit">
             {step > 0 ? (
                 <FaArrowLeft size={23} className="absolute left-0 hover:cursor-pointer" onClick={() => setStep && setStep(prev => prev - 1)} />
             ) : (

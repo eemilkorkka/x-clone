@@ -36,7 +36,8 @@ export const ChangePasswordPage = () => {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         const { data: changePasswordData, error } = await authClient.changePassword({
             currentPassword: data.currentPassword,
-            newPassword: data.password
+            newPassword: data.password,
+            revokeOtherSessions: true
         });
 
         if (error) {
@@ -69,9 +70,10 @@ export const ChangePasswordPage = () => {
                                 value={currentPassword}
                                 fieldState={fieldState}
                                 styles="border-border"
+                                toggleToSeePassword={true}
                             />
 
-                            <Link href="/password-recovery" className={cn("text-sm ml-2 hover:underline", colors.textColor)}>Forgot password?</Link>
+                            <Link href="/forgot-password" className={cn("text-sm ml-2 hover:underline", colors.textColor)}>Forgot password?</Link>
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
                     )}
@@ -89,6 +91,7 @@ export const ChangePasswordPage = () => {
                                     value={password}
                                     fieldState={fieldState}
                                     styles="border-border"
+                                    toggleToSeePassword={true}
                                 />
 
                                 {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
@@ -107,6 +110,7 @@ export const ChangePasswordPage = () => {
                                     value={confirmPassword}
                                     fieldState={fieldState}
                                     styles="border-border"
+                                    toggleToSeePassword={true}
                                 />
 
                                 {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}

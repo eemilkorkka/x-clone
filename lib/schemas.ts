@@ -131,3 +131,21 @@ export const passwordSchema = z.object({
         });
     }
 });
+
+export const userSchema = z.object({
+    username_or_email: z.string().min(1, "Username or email is required.").superRefine(async (username_or_email, ctx) => {
+        if (!username_or_email) {
+            return;
+        }
+
+        const response = await fetch(`/api/users/${username_or_email}`);
+
+        if (!response.ok) {
+            ctx.addIssue({
+                code: "custom",
+                message: "Sorry, we couldn't find your user.",
+                input: username_or_email
+            });
+        }
+    })
+});
