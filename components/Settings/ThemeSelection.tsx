@@ -12,6 +12,14 @@ import { useColor } from "@/context/ColorContext";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 
+type Theme = {
+    name: string;
+    value: string;
+    background: string;
+    hasDataCheckedBackground: string;
+    styles: string;
+}
+
 const themes = [
     {
         name: "Default",
@@ -41,6 +49,11 @@ export const ThemeSelection = () => {
     const { colors } = useColor();
     const { setTheme, resolvedTheme } = useTheme();
 
+    const onThemeSelect = (theme: Theme) => {
+        setTheme(theme.value);
+        localStorage.setItem("selectedTheme", theme.value)
+    }
+
     return (
         <div className="-mx-4 px-4 py-2">
             <h2 className="font-bold text-lg">Background</h2>
@@ -50,7 +63,7 @@ export const ThemeSelection = () => {
                         <FieldLabel key={index} className={cn("p-2 !rounded-sm border-border has-data-checked:!border-2 hover:cursor-pointer",
                             colors.checkedBorderColor, theme.background,
                             theme.hasDataCheckedBackground, theme.styles)}
-                            onClick={() => setTheme(theme.value)}>
+                            onClick={() => onThemeSelect(theme)}>
                             <Field orientation="horizontal" className="space-x-6">
                                 <RadioGroupItem value={theme.value} className={cn("border-gray-500 border-2", colors.checkedBorderColor, colors.checkedColor)} />
                                 <FieldContent>

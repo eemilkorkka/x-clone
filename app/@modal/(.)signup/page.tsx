@@ -65,7 +65,7 @@ export default function SignupModal() {
 
     return pathname === "/signup" && (
         <Dialog open={true} onOpenChange={() => router.back()}>
-            <DialogContent className="flex flex-col !max-w-[600px] min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5" showCloseButton={false}>
+            <DialogContent className="flex flex-col !max-w-[600px] h-full min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5 ring-0" showCloseButton={false}>
                 <DialogHeader step={step} setStep={setStep} handleDialogClose={() => router.back()} />
                 <div className="flex flex-1 flex-col mx-auto max-w-md w-full mt-2">
                     <div className="space-y-2">

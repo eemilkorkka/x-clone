@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { FormButton } from "../../SignUpForm/FormButton";
+import { useTheme } from "next-themes";
 
 const passwordStepSchema = z.object({
     password: z.string().min(1, "Password is required."),
@@ -20,6 +21,7 @@ interface PasswordStepProps {
 export const PasswordStep = ({ formData }: PasswordStepProps) => {
 
     const router = useRouter();
+    const { setTheme } = useTheme();
     const { toastMessage } = useToastMessage();
 
     const form = useForm<z.infer<typeof passwordStepSchema>>({
@@ -45,6 +47,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                         router.push("/two_factor_authentication");
                     } else {
                         toastMessage("Sign in successful.", true);
+                        setTheme(localStorage.getItem("selectedTheme") || "dark");
                         router.push("/home");
                     }
                 },
@@ -62,6 +65,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                         router.push("/two_factor_authentication");
                     } else {
                         toastMessage("Sign in successful.", true);
+                        setTheme(localStorage.getItem("selectedTheme") || "dark");
                         router.push("/home");
                     }
                 },

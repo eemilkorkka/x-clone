@@ -13,11 +13,13 @@ import {
 import { Button } from "../ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 export const LogoutDialog = () => {
 
     const { data } = authClient.useSession();
     const router = useRouter();
+    const { setTheme } = useTheme();
 
     const onLogOutClick = async () => {
         await authClient.signOut({
@@ -27,6 +29,8 @@ export const LogoutDialog = () => {
                 }
             }
         });
+
+        setTheme("dark");
     }
     
     return (

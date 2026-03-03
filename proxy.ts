@@ -4,9 +4,13 @@ import { allowedPaths } from "@/lib/paths";
 
 export async function proxy(request: NextRequest) {
     const path = request.nextUrl.pathname;
-    const session = await getSession(); 
-    
-    if (!session && !allowedPaths.includes(path)) {
+    const session = await getSession();
+
+    const isAllowedPath = allowedPaths.some((pattern) =>
+        typeof pattern === "string" ? pattern === path : pattern.test(path)
+    );
+
+    if (!session && !isAllowedPath) {
         return NextResponse.redirect(new URL("/", request.url));
     }
 
