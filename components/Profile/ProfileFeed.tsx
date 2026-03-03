@@ -11,6 +11,7 @@ import { MediaGrid } from "../Media/MediaGrid";
 import Link from "next/link";
 import Image from "next/image";
 import { FileType } from "@/generated/prisma/enums";
+import { authClient } from "@/lib/auth-client";
 
 export type Feed = "posts" | "replies" | "media" | "likes";
 
@@ -35,6 +36,7 @@ const fetchTweets = async (username: string, type: Feed, includeReplies: boolean
 export const ProfileFeed = ({ type }: ProfileFeedProps) => {
 
     const params = useParams();
+    const { data: sessionData } = authClient.useSession();
     const username = params.username as string;
     const includeReplies = type === "replies" ? true : false;
 
@@ -53,6 +55,17 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
     });
+
+    if (!sessionData || !isLoading && data?.pages[0].items.length === 0) {
+        return (
+            <div className="min-h-screen flex justify-center">
+                <div className="flex flex-col space-y-2">
+                    <p className="text-3xl font-bold mt-14">@{username} hasn't <br /> posted</p>
+                    <p className="text-zinc-500 text-sm">When they do, their posts will show up here.</p>
+                </div>
+            </div>
+        )
+    }
 
     if (type === "media") {
         return (

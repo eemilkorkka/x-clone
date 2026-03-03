@@ -9,7 +9,7 @@ import { FormButton } from "../FormButton";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToastMessage } from "@/hooks/useToastMessage";
-import { passwordSchemaWithConfirm } from "@/lib/schemas";
+import { passwordSchema } from "@/lib/schemas";
 
 interface ChoosePasswordProps {
     formData: SignupFormData;
@@ -20,8 +20,8 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
     const router = useRouter();
     const { toastMessage } = useToastMessage();
 
-    const form = useForm<z.infer<typeof passwordSchemaWithConfirm>>({
-        resolver: zodResolver(passwordSchemaWithConfirm),
+    const form = useForm<z.infer<typeof passwordSchema>>({
+        resolver: zodResolver(passwordSchema),
         defaultValues: {
             password: "",
             confirmPassword: ""
@@ -31,7 +31,7 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
     const password = form.watch("password");
     const confirmPassword = form.watch("confirmPassword");
 
-    const onSubmit = async (data: z.infer<typeof passwordSchemaWithConfirm>) => {
+    const onSubmit = async (data: z.infer<typeof passwordSchema>) => {
         const { data: signupData, error } = await authClient.signUp.email({
             email: formData.email,
             password: data.password,
@@ -66,7 +66,8 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
                                 type="password"
                                 value={password}
                                 fieldState={fieldState}
-                                isPasswordInput={true}
+                                toggleToSeePassword={true}
+                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
@@ -83,7 +84,7 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
                                 type="password"
                                 value={confirmPassword}
                                 fieldState={fieldState}
-                                isPasswordInput={true}
+                                toggleToSeePassword={true}
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

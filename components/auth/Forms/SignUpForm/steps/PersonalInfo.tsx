@@ -115,6 +115,7 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                                 value={name}
                                 maxLength={50}
                                 fieldState={fieldState}
+                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
@@ -131,6 +132,7 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                                 label="Email"
                                 value={email}
                                 fieldState={fieldState}
+                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
@@ -140,7 +142,7 @@ export const PersonalInfo = ({ formData, setFormData, setStep }: PersonalInfoPro
                     <p className="font-bold">Date of birth</p>
                     <p className="text-zinc-500">This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
                 </div>
-                <BirthdateDropdowns form={form} month={month} day={day} year={year} />
+                <BirthdateDropdowns form={form} month={month} day={day} year={year} styles="text-white" />
             </FieldGroup>
             <FormButton disabled={!name || !email || !month || !day || !year || isPending} />
         </form>

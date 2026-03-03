@@ -26,6 +26,7 @@ export const ChangeUsernamePage = () => {
 
     const form = useForm<z.infer<typeof usernameSchema>>({
         resolver: zodResolver(usernameSchema),
+        mode: "onBlur",
         defaultValues: {
             username: sessionData?.user.username || ""
         }
@@ -67,7 +68,7 @@ export const ChangeUsernamePage = () => {
                                 label="Username"
                                 value={username}
                                 fieldState={fieldState}
-                                styles="text-foreground border-border shadow-none"
+                                styles="border-border"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

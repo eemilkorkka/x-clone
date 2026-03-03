@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { FormButton } from "../../SignUpForm/FormButton";
+import { useTheme } from "next-themes";
 
 const passwordStepSchema = z.object({
     password: z.string().min(1, "Password is required."),
@@ -20,6 +21,7 @@ interface PasswordStepProps {
 export const PasswordStep = ({ formData }: PasswordStepProps) => {
 
     const router = useRouter();
+    const { setTheme } = useTheme();
     const { toastMessage } = useToastMessage();
 
     const form = useForm<z.infer<typeof passwordStepSchema>>({
@@ -45,6 +47,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                         router.push("/two_factor_authentication");
                     } else {
                         toastMessage("Sign in successful.", true);
+                        setTheme(localStorage.getItem("selectedTheme") || "dark");
                         router.push("/home");
                     }
                 },
@@ -62,6 +65,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                         router.push("/two_factor_authentication");
                     } else {
                         toastMessage("Sign in successful.", true);
+                        setTheme(localStorage.getItem("selectedTheme") || "dark");
                         router.push("/home");
                     }
                 },
@@ -87,6 +91,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                                 label="Username or email"
                                 value={username_or_email}
                                 fieldState={fieldState}
+                                styles="text-white"
                             />
                         </Field>
                     )}
@@ -102,7 +107,8 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                                 label="Password"
                                 value={password}
                                 fieldState={fieldState}
-                                isPasswordInput={true}
+                                toggleToSeePassword={true}
+                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

@@ -1,35 +1,21 @@
-"use client";
+import { ChangeEmailPage } from "@/components/Settings/Account/Account_Information/ChangeEmailPage";
+import { getSession } from "@/lib/session";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { authClient } from "@/lib/auth-client";
-import { emailSchema } from "@/lib/schemas"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form"
-import z from "zod";
+export const metadata: Metadata = {
+    title: "Email",
+}
 
-const formSchema = z.object({
-    email: emailSchema
-});
+export default async function EmailPage() {
 
-export default function EmailPage() {
-    
-    const { data } = authClient.useSession();
-    const router = useRouter();
+    const session = await getSession();
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            email: data?.user.email || ""
-        }
-    });
-
-    if (!data) {
-        return router.push("/");
+    if (!session) {
+        redirect("/");
+    } else if (!session.user.username || !session.user.displayUsername) {
+        redirect("/signup/setup");
     }
-    
-    return (
-        <form>
-        
-        </form>
-    )
+
+    return <ChangeEmailPage />;
 }

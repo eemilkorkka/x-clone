@@ -1,4 +1,5 @@
 import { useColor } from "@/context/ColorContext";
+import { allowedPaths } from "@/lib/paths";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -7,7 +8,7 @@ export const useToastMessage = () => {
     const { colors } = useColor();
     const pathname = usePathname();
 
-    const useChosenColor = pathname !== "/" && pathname !== "/signup";
+    const useChosenColor = !allowedPaths.includes(pathname);
 
     const toastStyles = {
         backgroundColor: useChosenColor ? colors.hexColor : "#0ea5e9",

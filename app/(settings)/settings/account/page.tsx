@@ -3,7 +3,6 @@ import { ReturnBack } from "@/components/ReturnBack"
 import { SettingsItem } from "@/components/Settings/SettingsItem";
 import { getSession } from "@/lib/session"
 import { redirect } from "next/navigation";
-import { GoShield } from "react-icons/go";
 import { IoPersonOutline } from "react-icons/io5";
 import { LuKeyRound } from "react-icons/lu";
 import { LiaHeartBrokenSolid } from "react-icons/lia";
@@ -38,7 +37,7 @@ export default async function AccountPage() {
                 title={"Change your password"}
                 description={"Change your password at any time."}
                 icon={<LuKeyRound className="text-zinc-500 size-6" />}
-                href="/settings/account/change_password"
+                href="/settings/password"
                 styles="mt-3 pl-8"
             />
 

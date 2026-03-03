@@ -34,56 +34,64 @@ export const Leftsidebar = async () => {
                     </Link>
                 </div>
 
-                <div className="flex flex-row p-2 mobile:p-0 mobile:flex-col justify-between items-center xl:items-start mobile:space-y-2">
-                    <Navitem
-                        href="/home"
-                        icon={<GoHome size={30} />}
-                        activeIcon={<GoHomeFill size={30} />}
-                        label="Home"
-                    />
-                    <Navitem
-                        icon={<IoSearchOutline size={30} />}
-                        label="Explore"
-                    />
-                    <Navitem
-                        icon={<BsBell size={30} />}
-                        label="Notifications"
-                        styles="hidden mobile:flex"
-                    />
-                    <Navitem
-                        icon={<HiOutlineEnvelope size={30} />}
-                        label="Messages"
-                        styles="hidden mobile:flex"
-                    />
-                    <Navitem
-                        href="/bookmarks"
-                        icon={<IoBookmarkOutline size={30} />}
-                        activeIcon={<IoBookmark size={30} />}
-                        label="Bookmarks"
-                    />
-                    <Navitem
-                        icon={<BsPeople size={30} />}
-                        label="Lists"
-                        styles="hidden mobile:flex"
-                    />
-                    <Navitem
-                        href={`/${session?.user.username}`}
-                        icon={<IoPersonOutline size={30} />}
-                        activeIcon={<IoPerson size={30} />}
-                        label="Profile"
-                    />
+                {session && (
+                    <div className="flex flex-row p-2 mobile:p-0 mobile:flex-col justify-between items-center xl:items-start mobile:space-y-2">
+                        <Navitem
+                            href="/home"
+                            icon={<GoHome size={30} />}
+                            activeIcon={<GoHomeFill size={30} />}
+                            label="Home"
+                        />
 
-                    <SettingsNavItem />
+                        <Navitem
+                            icon={<IoSearchOutline size={30} />}
+                            label="Explore"
+                        />
 
-                    <Link href="/compose/post" className="hidden mobile:inline">
-                        <Button className="w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">
-                            <div className="hidden xl:inline">Post</div>
-                            <div className="inline xl:hidden">
-                                <FaFeatherPointed className="size-6" />
-                            </div>
-                        </Button>
-                    </Link>
-                </div>
+                        <Navitem
+                            icon={<BsBell size={30} />}
+                            label="Notifications"
+                            styles="hidden mobile:flex"
+                        />
+
+                        <Navitem
+                            icon={<HiOutlineEnvelope size={30} />}
+                            label="Messages"
+                            styles="hidden mobile:flex"
+                        />
+
+                        <Navitem
+                            href="/bookmarks"
+                            icon={<IoBookmarkOutline size={30} />}
+                            activeIcon={<IoBookmark size={30} />}
+                            label="Bookmarks"
+                        />
+
+                        <Navitem
+                            icon={<BsPeople size={30} />}
+                            label="Lists"
+                            styles="hidden mobile:flex"
+                        />
+
+                        <Navitem
+                            href={`/${session?.user.username}`}
+                            icon={<IoPersonOutline size={30} />}
+                            activeIcon={<IoPerson size={30} />}
+                            label="Profile"
+                        />
+
+                        <SettingsNavItem />
+
+                        <Link href="/compose/post" className="hidden mobile:inline">
+                            <Button className="w-12 h-12 xl:w-60 rounded-full xl:h-13 font-bold hover:cursor-pointer text-lg">
+                                <div className="hidden xl:inline">Post</div>
+                                <div className="inline xl:hidden">
+                                    <FaFeatherPointed className="size-6" />
+                                </div>
+                            </Button>
+                        </Link>
+                    </div>
+                )}
             </div>
 
             {session && (

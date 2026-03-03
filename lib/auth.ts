@@ -6,6 +6,7 @@ import { transporter } from "./nodemailer";
 import { waitUntil } from '@vercel/functions';
 
 export const auth = betterAuth({
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
     session: {
         cookieCache: {
             enabled: true,
@@ -44,6 +45,18 @@ export const auth = betterAuth({
                         to: newEmail,
                         subject: "Approve email change",
                         text: `Proceed to this URL to confirm your new email: ${url}`
+                    })
+                );
+            }
+        },
+        deleteUser: {
+            enabled: true,
+            sendDeleteAccountVerification: async ({ user, url, token }, request) => {
+                waitUntil(
+                    transporter.sendMail({
+                        to: user.email,
+                        subject: "Confirm account deletion",
+                        text: `Proceed to this URL to confirm your account deletion: ${url}`
                     })
                 );
             }
@@ -96,6 +109,15 @@ export const auth = betterAuth({
     emailAndPassword: {
         requireEmailVerification: true,
         enabled: true,
+        sendResetPassword: async ({ user, url, token }, request) => {
+            waitUntil(
+                transporter.sendMail({
+                    to: user.email,
+                    subject: "Reset your password",
+                    text: `Click the link to reset your password: ${url}`,
+                })
+            )
+        }
     },
     appName: "X Clone",
     plugins: [

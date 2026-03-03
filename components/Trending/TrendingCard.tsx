@@ -7,8 +7,10 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
+
 import { TrendingTopic } from "./TrendingTopic";
 import { useColor } from "@/context/ColorContext";
+import { authClient } from "@/lib/auth-client";
 
 const trendingTopics = [
     {
@@ -36,7 +38,10 @@ const trendingTopics = [
 export const TrendingCard = () => {
     
     const { colors } = useColor();
-    
+    const { data } = authClient.useSession();
+
+    if (!data) return null;
+
     return (
         <Card className="py-4 shadow-none bg-background border-1 border-foreground/10 ring-0 gap-2 pb-0">
             <CardHeader className="px-4">

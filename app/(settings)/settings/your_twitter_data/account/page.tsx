@@ -19,6 +19,8 @@ export default async function YourTwitterDataAccountPage() {
         redirect("/signup/setup");
     }
 
+    const hasSetBirthDate = session.user.birthDateDay && session.user.birthDateMonth && session.user.birthDateYear;
+
     return (
         <div>
             <FeedHeader styles="px-2 flex gap-6 items-center border-b-0">
@@ -42,8 +44,12 @@ export default async function YourTwitterDataAccountPage() {
                 title="Birth date"
                 description={
                     <>
-                        {session.user.birthDateMonth?.slice(0, 3)} {session.user.birthDateDay}, {session.user.birthDateYear}
-                        <br />
+                        {hasSetBirthDate && (
+                            <>
+                                {session.user.birthDateMonth?.slice(0, 3)} {session.user.birthDateDay}, {session.user.birthDateYear}
+                                <br />
+                            </>
+                        )}
                         Change your date of birth on your profile.
                     </>
                 }

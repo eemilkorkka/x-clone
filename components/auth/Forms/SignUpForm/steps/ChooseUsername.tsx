@@ -45,6 +45,7 @@ export const ChooseUsername = ({ formData, setFormData, setStep }: ChooseUsernam
                             value={username}
                             maxLength={15}
                             fieldState={fieldState}
+                            styles="text-white"
                         />
                         {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                     </Field>

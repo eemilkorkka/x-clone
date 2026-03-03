@@ -92,6 +92,7 @@ export const emailSchema = z.email().superRefine(async (data, ctx) => {
 
 export const passwordSchema = z.object({
     password: z.string().min(8, "Password should at least be 8 characters long."),
+    confirmPassword: z.string().min(8, "Password should at least be 8 characters long.")
 }).superRefine((data, ctx) => {
     const specialChars = '!"#$%&\'()*+,-./:;<=>?@[\\]^`{|}~'.split('');
     const digits = '0123456789'.split('');
@@ -121,11 +122,30 @@ export const passwordSchema = z.object({
             path: ["password"]
         });
     }
+
+    if (data.password !== data.confirmPassword) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Passwords do not match.",
+            path: ["confirmPassword"]
+        });
+    }
 });
 
-export const passwordSchemaWithConfirm = passwordSchema.and(z.object({
-    confirmPassword: z.string().min(8, "Password should at least be 8 characters long.")
-})).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
-    path: ["confirmPassword"]
+export const userSchema = z.object({
+    username_or_email: z.string().min(1, "Username or email is required.").superRefine(async (username_or_email, ctx) => {
+        if (!username_or_email) {
+            return;
+        }
+
+        const response = await fetch(`/api/users/${username_or_email}`);
+
+        if (!response.ok) {
+            ctx.addIssue({
+                code: "custom",
+                message: "Sorry, we couldn't find your user.",
+                input: username_or_email
+            });
+        }
+    })
 });

@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function SignupModal() {
     const router = useRouter(); 
@@ -25,7 +24,7 @@ export default function SignupModal() {
                     <div className="space-y-2">
                         <DialogTitle className="text-3xl font-bold">Two-factor Authentication</DialogTitle>
                     </div>
-                    <TwoFactorAuth styles="justify-between mt-20">
+                    <TwoFactorAuth styles="justify-between mt-6">
                         <FormButton title="Continue" />
                     </TwoFactorAuth>
                 </div>

@@ -1,5 +1,6 @@
 import { useColor } from "@/context/ColorContext";
 import { colorsArray } from "@/lib/colors";
+import { allowedPaths } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { ControllerFieldState } from "react-hook-form";
@@ -18,7 +19,7 @@ export const CustomSelect = ({ label, value, fieldState, options, styles, ...fie
     const { colors } = useColor();
     const pathname = usePathname();
 
-    const useChosenColor = pathname !== "/" && pathname !== "/signup";
+    const useChosenColor = !allowedPaths.includes(pathname);
     const borderFocusColor = useChosenColor ? colors.focusVisibleBorderColor : colorsArray[0].focusVisibleBorderColor;
     const textFocusColor = useChosenColor ? colors.peerFocusTextColor : colorsArray[0].peerFocusTextColor;
     

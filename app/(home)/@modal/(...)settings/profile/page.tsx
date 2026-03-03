@@ -163,7 +163,7 @@ export default function EditProfileModal() {
                         <div className="absolute -bottom-15 z-50 left-4 rounded-full border-background border-4">
                             <CustomAvatar src={profilePicturePicker.pickedFiles.length > 0 ? profilePicturePicker.pickedFiles[0].url : (sessionData?.user.image ?? "")} alt={``} size="xl" styles="brightness-90" useLink={false}>
                                 <Button size="icon-lg" className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 rounded-full hover:cursor-pointer bg-black/10 hover:bg-white/10" onClick={() => profilePictureRef.current?.click()}>
-                                    <TbCameraPlus className="size-5" />
+                                    <TbCameraPlus className="size-5 text-white" />
                                 </Button>
                             </CustomAvatar>
                         </div>
@@ -198,7 +198,7 @@ export default function EditProfileModal() {
                                             value={displayName ?? ""}
                                             maxLength={50}
                                             fieldState={fieldState}
-                                            styles="text-foreground border-border shadow-none"
+                                            styles="border-border"
                                         />
                                         {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                                     </Field>
@@ -215,7 +215,7 @@ export default function EditProfileModal() {
                                             value={bio ?? ""}
                                             maxLength={160}
                                             fieldState={fieldState}
-                                            styles="text-foreground border-border shadow-none resize-none"
+                                            styles="border-border resize-none"
                                         />
                                     </Field>
                                 )}
@@ -232,7 +232,7 @@ export default function EditProfileModal() {
                                             value={location ?? ""}
                                             maxLength={30}
                                             fieldState={fieldState}
-                                            styles="text-foreground border-border shadow-none"
+                                            styles="border-border"
                                         />
                                     </Field>
                                 )}
@@ -249,7 +249,7 @@ export default function EditProfileModal() {
                                             value={website ?? ""}
                                             maxLength={30}
                                             fieldState={fieldState}
-                                            styles="text-foreground border-border shadow-none"
+                                            styles="border-border"
                                         />
                                     </Field>
                                 )}
@@ -290,7 +290,7 @@ export default function EditProfileModal() {
                                         month={month ?? ""}
                                         day={day}
                                         year={year}
-                                        styles="text-foreground border-border"
+                                        styles="border-border"
                                     />
                                 </div>
                             )}

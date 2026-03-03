@@ -24,7 +24,7 @@ export default function HomeLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <main className="flex flex-col-reverse mobile:flex-row w-full max-w-fit mx-auto">
+    <main className="flex flex-col-reverse mobile:flex-row w-full md:max-w-fit mx-auto">
       <SplashScreen />
 
       <div className="shrink-0 flex w-18 xl:w-69">

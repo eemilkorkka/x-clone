@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { colorsArray } from "@/lib/colors";
 import { useColor } from "@/context/ColorContext";
+import { allowedPaths } from "@/lib/paths";
 
 interface CustomInputProps {
     type: React.InputHTMLAttributes<HTMLInputElement>["type"];
@@ -15,7 +16,7 @@ interface CustomInputProps {
     styles?: string;
     fieldState?: ControllerFieldState;
     disabled?: boolean;
-    isPasswordInput?: boolean;
+    toggleToSeePassword?: boolean;
 }
 
 export const CustomInput = (
@@ -27,7 +28,7 @@ export const CustomInput = (
         styles,
         fieldState,
         disabled,
-        isPasswordInput = false,
+        toggleToSeePassword = false,
         ...field
     }: CustomInputProps) => {
 
@@ -35,7 +36,7 @@ export const CustomInput = (
     const pathname = usePathname();
     const { colors } = useColor();
     
-    const useChosenColor = pathname !== "/" && pathname !== "/signup";
+    const useChosenColor = !allowedPaths.includes(pathname);
     const borderFocusColor = useChosenColor ? colors.focusVisibleBorderColor : colorsArray[0].focusVisibleBorderColor;
     const textFocusColor = useChosenColor ? colors.peerFocusTextColor : colorsArray[0].peerFocusTextColor;
 
@@ -48,8 +49,8 @@ export const CustomInput = (
                 disabled={disabled}
                 value={value}
                 className={cn(
-                    "peer py-6.5 text-white px-4 focus-visible:ring-0 rounded-sm",
-                    disabled && "bg-zinc-800",
+                    "peer py-6.5 text-foreground px-4 focus-visible:ring-0 rounded-sm shadow-none",
+                    disabled ? "bg-zinc-800" : "!bg-transparent",
                     fieldState?.error ? "!border-destructive focus-visible:border-destructive" : `border-zinc-800 ${borderFocusColor}`,
                     styles
                 )}
@@ -62,12 +63,12 @@ export const CustomInput = (
                 {label}
             </label>
             {maxLength && <span className="hidden peer-focus-within:inline absolute text-sm top-2 right-4 text-gray-500">{`${value?.length ?? 0} / ${maxLength}`}</span>}
-            {isPasswordInput &&
-                <div className="absolute top-1/2 -translate-y-1/2 right-4">
+            {toggleToSeePassword &&
+                <div className="absolute top-1/2 -translate-y-1/2 right-4 hover:cursor-pointer">
                     {showPassword ? (
-                        <FaRegEyeSlash fill="white" onClick={() => setShowPassword(false)} />
+                        <FaRegEyeSlash className={pathname === "/" ? "white" : "foreground"} onClick={() => setShowPassword(false)} />
                     ) : (
-                        <FaRegEye fill="white" onClick={() => setShowPassword(true)} />
+                        <FaRegEye className={pathname === "/" ? "white" : "foreground"} onClick={() => setShowPassword(true)} />
                     )}
                 </div>
             }

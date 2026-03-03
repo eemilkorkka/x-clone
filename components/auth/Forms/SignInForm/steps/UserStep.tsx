@@ -8,24 +8,7 @@ import { CustomInput } from "../../../../customized/CustomInput";
 import { Button } from "../../../../ui/button";
 import React, { SetStateAction } from "react";
 import Link from "next/link";
-
-const userStepSchema = z.object({
-    username_or_email: z.string().min(1, "Username or email is required.").superRefine(async (username_or_email, ctx) => {
-        if (!username_or_email) {
-            return;
-        }
-
-        const response = await fetch(`/api/users/${username_or_email}`);
-
-        if (!response.ok) {
-            ctx.addIssue({
-                code: "custom",
-                message: "Sorry, we couldn't find your user.",
-                input: username_or_email
-            });
-        }
-    })
-});
+import { userSchema } from "@/lib/schemas";
 
 interface UserStepProps {
     setStep: React.Dispatch<SetStateAction<number>>;
@@ -39,14 +22,14 @@ interface UserStepProps {
 
 export const UserStep = ({ setStep, setFormData, setOpen, formData }: UserStepProps) => {
 
-    const form = useForm<z.infer<typeof userStepSchema>>({
-        resolver: zodResolver(userStepSchema),
+    const form = useForm<z.infer<typeof userSchema>>({
+        resolver: zodResolver(userSchema),
         defaultValues: {
             username_or_email: formData.username_or_email ?? ""
         }
     });
 
-    const onSubmit = async (data: z.infer<typeof userStepSchema>) => {
+    const onSubmit = async (data: z.infer<typeof userSchema>) => {
         setFormData({
             username_or_email: data.username_or_email,
             password: ""
@@ -72,13 +55,16 @@ export const UserStep = ({ setStep, setFormData, setOpen, formData }: UserStepPr
                                 label="Username or email"
                                 value={username_or_email}
                                 fieldState={fieldState}
+                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>
                     )}
                 />
                 <Button type="submit" size="lg" className="bg-white text-black hover:bg-zinc-200 font-bold rounded-full w-full mt-6 hover:cursor-pointer">Next</Button>
-                <Button size="lg" className="font-bold text-white hover:bg-ring/20 bg-transparent border-1 border-zinc-500 rounded-full w-full mt-6 hover:cursor-pointer">Forgot password?</Button>
+                <Link href="/forgot-password">
+                    <Button size="lg" className="font-bold text-white hover:bg-ring/20 bg-transparent border-1 border-zinc-500 rounded-full w-full mt-6 hover:cursor-pointer">Forgot password?</Button>
+                </Link>
             </form>
             <p className="mt-16 mb-20 text-zinc-500">Don't have an account?
                 {' '}
