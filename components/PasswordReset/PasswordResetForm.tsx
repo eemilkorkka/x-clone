@@ -9,12 +9,14 @@ import { passwordSchema } from "@/lib/schemas";
 import { Button } from "../ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useToastMessage } from "@/hooks/useToastMessage";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const PasswordResetForm = () => {
 
     const { toastMessage } = useToastMessage();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const token = searchParams.get("token");
 
     const form = useForm<z.infer<typeof passwordSchema>>({
         resolver: zodResolver(passwordSchema),
@@ -23,8 +25,6 @@ export const PasswordResetForm = () => {
             confirmPassword: ""
         }
     });
-
-    const token = new URLSearchParams(window.location.search).get("token");
 
     if (!token) {
         return <p className="text-center mt-20 text-2xl text-destructive">Invalid password reset link! ⚠️</p>;

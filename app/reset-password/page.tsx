@@ -1,5 +1,6 @@
 import { PasswordResetForm } from "@/components/PasswordReset/PasswordResetForm";
 import Link from "next/link";
+import { Suspense } from "react";
 import { FaXTwitter } from "react-icons/fa6";
 
 export default function ResetPasswordPage() {
@@ -11,7 +12,9 @@ export default function ResetPasswordPage() {
                 </Link>
                 <h1 className="text-xl font-bold">Password Reset</h1>
             </div>
-            <PasswordResetForm />
+            <Suspense>
+                <PasswordResetForm />
+            </Suspense>
         </div>
     )
 }
