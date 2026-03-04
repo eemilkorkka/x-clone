@@ -43,7 +43,7 @@ export const LogoutDialog = () => {
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="flex !flex-col !justify-center space-y-1">
-                    <Button className="rounded-full text-white py-5 font-bold hover:cursor-pointer" onClick={onLogOutClick}>Log out</Button>
+                    <Button className="bg-foreground rounded-full py-5 font-bold hover:cursor-pointer" onClick={onLogOutClick}>Log out</Button>
                     <AlertDialogCancel className="rounded-full py-5 font-bold hover:cursor-pointer" onClick={() => router.back()}>Cancel</AlertDialogCancel>
                 </AlertDialogFooter>
             </AlertDialogContent>

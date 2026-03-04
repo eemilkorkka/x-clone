@@ -47,7 +47,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                         router.push("/two_factor_authentication");
                     } else {
                         toastMessage("Sign in successful.", true);
-                        setTheme(localStorage.getItem("selectedTheme") || "dark");
+                        setTheme(localStorage.getItem("selectedTheme") || "light");
                         router.push("/home");
                     }
                 },
@@ -65,7 +65,7 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                         router.push("/two_factor_authentication");
                     } else {
                         toastMessage("Sign in successful.", true);
-                        setTheme(localStorage.getItem("selectedTheme") || "dark");
+                        setTheme(localStorage.getItem("selectedTheme") || "light");
                         router.push("/home");
                     }
                 },

@@ -55,12 +55,12 @@ export const ForgotPasswordDialog = () => {
     return (
         <Dialog open={true}>
             <DialogOverlay className="bg-black" />
-            <DialogContent className="flex flex-col !max-w-[600px] min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5" showCloseButton={false}>
+            <DialogContent className="flex flex-col !max-w-[600px] min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5 ring-0" showCloseButton={false}>
                 <DialogHeader handleDialogClose={() => router.back()} />
                 <div className="flex flex-1 flex-col mx-auto max-w-md w-full mt-2">
                     <div className="space-y-2">
                         <DialogTitle className="text-3xl font-bold">Find your X account</DialogTitle>
-                        <DialogDescription>Enter the email, phone number, or username associated with your account to change your password.</DialogDescription>
+                        <DialogDescription>Enter the email or username associated with your account to change your password.</DialogDescription>
                     </div>
                     <form className="flex flex-col flex-1 justify-between space-y-4 mt-8" onSubmit={form.handleSubmit(onSubmit)}>
                         <Controller

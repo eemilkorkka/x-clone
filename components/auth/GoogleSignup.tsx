@@ -4,14 +4,19 @@ import { FcGoogle } from "react-icons/fc"
 import { Button } from "../ui/button"
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 export const GoogleSignup = ({ styles }: { styles?: string }) => {
+
+    const { setTheme } = useTheme();
 
     const signup = async () => {
         await authClient.signIn.social({
             provider: "google",
             callbackURL: "/home",
         });
+
+        setTheme(localStorage.getItem("selectedTheme") || "light");
     }
 
     return (

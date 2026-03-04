@@ -51,7 +51,7 @@ export const ThemeSelection = () => {
 
     const onThemeSelect = (theme: Theme) => {
         setTheme(theme.value);
-        localStorage.setItem("selectedTheme", theme.value)
+        localStorage.setItem("selectedTheme", theme.value);
     }
 
     return (

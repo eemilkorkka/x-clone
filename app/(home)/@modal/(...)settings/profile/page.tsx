@@ -169,7 +169,7 @@ export default function EditProfileModal() {
                         </div>
                         <div className="flex gap-4 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
                             <Button size="icon-lg" className="rounded-full hover:cursor-pointer bg-black/50 hover:bg-black/45" onClick={() => profileBannerRef.current?.click()}>
-                                <TbCameraPlus className="size-5" />
+                                <TbCameraPlus className="size-5 text-white" />
                             </Button>
                             <Button size="icon-lg" className="rounded-full hover:cursor-pointer bg-black/50 hover:bg-black/45" onClick={() => {
                                 profileBannerPicker.setPickedFiles([]);
