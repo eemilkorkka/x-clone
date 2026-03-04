@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
 
-export type size = "sm" | "md" | "lg" | "xl";
+export type size = "sm" | "md" | "lg" | "xl" | "2xl";
 
 interface CustomAvatarProps {
     src: string;
@@ -34,6 +34,8 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
             case "lg":
                 return "w-18 h-18";
             case "xl":
+                return "w-25 h-25";
+            case "2xl":
                 return "w-33 h-33";
             default:
                 return "w-10 h-10";

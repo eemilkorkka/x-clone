@@ -30,6 +30,8 @@ import z from "zod";
 import { BirthdateDropdowns, monthStringSchema } from "@/components/auth/Forms/SignUpForm/BirthdateDropdowns";
 import { useColor } from "@/context/ColorContext";
 import { useToastMessage } from "@/hooks/useToastMessage";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
     displayName: z.string().max(50).min(1, "Name cannot be empty!"),
@@ -69,6 +71,7 @@ export default function EditProfileModal() {
     const router = useRouter();
     const { data: sessionData } = authClient.useSession();
     const { toastMessage } = useToastMessage();
+    const width = useWindowWidth();
 
     const profilePictureRef = useRef<HTMLInputElement | null>(null);
     const profileBannerRef = useRef<HTMLInputElement | null>(null);
@@ -160,8 +163,8 @@ export default function EditProfileModal() {
                         <Button className="rounded-full font-bold px-4 hover:cursor-pointer" onClick={() => form.handleSubmit(onSubmit)()}>Save</Button>
                     </DialogHeader>
                     <ProfileBanner isPreview={true} src={removeBanner ? "" : (profileBannerPicker.pickedFiles.length > 0 ? profileBannerPicker.pickedFiles[0].url : (sessionData?.user.profileBannerImage ?? ""))} styles="brightness-90">
-                        <div className="absolute -bottom-15 z-50 left-4 rounded-full border-background border-4">
-                            <CustomAvatar src={profilePicturePicker.pickedFiles.length > 0 ? profilePicturePicker.pickedFiles[0].url : (sessionData?.user.image ?? "")} alt={``} size="xl" styles="brightness-90" useLink={false}>
+                        <div className={cn("absolute z-50 left-4 rounded-full border-background border-4", width && width < 450 ? "-bottom-13" : "-bottom-15")}>
+                            <CustomAvatar src={profilePicturePicker.pickedFiles.length > 0 ? profilePicturePicker.pickedFiles[0].url : (sessionData?.user.image ?? "")} alt={``} size={width && width < 450 ? "xl" : "2xl"} styles="brightness-90" useLink={false}>
                                 <Button size="icon-lg" className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 rounded-full hover:cursor-pointer bg-black/10 hover:bg-white/10" onClick={() => profilePictureRef.current?.click()}>
                                     <TbCameraPlus className="size-5 text-white" />
                                 </Button>
@@ -169,7 +172,7 @@ export default function EditProfileModal() {
                         </div>
                         <div className="flex gap-4 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
                             <Button size="icon-lg" className="rounded-full hover:cursor-pointer bg-black/50 hover:bg-black/45" onClick={() => profileBannerRef.current?.click()}>
-                                <TbCameraPlus className="size-5" />
+                                <TbCameraPlus className="size-5 text-white" />
                             </Button>
                             <Button size="icon-lg" className="rounded-full hover:cursor-pointer bg-black/50 hover:bg-black/45" onClick={() => {
                                 profileBannerPicker.setPickedFiles([]);

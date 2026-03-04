@@ -11,6 +11,7 @@ export const GoogleSignup = ({ styles }: { styles?: string }) => {
         await authClient.signIn.social({
             provider: "google",
             callbackURL: "/home",
+            newUserCallbackURL: "/signup/setup"
         });
     }
 

@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { CustomAvatar } from "../User/CustomAvatar"
 import { ProfileBanner } from "./ProfileBanner"
 import { Displayname } from "../User/Displayname";
-import { useQuery } from "@tanstack/react-query";
 import { Username } from "../User/Username";
 import { Text } from "../Text";
 import { notFound } from "next/navigation";
@@ -18,6 +17,8 @@ import { FollowButton } from "../User/FollowButton";
 import { Follower } from "@/types/Follower";
 import { useColor } from "@/context/ColorContext";
 import { useGetUserData } from "@/hooks/useGetUserData";
+import useWindowWidth from "../useWindowWidth";
+import { cn } from "@/lib/utils";
 
 interface ProfileInfoProps {
     username: string;
@@ -28,6 +29,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
     const { data } = authClient.useSession();
     const { data: userData, isLoading } = useGetUserData(username);
     const { colors } = useColor();
+    const width = useWindowWidth();
 
     if (isLoading) {
         return null;
@@ -43,8 +45,8 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
         <div className="flex flex-col mb-4">
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
                 <MediaDialog src={userData.image ?? ""}>
-                    <div className="absolute -bottom-15 z-50 left-4 rounded-full border-background border-4">
-                        <CustomAvatar src={userData.image ?? ""} alt={``} size="xl" useLink={false} />
+                    <div className={cn("absolute z-50 left-4 rounded-full border-background border-4", width && width < 450 ? "-bottom-13" : "-bottom-15")}>
+                        <CustomAvatar src={userData.image ?? ""} alt={``} size={width && width < 450 ? "xl" : "2xl"} useLink={false} />
                     </div>
                 </MediaDialog>
             </ProfileBanner>

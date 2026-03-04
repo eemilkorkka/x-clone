@@ -15,6 +15,8 @@ export const SuggestedUsersCard = async () => {
 
     const session = await getSession();
 
+    if (!session) return null;
+
     const users = await prisma.user.findMany({
         where: {
             username: {
@@ -22,11 +24,11 @@ export const SuggestedUsersCard = async () => {
             },
             NOT: {
                 OR: [
-                    { id: session?.user.id },
+                    { id: session.user.id },
                     {
                         followers: {
                             some: {
-                                followerId: session?.user.id
+                                followerId: session.user.id
                             }
                         }
                     }
@@ -58,7 +60,7 @@ export const SuggestedUsersCard = async () => {
             </CardHeader>
             <CardContent className="p-0">
                 {users.map((user) => {
-                    const isFollowing = user.followers.some(follower => follower.followerId === session?.user.id);
+                    const isFollowing = user.followers.some(follower => follower.followerId === session.user.id);
 
                     return (
                         <User key={user.id} user={user} useLink={true}>

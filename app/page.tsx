@@ -17,10 +17,10 @@ export default async function IndexPage() {
     }
 
     return (
-        <div className="flex flex-col p-8 sm:items-center min-h-screen bg-black">
+        <div className="flex flex-col p-6 sm:items-center min-h-screen bg-black">
             <div className="lg:mt-auto flex flex-col lg:flex-row lg:w-full">
                 <div className="flex w-full h-fit lg:m-auto p-4 lg:p-8 lg:max-w-1/2 lg:pr-8">
-                    <FaXTwitter className="w-full h-full max-h-15 max-w-15 lg:max-h-90 lg:max-w-full " fill="white" />
+                    <FaXTwitter className="w-full h-full max-h-11 max-w-11 lg:max-h-90 lg:max-w-full " fill="white" />
                 </div>
                 <div className="flex flex-col lg:justify-center flex-1 p-4">
                     <div className="w-full space-y-8">
