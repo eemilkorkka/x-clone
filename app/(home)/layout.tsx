@@ -36,9 +36,9 @@ export default function HomeLayout({
           {children}
           {modal}
         </div>
-        <aside className="hidden lg:flex flex-col gap-4 flex-shrink-0 py-1 w-85 sticky top-0 self-start">
+        <aside className="hidden lg:flex flex-col gap-4 flex-shrink-0 py-1 w-85 sticky bottom-0 self-end">
           <Searchbar />
-          <div className="flex flex-col gap-4 overflow-y-auto">
+          <div className="flex flex-col gap-4">
             <PremiumCard />
             <SuggestedUsersCard />
             <TrendingCard />

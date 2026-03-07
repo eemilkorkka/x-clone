@@ -30,7 +30,7 @@ const trendingTopics = [
     },
     {
         category: "Politics · Trending",
-        title: "Donald Trump",
+        title: "Iran",
         postsCount: "531K"
     }
 ]

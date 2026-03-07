@@ -8,7 +8,7 @@ export async function retweet(formData: FormData) {
     const postId = formData.get("postId");
     const session = await getSession();
 
-    if (!session || !session.user) return { error: "Not authenticated." };
+    if (!session || !session.user) return { success: false, error: "Not authenticated." };
 
     const tweetToRetweet = await prisma.tweet.findUnique({
         where: { 

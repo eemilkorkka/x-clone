@@ -7,7 +7,7 @@ export async function likeTweet(formData: FormData) {
     const postId = formData.get("postId");
     const session = await getSession();
 
-    if (!session || !session.user) return { error: "Not authenticated." };
+    if (!session || !session.user) return { success: false, error: "Not authenticated." };
 
     const tweet = await prisma.tweet.findUnique({
         where: { 

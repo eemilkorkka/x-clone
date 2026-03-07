@@ -46,6 +46,6 @@ export async function deleteTweet(tweetId: number) {
 
         return { success: true, message: "Post deleted successfully." };
     } catch (error) {
-        return { success: false, message: "Post deletion failed. Try again later." };
+        return { success: false, error: "Post deletion failed. Try again later." };
     }
 }

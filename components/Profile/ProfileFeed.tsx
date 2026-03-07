@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { InfiniteScrollContainer } from "../Feed/InfiniteScrollContainer";
 import React from "react";
@@ -33,12 +33,22 @@ const fetchTweets = async (username: string, type: Feed, includeReplies: boolean
     }
 }
 
+const fetchPinnedTweet = async (username: string) => {
+    const response = await fetch(`/api/posts/user/${username}/pinned`);
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error("Failed to fetch pinned tweet.");
+    }
+}
+
 export const ProfileFeed = ({ type }: ProfileFeedProps) => {
 
     const params = useParams();
     const { data: sessionData } = authClient.useSession();
     const username = params.username as string;
-    const includeReplies = type === "replies" ? true : false;
+    const includeReplies = type === "replies";
 
     const {
         data,
@@ -54,6 +64,12 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
         queryKey: ["profilefeed", type, username, includeReplies],
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
+    });
+
+    const { data: pinnedTweetData } = useQuery({
+        queryFn: () => fetchPinnedTweet(username),
+        queryKey: ["pinnedTweet", username],
+        enabled: type === "posts",
     });
 
     if (!sessionData || !isLoading && data?.pages[0].items.length === 0) {
@@ -73,7 +89,7 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
                 <MediaGrid>
                     {data && data?.pages.map((group, i) => (
                         <React.Fragment key={i}>
-                            {group.items?.map((tweet: RegularTweet | Retweet,) => (
+                            {group.items?.map((tweet: RegularTweet | Retweet) => (
                                 <Link href={`/${username}/status/${tweet.id}`} key={tweet.id}>
                                     {tweet.files[0].type === FileType.IMAGE ? (
                                         <Image
@@ -101,14 +117,17 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
     }
 
     return (
-        <>
+        <div>
+            {type === "posts" && pinnedTweetData?.pinnedTweet && (
+                <Tweet type="tweet" tweet={pinnedTweetData.pinnedTweet} isParentTweet={false} />
+            )}
             {isLoading ? (
                 <LoadingSpinner />
             ) : (
                 <InfiniteScrollContainer onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}>
                     {data && data?.pages.map((group, i) => (
                         <React.Fragment key={i}>
-                            {group.items?.map((tweet: RegularTweet | Retweet,) => (
+                            {group.items?.map((tweet: RegularTweet | Retweet) => (
                                 <React.Fragment key={tweet.id}>
                                     {tweet.parentTweet && <Tweet type="tweet" tweet={tweet.parentTweet} isParentTweet={true} />}
                                     <Tweet type="tweet" tweet={tweet} isParentTweet={false} />
@@ -119,6 +138,6 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
                     {isFetchingNextPage && <LoadingSpinner />}
                 </InfiniteScrollContainer>
             )}
-        </>
+        </div>
     )
 }

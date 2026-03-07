@@ -10,7 +10,7 @@ import { Text } from "../Text";
 import { Media } from "../Media/Media";
 import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
-import { BsThreeDots, BsPin } from "react-icons/bs";
+import { BsThreeDots, BsPin, BsPinFill } from "react-icons/bs";
 import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import { OptionsPopover } from "./TweetPopover/OptionsPopover";
 import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
@@ -19,7 +19,7 @@ import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
-import { useToastMessage } from "@/hooks/useToastMessage";
+import { usePinTweetMutation } from "@/hooks/usePinTweetMutation";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -33,15 +33,16 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
     const { data } = authClient.useSession();
     const router = useRouter();
-    const { toastMessage } = useToastMessage();
-
+    
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
     const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
     const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
     const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
     const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
+    const tweetToPin = tweet.isRetweet ? tweet.originalTweet : tweet;
 
     const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
+    const { pinTweetMutation } = usePinTweetMutation(tweetToPin);
     const { followMutation } = useFollowMutation(
         tweetAuthor?.username ?? "",
         tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false
@@ -77,9 +78,9 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
             onClick: () => deleteTweetMutation.mutate(tweetId)
         },
         {
-            label: "Pin to your profile",
+            label: tweetToPin.user?.pinnedTweetId === tweetToPin.id ? "Unpin from your profile" : "Pin to your profile",
             icon: <BsPin />,
-            onClick: () => toastMessage("This feature hasn't been implemented yet!", false)
+            onClick: () => pinTweetMutation.mutate(tweetToPin)
         }
     ];
 
@@ -109,6 +110,11 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
             {tweet.isRetweet && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
                     <AiOutlineRetweet className="text-zinc-600" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
+                </p>
+            )}
+            {tweetAuthor?.pinnedTweetId == tweetId && (
+                <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
+                    <BsPinFill className="text-zinc-600" size={16} /> Pinned 
                 </p>
             )}
             <div className="flex" onClick={onClick}>

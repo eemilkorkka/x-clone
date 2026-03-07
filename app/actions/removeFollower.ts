@@ -7,7 +7,7 @@ export async function removeFollower(followerId: string) {
     const session = await getSession();
 
     if (!session) {
-        return { error: "Not authenticated." };
+        return { success: false, error: "Not authenticated." };
     }
 
     try {
@@ -22,6 +22,6 @@ export async function removeFollower(followerId: string) {
 
         return { success: true };
     } catch (error) {
-        return { error: "Internal Server Error." };
+        return { success: false, error: "Internal Server Error." };
     }
 }

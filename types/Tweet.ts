@@ -1,7 +1,7 @@
 import { Bookmark } from "./Bookmark";
 import { File } from "./File";
 import { Like } from "./Like";
-import { UserWithFollowData } from "./User";
+import { User, UserWithFollowData } from "./User";
 
 export type TweetBase = {
     id: number;
