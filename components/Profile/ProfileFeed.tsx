@@ -66,13 +66,13 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
     });
 
-    const { data: pinnedTweetData } = useQuery({
+    const { data: pinnedTweetData, isLoading: isPinnedTweetLoading } = useQuery({
         queryFn: () => fetchPinnedTweet(username),
         queryKey: ["pinnedTweet", username],
         enabled: type === "posts",
     });
 
-    if (!sessionData || !isLoading && data?.pages[0].items.length === 0) {
+    if (!sessionData || !isLoading && data?.pages[0].items.length === 0 && !isPinnedTweetLoading && !pinnedTweetData?.pinnedTweet) {
         return (
             <div className="min-h-screen flex justify-center">
                 <div className="flex flex-col space-y-2">

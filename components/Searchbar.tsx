@@ -35,7 +35,7 @@ export const Searchbar = () => {
     });
 
     return (
-        <div className="relative sticky top-0 py-1.5 bg-background">
+        <div className="relative sticky top-0 py-1.5 bg-background z-50">
             <div className="relative">
                 <Input
                     type="text"

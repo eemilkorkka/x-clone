@@ -2,7 +2,7 @@ import { Tweet as TweetType } from "@/types/Tweet";
 import { CustomAvatar } from "../User/CustomAvatar";
 import { Displayname } from "../User/Displayname";
 import { Username } from "../User/Username";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { TweetActions } from "./TweetActions";
 import { authClient } from "@/lib/auth-client";
 import { AiOutlineRetweet } from "react-icons/ai";
@@ -13,13 +13,13 @@ import { Icon } from "../Icon";
 import { BsThreeDots, BsPin, BsPinFill } from "react-icons/bs";
 import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import { OptionsPopover } from "./TweetPopover/OptionsPopover";
-import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
+import { useDeleteTweetMutation } from "@/hooks/Tweet/useDeleteTweetMutation";
 import TimeAgo from 'react-timeago';
 import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
-import { usePinTweetMutation } from "@/hooks/usePinTweetMutation";
+import { usePinTweetMutation } from "@/hooks/Tweet/usePinTweetMutation";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -33,6 +33,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
     const { data } = authClient.useSession();
     const router = useRouter();
+    const pathname = usePathname();
     
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
     const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
@@ -112,7 +113,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                     <AiOutlineRetweet className="text-zinc-600" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
                 </p>
             )}
-            {tweetAuthor?.pinnedTweetId == tweetId && (
+            {tweetAuthor?.pinnedTweetId == tweet.id &&  pathname != "/home" && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
                     <BsPinFill className="text-zinc-600" size={16} /> Pinned 
                 </p>
