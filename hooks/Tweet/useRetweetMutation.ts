@@ -60,7 +60,7 @@ export const useRetweetMutation = (tweet: Tweet) => {
                 pinnedQueryKey,
             };
 
-            const targetTweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
+            const targetOriginalId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
             const originalTweet = tweet.isRetweet ? tweet.originalTweet : tweet;
 
             const hasRetweeted = originalTweet.retweets.some(retweet => retweet.userId === data.user.id);
@@ -109,7 +109,7 @@ export const useRetweetMutation = (tweet: Tweet) => {
                             ...page,
                             items: page.items
                                 .filter(t => {
-                                    if (hasRetweeted && t.isRetweet && t.userId === data.user.id && t.originalTweetId === targetTweetId) {
+                                    if (hasRetweeted && t.isRetweet && t.userId === data.user.id && t.originalTweetId === targetOriginalId) {
                                         return false;
                                     }
                                     return true;
@@ -151,7 +151,7 @@ export const useRetweetMutation = (tweet: Tweet) => {
                     ? previousPinnedTweet.pinnedTweet.originalTweetId
                     : previousPinnedTweet.pinnedTweet.id;
 
-                if (pinnedTweetId === targetTweetId) {
+                if (pinnedTweetId === targetOriginalId) {
                     queryClient.setQueryData<PinnedTweetQueryData>(pinnedQueryKey, {
                         ...previousPinnedTweet,
                         pinnedTweet: toggleRetweet(previousPinnedTweet.pinnedTweet),

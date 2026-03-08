@@ -1,9 +1,9 @@
 export function shortFormatter(value: number, unit: string, suffix: string) {
     const getDate = () => {
         const date = new Date();
-        
+
         let daysAgo = 0;
-        
+
         switch (unit) {
             case "day":
                 daysAgo = value;
@@ -18,11 +18,11 @@ export function shortFormatter(value: number, unit: string, suffix: string) {
                 daysAgo = value * 365;
                 break;
         }
-        
+
         date.setDate(date.getDate() - daysAgo);
-        
+
         const showYear = date.getFullYear() < new Date().getFullYear();
-        
+
         if (showYear) {
             return date.toLocaleDateString('en-US', {
                 month: 'short',
@@ -50,4 +50,11 @@ export function shortFormatter(value: number, unit: string, suffix: string) {
         case "year":
             return getDate();
     }
+}
+
+export function getNumberToDisplay(num: number): string {
+    return new Intl.NumberFormat('en', {
+        notation: 'compact',
+        maximumFractionDigits: 1,
+    } as Intl.NumberFormatOptions).format(num);
 }

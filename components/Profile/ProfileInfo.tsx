@@ -68,7 +68,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                         displayName={userData.displayUsername}
                         username={userData.username}
                         useLink={false}
-                        styles="text-xl w-fit"
+                        styles="text-xl w-fit max-w-full"
                     />
                     <Username
                         username={userData.username}

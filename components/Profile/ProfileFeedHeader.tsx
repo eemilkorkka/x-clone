@@ -30,7 +30,7 @@ export const ProfileFeedHeader = ({ username, displayName, postsCount, likesCoun
                     displayName={displayName}
                     username={username}
                     useLink={false}
-                    styles="text-lg"
+                    styles="text-lg max-w-md"
                 />
                 {<p className="text-sm text-zinc-500">{count} {label}</p>}
             </div>

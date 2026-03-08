@@ -34,7 +34,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const { data } = authClient.useSession();
     const router = useRouter();
     const pathname = usePathname();
-    
+
     const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
     const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
     const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
@@ -66,6 +66,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                 username={tweetAuthor?.username ?? ""}
                 alt={`@${tweetAuthor?.username}`}
                 useHoverCard={!isComposeModal}
+                useLink={!isComposeModal}
             />
             {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-border"></hr>}
         </div>
@@ -113,30 +114,35 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                     <AiOutlineRetweet className="text-zinc-600" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
                 </p>
             )}
-            {tweetAuthor?.pinnedTweetId == tweet.id &&  pathname != "/home" && (
+            {tweetAuthor?.pinnedTweetId == tweet.id && pathname != "/home" && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
-                    <BsPinFill className="text-zinc-600" size={16} /> Pinned 
+                    <BsPinFill className="text-zinc-600" size={16} /> Pinned
                 </p>
             )}
             <div className="flex" onClick={onClick}>
                 {type === "tweet" && (
                     avatar
                 )}
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full min-w-0">
                     <div className="flex">
                         {type === "status" && (
                             avatar
                         )}
-                        <div className="xs:flex gap-1 min-w-0">
+                        <div className="xs:flex gap-1 min-w-0 overflow-hidden">
                             {type === "tweet" ? (
                                 <>
-                                    <Displayname
-                                        username={tweetAuthor?.username ?? ""}
-                                        displayName={tweetAuthor?.displayUsername ?? ""}
-                                        styles="ml-2"
-                                    />
+                                    <div className="min-w-0 shrink overflow-hidden">
+                                        <Displayname
+                                            username={tweetAuthor?.username ?? ""}
+                                            displayName={tweetAuthor?.displayUsername ?? ""}
+                                            styles="ml-2"
+                                            useHoverCard={!isComposeModal}
+                                        />
+                                    </div>
                                     <div className="ml-1.5 mobile:ml-0 flex gap-1 min-w-0">
-                                        <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
+                                        <div className="min-w-0 shrink overflow-hidden">
+                                            <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
+                                        </div>
                                         {timeStamp}
                                     </div>
                                 </>
@@ -158,13 +164,16 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         </div>
                         {!isComposeModal && (
                             <OptionsPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
-                                <Icon styles="text-zinc-500 hover:text-sky-500">
+                                <Icon styles="text-zinc-500 hover:text-sky-500 right-0">
                                     <BsThreeDots />
                                 </Icon>
                             </OptionsPopover>
                         )}
                     </div>
-                    <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "ml-2", isComposeModal && "mt-0")} />
+                    <Text text={tweetContent ?? ""} styles={cn("ml-2 xs:-mt-1", { 
+                        "mt-1": isComposeModal,
+                        "ml-0": type === "status"
+                     })} />
                     {tweetFiles.length > 0 && (
                         <AttachmentsGrid>
                             {tweetFiles.map((file, index) => (
@@ -175,7 +184,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
                     {isComposeModal && isParentTweet && (
                         <span
-                            className="text-zinc-500 ml-2">Replying to <span className={colors.textColor}>@{tweet.user?.username}</span>
+                            className="text-zinc-500 ml-2 mt-4">Replying to <span className={colors.textColor}>@{tweet.user?.username}</span>
                         </span>
                     )}
                     {type === "status" && (
