@@ -14,7 +14,7 @@ export type ColorsType = {
     hexColor: string;
     checkedColor: string;
     checkedBorderColor: string;
-};
+}
 
 type ColorContextType = {
     colors: ColorsType;

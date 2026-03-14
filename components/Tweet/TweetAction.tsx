@@ -1,3 +1,4 @@
+import { getNumberToDisplay } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import {  UseMutationResult } from "@tanstack/react-query";
 
@@ -48,7 +49,7 @@ export const TweetAction = ({
                 <span className={cn(hoverBgColor, "p-2 rounded-full", isActive && activeColor)}>
                     {isActive && activeIcon ? activeIcon : icon}
                 </span>
-                {statCount !== undefined && statCount > 0 && <span className={cn("text-sm", isActive && activeColor)}>{statCount}</span>}
+                {statCount !== undefined && statCount > 0 && <span className={cn("text-sm", isActive && activeColor)}>{getNumberToDisplay(statCount)}</span>}
             </button>
         </form>
     )

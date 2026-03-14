@@ -12,6 +12,7 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
                     username: true,
                     displayUsername: true,
                     image: true,
+                    pinnedTweetId: true,
                     followers: {
                         select: {
                             followerId: true
@@ -41,6 +42,7 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
                             username: true,
                             displayUsername: true,
                             image: true,
+                            pinnedTweetId: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -183,12 +185,19 @@ export const getTweetsFromFollowing = async (userId: string, cursor?: { createdA
 }
 
 export const getTweetsByUser = async (username: string, includeReplies: boolean, cursor?: { createdAt: Date; id: number }) => {
+
+    const user = await prisma.user.findUnique({
+        where: { username },
+        select: { pinnedTweetId: true },
+    });
+
     const tweets = await prisma.tweet.findMany({
         where: {
             parentTweetId: includeReplies ? undefined : null,
             user: {
                 username: username
-            }
+            },
+            ...(user?.pinnedTweetId ? { id: { not: user.pinnedTweetId } } : {})
         },
         include: {
             user: {
@@ -197,6 +206,7 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                     username: true,
                     displayUsername: true,
                     image: true,
+                    pinnedTweetId: true,
                     followers: {
                         select: {
                             followerId: true
@@ -226,6 +236,7 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                             username: true,
                             displayUsername: true,
                             image: true,
+                            pinnedTweetId: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -257,6 +268,7 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                             username: true,
                             displayUsername: true,
                             image: true,
+                            pinnedTweetId: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -313,95 +325,7 @@ export const getTweetsByUserWithMedia = async (username: string, cursor?: { crea
             }
         },
         include: {
-            user: {
-                select: {
-                    id: true,
-                    username: true,
-                    displayUsername: true,
-                    image: true,
-                    followers: {
-                        select: {
-                            followerId: true
-                        }
-                    },
-                    following: {
-                        select: {
-                            followingId: true
-                        }
-                    },
-                },
-            },
             files: true,
-            likes: true,
-            bookmarks: true,
-            _count: {
-                select: {
-                    replies: true
-                }
-            },
-            retweets: true,
-            parentTweet: {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            username: true,
-                            displayUsername: true,
-                            image: true,
-                            followers: {
-                                select: {
-                                    followerId: true
-                                }
-                            },
-                            following: {
-                                select: {
-                                    followingId: true
-                                }
-                            },
-                        },
-                    },
-                    files: true,
-                    likes: true,
-                    bookmarks: true,
-                    retweets: true,
-                    _count: {
-                        select: {
-                            replies: true
-                        }
-                    }
-                }
-            },
-            originalTweet: {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            username: true,
-                            displayUsername: true,
-                            image: true,
-                            followers: {
-                                select: {
-                                    followerId: true
-                                }
-                            },
-                            following: {
-                                select: {
-                                    followingId: true
-                                }
-                            },
-                        },
-                    },
-                    files: true,
-                    likes: true,
-                    bookmarks: true,
-                    retweets: true,
-                    _count: {
-                        select: {
-                            replies: true
-                        }
-                    }
-                }
-            }
         },
         orderBy: [
             { createdAt: 'desc' },
@@ -440,6 +364,7 @@ export const getLikesByUser = async (username: string, cursor?: { createdAt: Dat
                             username: true,
                             displayUsername: true,
                             image: true,
+                            pinnedTweetId: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -469,6 +394,7 @@ export const getLikesByUser = async (username: string, cursor?: { createdAt: Dat
                                     username: true,
                                     displayUsername: true,
                                     image: true,
+                                    pinnedTweetId: true,
                                     followers: {
                                         select: {
                                             followerId: true
@@ -532,6 +458,7 @@ export const getBookmarksByUser = async (username: string, cursor?: { createdAt:
                             username: true,
                             displayUsername: true,
                             image: true,
+                            pinnedTweetId: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -561,6 +488,7 @@ export const getBookmarksByUser = async (username: string, cursor?: { createdAt:
                                     username: true,
                                     displayUsername: true,
                                     image: true,
+                                    pinnedTweetId: true,
                                     followers: {
                                         select: {
                                             followerId: true
@@ -619,6 +547,7 @@ export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date
                     username: true,
                     displayUsername: true,
                     image: true,
+                    pinnedTweetId: true,
                     followers: {
                         select: {
                             followerId: true
@@ -648,6 +577,7 @@ export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date
                             username: true,
                             displayUsername: true,
                             image: true,
+                            pinnedTweetId: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -705,6 +635,7 @@ export const getTweetById = async (id: number) => {
                     username: true,
                     displayUsername: true,
                     image: true,
+                    pinnedTweetId: true,
                     followers: {
                         select: {
                             followerId: true
@@ -734,6 +665,7 @@ export const getTweetById = async (id: number) => {
                             username: true,
                             displayUsername: true,
                             image: true,
+                            pinnedTweetId: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -757,38 +689,8 @@ export const getTweetById = async (id: number) => {
                     }
                 }
             },
-            originalTweet: {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            username: true,
-                            displayUsername: true,
-                            image: true,
-                            followers: {
-                                select: {
-                                    followerId: true
-                                }
-                            },
-                            following: {
-                                select: {
-                                    followingId: true
-                                }
-                            },
-                        },
-                    },
-                    files: true,
-                    likes: true,
-                    bookmarks: true,
-                    retweets: true,
-                    _count: {
-                        select: {
-                            replies: true
-                        }
-                    }
-                }
-            }
         }
     });
 }
+
 

@@ -1,3 +1,4 @@
+import { ParamValue } from "next/dist/server/request/params";
 import { Bookmark } from "./Bookmark";
 import { File } from "./File";
 import { Like } from "./Like";
@@ -47,6 +48,10 @@ export interface Retweet extends TweetBase {
 export type TweetsPage = {
     items: Tweet[];
     nextCursor: { createdAt: string; id: number } | null;
+}
+
+export type PinnedTweetQueryData = {
+    pinnedTweet: Tweet | null;
 }
 
 export type Tweet = RegularTweet | ReplyTweet | Retweet;

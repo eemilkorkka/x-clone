@@ -7,6 +7,7 @@ export type UserBase = {
     bio?: string | null | undefined;
     website?: string | null | undefined;
     displayUsername?: string | null | undefined;
+    pinnedTweetId?: number | null | undefined;
 }
 
 export interface User extends UserBase {

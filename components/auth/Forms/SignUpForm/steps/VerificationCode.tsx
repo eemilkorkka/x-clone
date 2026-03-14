@@ -64,7 +64,6 @@ export const VerificationCode = ({ formData, setFormData, setStep }: Verificatio
                             value={verificationCode}
                             maxLength={6}
                             fieldState={fieldState}
-                            styles="text-white"
                         />
                         {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                     </Field>

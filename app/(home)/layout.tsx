@@ -1,10 +1,10 @@
 import { Footer } from "@/components/Footer";
 import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
-import { PremiumCard } from "@/components/PremiumCard";
-import { Searchbar } from "@/components/Searchbar";
+import { PremiumCard } from "@/components/Rightsidebar/PremiumCard";
+import { Searchbar } from "@/components/Rightsidebar/Searchbar";
 import { SplashScreen } from "@/components/SplashScreen";
 import { TrendingCard } from "@/components/Trending/TrendingCard";
-import { SuggestedUsersCard } from "@/components/User/SuggestedUsersCard";
+import { SuggestedUsersCard } from "@/components/Rightsidebar/SuggestedUsersCard";
 import { Metadata } from "next";
 import React from "react";
 
@@ -36,9 +36,9 @@ export default function HomeLayout({
           {children}
           {modal}
         </div>
-        <aside className="hidden lg:flex flex-col gap-4 flex-shrink-0 py-1 w-85 sticky top-0 self-start">
+        <aside className="hidden lg:flex flex-col gap-4 flex-shrink-0 py-1 w-85 sticky top-0">
           <Searchbar />
-          <div className="flex flex-col gap-4 overflow-y-auto">
+          <div className="flex flex-col gap-4">
             <PremiumCard />
             <SuggestedUsersCard />
             <TrendingCard />

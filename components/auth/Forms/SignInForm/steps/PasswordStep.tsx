@@ -87,7 +87,6 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                                 label="Username or email"
                                 value={username_or_email}
                                 fieldState={fieldState}
-                                styles="text-white"
                             />
                         </Field>
                     )}
@@ -104,7 +103,6 @@ export const PasswordStep = ({ formData }: PasswordStepProps) => {
                                 value={password}
                                 fieldState={fieldState}
                                 toggleToSeePassword={true}
-                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

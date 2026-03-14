@@ -97,6 +97,11 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
         }
     }
 
+    const onEmojiSelect = (emoji: string) => {
+        setTweetContent([tweetContent.slice(0, caretPos), emoji, tweetContent.slice(caretPos)].join(""));
+        setCaretPos(prev => prev + emoji.length);
+    }
+
     return (
         <div>
             {isPending && <IntermediateLoading styles={`${isComposeModal && "mb-4"}`} />}
@@ -162,7 +167,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
                                 <HiOutlineGif size={18} />
                             </Icon>
 
-                            <EmojiPickerPopover onEmojiSelect={(emoji) => setTweetContent([tweetContent.slice(0, caretPos), emoji, tweetContent.slice(caretPos)].join(""))}>
+                            <EmojiPickerPopover onEmojiSelect={(emoji) => onEmojiSelect(emoji)}>
                                 <Icon>
                                     <HiOutlineEmojiHappy size={18} />
                                 </Icon>

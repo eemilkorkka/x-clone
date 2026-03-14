@@ -1,16 +1,17 @@
 import { retweet } from "@/app/actions/retweet";
 import { authClient } from "@/lib/auth-client";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { Tweet, TweetsPage } from "@/types/Tweet";
+import { PinnedTweetQueryData, Tweet, TweetsPage } from "@/types/Tweet";
 import { UserWithFollowData } from "@/types/User";
-import { InfiniteData, useMutation } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import { useGetProfileFeedQueryKey } from "./useGetProfileFeedQueryKey";
+import { InfiniteData, QueryKey, useMutation } from "@tanstack/react-query";
+import { useParams, useSearchParams } from "next/navigation";
+import { useGetProfileFeedQueryKey } from "../useGetProfileFeedQueryKey";
 
 export const useRetweetMutation = (tweet: Tweet) => {
     const { data } = authClient.useSession();
     const queryClient = getQueryClient();
     const searchParams = useSearchParams();
+    const params = useParams();
     const profileFeedQueryKey = useGetProfileFeedQueryKey();
 
     const retweetMutation = useMutation({
@@ -27,29 +28,39 @@ export const useRetweetMutation = (tweet: Tweet) => {
             const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
             const tweetQueryKey = ["tweet", tweet.id];
             const repliesQueryKey = ["replies", tweet.parentTweetId];
+            const bookmarksQueryKey = ["bookmarks", data?.user.username];
+            const pinnedQueryKey = ["pinnedTweet", params.username];
 
             await queryClient.cancelQueries({ queryKey: tweetsQueryKey });
             await queryClient.cancelQueries({ queryKey: tweetQueryKey });
             await queryClient.cancelQueries({ queryKey: repliesQueryKey });
             await queryClient.cancelQueries({ queryKey: profileFeedQueryKey });
+            await queryClient.cancelQueries({ queryKey: bookmarksQueryKey });
+            await queryClient.cancelQueries({ queryKey: pinnedQueryKey });
 
             const previousTweets = queryClient.getQueryData<InfiniteData<TweetsPage>>(tweetsQueryKey);
             const previousTweet = queryClient.getQueryData<Tweet>(tweetQueryKey);
             const previousReplies = queryClient.getQueryData<InfiniteData<TweetsPage>>(repliesQueryKey);
             const previousProfileTweets = queryClient.getQueryData<InfiniteData<TweetsPage>>(profileFeedQueryKey);
+            const previousBookmarks = queryClient.getQueryData<InfiniteData<TweetsPage>>(bookmarksQueryKey);
+            const previousPinnedTweet = queryClient.getQueryData<PinnedTweetQueryData>(pinnedQueryKey);
 
             if (!data?.user.id) return {
                 previousTweets,
                 previousTweet,
                 previousReplies,
                 previousProfileTweets,
+                previousBookmarks,
+                previousPinnedTweet,
                 tweetsQueryKey,
                 tweetQueryKey,
                 repliesQueryKey,
-                profileFeedQueryKey
+                profileFeedQueryKey,
+                bookmarksQueryKey,
+                pinnedQueryKey,
             };
 
-            const targetTweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
+            const targetOriginalId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
             const originalTweet = tweet.isRetweet ? tweet.originalTweet : tweet;
 
             const hasRetweeted = originalTweet.retweets.some(retweet => retweet.userId === data.user.id);
@@ -90,19 +101,15 @@ export const useRetweetMutation = (tweet: Tweet) => {
                 };
             };
 
-            if (previousTweet) {
-                queryClient.setQueryData<Tweet>(tweetQueryKey, toggleRetweet(previousTweet));
-            }
-
-            if (previousTweets) {
-                queryClient.setQueryData<InfiniteData<TweetsPage>>(tweetsQueryKey, {
-                    ...previousTweets,
-                    pages: previousTweets.pages.map((page) => {
+            const setQueryData = (queryKey: QueryKey, previousItems: InfiniteData<TweetsPage, unknown>) => {
+                queryClient.setQueryData<InfiniteData<TweetsPage>>(queryKey, {
+                    ...previousItems,
+                    pages: previousItems.pages.map((page) => {
                         return {
                             ...page,
                             items: page.items
                                 .filter(t => {
-                                    if (hasRetweeted && t.isRetweet && t.userId === data.user.id && t.originalTweetId === targetTweetId) {
+                                    if (hasRetweeted && t.isRetweet && t.userId === data.user.id && t.originalTweetId === targetOriginalId) {
                                         return false;
                                     }
                                     return true;
@@ -133,6 +140,27 @@ export const useRetweetMutation = (tweet: Tweet) => {
                         };
                     })
                 });
+            }
+
+            if (previousTweet) {
+                queryClient.setQueryData<Tweet>(tweetQueryKey, toggleRetweet(previousTweet));
+            }
+
+            if (previousPinnedTweet?.pinnedTweet) {
+                const pinnedTweetId = previousPinnedTweet.pinnedTweet.isRetweet
+                    ? previousPinnedTweet.pinnedTweet.originalTweetId
+                    : previousPinnedTweet.pinnedTweet.id;
+
+                if (pinnedTweetId === targetOriginalId) {
+                    queryClient.setQueryData<PinnedTweetQueryData>(pinnedQueryKey, {
+                        ...previousPinnedTweet,
+                        pinnedTweet: toggleRetweet(previousPinnedTweet.pinnedTweet),
+                    });
+                }
+            }
+
+            if (previousTweets) {
+                setQueryData(tweetsQueryKey, previousTweets);
             }
 
             if (previousReplies) {
@@ -151,62 +179,43 @@ export const useRetweetMutation = (tweet: Tweet) => {
             }
 
             if (previousProfileTweets) {
-                queryClient.setQueryData<InfiniteData<TweetsPage>>(profileFeedQueryKey, {
-                    ...previousProfileTweets,
-                    pages: previousProfileTweets.pages.map((page) => {
-                        return {
-                            ...page,
-                            items: page.items
-                                .filter(t => {
-                                    if (hasRetweeted && t.isRetweet && t.userId === data.user.id && t.originalTweetId === targetTweetId) {
-                                        return false;
-                                    }
-                                    return true;
-                                })
-                                .map((t) => {
-                                    const currentItemId = t.id;
-                                    const currentOriginalId = t.isRetweet ? t.originalTweetId : t.id;
-
-                                    const targetItemId = tweet.id;
-                                    const targetOriginalId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
-
-                                    const shouldUpdate =
-                                        currentItemId === targetItemId ||
-                                        currentOriginalId === targetOriginalId;
-
-                                    if (shouldUpdate) {
-                                        if (t.isRetweet && t.originalTweet) {
-                                            return {
-                                                ...t,
-                                                originalTweet: toggleRetweet(t.originalTweet)
-                                            };
-                                        } else {
-                                            return toggleRetweet(t);
-                                        }
-                                    }
-                                    return t;
-                                })
-                        };
-                    })
-                });
+                setQueryData(profileFeedQueryKey, previousProfileTweets);
             }
+
+            if (previousBookmarks) {
+                setQueryData(bookmarksQueryKey, previousBookmarks);
+            }
+
+            const allTweetQueries = queryClient.getQueriesData<Tweet>({ queryKey: ["tweet"] });
+            allTweetQueries.forEach(([queryKey, cachedTweet]) => {
+                if (cachedTweet && cachedTweet.parentTweetId === tweet.id && cachedTweet.parentTweet) {
+                    queryClient.setQueryData<Tweet>(queryKey, {
+                        ...cachedTweet,
+                        parentTweet: toggleRetweet(cachedTweet.parentTweet as Tweet)
+                    });
+                }
+            });
 
             return {
                 previousTweets,
                 previousTweet,
                 previousReplies,
                 previousProfileTweets,
+                previousBookmarks,
+                previousPinnedTweet,
                 tweetsQueryKey,
                 tweetQueryKey,
                 repliesQueryKey,
-                profileFeedQueryKey
+                profileFeedQueryKey,
+                bookmarksQueryKey,
+                pinnedQueryKey
             };
         },
         onSuccess: (data, variables, context) => {
-            queryClient.invalidateQueries({ queryKey: ["replies", tweet.parentTweetId ] });
-            
+            queryClient.invalidateQueries({ queryKey: ["replies", tweet.parentTweetId] });
+
             if (tweet.originalTweet) {
-                queryClient.invalidateQueries({ queryKey: ["replies", tweet.originalTweet.parentTweetId ] });
+                queryClient.invalidateQueries({ queryKey: ["replies", tweet.originalTweet.parentTweetId] });
             }
 
             queryClient.invalidateQueries({ queryKey: context.profileFeedQueryKey });
@@ -220,12 +229,20 @@ export const useRetweetMutation = (tweet: Tweet) => {
                 queryClient.setQueryData(context.tweetQueryKey, context.previousTweet);
             }
 
+            if (context?.previousPinnedTweet) {
+                queryClient.setQueryData(context.pinnedQueryKey, context.previousPinnedTweet);
+            }
+
             if (context?.previousReplies) {
                 queryClient.setQueryData(context.repliesQueryKey, context.previousReplies);
             }
 
             if (context?.previousProfileTweets) {
                 queryClient.setQueryData(context.profileFeedQueryKey, context.previousProfileTweets);
+            }
+
+            if (context?.previousBookmarks) {
+                queryClient.setQueryData(context.bookmarksQueryKey, context.previousBookmarks);
             }
         }
     });

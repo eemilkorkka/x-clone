@@ -59,6 +59,7 @@ export default function SetupPage() {
                                                 value={displayUsername}
                                                 maxLength={50}
                                                 fieldState={fieldState}
+                                                styles="text-white"
                                             />
                                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                                         </Field>
@@ -76,6 +77,7 @@ export default function SetupPage() {
                                                 value={username}
                                                 maxLength={15}
                                                 fieldState={fieldState}
+                                                styles="text-white"
                                             />
                                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                                         </Field>

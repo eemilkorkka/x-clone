@@ -74,7 +74,6 @@ export const ForgotPasswordDialog = () => {
                                         label="Username or email"
                                         value={username_or_email}
                                         fieldState={fieldState}
-                                        styles="text-white"
                                     />
                                     {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                                 </Field>

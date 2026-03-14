@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Avatar,
     AvatarFallback,
@@ -5,10 +7,10 @@ import {
 } from "@/components/ui/avatar"
 
 import defaultPfp from "@/public/defaultPfp.jpg";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
+import { useRouter } from "next/navigation";
 
 export type size = "sm" | "md" | "lg" | "xl" | "2xl";
 
@@ -24,6 +26,8 @@ interface CustomAvatarProps {
 }
 
 export const CustomAvatar = ({ src, alt, size, children, username, useLink = true, useHoverCard = true, styles }: CustomAvatarProps) => {
+
+    const router = useRouter();
 
     const getSize = (size: size) => {
         switch (size) {
@@ -42,8 +46,16 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
         }
     }
 
+    const onAvatarClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        if (useLink) {
+            e.stopPropagation();
+            router.push(`/${username}`);
+        }
+    }
+
+
     const avatarElement = (
-        <Avatar className={cn(getSize(size), "hover:cursor-pointer", styles)}>
+        <Avatar className={cn(getSize(size), "hover:cursor-pointer", styles)} onClick={onAvatarClick}>
             <AvatarImage src={src || defaultPfp.src} alt={alt} className="rounded-full" />
             <AvatarFallback>CN</AvatarFallback>
             {children}
@@ -60,11 +72,5 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
         )
     );
 
-    return useLink ? (
-        <Link href={`/${username}`} onClick={(e) => e.stopPropagation()}>
-            {customAvatar}
-        </Link>
-    ) : (
-        customAvatar
-    )
+    return customAvatar;
 }

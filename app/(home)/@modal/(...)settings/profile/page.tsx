@@ -32,40 +32,7 @@ import { useColor } from "@/context/ColorContext";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import { cn } from "@/lib/utils";
-
-const formSchema = z.object({
-    displayName: z.string().max(50).min(1, "Name cannot be empty!"),
-    bio: z.string().max(160).min(0).optional(),
-    location: z.string().max(30).min(0).optional(),
-    website: z.string().max(100).min(0).optional(),
-    month: monthStringSchema.optional().or(z.literal("")),
-    day: z.union([
-        z.coerce.number().int().min(1).max(31),
-        z.literal(""),
-        z.undefined()
-    ]).optional(),
-    year: z.union([
-        z.coerce.number().int().min(1906).max(new Date().getFullYear()),
-        z.literal(""),
-        z.undefined()
-    ]).optional()
-}).refine((data) => {
-    if (!data.month || !data.day || !data.year ||
-        data.month === "" || typeof data.day !== "number" || typeof data.year !== "number") {
-        return true;
-    }
-
-    const monthIndex = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ].indexOf(data.month) + 1;
-
-    const daysInMonth = new Date(data.year, monthIndex, 0).getDate();
-    return data.day <= daysInMonth;
-}, {
-    message: "Invalid day for the selected month",
-    path: ["day"]
-});
+import { editProfileFormSchema } from "@/lib/schemas";
 
 export default function EditProfileModal() {
     const router = useRouter();
@@ -83,8 +50,8 @@ export default function EditProfileModal() {
 
     const queryClient = getQueryClient();
 
-    const form = useForm<z.input<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.input<typeof editProfileFormSchema>>({
+        resolver: zodResolver(editProfileFormSchema),
         defaultValues: {
             displayName: sessionData?.user.displayUsername ?? "",
             bio: sessionData?.user.bio ?? "",
@@ -96,8 +63,8 @@ export default function EditProfileModal() {
         }
     });
 
-    const onSubmit = async (data: z.input<typeof formSchema>) => {
-        const validatedData = formSchema.parse(data);
+    const onSubmit = async (data: z.input<typeof editProfileFormSchema>) => {
+        const validatedData = editProfileFormSchema.parse(data);
 
         let profilePictureUrl;
         let profileBannerUrl;
@@ -127,6 +94,7 @@ export default function EditProfileModal() {
             if (!result.error) {
                 toastMessage("Profile updated successfully!", true);
                 queryClient.invalidateQueries({ queryKey: ["user", sessionData?.user.username] });
+                queryClient.invalidateQueries({ queryKey: ["pinnedTweet", sessionData?.user.username] });
                 router.refresh();
                 router.back();
             } else {
@@ -151,7 +119,7 @@ export default function EditProfileModal() {
 
     return (
         <Dialog open={true} onOpenChange={handleOpenChange}>
-            <DialogContent className="!max-w-[600px] p-0 rounded-none sm:!rounded-2xl h-full sm:max-h-[650px] flex flex-col sm:rounded-xl ring-0 gap-0 overflow-hidden" showCloseButton={false}>
+            <DialogContent className="!max-w-[600px] p-0 rounded-none sm:!rounded-2xl h-full sm:max-h-[650px] flex flex-col sm:rounded-xl ring-0 gap-0 overflow-hidden dark:bg-black" showCloseButton={false}>
                 <div className="overflow-y-auto">
                     <DialogHeader className="flex flex-row justify-between p-2">
                         <div className="flex gap-6 items-center">

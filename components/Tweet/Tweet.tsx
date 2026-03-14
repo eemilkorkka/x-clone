@@ -2,7 +2,7 @@ import { Tweet as TweetType } from "@/types/Tweet";
 import { CustomAvatar } from "../User/CustomAvatar";
 import { Displayname } from "../User/Displayname";
 import { Username } from "../User/Username";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { TweetActions } from "./TweetActions";
 import { authClient } from "@/lib/auth-client";
 import { AiOutlineRetweet } from "react-icons/ai";
@@ -10,16 +10,16 @@ import { Text } from "../Text";
 import { Media } from "../Media/Media";
 import AttachmentsGrid from "./AttachmentsGrid";
 import { Icon } from "../Icon";
-import { BsThreeDots, BsPin } from "react-icons/bs";
+import { BsThreeDots, BsPin, BsPinFill } from "react-icons/bs";
 import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import { OptionsPopover } from "./TweetPopover/OptionsPopover";
-import { useDeleteTweetMutation } from "@/hooks/useDeleteTweetMutation";
+import { useDeleteTweetMutation } from "@/hooks/Tweet/useDeleteTweetMutation";
 import TimeAgo from 'react-timeago';
 import { shortFormatter } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
 import { useFollowMutation } from "@/hooks/useFollowMutation";
-import { useToastMessage } from "@/hooks/useToastMessage";
+import { usePinTweetMutation } from "@/hooks/Tweet/usePinTweetMutation";
 
 interface TweetProps {
     type: "tweet" | "status";
@@ -33,26 +33,23 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
     const { data } = authClient.useSession();
     const router = useRouter();
-    const { toastMessage } = useToastMessage();
+    const pathname = usePathname();
+    const { colors } = useColor();
 
-    const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
-    const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
-    const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
-    const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
-    const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
+    const tweetToUse = tweet.isRetweet ? tweet.originalTweet : tweet;
+    const tweetAuthor = tweetToUse.user;
+    const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
-    const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
+    const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetToUse.id);
+    const { pinTweetMutation } = usePinTweetMutation(tweetToUse);
     const { followMutation } = useFollowMutation(
         tweetAuthor?.username ?? "",
-        tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false
+        isFollowing
     );
-
-    const { colors } = useColor();
-    const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
     const onClick = () => {
         if (useLink) {
-            router.push(`/${tweetAuthor?.username}/status/${tweetId}`);
+            router.push(`/${tweetAuthor?.username}/status/${tweetToUse.id}`);
         }
     }
 
@@ -64,6 +61,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                 username={tweetAuthor?.username ?? ""}
                 alt={`@${tweetAuthor?.username}`}
                 useHoverCard={!isComposeModal}
+                useLink={!isComposeModal}
             />
             {isParentTweet && <hr style={{ width: "2px" }} className="min-h-10 h-full mt-2 mx-auto bg-border"></hr>}
         </div>
@@ -74,12 +72,12 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
             label: "Delete",
             icon: <IoTrashOutline />,
             variant: "destructive",
-            onClick: () => deleteTweetMutation.mutate(tweetId)
+            onClick: () => deleteTweetMutation.mutate(tweetToUse.id)
         },
         {
-            label: "Pin to your profile",
+            label: tweetToUse.user?.pinnedTweetId === tweetToUse.id ? "Unpin from your profile" : "Pin to your profile",
             icon: <BsPin />,
-            onClick: () => toastMessage("This feature hasn't been implemented yet!", false)
+            onClick: () => pinTweetMutation.mutate(tweetToUse)
         }
     ];
 
@@ -94,8 +92,8 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const timeStamp = (
         <>
             <span className="text-zinc-500">·</span>
-            <time className="text-sm text-zinc-500 hover:underline whitespace-nowrap" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
-                <TimeAgo date={new Date(tweetCreatedAt)} formatter={shortFormatter} />
+            <time className="text-sm text-zinc-500 hover:underline whitespace-nowrap" dateTime={new Date(tweetToUse.createdAt).toISOString()} title={new Date(tweetToUse.createdAt).toLocaleString()}>
+                <TimeAgo date={new Date(tweetToUse.createdAt)} formatter={shortFormatter} />
             </time>
         </>
     );
@@ -111,25 +109,35 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                     <AiOutlineRetweet className="text-zinc-600" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
                 </p>
             )}
+            {tweetAuthor?.pinnedTweetId == tweet.id && !["/home", "/compose/post"].includes(pathname) && (
+                <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
+                    <BsPinFill className="text-zinc-600" size={16} /> Pinned
+                </p>
+            )}
             <div className="flex" onClick={onClick}>
                 {type === "tweet" && (
                     avatar
                 )}
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full min-w-0">
                     <div className="flex">
                         {type === "status" && (
                             avatar
                         )}
-                        <div className="xs:flex gap-1 min-w-0">
+                        <div className="xs:flex gap-1 min-w-0 overflow-hidden">
                             {type === "tweet" ? (
                                 <>
-                                    <Displayname
-                                        username={tweetAuthor?.username ?? ""}
-                                        displayName={tweetAuthor?.displayUsername ?? ""}
-                                        styles="ml-2"
-                                    />
+                                    <div className="min-w-0 shrink overflow-hidden">
+                                        <Displayname
+                                            username={tweetAuthor?.username ?? ""}
+                                            displayName={tweetAuthor?.displayUsername ?? ""}
+                                            styles="ml-2"
+                                            useHoverCard={!isComposeModal}
+                                        />
+                                    </div>
                                     <div className="ml-1.5 mobile:ml-0 flex gap-1 min-w-0">
-                                        <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
+                                        <div className="min-w-0 shrink overflow-hidden">
+                                            <Username username={tweetAuthor?.username ?? ""} useHoverCard={!isComposeModal} />
+                                        </div>
                                         {timeStamp}
                                     </div>
                                 </>
@@ -151,16 +159,19 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         </div>
                         {!isComposeModal && (
                             <OptionsPopover options={tweetAuthor?.id === data?.user.id ? ownTweetOptions : generalTweetOptions}>
-                                <Icon styles="text-zinc-500 hover:text-sky-500">
+                                <Icon styles="text-zinc-500 hover:text-sky-500 right-0">
                                     <BsThreeDots />
                                 </Icon>
                             </OptionsPopover>
                         )}
                     </div>
-                    <Text text={tweetContent ?? ""} styles={cn(type === "status" ? "text-lg" : "ml-2", isComposeModal && "mt-0")} />
-                    {tweetFiles.length > 0 && (
+                    <Text text={tweetToUse.tweetContent ?? ""} styles={cn("ml-2 xs:-mt-1", {
+                        "xs:mt-1": isComposeModal,
+                        "ml-0": type === "status"
+                    })} />
+                    {tweetToUse.files.length > 0 && (
                         <AttachmentsGrid>
-                            {tweetFiles.map((file, index) => (
+                            {tweetToUse.files.map((file, index) => (
                                 <Media key={file.id} type={file.type} url={file.url} />
                             ))}
                         </AttachmentsGrid>
@@ -168,11 +179,11 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
 
                     {isComposeModal && isParentTweet && (
                         <span
-                            className="text-zinc-500 ml-2">Replying to <span className={colors.textColor}>@{tweet.user?.username}</span>
+                            className="text-zinc-500 ml-2 mt-4">Replying to <span className={colors.textColor}>@{tweet.user?.username}</span>
                         </span>
                     )}
                     {type === "status" && (
-                        <time className="pt-2 flex items-center text-zinc-500 text-[15px] hover:underline" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
+                        <time className="pt-2 flex items-center text-zinc-500 text-[15px] hover:underline" dateTime={new Date(tweetToUse.createdAt).toISOString()} title={new Date(tweetToUse.createdAt).toLocaleString()}>
                             <span>{new Date(tweet.createdAt).toLocaleTimeString('en-US', {
                                 hour: 'numeric',
                                 minute: '2-digit'

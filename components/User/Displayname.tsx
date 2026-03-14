@@ -1,6 +1,8 @@
-import Link from "next/link";
+"use client";
+
 import { cn } from "@/lib/utils";
 import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
+import { useRouter } from "next/navigation";
 
 interface DisplaynameProps {
     displayName: string;
@@ -12,27 +14,26 @@ interface DisplaynameProps {
 
 export const Displayname = ({ displayName, username, styles, useHoverCard = false, useLink = true }: DisplaynameProps) => {
 
+    const router = useRouter();
+
     const className = cn(
         "block truncate overflow-hidden whitespace-nowrap text-left h-fit font-bold text-[15px]",
         useLink && "hover:underline",
         styles
     );
 
+    const onDisplaynameClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+        e.stopPropagation();
+        router.push(`/${username}`);
+    }
+
     const displayNameElement = useHoverCard && useLink ? (
         <ProfileHoverCard username={username}>
-            <span className={className}>{displayName}</span>
+            <span className={className} onClick={onDisplaynameClick}>{displayName}</span>
         </ProfileHoverCard>
     ) : (
         <span className={className}>{displayName}</span>
     );
 
-    return useLink ? (
-        <Link href={`/${username}`} onClick={(e) => e.stopPropagation()} className="min-w-0">
-            {displayNameElement}
-        </Link>
-    ) : (
-        <div className="min-w-0">
-            {displayNameElement}
-        </div>
-    );
+    return displayNameElement;
 }

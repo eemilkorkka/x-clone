@@ -67,7 +67,6 @@ export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) =
                                 value={password}
                                 fieldState={fieldState}
                                 toggleToSeePassword={true}
-                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

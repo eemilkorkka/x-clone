@@ -30,6 +30,7 @@ model User {
   birthDateMonth     String?
   birthDateDay       Int?
   birthDateYear      Int?
+  pinnedTweetId Int?    @unique
   sessions           Session[]
   accounts           Account[]
   tweets             Tweet[]

@@ -62,7 +62,6 @@ export const PasswordResetForm = () => {
                                 value={password}
                                 fieldState={fieldState}
                                 toggleToSeePassword={true}
-                                styles="text-white"
                             />
                             {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
                         </Field>

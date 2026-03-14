@@ -14,7 +14,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <QueryClientProvider client={queryClient}>
             <NuqsAdapter>
                 <ComposeModalContextProvider>
-                    <ThemeProvider attribute="class" defaultTheme="light" themes={["light", "dim", "dark"]}>
+                    <ThemeProvider attribute="class" defaultTheme="dark" themes={["light", "dim", "dark"]}>
                         <ColorContextProvider>
                             {children}
                         </ColorContextProvider>

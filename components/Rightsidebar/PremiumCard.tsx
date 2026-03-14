@@ -9,10 +9,10 @@ import {
     CardTitle
 } from "@/components/ui/card";
 
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useColor } from "@/context/ColorContext";
 import { authClient } from "@/lib/auth-client";
-import { GoogleSignup } from "./auth/GoogleSignup";
+import { GoogleSignup } from "../auth/GoogleSignup";
 import Link from "next/link";
 
 export const PremiumCard = () => {

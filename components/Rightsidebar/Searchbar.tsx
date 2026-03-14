@@ -1,15 +1,15 @@
 "use client";
 
 import { IoSearch } from "react-icons/io5";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 import { useColor } from "@/context/ColorContext";
 import { useQuery } from "@tanstack/react-query";
 import { UserBase } from "@/types/User";
 import useDebounce from "@/hooks/useDebounce";
-import { User } from "./User/User";
-import { UserSkeleton } from "./User/UserSkeleton";
+import { User } from "../User/User";
+import { UserSkeleton } from "../User/UserSkeleton";
 
 const searchForUsers = async (username_or_displayname: string) => {
     const response = await fetch(`/api/users?username_or_displayname=${username_or_displayname}`);
@@ -35,7 +35,7 @@ export const Searchbar = () => {
     });
 
     return (
-        <div className="relative sticky top-0 py-1.5 bg-background">
+        <div className="relative sticky top-0 py-1.5 bg-background z-50">
             <div className="relative">
                 <Input
                     type="text"

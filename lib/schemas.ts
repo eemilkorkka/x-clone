@@ -149,3 +149,37 @@ export const userSchema = z.object({
         }
     })
 });
+
+export const editProfileFormSchema = z.object({
+    displayName: z.string().max(50).min(1, "Name cannot be empty!"),
+    bio: z.string().max(160).min(0).optional(),
+    location: z.string().max(30).min(0).optional(),
+    website: z.string().max(100).min(0).optional(),
+    month: monthStringSchema.optional().or(z.literal("")),
+    day: z.union([
+        z.coerce.number().int().min(1).max(31),
+        z.literal(""),
+        z.undefined()
+    ]).optional(),
+    year: z.union([
+        z.coerce.number().int().min(1906).max(new Date().getFullYear()),
+        z.literal(""),
+        z.undefined()
+    ]).optional()
+}).refine((data) => {
+    if (!data.month || !data.day || !data.year ||
+        data.month === "" || typeof data.day !== "number" || typeof data.year !== "number") {
+        return true;
+    }
+
+    const monthIndex = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ].indexOf(data.month) + 1;
+
+    const daysInMonth = new Date(data.year, monthIndex, 0).getDate();
+    return data.day <= daysInMonth;
+}, {
+    message: "Invalid day for the selected month",
+    path: ["day"]
+});
