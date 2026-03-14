@@ -1,7 +1,7 @@
 import React, { SetStateAction } from "react";
 import { FeedHeader } from "../Feed/FeedHeader"
 import { Tabs } from "../Tabs"
-import useWindowWidth from "../useWindowWidth";
+import useWindowWidth from "@/hooks/useWindowWidth";
 import { authClient } from "@/lib/auth-client";
 import { FaXTwitter } from "react-icons/fa6";
 import { MobileLeftSidebar } from "../Leftsidebar/MobileLeftSidebar";

@@ -1,17 +1,19 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogOverlay, DialogTrigger } from "../ui/dialog";
+import { cn } from "@/lib/utils";
 
 interface MediaDialogProps {
     children: React.ReactNode;
     src: string;
+    styles?: string;
 }
-export const MediaDialog = ({ children, src }: MediaDialogProps) => {
+export const MediaDialog = ({ children, src, styles }: MediaDialogProps) => {
     const [open, setOpen] = useState(false);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger className="w-fit h-fit" onClick={(e) => e.stopPropagation()}>
+            <DialogTrigger className={cn("w-full h-full", styles)} onClick={(e) => e.stopPropagation()}>
                 {children}
             </DialogTrigger>
             <DialogOverlay className="bg-black/60" />

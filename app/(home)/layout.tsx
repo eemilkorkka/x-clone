@@ -1,10 +1,10 @@
 import { Footer } from "@/components/Footer";
 import { Leftsidebar } from "@/components/Leftsidebar/Leftsidebar";
-import { PremiumCard } from "@/components/PremiumCard";
-import { Searchbar } from "@/components/Searchbar";
+import { PremiumCard } from "@/components/Rightsidebar/PremiumCard";
+import { Searchbar } from "@/components/Rightsidebar/Searchbar";
 import { SplashScreen } from "@/components/SplashScreen";
 import { TrendingCard } from "@/components/Trending/TrendingCard";
-import { SuggestedUsersCard } from "@/components/User/SuggestedUsersCard";
+import { SuggestedUsersCard } from "@/components/Rightsidebar/SuggestedUsersCard";
 import { Metadata } from "next";
 import React from "react";
 

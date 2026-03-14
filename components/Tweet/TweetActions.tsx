@@ -31,12 +31,12 @@ export const TweetActions = ({ type, tweet, styles }: TweetActionsProps) => {
     const { setTweetToReplyTo } = useComposeModal();
     const { toastMessage } = useToastMessage();
 
+    const tweetToCheck = tweet.isRetweet ? tweet.originalTweet : tweet;
+
     const handleReplyActionClick = () => {
         tweet.isRetweet ? setTweetToReplyTo(tweet.originalTweet) : setTweetToReplyTo(tweet);
         router.push("/compose/post");
     }
-
-    const tweetToCheck = tweet.isRetweet ? tweet.originalTweet : tweet;
 
     const copyLinkToClipboard = () => {
         navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/${tweet.user?.username}/status/${tweet.id}`);

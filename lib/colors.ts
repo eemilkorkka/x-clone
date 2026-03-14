@@ -1,5 +1,3 @@
-import { check } from "zod";
-
 export const colorsArray = [
     {
         color: "bg-sky-500",

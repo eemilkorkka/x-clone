@@ -69,7 +69,7 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
     const { data: pinnedTweetData, isLoading: isPinnedTweetLoading } = useQuery({
         queryFn: () => fetchPinnedTweet(username),
         queryKey: ["pinnedTweet", username],
-        enabled: type === "posts",
+        enabled: type === "posts" || type === "replies",
     });
 
     if (!sessionData || !isLoading && data?.pages[0].items.length === 0 && !isPinnedTweetLoading && !pinnedTweetData?.pinnedTweet) {
@@ -118,7 +118,7 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
 
     return (
         <div>
-            {type === "posts" && pinnedTweetData?.pinnedTweet && (
+            {(type === "posts" || type == "replies") && pinnedTweetData?.pinnedTweet && (
                 <Tweet type="tweet" tweet={pinnedTweetData.pinnedTweet} isParentTweet={false} />
             )}
             {isLoading ? (

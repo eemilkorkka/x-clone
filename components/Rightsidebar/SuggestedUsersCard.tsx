@@ -6,10 +6,10 @@ import {
     CardHeader,
     CardTitle
 } from "../ui/card";
-import { getSession } from "@/lib/session";
 
-import { User } from "./User";
-import { FollowButton } from "./FollowButton";
+import { getSession } from "@/lib/session";
+import { User } from "@/components/User/User";
+import { FollowButton } from "@/components/User/FollowButton";
 
 export const SuggestedUsersCard = async () => {
 

@@ -17,7 +17,7 @@ import { FollowButton } from "../User/FollowButton";
 import { Follower } from "@/types/Follower";
 import { useColor } from "@/context/ColorContext";
 import { useGetUserData } from "@/hooks/useGetUserData";
-import useWindowWidth from "../useWindowWidth";
+import useWindowWidth from "@/hooks/useWindowWidth";
 import { cn } from "@/lib/utils";
 
 interface ProfileInfoProps {
@@ -44,7 +44,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
     return (
         <div className="flex flex-col mb-4">
             <ProfileBanner src={userData.profileBannerImage ?? ""} >
-                <MediaDialog src={userData.image ?? ""}>
+                <MediaDialog src={userData.image ?? ""} styles="w-fit h-fit">
                     <div className={cn("absolute z-50 left-4 rounded-full border-background border-4", width && width < 450 ? "-bottom-13" : "-bottom-15")}>
                         <CustomAvatar src={userData.image ?? ""} alt={``} size={width && width < 450 ? "xl" : "2xl"} useLink={false} />
                     </div>

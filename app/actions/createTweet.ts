@@ -43,16 +43,13 @@ export async function createTweet(previousState: any, formData: FormData) {
     }
 
     try {
-        const result = await prisma.$transaction(async (tx) => {
-            const tweet = await tx.tweet.create({
-                data: {
-                    userId: session.user.id,
-                    tweetContent: tweetContent,
-                    parentTweetId: parentId
-                }
-            });
-
-            return tweet;
+        
+        const tweet = await prisma.tweet.create({
+            data: {
+                userId: session.user.id,
+                tweetContent: tweetContent,
+                parentTweetId: parentId
+            }
         });
 
         for (const file of actualFiles) {
@@ -64,7 +61,7 @@ export async function createTweet(previousState: any, formData: FormData) {
 
                 await prisma.file.create({
                     data: {
-                        tweetId: result.id,
+                        tweetId: tweet.id,
                         url: fileUrl,
                         type: fileType
                     }
@@ -72,7 +69,7 @@ export async function createTweet(previousState: any, formData: FormData) {
             } catch (error) {
                 await prisma.tweet.delete({
                     where: {
-                        id: result.id
+                        id: tweet.id
                     }
                 });
 

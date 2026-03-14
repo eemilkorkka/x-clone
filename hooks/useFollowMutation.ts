@@ -92,6 +92,7 @@ export const useFollowMutation = (username: string, isFollowing: boolean) => {
             queryClient.invalidateQueries({ queryKey: ["user", session.data?.user.username] });
             queryClient.invalidateQueries({ queryKey: ["followers", username] });
             queryClient.invalidateQueries({ queryKey: ["followers", session.data?.user.username] });
+            queryClient.invalidateQueries({ queryKey: ["pinnedTweet", username] });
 
             router.refresh();
         },

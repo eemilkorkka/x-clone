@@ -21,7 +21,7 @@ const AttachmentsGrid = ({ children }: AttachmentsGridProps) => {
     return (
         <div
             className={cn(
-                "grid gap-0.5 w-full mt-2 mb-2 rounded-2xl overflow-hidden h-[42vw] xs:h-[37vw] md:h-[271px] max-h-[500px]",
+                "grid gap-0.5 w-full mt-2 mb-2 rounded-2xl overflow-hidden",
                 itemCount > 2 ? "grid-cols-2 h-75 grid-rows-2" : "grid-cols-2"
             )}
         >

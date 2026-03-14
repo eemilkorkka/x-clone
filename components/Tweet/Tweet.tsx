@@ -34,27 +34,22 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const { data } = authClient.useSession();
     const router = useRouter();
     const pathname = usePathname();
+    const { colors } = useColor();
 
-    const tweetId = tweet.isRetweet ? tweet.originalTweetId : tweet.id;
-    const tweetContent = tweet.isRetweet ? tweet.originalTweet.tweetContent : tweet.tweetContent;
-    const tweetFiles = tweet.isRetweet ? tweet.originalTweet.files : tweet.files;
-    const tweetAuthor = tweet.isRetweet ? tweet.originalTweet.user : tweet.user;
-    const tweetCreatedAt = tweet.isRetweet ? tweet.originalTweet.createdAt : tweet.createdAt;
-    const tweetToPin = tweet.isRetweet ? tweet.originalTweet : tweet;
+    const tweetToUse = tweet.isRetweet ? tweet.originalTweet : tweet;
+    const tweetAuthor = tweetToUse.user;
+    const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
-    const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetId);
-    const { pinTweetMutation } = usePinTweetMutation(tweetToPin);
+    const { deleteTweetMutation } = useDeleteTweetMutation(tweet.parentTweetId ?? tweetToUse.id);
+    const { pinTweetMutation } = usePinTweetMutation(tweetToUse);
     const { followMutation } = useFollowMutation(
         tweetAuthor?.username ?? "",
-        tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false
+        isFollowing
     );
-
-    const { colors } = useColor();
-    const isFollowing = tweetAuthor?.followers?.some(follower => follower.followerId === data?.user.id) ?? false;
 
     const onClick = () => {
         if (useLink) {
-            router.push(`/${tweetAuthor?.username}/status/${tweetId}`);
+            router.push(`/${tweetAuthor?.username}/status/${tweetToUse.id}`);
         }
     }
 
@@ -77,12 +72,12 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
             label: "Delete",
             icon: <IoTrashOutline />,
             variant: "destructive",
-            onClick: () => deleteTweetMutation.mutate(tweetId)
+            onClick: () => deleteTweetMutation.mutate(tweetToUse.id)
         },
         {
-            label: tweetToPin.user?.pinnedTweetId === tweetToPin.id ? "Unpin from your profile" : "Pin to your profile",
+            label: tweetToUse.user?.pinnedTweetId === tweetToUse.id ? "Unpin from your profile" : "Pin to your profile",
             icon: <BsPin />,
-            onClick: () => pinTweetMutation.mutate(tweetToPin)
+            onClick: () => pinTweetMutation.mutate(tweetToUse)
         }
     ];
 
@@ -97,8 +92,8 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
     const timeStamp = (
         <>
             <span className="text-zinc-500">·</span>
-            <time className="text-sm text-zinc-500 hover:underline whitespace-nowrap" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
-                <TimeAgo date={new Date(tweetCreatedAt)} formatter={shortFormatter} />
+            <time className="text-sm text-zinc-500 hover:underline whitespace-nowrap" dateTime={new Date(tweetToUse.createdAt).toISOString()} title={new Date(tweetToUse.createdAt).toLocaleString()}>
+                <TimeAgo date={new Date(tweetToUse.createdAt)} formatter={shortFormatter} />
             </time>
         </>
     );
@@ -114,7 +109,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                     <AiOutlineRetweet className="text-zinc-600" size={16} /> {tweet.user?.username === data?.user.username ? "You" : tweet.user?.username} reposted
                 </p>
             )}
-            {tweetAuthor?.pinnedTweetId == tweet.id && pathname != "/home" && (
+            {tweetAuthor?.pinnedTweetId == tweet.id && !["/home", "/compose/post"].includes(pathname) && (
                 <p className="flex gap-1 items-center text-[13px] font-semibold text-zinc-600 pb-2">
                     <BsPinFill className="text-zinc-600" size={16} /> Pinned
                 </p>
@@ -170,13 +165,13 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                             </OptionsPopover>
                         )}
                     </div>
-                    <Text text={tweetContent ?? ""} styles={cn("ml-2 xs:-mt-1", { 
-                        "mt-1": isComposeModal,
+                    <Text text={tweetToUse.tweetContent ?? ""} styles={cn("ml-2 xs:-mt-1", {
+                        "xs:mt-1": isComposeModal,
                         "ml-0": type === "status"
-                     })} />
-                    {tweetFiles.length > 0 && (
+                    })} />
+                    {tweetToUse.files.length > 0 && (
                         <AttachmentsGrid>
-                            {tweetFiles.map((file, index) => (
+                            {tweetToUse.files.map((file, index) => (
                                 <Media key={file.id} type={file.type} url={file.url} />
                             ))}
                         </AttachmentsGrid>
@@ -188,7 +183,7 @@ export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isP
                         </span>
                     )}
                     {type === "status" && (
-                        <time className="pt-2 flex items-center text-zinc-500 text-[15px] hover:underline" dateTime={new Date(tweetCreatedAt).toISOString()} title={new Date(tweetCreatedAt).toLocaleString()}>
+                        <time className="pt-2 flex items-center text-zinc-500 text-[15px] hover:underline" dateTime={new Date(tweetToUse.createdAt).toISOString()} title={new Date(tweetToUse.createdAt).toLocaleString()}>
                             <span>{new Date(tweet.createdAt).toLocaleTimeString('en-US', {
                                 hour: 'numeric',
                                 minute: '2-digit'
