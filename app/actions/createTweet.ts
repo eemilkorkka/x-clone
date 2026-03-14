@@ -43,7 +43,6 @@ export async function createTweet(previousState: any, formData: FormData) {
     }
 
     try {
-        
         const tweet = await prisma.tweet.create({
             data: {
                 userId: session.user.id,

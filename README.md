@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# X-Clone
 
-## Getting Started
+A fully responsive full-stack clone of X (formerly known as Twitter) built using technologies like Next.js 16, tailwindcss, Shadcn UI, PostgreSQL, Appwrite Storage for storing videos & images and BetterAuth for authentication. 
 
-First, run the development server:
+## Screenshots 📸
+
+![Login / Signup page](./screenshots/Screenshot%202026-03-14%20152609.png)
+![Home page](./screenshots/Screenshot%202026-03-14%20174400.png)
+![Profile page](./screenshots/Screenshot%202026-03-14%20174537.png)
+
+## Features 🖌️
+
+- The ability to make posts, which can include photos and/or videos.
+- The ability to like, retweet, bookmark and reply to posts.
+- Theme switching
+- The ability to follow and unfollow others.
+- The ability to edit your profile and change your username.
+
+## Installation locally 💻
+
+You may install the application locally by cloning the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+git clone https://github.com/eemilkorkka/x-clone.git
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Install the required dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm i
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Set up a .env file; see .env.example for more information.
 
-## Learn More
+Set up a PostgreSQL database in Supabase or run one locally and generate the database from the Prisma Schema by typing this into the terminal: 
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpx prisma migrate dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Finally, run the app:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm run dev
+   ```
 
-## Deploy on Vercel
+You should then be able to access the website at http://localhost:3000
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributions are always welcome!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open a pull request with your changes/improvements.
+
