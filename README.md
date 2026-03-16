@@ -4,9 +4,9 @@ A fully responsive full-stack clone of X (formerly known as Twitter) built using
 
 ## Screenshots 📸
 
-![Login / Signup page](./screenshots/Screenshot%202026-03-14%20152609.png)
-![Home page](./screenshots/Screenshot%202026-03-14%20174400.png)
-![Profile page](./screenshots/Screenshot%202026-03-14%20174537.png)
+| Login / Signup | Home Page | Profile Page |
+|---------------|------------|--------------|
+| ![Login / Signup page](./screenshots/Screenshot%202026-03-14%20152609.png) | ![Home page](./screenshots/Screenshot%202026-03-14%20174400.png) | ![Profile page](./screenshots/Screenshot%202026-03-14%20174537.png) |
 
 ## Features 🖌️
 
