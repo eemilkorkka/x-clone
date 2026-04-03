@@ -29,7 +29,13 @@ interface TweetProps {
     isParentTweet: boolean;
 }
 
-export const Tweet = ({ type, tweet, useLink = true, isComposeModal = false, isParentTweet }: TweetProps) => {
+export const Tweet = ({
+    type,
+    tweet,
+    useLink = true,
+    isComposeModal = false,
+    isParentTweet
+}: TweetProps) => {
 
     const { data } = authClient.useSession();
     const router = useRouter();

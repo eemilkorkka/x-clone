@@ -18,9 +18,9 @@ import Link from "next/link";
 export const PremiumCard = () => {
 
     const { colors } = useColor();
-    const { data } = authClient.useSession();
+    const { data, isPending } = authClient.useSession();
 
-    if (!data) return (
+    if (!isPending && !data) return (
         <Card className="py-4 shadow-none bg-background border-1 border-foreground/10 ring-0 gap-2">
             <CardHeader className="px-4">
                 <CardTitle className="font-bold text-xl">New to X Clone?</CardTitle>

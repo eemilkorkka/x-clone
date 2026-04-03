@@ -1,12 +1,14 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { colorsArray } from "@/lib/colors";
+import { useTheme } from "next-themes";
 import React, { createContext, SetStateAction, useState, useContext, useEffect } from "react";
 
-export type ColorsType = { 
-    color: string; 
-    hoverColor: string; 
-    secondHoverColor: string; 
+export type ColorsType = {
+    color: string;
+    hoverColor: string;
+    secondHoverColor: string;
     textColor: string;
     focusVisibleBorderColor: string;
     peerFocusTextColor: string;
@@ -35,7 +37,9 @@ export function useColor() {
 
 export default function ColorContextProvider({ children }: { children: React.ReactNode }) {
     const [colors, setColors] = useState<ColorsType>(colorsArray[0]);
-
+    const { setTheme } = useTheme();
+    const { data } = authClient.useSession();
+    
     useEffect(() => {
         const savedColor = localStorage.getItem("color");
 
@@ -44,9 +48,18 @@ export default function ColorContextProvider({ children }: { children: React.Rea
         }
     }, []);
 
+    useEffect(() => {
+        if (data?.session) {
+            setTheme(localStorage.getItem("selectedTheme") || "dark");
+        } else {
+            setTheme("dark");
+        }
+    }, [data]);
+
+
     return (
         <ColorContext.Provider value={{ colors, setColors }}>
             {children}
         </ColorContext.Provider>
     )
-}
+}  

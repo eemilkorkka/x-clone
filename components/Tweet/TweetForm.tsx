@@ -113,8 +113,7 @@ export const TweetForm = ({ type, parentTweetId, parentTweetAuthor, isComposeMod
             <div className={cn(
                 "p-4 pb-0 flex items-start max-w-full",
                 parentTweetId && textAreaFocused && "pt-0",
-                !isComposeModal && "border-b border-border",
-                isComposeModal && "pt-0"
+                isComposeModal ? "pt-0" : "border-b border-border",
             )}>
                 <CustomAvatar src={data?.user.image ?? ""} alt={`@${data?.user.username}`} size="md" styles="mr-2" useLink={false} />
                 <form onSubmit={handleSubmit} className="flex flex-col w-full mt-2">

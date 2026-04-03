@@ -1,6 +1,7 @@
 "use server";
 
 import { FileType } from "@/generated/prisma/enums";
+import { storage } from "@/lib/appwrite";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { uploadFile } from "@/lib/utils/uploadFile";
@@ -37,6 +38,8 @@ export async function createTweet(previousState: any, formData: FormData) {
         tweetContent,
         files: actualFiles
     });
+    
+    const uploadedFileIds: string[] = [];
 
     if (!parsedData.success) {
         return { error: "Invalid form data.", success: false };
@@ -56,7 +59,10 @@ export async function createTweet(previousState: any, formData: FormData) {
 
             try {
                 const fileUrl = await uploadFile(file);
+                const fileId = fileUrl.split("/")[8];
                 const fileType = file.type.includes("video") ? FileType.VIDEO : FileType.IMAGE;
+                
+                uploadedFileIds.push(fileId);
 
                 await prisma.file.create({
                     data: {
@@ -65,6 +71,7 @@ export async function createTweet(previousState: any, formData: FormData) {
                         type: fileType
                     }
                 });
+
             } catch (error) {
                 await prisma.tweet.delete({
                     where: {
@@ -72,6 +79,15 @@ export async function createTweet(previousState: any, formData: FormData) {
                     }
                 });
 
+                await Promise.allSettled(
+                    uploadedFileIds.map((id) =>
+                        storage.deleteFile({
+                            bucketId: process.env.APPWRITE_BUCKET_ID!,
+                            fileId: id
+                        })
+                    )
+                );
+                
                 return { success: false, error: "Failed to upload tweet attachment(s)" };
             }
         }

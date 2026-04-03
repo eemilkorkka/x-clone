@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     default: "Home / X Clone",
     template: "%s / X Clone",
   },
-  description: "Welcome to X Clone, a social media platform.",
+  description: "Welcome to X Clone, a NextJS clone of X.",
 }
 
 export default function HomeLayout({
