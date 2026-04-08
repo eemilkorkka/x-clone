@@ -1,5 +1,5 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { DeactivateAccount } from "@/components/Settings/Account/DeactivateAccount";
 import { User } from "@/components/User/User";
 import { getSession } from "@/lib/session";

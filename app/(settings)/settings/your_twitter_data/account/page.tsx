@@ -1,5 +1,5 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
 import { getSession } from "@/lib/session";
 import { Metadata } from "next";

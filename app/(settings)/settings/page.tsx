@@ -1,6 +1,6 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { MobileOnlyPageWrapper } from "@/components/MobileOnlyPageWrapper";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
 import { Username } from "@/components/User/Username";
 import { getSession } from "@/lib/session";

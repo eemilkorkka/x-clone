@@ -6,7 +6,7 @@ import { TweetActions } from "./TweetActions";
 import { TweetForm } from "./TweetForm";
 import { RepliesFeed } from "./RepliesFeed";
 import { notFound } from "next/navigation";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 
 const fetchTweetById = async (id: number) => {
     const response = await fetch(`/api/posts/${id}`);

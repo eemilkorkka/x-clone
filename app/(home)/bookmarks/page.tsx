@@ -1,6 +1,6 @@
 import { BookmarksFeed } from "@/components/Feed/BookmarksFeed";
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getBookmarksByUser } from "@/lib/queries/tweet-queries";
 import { getSession } from "@/lib/session";

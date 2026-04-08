@@ -6,10 +6,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { TweetActions } from "./TweetActions";
 import { authClient } from "@/lib/auth-client";
 import { AiOutlineRetweet } from "react-icons/ai";
-import { Text } from "../Text";
+import { Text } from "../ui/Text";
 import { Media } from "../Media/Media";
 import AttachmentsGrid from "./AttachmentsGrid";
-import { Icon } from "../Icon";
+import { Icon } from "../ui/Icon";
 import { BsThreeDots, BsPin, BsPinFill } from "react-icons/bs";
 import { IoTrashOutline, IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import { OptionsPopover } from "./TweetPopover/OptionsPopover";
@@ -177,8 +177,13 @@ export const Tweet = ({
                     })} />
                     {tweetToUse.files.length > 0 && (
                         <AttachmentsGrid>
-                            {tweetToUse.files.map((file, index) => (
-                                <Media key={file.id} type={file.type} url={file.url} />
+                            {tweetToUse.files.map((file) => (
+                                <Media 
+                                    key={file.id} 
+                                    type={file.type} 
+                                    url={file.url} 
+                                    useDialog={!isComposeModal} 
+                                />
                             ))}
                         </AttachmentsGrid>
                     )}

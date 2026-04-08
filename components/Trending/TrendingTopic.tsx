@@ -1,5 +1,5 @@
 import { BsThreeDots } from "react-icons/bs";
-import { Icon } from "../Icon";
+import { Icon } from "../ui/Icon";
 
 interface TrendingTopicProps {
     category: string;

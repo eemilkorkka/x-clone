@@ -53,7 +53,6 @@ export const CustomAvatar = ({ src, alt, size, children, username, useLink = tru
         }
     }
 
-
     const avatarElement = (
         <Avatar className={cn(getSize(size), "hover:cursor-pointer", styles)} onClick={onAvatarClick}>
             <AvatarImage src={src || defaultPfp.src} alt={alt} className="rounded-full" />

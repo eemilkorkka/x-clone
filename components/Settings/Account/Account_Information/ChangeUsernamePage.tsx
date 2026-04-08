@@ -2,7 +2,7 @@
 
 import { CustomInput } from "@/components/customized/CustomInput";
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { useColor } from "@/context/ColorContext";

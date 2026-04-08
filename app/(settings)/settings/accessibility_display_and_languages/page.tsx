@@ -1,5 +1,5 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { SettingsItem } from "@/components/Settings/SettingsItem";
 import { Metadata } from "next";
 import { HiOutlinePaintBrush } from "react-icons/hi2";

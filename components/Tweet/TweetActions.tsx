@@ -12,7 +12,7 @@ import { useBookmarkMutation } from "@/hooks/Tweet/useBookmarkMutation";
 import { useRetweetMutation } from "@/hooks/Tweet/useRetweetMutation";
 import { AiOutlineLink } from "react-icons/ai";
 import { OptionsPopover } from "./TweetPopover/OptionsPopover";
-import { Icon } from "../Icon";
+import { Icon } from "../ui/Icon";
 import { useToastMessage } from "@/hooks/useToastMessage";
 
 interface TweetActionsProps {

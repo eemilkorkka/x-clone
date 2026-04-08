@@ -1,5 +1,5 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { Displayname } from "@/components/User/Displayname";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";

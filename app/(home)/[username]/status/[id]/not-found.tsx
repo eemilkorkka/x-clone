@@ -1,4 +1,4 @@
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 
 export default function NotFound() {
     return (

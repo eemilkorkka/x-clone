@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FaXTwitter } from "react-icons/fa6";
-import { Separator } from "@/components/Separator";
+import { Separator } from "@/components/ui/seperator-with-text";
 import { Footer } from "@/components/Footer";
 import { GoogleSignup } from "@/components/auth/GoogleSignup";
 import { SignInDialog } from "@/components/auth/Forms/SignInForm/SignInDialog";
@@ -29,7 +29,7 @@ export default async function IndexPage() {
                     </div>
                     <div className="mt-8 space-y-4 max-w-xs">
                         <GoogleSignup />
-                        <Separator text="OR" />
+                        <Separator />
                         <Link href="/signup">
                             <Button size="lg" className="bg-white text-black hover:bg-zinc-200 rounded-full w-full font-bold py-5.5 hover:cursor-pointer">
                                 Create account

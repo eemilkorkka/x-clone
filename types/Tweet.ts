@@ -1,4 +1,3 @@
-import { ParamValue } from "next/dist/server/request/params";
 import { Bookmark } from "./Bookmark";
 import { File } from "./File";
 import { Like } from "./Like";

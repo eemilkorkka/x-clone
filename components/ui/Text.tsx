@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useColor } from "@/context/ColorContext";
-import { ProfileHoverCard } from "./Profile/ProfileHoverCard";
+import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
 
 const urlPattern = /\b((https?:\/\/|www\.)[^\s/$.?#].[^\s]*)/gi;
 

@@ -2,7 +2,7 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { GoogleSignup } from "../../../GoogleSignup";
-import { Separator } from "../../../../Separator";
+import { Separator } from "@/components/ui/seperator-with-text";
 import { Field, FieldError } from "../../../../ui/field";
 import { CustomInput } from "../../../../customized/CustomInput";
 import { Button } from "../../../../ui/button";
@@ -42,7 +42,7 @@ export const UserStep = ({ setStep, setFormData, setOpen, formData }: UserStepPr
     return (
         <>
             <GoogleSignup />
-            <Separator text="OR" />
+            <Separator />
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <Controller
                     name="username_or_email"

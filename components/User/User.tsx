@@ -6,7 +6,7 @@ import { Displayname } from "./Displayname";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { Text } from "../Text";
+import { Text } from "../ui/Text";
 import { authClient } from "@/lib/auth-client";
 import { UserBase, UserWithFollowData } from "@/types/User";
 import { Badge } from "../ui/badge";

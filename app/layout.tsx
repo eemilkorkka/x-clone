@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import "./globals.css";
 import Providers from "@/components/Providers";
 import React from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-backround`}
       >
+        <SpeedInsights />
         <Toaster />
         <Providers>
           {children}

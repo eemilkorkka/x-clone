@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Separator } from "./ui/separator";
+import { Separator } from "@/components/ui/separator";
 import React from "react";
 
 const footerLinks = [

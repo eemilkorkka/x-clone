@@ -1,7 +1,7 @@
 "use client";
 
 import { FeedHeader } from "../Feed/FeedHeader";
-import { ReturnBack } from "../ReturnBack";
+import { ReturnBack } from "../ui/ReturnBack";
 import { usePathname } from "next/navigation";
 import { Displayname } from "../User/Displayname";
 

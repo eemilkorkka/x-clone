@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer"
-import { LoadingSpinner } from "../LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import React from "react";
 import { User } from "../User/User";
 import { FollowButton } from "../User/FollowButton";

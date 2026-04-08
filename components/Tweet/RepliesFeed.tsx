@@ -3,7 +3,7 @@ import { InfiniteScrollContainer } from "../Feed/InfiniteScrollContainer"
 import React from "react";
 import { Tweet } from "./Tweet";
 import { ReplyTweet } from "@/types/Tweet";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 
 const fetchReplies = async (id: number, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
     const query = pageParam

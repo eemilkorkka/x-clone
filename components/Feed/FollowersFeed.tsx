@@ -2,12 +2,12 @@
 
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer"
-import { LoadingSpinner } from "../LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import React from "react";
 import { User } from "../User/User";
 import { FollowButton } from "../User/FollowButton";
 import { authClient } from "@/lib/auth-client";
-import { Icon } from "../Icon";
+import { Icon } from "../ui/Icon";
 import { BsThreeDots } from "react-icons/bs";
 import { UserWithFollowData } from "@/types/User";
 import { IoPersonRemove } from "react-icons/io5";

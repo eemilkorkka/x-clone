@@ -4,7 +4,7 @@ import { TwoFactorAuth } from "@/components/auth/2FA";
 import { PasswordStep } from "@/components/Settings/2FASetting/EnableSteps/PasswordStep";
 import { QrCodeStep } from "@/components/Settings/2FASetting/EnableSteps/QrCodeStep";
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { Button } from "@/components/ui/button";
 import { useColor } from "@/context/ColorContext";
 import { authClient } from "@/lib/auth-client";

@@ -1,7 +1,7 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
 import { FollowersFeed } from "@/components/Feed/FollowersFeed";
-import { ReturnBack } from "@/components/ReturnBack";
-import { Tabs } from "@/components/Tabs";
+import { ReturnBack } from "@/components/ui/ReturnBack";
+import { Tabs } from "@/components/ui/Tabs";
 import { Displayname } from "@/components/User/Displayname";
 import { Username } from "@/components/User/Username";
 import { getQueryClient } from "@/lib/getQueryClient";

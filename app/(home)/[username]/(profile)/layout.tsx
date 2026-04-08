@@ -1,6 +1,6 @@
 import { ProfileFeedHeader } from "@/components/Profile/ProfileFeedHeader";
 import { ProfileInfo } from "@/components/Profile/ProfileInfo";
-import { Tabs } from "@/components/Tabs";
+import { Tabs } from "@/components/ui/Tabs";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { prisma } from "@/lib/prisma";
 import { getUserByUsernameOrEmail } from "@/lib/queries/user-queries";

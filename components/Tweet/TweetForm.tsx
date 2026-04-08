@@ -2,7 +2,7 @@
 
 import TextareaAutosize from 'react-textarea-autosize';
 import { CircularProgress } from "@/components/customized/progress/progress-10";
-import { Icon } from '../Icon';
+import { Icon } from '../ui/Icon';
 import { HiOutlineGif } from 'react-icons/hi2';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { RxCalendar } from 'react-icons/rx';
@@ -22,7 +22,7 @@ import { FileType } from '@/generated/prisma/enums';
 import { cn } from '@/lib/utils';
 import { useGetProfileFeedQueryKey } from '@/hooks/useGetProfileFeedQueryKey';
 import { useColor } from '@/context/ColorContext';
-import { IntermediateLoading } from '../IntermediateLoading';
+import { IntermediateLoading } from '../ui/IntermediateLoading';
 import { EmojiPickerPopover } from '../EmojiPickerPopover';
 import { useToastMessage } from '@/hooks/useToastMessage';
 

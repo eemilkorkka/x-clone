@@ -13,7 +13,7 @@ import { authClient } from "@/lib/auth-client";
 import { Follower } from "@/types/Follower";
 import { Displayname } from "../User/Displayname";
 import { Username } from "../User/Username";
-import { Text } from "../Text";
+import { Text } from "../ui/Text";
 import Link from "next/link";
 import { useState } from "react";
 

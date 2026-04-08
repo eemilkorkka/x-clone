@@ -6,7 +6,7 @@ import { CustomAvatar } from "../User/CustomAvatar"
 import { ProfileBanner } from "./ProfileBanner"
 import { Displayname } from "../User/Displayname";
 import { Username } from "../User/Username";
-import { Text } from "../Text";
+import { Text } from "../ui/Text";
 import { notFound } from "next/navigation";
 import { IoCalendarOutline } from "react-icons/io5";
 import { RiLinkM } from "react-icons/ri";

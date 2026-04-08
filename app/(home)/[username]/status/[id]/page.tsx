@@ -1,5 +1,5 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { TweetView } from "@/components/Tweet/TweetView";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { prisma } from "@/lib/prisma";

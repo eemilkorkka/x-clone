@@ -18,6 +18,8 @@ export const ProfileBanner = ({ children, src, isPreview = false, styles }: Prof
             alt="profile banner"
             className={cn("hover:cursor-pointer", styles)}
             fill
+            priority
+            sizes="100vw"
         />
     );
 

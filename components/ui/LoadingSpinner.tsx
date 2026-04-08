@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/context/ColorContext";
-import { Spinner } from "./ui/spinner"
+import { Spinner } from "./spinner"
 
 export const LoadingSpinner = () => {
 

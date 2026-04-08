@@ -6,7 +6,7 @@ import React from "react";
 import { Tweet } from "../Tweet/Tweet";
 import { RegularTweet, Retweet } from "@/types/Tweet";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { useQueryState } from 'nuqs';
 import { authClient } from "@/lib/auth-client";
 import { HomeHeader } from "../Home/HomeHeader";

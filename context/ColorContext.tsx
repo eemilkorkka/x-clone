@@ -56,7 +56,6 @@ export default function ColorContextProvider({ children }: { children: React.Rea
         }
     }, [data]);
 
-
     return (
         <ColorContext.Provider value={{ colors, setColors }}>
             {children}

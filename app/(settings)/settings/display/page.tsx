@@ -1,11 +1,11 @@
 import { FeedHeader } from "@/components/Feed/FeedHeader";
-import { ReturnBack } from "@/components/ReturnBack";
+import { ReturnBack } from "@/components/ui/ReturnBack";
 import { CustomAvatar } from "@/components/User/CustomAvatar";
 import { Displayname } from "@/components/User/Displayname";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import xLogo from "@/public/x-logo.jpg";
 import { Username } from "@/components/User/Username";
-import { Text } from "@/components/Text";
+import { Text } from "@/components/ui/Text";
 import { ColorSelection } from "@/components/Settings/ColorSelection";
 import { Metadata } from "next";
 import { ThemeSelection } from "@/components/Settings/ThemeSelection";

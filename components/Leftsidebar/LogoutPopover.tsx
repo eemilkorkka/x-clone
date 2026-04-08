@@ -9,7 +9,6 @@ import { User } from "@/components/User/User";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { Button } from "../ui/button";
 import { UserBase } from "@/types/User";
-import { LogoutDialog } from "./LogoutDialog";
 import Link from "next/link";
 
 interface LogoutPopoverProps {

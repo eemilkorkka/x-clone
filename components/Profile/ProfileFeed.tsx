@@ -1,7 +1,7 @@
 "use client";
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { LoadingSpinner } from "../LoadingSpinner";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { InfiniteScrollContainer } from "../Feed/InfiniteScrollContainer";
 import React from "react";
 import { RegularTweet, Retweet } from "@/types/Tweet";
