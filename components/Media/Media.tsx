@@ -17,14 +17,14 @@ export const Media = ({ type, url, children, useDialog = true }: MediaProps) => 
             className="w-full h-full cursor-pointer object-cover"
             src={url}
             alt="Media"
-            unoptimized
-            width={0}
-            height={0}
+            width={500}
+            height={300}
+            sizes="(max-width: 768px) 100vw, 50vw"
         />
     );
 
     const imageElement = (
-        <div className="relative w-full h-full">
+        <div className="relative h-full">
             {type === FileType.IMAGE ? (
                 useDialog ? (
                     <MediaDialog src={url}>

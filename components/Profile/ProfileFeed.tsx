@@ -97,7 +97,7 @@ export const ProfileFeed = ({ type }: ProfileFeedProps) => {
                                             src={tweet.files[0].url}
                                             height={196}
                                             width={196}
-                                            className="aspect-square"
+                                            className="aspect-square object-cover"
                                         />
                                     ) : (
                                         <video

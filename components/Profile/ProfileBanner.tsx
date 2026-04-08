@@ -18,13 +18,12 @@ export const ProfileBanner = ({ children, src, isPreview = false, styles }: Prof
             alt="profile banner"
             className={cn("hover:cursor-pointer", styles)}
             fill
-            priority
-            sizes="100vw"
+            preload
         />
     );
 
     return (
-        <div className={cn("relative w-full aspect-[3/1] max-h-50", !src && "bg-gray-300")}>
+        <div className={cn("relative w-full aspect-[3/1]", !src && "bg-gray-300")}>
             {src && (
                 <>
                     {!isPreview ? (
