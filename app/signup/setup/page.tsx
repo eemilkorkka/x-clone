@@ -8,7 +8,7 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
 import { usernameSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -17,6 +17,12 @@ const formSchema = usernameSchema.and(z.object({
 }));
 
 export default function SetupPage() {
+
+    const { data } = authClient.useSession();
+
+    if (!data) {
+        redirect("/");
+    }
 
     const router = useRouter();
 
@@ -41,7 +47,7 @@ export default function SetupPage() {
     return (
         <div className="bg-black min-h-screen flex justify-center items-center">
             <Dialog open={true}>
-                <DialogContent className="flex flex-col !max-w-[600px] h-full min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5" showCloseButton={false}>
+                <DialogContent className="flex flex-col !max-w-[600px] h-full min-h-[650px] rounded-none sm:h-fit sm:rounded-2xl bg-black text-white p-2.5 ring-0" showCloseButton={false}>
                     <DialogHeader handleDialogClose={() => router.push("/")} />
                     <div className="flex-1 flex flex-col w-full max-w-md mx-auto">
                         <DialogTitle className="text-3xl font-bold">Let's finish setting up your account</DialogTitle>

@@ -15,7 +15,10 @@ interface UsernameProps {
 export const Username = ({ username, styles, useLink = true, useHoverCard = true }: UsernameProps) => {
 
     const router = useRouter();
-    const className = cn("block truncate overflow-hidden whitespace-nowrap h-fit text-zinc-500 text-[15px]", styles);
+    const className = cn("block truncate overflow-hidden whitespace-nowrap h-fit text-zinc-500 text-[15px]", 
+        useLink && "hover:underline cursor-pointer",
+        styles
+    );
 
     const onUsernameClick = (e: React.MouseEvent<HTMLSpanElement>) => {
         e.stopPropagation();

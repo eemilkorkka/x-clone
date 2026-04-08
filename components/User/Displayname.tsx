@@ -18,7 +18,7 @@ export const Displayname = ({ displayName, username, styles, useHoverCard = fals
 
     const className = cn(
         "block truncate overflow-hidden whitespace-nowrap text-left h-fit font-bold text-[15px]",
-        useLink && "hover:underline",
+        useLink && "hover:underline cursor-pointer",
         styles
     );
 
