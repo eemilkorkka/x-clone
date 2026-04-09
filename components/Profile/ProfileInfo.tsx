@@ -27,9 +27,13 @@ interface ProfileInfoProps {
 export const ProfileInfo = ({ username }: ProfileInfoProps) => {
 
     const { data } = authClient.useSession();
-    const { data: userData } = useGetUserData(username);
+    const { data: userData, isLoading } = useGetUserData(username);
     const { colors } = useColor();
     const width = useWindowWidth();
+
+    if (isLoading) {
+        return null;
+    }
 
     if (!userData) {
         notFound();
