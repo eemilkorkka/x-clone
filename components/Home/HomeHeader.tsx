@@ -2,7 +2,6 @@ import React, { SetStateAction } from "react";
 import { FeedHeader } from "../Feed/FeedHeader"
 import { Tabs } from "../ui/Tabs"
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { authClient } from "@/lib/auth-client";
 import { FaXTwitter } from "react-icons/fa6";
 import { MobileLeftSidebar } from "../Leftsidebar/MobileLeftSidebar";
 
@@ -19,7 +18,6 @@ interface HomeHeaderProps {
 export const HomeHeader = ({ feed, setFeed }: HomeHeaderProps) => {
 
     const width = useWindowWidth();
-    const { data } = authClient.useSession();
     const activeTab = feed === "following" ? "Following" : "For you";
 
     const changeTab = (tab: string) => {
@@ -27,7 +25,7 @@ export const HomeHeader = ({ feed, setFeed }: HomeHeaderProps) => {
     }
 
     return (
-        <FeedHeader styles="flex-col backdrop-blur-lg bg-background/80">
+        <FeedHeader styles="flex-col items-start backdrop-blur-lg bg-background/80">
             {width && width < 500 && (
                 <div className="flex items-center">
                     <MobileLeftSidebar />

@@ -23,7 +23,7 @@ export const ProfileFeedHeader = ({ username, displayName, postsCount, likesCoun
     const label = currentPage === "likes" ? (likesCount === 1 ? "like" : "likes") : currentPage === "media" ? "photos & videos" : postsCount === 1 ? "post" : "posts";
 
     return (
-        <FeedHeader styles="items-center px-2 gap-6 sticky top-0 z-55 backdrop-blur-lg bg-background/80">
+        <FeedHeader styles="sticky top-0 z-55 backdrop-blur-lg bg-background/80">
             <ReturnBack />
             <div className="flex flex-col">
                 <Displayname

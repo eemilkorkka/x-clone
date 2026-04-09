@@ -32,7 +32,7 @@ export default async function BookmarksPage() {
 
     return (
         <div>
-            <FeedHeader styles="flex px-2 items-center gap-6">
+            <FeedHeader>
                 <ReturnBack />
                 <h1 className="text-lg font-bold">Bookmarks</h1>
             </FeedHeader>

@@ -20,7 +20,7 @@ export default async function AccountPage() {
 
     return (
         <div>
-            <FeedHeader styles="flex gap-6 items-center px-2 lg:px-8 border-b-0">
+            <FeedHeader styles="lg:px-8 border-b-0">
                 <ReturnBack styles="flex lg:hidden" />
                 <h1 className="text-xl font-bold pt-2">Your account</h1>
             </FeedHeader>

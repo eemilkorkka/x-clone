@@ -31,7 +31,7 @@ export const Navitem = ({ href, icon, activeIcon, label, styles }: NavitemProps)
     );
 
     return href ? (
-        <Link href={href} className={className} prefetch={true}>
+        <Link href={href} className={className} prefetch={label !== "Settings and privacy"}>
             {isActive ? activeIcon : icon}
             <span className="hidden xl:block">{label}</span>
         </Link>

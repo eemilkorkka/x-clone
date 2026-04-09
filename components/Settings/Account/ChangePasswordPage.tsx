@@ -53,7 +53,7 @@ export const ChangePasswordPage = () => {
 
     return (
         <div>
-            <FeedHeader styles="px-2 flex gap-6 items-center border-b-0">
+            <FeedHeader styles="border-b-0">
                 <ReturnBack />
                 <h1 className="text-xl font-bold">Change your password</h1>
             </FeedHeader>

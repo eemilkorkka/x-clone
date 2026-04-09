@@ -23,7 +23,7 @@ export default async function YourTwitterDataAccountPage() {
 
     return (
         <div>
-            <FeedHeader styles="px-2 flex gap-6 items-center border-b-0">
+            <FeedHeader styles="border-b-0">
                 <ReturnBack />
                 <h1 className="text-xl font-bold">Account information</h1>
             </FeedHeader>

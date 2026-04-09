@@ -56,7 +56,7 @@ export default async function TweetPage({ params }: { params: Promise<{ id: stri
 
     return (
         <>
-            <FeedHeader styles="px-2 flex gap-6 items-center border-b-0">
+            <FeedHeader styles="border-b-0">
                 <ReturnBack />
                 <p className="font-bold text-xl">Post</p>
             </FeedHeader>

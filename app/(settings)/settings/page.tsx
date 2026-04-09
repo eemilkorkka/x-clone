@@ -24,7 +24,7 @@ export default async function SettingsPage() {
     return (
         <MobileOnlyPageWrapper redirectUrl="/settings/account">
             <div className="space-y-4">
-                <FeedHeader styles="flex px-2 gap-6 items-center border-b-0">
+                <FeedHeader styles="border-b-0">
                     <ReturnBack />
                     <div>
                         <h1 className="font-bold text-lg">Settings</h1>

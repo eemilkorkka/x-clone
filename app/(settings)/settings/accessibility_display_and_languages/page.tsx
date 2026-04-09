@@ -23,7 +23,7 @@ export default async function AccessabilityPage() {
     return (
         <div>
             <div className="space-y-4">
-                <FeedHeader styles="flex gap-6 px-2 lg:px-8 items-center border-b-0">
+                <FeedHeader styles="lg:px-8 border-b-0">
                     <ReturnBack styles="flex lg:hidden" />
                     <h2 className="text-xl font-bold">Accessibility, display, and languages</h2>
                 </FeedHeader>

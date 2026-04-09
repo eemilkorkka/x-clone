@@ -49,7 +49,7 @@ export const ManageTwoFactorAuthPage = () => {
 
     return (
         <div>
-            <FeedHeader styles="px-2 flex gap-6 items-center border-b-0">
+            <FeedHeader styles="border-b-0">
                 <ReturnBack />
                 <h1 className="text-xl font-bold">{is2FAEnabled ? "Disable Two-factor Authentication" : "Enable Two-factor Authentication"}</h1>
             </FeedHeader>

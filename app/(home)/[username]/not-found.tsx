@@ -14,7 +14,7 @@ export default async function NotFound() {
     
     return (
         <div>
-            <FeedHeader styles="items-center px-2 gap-6 border-b-0">
+            <FeedHeader styles="border-b-0">
                 <ReturnBack />
                 <Displayname
                     displayName={"Profile"}

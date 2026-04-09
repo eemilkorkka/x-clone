@@ -45,7 +45,7 @@ export const Tabs = ({ tabs, activeTab, changeTab, styles }: TabsProps) => {
             {tabs.map((tab, index) => (
                 <React.Fragment key={tab.label}>
                     {tab.href ? (
-                        <Link href={tab.href} className="flex-1 h-full">
+                        <Link href={tab.href} className="flex-1 h-full" prefetch={true}>
                             {renderTabElement(index)}
                         </Link>
                     ) : (

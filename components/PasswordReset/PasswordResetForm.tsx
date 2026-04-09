@@ -85,7 +85,7 @@ export const PasswordResetForm = () => {
                     )}
                 />
             </FieldGroup>
-            <Button type="submit" className="bg-sky-500 rounded-full font-bold w-fit text-foreground mt-4 self-end px-4">Reset Password</Button>
+            <Button type="submit" className="bg-sky-500 hover:bg-sky-600 rounded-full font-bold w-fit text-foreground mt-4 self-end px-4">Reset Password</Button>
         </form>
     )
 }

@@ -8,7 +8,7 @@ interface FeedHeaderProps {
 
 export const FeedHeader = ({ children, styles }: FeedHeaderProps) => {
     return (
-        <div className={cn("flex sticky top-0 min-h-13 border-b border-border bg-background z-20", styles)}>
+        <div className={cn("flex sticky top-0 min-h-13 border-b border-border bg-background z-20 flex px-2 items-center gap-6", styles)}>
             {children}
         </div>
     )
