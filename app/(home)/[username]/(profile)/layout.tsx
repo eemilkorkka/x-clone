@@ -69,6 +69,7 @@ export default async function ProfileLayout({
             select: {
                 displayUsername: true,
                 id: true,
+                isVerified: true,
             }
         }),
         prisma.tweet.count({
@@ -106,6 +107,7 @@ export default async function ProfileLayout({
             <ProfileFeedHeader
                 username={username}
                 displayName={user?.displayUsername ?? ""}
+                isVerified={user?.isVerified ?? false}
                 postsCount={postsCount}
                 likesCount={likesCount}
                 mediaCount={mediaCount}

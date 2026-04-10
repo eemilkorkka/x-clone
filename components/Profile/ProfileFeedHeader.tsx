@@ -8,12 +8,13 @@ import { Displayname } from "../User/Displayname";
 interface ProfileFeedHeaderProps {
     username: string;
     displayName: string;
+    isVerified: boolean;    
     postsCount: number;
     likesCount: number;
     mediaCount: number;
 }
 
-export const ProfileFeedHeader = ({ username, displayName, postsCount, likesCount, mediaCount }: ProfileFeedHeaderProps) => {
+export const ProfileFeedHeader = ({ username, displayName, isVerified, postsCount, likesCount, mediaCount }: ProfileFeedHeaderProps) => {
 
     const pathname = usePathname();
     const pathnameParts = pathname.split("/");
@@ -29,6 +30,7 @@ export const ProfileFeedHeader = ({ username, displayName, postsCount, likesCoun
                 <Displayname
                     displayName={displayName}
                     username={username}
+                    isVerified={isVerified}
                     useLink={false}
                     styles="text-lg max-w-md"
                 />
