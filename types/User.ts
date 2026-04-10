@@ -7,7 +7,7 @@ export type UserBase = {
     bio?: string | null | undefined;
     website?: string | null | undefined;
     displayUsername?: string | null | undefined;
-    isVerified: boolean;
+    isVerified: boolean | null | undefined;
     pinnedTweetId?: number | null | undefined;
 }
 

@@ -56,7 +56,7 @@ export const User = (
                         <Displayname
                             username={user.username ?? ""}
                             displayName={user.displayUsername ?? ""}
-                            isVerified={user.isVerified}
+                            isVerified={user.isVerified ?? false}
                             useLink={useLink}
                             useHoverCard={true}
                         />
