@@ -42,6 +42,7 @@ export const SuggestedUsersCard = async () => {
             website: true,
             bio: true,
             image: true,
+            isVerified: true,
             followers: {
                 select: {
                     followerId: true,

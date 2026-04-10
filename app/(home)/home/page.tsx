@@ -32,7 +32,7 @@ export default async function HomePage({
     return (
         <div className="min-h-screen">
             <HydrationBoundary state={dehydrate(queryClient)}>
-                <HomeFeed />
+                <HomeFeed userId={session.user.id} />
             </HydrationBoundary>
         </div>
     )

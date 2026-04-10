@@ -49,7 +49,8 @@ export default async function FollowingPage({ params }: { params: Promise<{ user
             username: username
         },
         select: {
-            displayUsername: true
+            displayUsername: true,
+            isVerified: true
         }
     });
 
@@ -74,13 +75,14 @@ export default async function FollowingPage({ params }: { params: Promise<{ user
 
     return (
         <div className="min-h-screen">
-            <FeedHeader styles="flex flex-col">
+            <FeedHeader styles="flex flex-col gap-2 px-0">
                 <div className="w-full px-2 flex items-center gap-6 mt-1">
                     <ReturnBack />
                     <div>
                         <Displayname
                             username={username}
                             displayName={user?.displayUsername ?? ""}
+                            isVerified={user?.isVerified ?? false}
                             useLink={false}
                             styles="text-xl"
                         />
@@ -91,7 +93,7 @@ export default async function FollowingPage({ params }: { params: Promise<{ user
                         />
                     </div>
                 </div>
-                <Tabs tabs={tabs} styles="mt-2" />
+                <Tabs tabs={tabs} />
             </FeedHeader>
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <FollowingFeed username={username} />

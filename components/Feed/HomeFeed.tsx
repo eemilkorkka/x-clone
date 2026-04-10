@@ -8,7 +8,6 @@ import { RegularTweet, Retweet } from "@/types/Tweet";
 import { InfiniteScrollContainer } from "./InfiniteScrollContainer";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { useQueryState } from 'nuqs';
-import { authClient } from "@/lib/auth-client";
 import { HomeHeader } from "../Home/HomeHeader";
 
 const fetchTweets = async (feed: string | null, { pageParam }: { pageParam?: { createdAt: string; id: number; } }) => {
@@ -25,9 +24,8 @@ const fetchTweets = async (feed: string | null, { pageParam }: { pageParam?: { c
     }
 }
 
-export const HomeFeed = () => {
+export const HomeFeed = ({ userId }: { userId: string }) => {
 
-    const { data: sessionData } = authClient.useSession();
     const [feed, setFeed] = useQueryState("feed", {
         defaultValue: "foryou"
     });
@@ -43,7 +41,7 @@ export const HomeFeed = () => {
         status,
     } = useInfiniteQuery({
         queryFn: ({ pageParam }) => fetchTweets(feed, { pageParam }),
-        queryKey: ["tweets", sessionData?.user.id, feed],
+        queryKey: ["tweets", userId, feed],
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
     });

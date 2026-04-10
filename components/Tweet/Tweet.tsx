@@ -136,6 +136,7 @@ export const Tweet = ({
                                         <Displayname
                                             username={tweetAuthor?.username ?? ""}
                                             displayName={tweetAuthor?.displayUsername ?? ""}
+                                            isVerified={tweetAuthor?.isVerified ?? false}
                                             styles="ml-2"
                                             useHoverCard={!isComposeModal}
                                         />
@@ -152,6 +153,7 @@ export const Tweet = ({
                                     <Displayname
                                         username={tweetAuthor?.username ?? ""}
                                         displayName={tweetAuthor?.displayUsername ?? ""}
+                                        isVerified={tweetAuthor?.isVerified ?? false}
                                         styles="ml-2"
                                         useHoverCard={!isComposeModal}
                                     />

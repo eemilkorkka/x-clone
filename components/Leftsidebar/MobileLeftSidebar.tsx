@@ -44,6 +44,7 @@ export const MobileLeftSidebar = () => {
                         <Displayname
                             username={data?.user.username ?? ""}
                             displayName={data?.user.displayUsername ?? ""}
+                            isVerified={data?.user.isVerified ?? false}
                             styles="text-lg"
                         />
                         <Username

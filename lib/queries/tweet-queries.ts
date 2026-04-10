@@ -13,6 +13,7 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
                     displayUsername: true,
                     image: true,
                     pinnedTweetId: true,
+                    isVerified: true,
                     followers: {
                         select: {
                             followerId: true
@@ -43,6 +44,7 @@ export const getTweets = async (cursor?: { createdAt: Date; id: number }) => {
                             displayUsername: true,
                             image: true,
                             pinnedTweetId: true,
+                            isVerified: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -110,6 +112,7 @@ export const getTweetsFromFollowing = async (userId: string, cursor?: { createdA
                     username: true,
                     displayUsername: true,
                     image: true,
+                    isVerified: true,
                     followers: {
                         select: {
                             followerId: true
@@ -139,6 +142,7 @@ export const getTweetsFromFollowing = async (userId: string, cursor?: { createdA
                             username: true,
                             displayUsername: true,
                             image: true,
+                            isVerified: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -206,6 +210,7 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                     username: true,
                     displayUsername: true,
                     image: true,
+                    isVerified: true,
                     pinnedTweetId: true,
                     followers: {
                         select: {
@@ -237,6 +242,7 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                             displayUsername: true,
                             image: true,
                             pinnedTweetId: true,
+                            isVerified: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -269,6 +275,7 @@ export const getTweetsByUser = async (username: string, includeReplies: boolean,
                             displayUsername: true,
                             image: true,
                             pinnedTweetId: true,
+                            isVerified: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -365,6 +372,7 @@ export const getLikesByUser = async (username: string, cursor?: { createdAt: Dat
                             displayUsername: true,
                             image: true,
                             pinnedTweetId: true,
+                            isVerified: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -395,6 +403,7 @@ export const getLikesByUser = async (username: string, cursor?: { createdAt: Dat
                                     displayUsername: true,
                                     image: true,
                                     pinnedTweetId: true,
+                                    isVerified: true,
                                     followers: {
                                         select: {
                                             followerId: true
@@ -459,6 +468,7 @@ export const getBookmarksByUser = async (username: string, cursor?: { createdAt:
                             displayUsername: true,
                             image: true,
                             pinnedTweetId: true,
+                            isVerified: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -489,6 +499,7 @@ export const getBookmarksByUser = async (username: string, cursor?: { createdAt:
                                     displayUsername: true,
                                     image: true,
                                     pinnedTweetId: true,
+                                    isVerified: true,
                                     followers: {
                                         select: {
                                             followerId: true
@@ -548,6 +559,7 @@ export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date
                     displayUsername: true,
                     image: true,
                     pinnedTweetId: true,
+                    isVerified: true,
                     followers: {
                         select: {
                             followerId: true
@@ -578,6 +590,7 @@ export const getRepliesByTweetId = async (id: number, cursor?: { createdAt: Date
                             displayUsername: true,
                             image: true,
                             pinnedTweetId: true,
+                            isVerified: true,
                             followers: {
                                 select: {
                                     followerId: true
@@ -636,6 +649,7 @@ export const getTweetById = async (id: number) => {
                     displayUsername: true,
                     image: true,
                     pinnedTweetId: true,
+                    isVerified: true,
                     followers: {
                         select: {
                             followerId: true

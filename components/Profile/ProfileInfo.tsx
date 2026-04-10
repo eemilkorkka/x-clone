@@ -67,6 +67,7 @@ export const ProfileInfo = ({ username }: ProfileInfoProps) => {
                     <Displayname
                         displayName={userData.displayUsername}
                         username={userData.username}
+                        isVerified={userData.isVerified}
                         useLink={false}
                         styles="text-xl w-fit max-w-full"
                     />

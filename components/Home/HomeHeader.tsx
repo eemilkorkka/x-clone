@@ -25,7 +25,7 @@ export const HomeHeader = ({ feed, setFeed }: HomeHeaderProps) => {
     }
 
     return (
-        <FeedHeader styles="flex-col items-start backdrop-blur-lg bg-background/80">
+        <FeedHeader styles="flex-col items-start backdrop-blur-lg bg-background/80 px-0">
             {width && width < 500 && (
                 <div className="flex items-center">
                     <MobileLeftSidebar />

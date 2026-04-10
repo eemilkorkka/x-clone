@@ -53,7 +53,12 @@ export const ProfileHoverCard = ({ children, username }: ProfileHoverCardProps) 
                         )}
                     </div>
                     <div>
-                        <Displayname username={username} displayName={data.displayUsername} styles="text-lg" />
+                        <Displayname 
+                            username={username} 
+                            displayName={data.displayUsername}
+                            isVerified={data.isVerified} 
+                            styles="text-lg" 
+                        />
                         <Username username={username} />
                     </div>
                     <Text text={data.bio} />

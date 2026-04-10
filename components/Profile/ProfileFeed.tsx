@@ -35,7 +35,7 @@ const fetchTweets = async (username: string, type: Feed, includeReplies: boolean
 
 const fetchPinnedTweet = async (username: string) => {
     const response = await fetch(`/api/posts/user/${username}/pinned`);
-
+    
     if (response.ok) {
         return await response.json();
     } else {
