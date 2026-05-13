@@ -4,19 +4,14 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SetStateAction } from "react";
 import { Controller, useForm } from "react-hook-form";
-import z from "zod"
+import z from "zod";
 import { FormButton } from "../FormButton";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { passwordSchema } from "@/lib/schemas";
 
-interface ChoosePasswordProps {
-    formData: SignupFormData;
-    setFormData: React.Dispatch<SetStateAction<SignupFormData>>;
-}
-
-export const ChoosePassword = ({ formData, setFormData }: ChoosePasswordProps) => {
+export const ChoosePassword = ({ formData }: { formData: SignupFormData }) => {
     const router = useRouter();
     const { toastMessage } = useToastMessage();
 

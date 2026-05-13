@@ -33,12 +33,12 @@ export const ManageTwoFactorAuthPage = () => {
 
     const steps = is2FAEnabled ?
         [
-            <PasswordStep />,
+            <PasswordStep key={0} />,
         ] :
         [
-            <PasswordStep setStep={setStep} setQrCode={setQrCode} />,
-            <QrCodeStep value={qrCode || ""} setStep={setStep} />,
-            <TwoFactorAuth>
+            <PasswordStep key={1} setStep={setStep} setQrCode={setQrCode} />,
+            <QrCodeStep key={2} value={qrCode || ""} setStep={setStep} />,
+            <TwoFactorAuth key={3}>
                 <Button
                     type="submit"
                     className={cn("max-w-fit text-white self-end font-bold rounded-full px-4 mt-4 hover:cursor-pointer", colors.color, colors.hoverColor)}>

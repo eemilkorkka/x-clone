@@ -6,6 +6,7 @@ import { pinTweet } from "@/app/actions/pinTweet";
 import { useToastMessage } from "../useToastMessage";
 import { authClient } from "@/lib/auth-client";
 import { useSearchParams } from "next/navigation";
+import { queryKeys } from "@/lib/querykeys";
 
 export const usePinTweetMutation = (tweet: Tweet) => {
     const { data } = authClient.useSession();
@@ -18,11 +19,11 @@ export const usePinTweetMutation = (tweet: Tweet) => {
         mutationFn: pinTweet,
         onSuccess: (ctx) => {
             queryClient.invalidateQueries({ queryKey: profileFeedQueryKey });
-            queryClient.invalidateQueries({ queryKey: ["pinnedTweet", data?.user?.username] });
-            queryClient.invalidateQueries({ queryKey: ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"] });
-            queryClient.invalidateQueries({ queryKey: ["replies", tweet.id] });
-            queryClient.invalidateQueries({ queryKey: ["bookmarks", data?.user.username] });
-            queryClient.invalidateQueries({ queryKey: ["tweet", tweet.id] });
+            queryClient.invalidateQueries({ queryKey: queryKeys.pinnedTweet(data?.user.username) });
+            queryClient.invalidateQueries({ queryKey: queryKeys.tweets(data?.user.id, searchParams)});
+            queryClient.invalidateQueries({ queryKey: queryKeys.replies(tweet.id)});
+            queryClient.invalidateQueries({ queryKey: queryKeys.bookmarks(data?.user.username) });
+            queryClient.invalidateQueries({ queryKey: queryKeys.tweet(tweet.id) });
             toastMessage(ctx.message ?? "Success", true);
         },
         onError: (ctx) => {

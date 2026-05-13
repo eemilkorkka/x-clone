@@ -211,14 +211,22 @@ export const useRetweetMutation = (tweet: Tweet) => {
                 pinnedQueryKey
             };
         },
-        onSuccess: (data, variables, context) => {
-            queryClient.invalidateQueries({ queryKey: ["replies", tweet.parentTweetId] });
+        onSuccess: (err, variables, context) => {
+            queryClient.invalidateQueries({ queryKey: ["tweet", tweet.originalTweetId] });
+            queryClient.invalidateQueries({ queryKey: context.repliesQueryKey });
 
             if (tweet.originalTweet) {
                 queryClient.invalidateQueries({ queryKey: ["replies", tweet.originalTweet.parentTweetId] });
             }
 
-            queryClient.invalidateQueries({ queryKey: context.profileFeedQueryKey });
+            queryClient.invalidateQueries({ queryKey: context.pinnedQueryKey });
+
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    const key = query.queryKey as [string, string, string | undefined, boolean];
+                    return key[0] === "profilefeed" && key[2] === data?.user.username || key[2] === (tweet.isRetweet ? tweet.originalTweet.user?.username : tweet.user?.username);
+                },
+            });
         },
         onError: (err, variables, context) => {
             if (context?.previousTweets) {

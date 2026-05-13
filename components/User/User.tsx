@@ -32,10 +32,10 @@ export const User = (
         showFollowBadge = false,
     }: UserProps) => {
 
-    if (!user || !user?.username) return null;
-
     const router = useRouter();
     const { data } = authClient.useSession();
+
+    if (!user || !user?.username) return null;
 
     const isFollowing = typeof (user) === "object" && "following" in user &&
         user.following?.some(follower => follower.followingId === data?.user.id);

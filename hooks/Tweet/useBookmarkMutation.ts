@@ -5,6 +5,7 @@ import { PinnedTweetQueryData, Tweet, TweetsPage } from "@/types/Tweet";
 import { InfiniteData, QueryKey, useMutation } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import { useGetProfileFeedQueryKey } from "../useGetProfileFeedQueryKey";
+import { queryKeys } from "@/lib/querykeys";
 
 export const useBookmarkMutation = (tweet: Tweet) => {
     const { data } = authClient.useSession();
@@ -24,11 +25,11 @@ export const useBookmarkMutation = (tweet: Tweet) => {
             return result;
         },
         onMutate: async () => {
-            const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
-            const tweetQueryKey = ["tweet", tweet.id];
-            const repliesQueryKey = ["replies", tweet.parentTweetId];
-            const bookmarksQueryKey = ["bookmarks", data?.user.username];
-            const pinnedQueryKey = ["pinnedTweet", params.username];
+            const tweetsQueryKey = queryKeys.tweets(data?.user.id, searchParams);
+            const tweetQueryKey = queryKeys.tweet(tweet.id);
+            const repliesQueryKey = queryKeys.replies(tweet.parentTweetId);
+            const bookmarksQueryKey = queryKeys.bookmarks(data?.user.username);
+            const pinnedQueryKey = queryKeys.pinnedTweet(params.username as string);
 
             await queryClient.cancelQueries({ queryKey: tweetsQueryKey });
             await queryClient.cancelQueries({ queryKey: tweetQueryKey });
@@ -173,11 +174,17 @@ export const useBookmarkMutation = (tweet: Tweet) => {
                 repliesQueryKey,
                 profileFeedQueryKey,
                 bookmarksQueryKey,
-                pinnedQueryKey
+                pinnedQueryKey,
             };
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["bookmarks", data?.user.username] });
+        onSuccess: (err, variables, context) => {
+            queryClient.invalidateQueries({ queryKey: context.bookmarksQueryKey });
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    const key = query.queryKey as [string, string, string | undefined, boolean];
+                    return key[0] === "profilefeed" && key[2] === data?.user.username || key[2] === (tweet.isRetweet ? tweet.originalTweet.user?.username : tweet.user?.username);
+                },
+            });
         },
         onError: (err, variables, context) => {
             if (context?.previousTweets) {

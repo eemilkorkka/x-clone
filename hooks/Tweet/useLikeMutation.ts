@@ -5,6 +5,7 @@ import { Tweet, TweetsPage, PinnedTweetQueryData } from "@/types/Tweet";
 import { InfiniteData, QueryKey, useMutation } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import { useGetProfileFeedQueryKey } from "../useGetProfileFeedQueryKey";
+import { queryKeys } from "@/lib/querykeys";
 
 export const useLikeMutation = (tweet: Tweet) => {
     const { data } = authClient.useSession();
@@ -24,11 +25,11 @@ export const useLikeMutation = (tweet: Tweet) => {
             return result;
         },
         onMutate: async () => {
-            const tweetsQueryKey = ["tweets", data?.user.id, searchParams.get("feed") ?? "foryou"];
-            const tweetQueryKey = ["tweet", tweet.id];
-            const repliesQueryKey = ["replies", tweet.parentTweetId];
-            const bookmarksQueryKey = ["bookmarks", data?.user.username];
-            const pinnedQueryKey = ["pinnedTweet", params.username];
+            const tweetsQueryKey = queryKeys.tweets(data?.user.id, searchParams);
+            const tweetQueryKey = queryKeys.tweet(tweet.id);
+            const repliesQueryKey = queryKeys.replies(tweet.parentTweetId);
+            const bookmarksQueryKey = queryKeys.bookmarks(data?.user.username);
+            const pinnedQueryKey = queryKeys.pinnedTweet(params.username as string);
 
             await queryClient.cancelQueries({ queryKey: tweetsQueryKey });
             await queryClient.cancelQueries({ queryKey: tweetQueryKey });
@@ -112,10 +113,10 @@ export const useLikeMutation = (tweet: Tweet) => {
             }
 
             if (previousPinnedTweet?.pinnedTweet) {
-                const pinnedTweetId = previousPinnedTweet.pinnedTweet.isRetweet 
-                    ? previousPinnedTweet.pinnedTweet.originalTweetId 
+                const pinnedTweetId = previousPinnedTweet.pinnedTweet.isRetweet
+                    ? previousPinnedTweet.pinnedTweet.originalTweetId
                     : previousPinnedTweet.pinnedTweet.id;
-                
+
                 if (pinnedTweetId === targetOriginalId) {
                     queryClient.setQueryData<PinnedTweetQueryData>(pinnedQueryKey, {
                         ...previousPinnedTweet,
@@ -177,6 +178,12 @@ export const useLikeMutation = (tweet: Tweet) => {
             };
         },
         onSuccess: (context) => {
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    const key = query.queryKey as [string, string, string | undefined, boolean];
+                    return key[0] === "profilefeed" && key[2] === (tweet.isRetweet ? tweet.originalTweet.user?.username : tweet.user?.username);
+                },
+            });
             queryClient.invalidateQueries({ queryKey: ["profilefeed", "likes", data?.user.username, false] });
         },
         onError: (err, variables, context) => {

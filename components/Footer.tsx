@@ -48,8 +48,8 @@ export const Footer = ({ isRightSideBar, styles }: { isRightSideBar?: boolean, s
     return (
         <footer className={cn("p-4 mt-auto flex flex-wrap justify-center", styles)}>
             {!isRightSideBar ? (
-                footerLinks.map((link, index) => (
-                    <React.Fragment key={index}>
+                footerLinks.map((link) => (
+                    <React.Fragment key={link}>
                         {displayFooterItems(link)}
                     </React.Fragment>
                 ))

@@ -57,10 +57,10 @@ export default function SignupModal() {
     });
 
     const steps = [
-        <PersonalInfo formData={formData} setFormData={setFormData} setStep={setStep} />,
-        <VerificationCode formData={formData} setFormData={setFormData} setStep={setStep} />,
-        <ChooseUsername formData={formData} setFormData={setFormData} setStep={setStep} />,
-        <ChoosePassword formData={formData} setFormData={setFormData} />
+        <PersonalInfo key={0} formData={formData} setFormData={setFormData} setStep={setStep} />,
+        <VerificationCode key={1} formData={formData} setFormData={setFormData} setStep={setStep} />,
+        <ChooseUsername key={2} formData={formData} setFormData={setFormData} setStep={setStep} />,
+        <ChoosePassword key={3} formData={formData} />
     ];
 
     return pathname === "/signup" && (

@@ -54,42 +54,41 @@ export async function createTweet(previousState: any, formData: FormData) {
             }
         });
 
-        for (const file of actualFiles) {
-            if (!(file instanceof File)) return;
-
-            try {
+        try {
+            const uploadPromises = actualFiles.map(async (file) => {
                 const fileUrl = await uploadFile(file);
                 const fileId = fileUrl.split("/")[8];
                 const fileType = file.type.includes("video") ? FileType.VIDEO : FileType.IMAGE;
-                
+
                 uploadedFileIds.push(fileId);
 
-                await prisma.file.create({
+                return prisma.file.create({
                     data: {
                         tweetId: tweet.id,
                         url: fileUrl,
                         type: fileType
                     }
                 });
+            });
 
-            } catch (error) {
-                await prisma.tweet.delete({
-                    where: {
-                        id: tweet.id
-                    }
-                });
+            await Promise.all(uploadPromises);
+        } catch (error) {
+            await prisma.tweet.delete({
+                where: {
+                    id: tweet.id
+                }
+            });
 
-                await Promise.allSettled(
-                    uploadedFileIds.map((id) =>
-                        storage.deleteFile({
-                            bucketId: process.env.APPWRITE_BUCKET_ID!,
-                            fileId: id
-                        })
-                    )
-                );
-                
-                return { success: false, error: "Failed to upload tweet attachment(s)" };
-            }
+            await Promise.allSettled(
+                uploadedFileIds.map((id) =>
+                    storage.deleteFile({
+                        bucketId: process.env.APPWRITE_BUCKET_ID!,
+                        fileId: id
+                    })
+                )
+            );
+
+            return { success: false, error: "Failed to upload tweet attachment(s)" };
         }
 
         return { success: true, message: "Post created successfully" };

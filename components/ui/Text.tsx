@@ -8,9 +8,6 @@ import { ProfileHoverCard } from "../Profile/ProfileHoverCard";
 const urlPattern = /\b((https?:\/\/|www\.)[^\s/$.?#].[^\s]*)/gi;
 
 export const Text = ({ text, styles }: { text: string, styles?: string }) => {
-
-    if (!text) return null;
-
     const { colors } = useColor();
     const words = text.split(" ");
 
@@ -27,6 +24,8 @@ export const Text = ({ text, styles }: { text: string, styles?: string }) => {
             </Link>
         )
     }
+
+    if (!text) return null;
 
     return (
         <span className={cn("text-[15px]", styles)} style={{ wordBreak: "break-word" }}>
